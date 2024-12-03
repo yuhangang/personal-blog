@@ -3,6 +3,8 @@
 import { ReactNode } from "react";
 import { ThemeProvider, type DefaultTheme } from "styled-components";
 import GlobalStyle from "@/app/_components/globalstyles";
+import Navbar from "@/app/_components/common/navbar/navbar";
+import Footer from "@/app/_components/common/footer/footer";
 
 const theme: DefaultTheme = {
   colors: {
@@ -16,6 +18,7 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       {children}
+      <Footer />
     </ThemeProvider>
   );
 }

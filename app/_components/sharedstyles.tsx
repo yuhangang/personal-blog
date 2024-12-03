@@ -1,21 +1,17 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-  padding: 0 0.5rem;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  width: 100%;
   min-height: 100vh;
-`;
-const Main = styled.main`
-  padding: 5rem 0;
-  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+`;
+const Main = styled.main`
+  width: 100vw;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px; // Adds consistent spacing between children
 `;
 
 const Title = styled.h1`
@@ -47,15 +43,8 @@ const CodeTag = styled.code`
   margin: 0 0.75rem;
   padding: 0.75rem;
   font-size: 1.1rem;
-  font-family:
-    Menlo,
-    Monaco,
-    Lucida Console,
-    Liberation Mono,
-    DejaVu Sans Mono,
-    Bitstream Vera Sans Mono,
-    Courier New,
-    monospace;
+  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+    Bitstream Vera Sans Mono, Courier New, monospace;
 `;
 
 export { Container, Main, Title, Description, CodeTag };
