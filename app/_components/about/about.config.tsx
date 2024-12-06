@@ -1,18 +1,53 @@
+import { desc } from "framer-motion/client";
 import RetroList from "./timeline/components/RetroList.style";
+
+import Head from "next/head";
+
+interface SEOProps {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const SEO: React.FC<SEOProps> = ({
+  title = "Yu Hang Ang | Software Engineer",
+  description = "26-year-old software engineer based in Kuala Lumpur, Malaysia. Experienced in mobile app development, open for new opportunities and collaborations.",
+  image = "/images/profile.jpg",
+}) => {
+  const canonicalUrl = "https://yuhangang.com"; // Replace with actual portfolio URL
+
+  return (
+    <Head>
+      {/* Basic SEO */}
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <link rel="canonical" href={canonicalUrl} />
+
+      {/* Additional Metadata */}
+      <meta
+        name="keywords"
+        content="  software engineer, mobile developer, flutter, react, iOS, Android, Kuala Lumpur"
+      />
+      <meta name="author" content="Yu Hang Ang" />
+
+      {/* Geo Metadata */}
+      <meta name="geo.region" content="MY-KL" />
+      <meta name="geo.placename" content="Kuala Lumpur" />
+    </Head>
+  );
+};
+
+export default SEO;
 
 const bioBrief = {
   src: "/images/profile.jpg",
   name: "Yu Hang Ang",
-  description: `
-  I am a dedicated App and Mobile Developer with over 3 years of
-  experience, currently working at Lumi News since March 2023. Prior to
-  this, I worked as a Software Engineer at Snappymob Sdn Bhd, where I
-  contributed to the My Astro application, focusing on digitalizing user
-  management for Astro products. I collaborated closely with various
-  stakeholders and played a key role in the development and maintenance
-  of new reward modules, integrating CMS, remote configurations, and
-  APIs.
-  `,
+  description: (
+    <>
+      26, software engineer based in Kuala Lumpur, Malaysia. Open for new
+      opportunities for collaboration and learning.
+    </>
+  ),
 };
 
 const timelineItems = [
@@ -44,6 +79,10 @@ const timelineItems = [
           <li>
             Experiment with new technologies, product ideas, and various
             improvements and optimizations of existing applications.
+          </li>
+          <li>
+            Native IOS/Android home widget for displaying latest news on user
+            device home screen
           </li>
         </RetroList>
       </>
@@ -123,24 +162,40 @@ const aboutCarouselSlides = [
     description: "Taken on the way to Tiliche, Manang",
     image: "/images/bhimtang.jpg",
     link: "https://google.com",
+    location: {
+      description: "Bhimtang, Manang",
+      mapsLink: "https://maps.app.goo.gl/fab8Fd2cFk9McgCh8",
+    },
   },
   {
     title: "Manaslu Glacier",
     description: "Taken on the way to Manaslu Base Camp",
     image: "/images/manaslu_glacier.jpg",
     link: "https://google.com",
+    location: {
+      description: "Manaslu Glacier, Samagaun",
+      mapsLink: "https://maps.app.goo.gl/eQ1NKGVHR1Cyk5Sk7",
+    },
   },
   {
     title: "Namjung",
     description: "Taken during descent from Larkya La",
     image: "/images/namjung.jpg",
     link: "https://google.com",
+    location: {
+      description: "Gyaji Kang and Namjung",
+      mapsLink: "https://maps.app.goo.gl/VwsLFzaCRvFRuaT29",
+    },
   },
   {
     title: "Family of yaks",
     description: "Taken during ascent from Samdo to Dharamsala",
     image: "/images/yak.jpg",
     link: "https://google.com",
+    location: {
+      description: "Family of yaks, Samdo",
+      mapsLink: "https://maps.app.goo.gl/vtxJ7MtzjF6x1d9M9",
+    },
   },
 ];
 

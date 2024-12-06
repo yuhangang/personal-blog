@@ -16,15 +16,6 @@ interface BioProps {
 }
 
 const Bio: React.FC<BioProps> = ({ src, name, description }) => {
-  const getInitials = (fullName: string) => {
-    return fullName
-      .split(" ")
-      .map((word) => word[0])
-      .slice(0, 2)
-      .join("")
-      .toUpperCase();
-  };
-
   return (
     <AvatarContainer>
       <AvatarWrapper size={"large"} variant={"circle"}>

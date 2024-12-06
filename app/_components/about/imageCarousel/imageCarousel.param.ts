@@ -3,4 +3,10 @@ export type ImageCarouselEntry = {
   description: string;
   image: string;
   link: string;
+  location?: ImageCarouselLocation;
+};
+
+export type ImageCarouselLocation = {
+  description: string;
+  mapsLink: string;
 };

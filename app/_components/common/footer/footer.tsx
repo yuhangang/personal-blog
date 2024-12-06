@@ -15,7 +15,7 @@ import { socialLinks } from "./footer.config";
 const Footer: React.FC = () => {
   return (
     <FooterContainer>
-      <FooterTitle>Crafted with Intention</FooterTitle>
+      <FooterTitle>Work in Progress ...</FooterTitle>
 
       <Divider />
 

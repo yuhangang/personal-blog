@@ -1,134 +1,155 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import styled from "styled-components";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
+import Image from "next/image";
 import {
   CarouselContainer,
-  CarouselImage,
   Indicator,
   Indicators,
-  NextButton,
-  PlaceholderSlide,
-  PrevButton,
-  Slide,
+  NavigationButton,
   SlideContainer,
+  SlideWrapper,
+  BottomIndicator,
+  BottomIndicatorsContainer,
+  LocationChip,
+  LocationContainer,
 } from "./imageCarousel.style";
-import { ImageCarouselEntry } from "./imageCarousel.param";
-import Image from "next/image";
-import Link from "next/link";
 
-const ImageCarousel = ({ slides }: { slides: ImageCarouselEntry[] }) => {
+interface Slide {
+  image: string;
+  title: string;
+  location?: {
+    description: string;
+    mapsLink: string;
+  };
+}
+
+const ImageCarousel: React.FC<{ slides: Slide[] }> = ({ slides }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const carouselRef = useRef<HTMLDivElement>(null);
+  const [prevIndex, setPrevIndex] = useState<number | null>(null);
+  const [direction, setDirection] = useState<"next" | "prev" | "initial">(
+    "initial"
+  );
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Memoize slides to prevent unnecessary re-renders
+  const memoizedSlides = useMemo(() => slides, [slides]);
+
+  // Advance slide with optimized logic
+  const advanceSlide = useCallback(() => {
+    setPrevIndex(currentIndex);
+    setDirection("next");
+    setCurrentIndex((prev) => (prev + 1) % memoizedSlides.length);
+  }, [currentIndex, memoizedSlides.length]);
+
+  // Setup auto-play interval with cleanup
   useEffect(() => {
-    const checkVisibilityAndScroll = () => {
-      if (!carouselRef.current) return;
-
-      // Check if carousel is in view
-      const rect = carouselRef.current.getBoundingClientRect();
-      const isVisible =
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <=
-          (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <=
-          (window.innerWidth || document.documentElement.clientWidth);
-
-      // Prevent autoplay if not fully visible or page is not in focus
-      if (!isVisible || document.hidden) {
-        if (intervalRef.current) {
-          clearInterval(intervalRef.current);
-          intervalRef.current = null;
-        }
-        return;
-      }
-
-      // Start or continue autoplay
-      if (isAutoPlaying && !intervalRef.current) {
-        intervalRef.current = setInterval(() => {
-          setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-        }, 5000);
-      }
-    };
-
-    // Add event listeners
-    document.addEventListener("visibilitychange", checkVisibilityAndScroll);
-    window.addEventListener("scroll", checkVisibilityAndScroll);
-
-    // Initial check
-    checkVisibilityAndScroll();
-
-    // Cleanup
+    intervalRef.current = setInterval(advanceSlide, 5000);
     return () => {
-      document.removeEventListener(
-        "visibilitychange",
-        checkVisibilityAndScroll
-      );
-      window.removeEventListener("scroll", checkVisibilityAndScroll);
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [advanceSlide]);
 
+  // Navigation handlers with interval reset
+  const navigate = useCallback(
+    (newIndex: number, navDirection: "next" | "prev") => {
+      setPrevIndex(currentIndex);
+      setDirection(navDirection);
+      setCurrentIndex(newIndex);
+
+      // Reset interval
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+        intervalRef.current = setInterval(advanceSlide, 5000);
       }
-    };
-  }, [isAutoPlaying, slides.length]);
+    },
+    [currentIndex, advanceSlide]
+  );
 
   const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    setIsAutoPlaying(false);
+    const nextIndex = (currentIndex + 1) % memoizedSlides.length;
+    navigate(nextIndex, "next");
   };
 
   const goToPrev = () => {
-    setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + slides.length) % slides.length
-    );
-    setIsAutoPlaying(false);
+    const prevIndex =
+      (currentIndex - 1 + memoizedSlides.length) % memoizedSlides.length;
+    navigate(prevIndex, "prev");
   };
 
   const goToSlide = (index: number) => {
-    setCurrentIndex(index);
-    setIsAutoPlaying(false);
+    const navDirection = index > currentIndex ? "next" : "prev";
+    navigate(index, navDirection);
   };
 
   return (
-    <CarouselContainer
-      ref={carouselRef}
-      onMouseEnter={() => setIsAutoPlaying(false)}
-      onMouseLeave={() => setIsAutoPlaying(true)}
-    >
+    <CarouselContainer>
       <SlideContainer>
-        {slides.map((_, index) => (
-          <Slide key={index} $isActive={index === currentIndex}>
-            <Link href={slides[index].image}>
+        {[currentIndex, prevIndex].map((slideIndex, stackIndex) => {
+          if (slideIndex === null) return null;
+
+          const isActive = slideIndex === currentIndex;
+          const slideDirection =
+            stackIndex === 0 && !isActive ? direction : "initial";
+
+          return (
+            <SlideWrapper
+              key={`${slideIndex}`}
+              $isActive={isActive}
+              $direction={slideDirection}
+            >
               <Image
-                src={slides[index].image}
-                alt={slides[index].title}
+                src={memoizedSlides[slideIndex].image}
+                alt={memoizedSlides[slideIndex].title}
                 layout="fill"
                 objectFit="cover"
                 objectPosition="50% 20%"
+                priority={slideIndex < 2}
               />
-            </Link>
-          </Slide>
-        ))}
+              {memoizedSlides[slideIndex].location && (
+                <LocationContainer>
+                  <LocationChip>
+                    <MapPin size={20} style={{ marginRight: "8px" }} />
+                    {memoizedSlides[slideIndex].location!.description}
+                  </LocationChip>
+                </LocationContainer>
+              )}
+            </SlideWrapper>
+          );
+        })}
       </SlideContainer>
-      <PrevButton onClick={goToPrev} aria-label="Previous slide">
-        <ChevronLeft size={24} />
-      </PrevButton>
-      <NextButton onClick={goToNext} aria-label="Next slide">
-        <ChevronRight size={24} />
-      </NextButton>
 
-      <Indicators>
-        {slides.map((_, index) => (
-          <Indicator
+      <NavigationButton
+        style={{ left: "8px" }}
+        onClick={goToPrev}
+        aria-label="Previous slide"
+      >
+        <ChevronLeft size={24} />
+      </NavigationButton>
+
+      <NavigationButton
+        style={{ right: "8px" }}
+        onClick={goToNext}
+        aria-label="Next slide"
+      >
+        <ChevronRight size={24} />
+      </NavigationButton>
+
+      <BottomIndicatorsContainer>
+        {slides.map((slide, index) => (
+          <BottomIndicator
             key={index}
-            $isActive={index === currentIndex}
             onClick={() => goToSlide(index)}
-            aria-label={`Go to slide ${index + 1}`}
+            $isActive={index === currentIndex}
           />
         ))}
-      </Indicators>
+      </BottomIndicatorsContainer>
     </CarouselContainer>
   );
 };

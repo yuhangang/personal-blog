@@ -1,113 +1,134 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
-export const CarouselContainer = styled.div`
-  position: relative;
-  width: 100vw;
-  height: 60vh;
-  overflow: hidden;
-`;
-
-export const SlideContainer = styled.div`
+const CarouselContainer = styled.div`
   position: relative;
   width: 100%;
-  height: 100%;
 `;
 
-export const Slide = styled.div<{ $isActive: boolean }>`
+const SlideWrapper = styled.div<{
+  $isActive: boolean;
+  $direction: "next" | "prev" | "initial";
+}>`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   opacity: ${(props) => (props.$isActive ? 1 : 0)};
-  transition: opacity 0.5s ease-in-out;
+  transform: ${(props) => {
+    if (!props.$isActive) {
+      return props.$direction === "next"
+        ? "translateX(100%)"
+        : "translateX(-100%)";
+    }
+    return "translateX(0)";
+  }};
+  transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
+  z-index: ${(props) => (props.$isActive ? 10 : 1)};
 `;
-
-export const PlaceholderSlide = styled.div`
+const SlideContainer = styled.div`
+  position: relative;
   width: 100%;
-  height: 100%;
-  background-color: #2a303c;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #4b5563;
-  font-size: 14px;
+  overflow: hidden;
+  aspect-ratio: 21 / 9;
+
+  @media (max-width: 768px) {
+    aspect-ratio: 9 / 16;
+  }
 `;
 
-export const CarouselImage = styled.image`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
-
-export const CarouselButton = styled.button`
+const NavigationButton = styled.button`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 8px;
+  border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  color: white;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
+  z-index: 30;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.7);
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px white;
+    background-color: rgba(0, 0, 0, 0.7);
   }
 `;
 
-export const PrevButton = styled(CarouselButton)`
-  left: 16px;
-
-  @media (min-width: 768px) {
-    left: 32px;
-  }
-  @media (min-width: 1024px) {
-    left: 48px;
-  }
-`;
-
-export const NextButton = styled(CarouselButton)`
-  right: 16px;
-
-  @media (min-width: 768px) {
-    right: 32px;
-  }
-  @media (min-width: 1024px) {
-    right: 48px;
-  }
-`;
-
-export const Indicators = styled.div`
+const BottomIndicatorsContainer = styled.div`
   position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
   display: flex;
+  justify-content: center;
+  z-index: 20;
+  bottom: 8px;
+
+  @media (min-width: 768px) {
+    bottom: 24px;
+  }
+`;
+
+const BottomIndicator = styled.div<{ $isActive: boolean }>`
+  width: 40px;
+  height: 4px;
+  margin: 0 4px;
+  background-color: ${(props) =>
+    props.$isActive ? "white" : "rgba(255, 255, 255, 0.5)"};
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+`;
+
+const Indicators = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
   gap: 8px;
 `;
 
-export const Indicator = styled.button<{ $isActive: boolean }>`
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+const Indicator = styled.button<{ $isActive: boolean }>`
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background-color: ${(props) => (props.$isActive ? "black" : "#D1D5DB")};
   border: none;
-  background: ${(props) =>
-    props.$isActive ? "white" : "rgba(255, 255, 255, 0.5)"};
   cursor: pointer;
-  transition: background-color 0.3s;
+`;
 
-  &:hover {
-    background: white;
+const LocationContainer = styled.div`
+  position: relative; // Keep relative positioning for child elements
+  display: flex;
+  justify-content: flex-start; // Default alignment (for larger screens)
+  align-items: flex-end; // Align to bottom
+  height: 100%; // Ensure proper alignment within a fixed height container
+  padding: 16px; // Add padding to the container instead of the chip
+
+  @media (max-width: 768px) {
+    align-items: flex-start;
+    justify-content: center; // Center horizontally on small screens
   }
 `;
+
+const LocationChip = styled.div`
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px; // Adjust bottom spacing instead of absolute positioning
+`;
+
+export {
+  CarouselContainer,
+  SlideWrapper,
+  SlideContainer,
+  NavigationButton,
+  BottomIndicatorsContainer,
+  BottomIndicator,
+  Indicators,
+  Indicator,
+  LocationContainer,
+  LocationChip,
+};
