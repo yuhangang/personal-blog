@@ -28,17 +28,9 @@ const Footer: React.FC = () => {
             rel="noopener noreferrer"
           >
             <SocialIconWrapper>
-              <IconCircle>
-                <img
-                  src={`https://www.google.com/s2/favicons?domain=${link.url}`}
-                  alt={`${link.name} favicon`}
-                  width="24"
-                  height="24"
-                  style={{ borderRadius: '50%' }}
-                />
-              </IconCircle>
+              <IconCircle>{link.icon}</IconCircle>
               <SocialText>{link.name}</SocialText>
-            </SocialLink>
+            </SocialIconWrapper>
           </SocialLink>
         ))}
       </SocialLinks>
@@ -49,3 +41,5 @@ const Footer: React.FC = () => {
     </FooterContainer>
   );
 };
+
+export default Footer;
