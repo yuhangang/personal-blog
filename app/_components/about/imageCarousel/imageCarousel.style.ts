@@ -22,7 +22,7 @@ const SlideContainer = styled.div`
   position: relative;
   width: 100%;
   overflow: hidden;
-  aspect-ratio: 21 / 9;
+  aspect-ratio: 3 / 1;
 
   @media (max-width: 768px) {
     aspect-ratio: 9 / 16;
