@@ -10,25 +10,14 @@ import {
   TimelineContent,
   TimeLineLinkFont,
   TimeLineLink,
+  WorkContainer,
+  WorkTitle,
+  StyledTimeline,
+  TimelineTitle,
 } from "./timeline.style";
 import { ConstrainedSection, NavbarSpacer } from "../../common/constraint";
 
 // Additional styled components specific to this implementation
-const WorkContainer = styled(motion.div)`
-  /* Add any specific styles from your work class */
-`;
-
-const WorkTitle = styled.h2`
-  /* Add any specific styles for the title */
-`;
-
-const StyledTimeline = styled(Timeline)`
-  /* Add any additional timeline styles from your scss modules */
-`;
-
-const TimelineTitle = styled.h3`
-  /* Add any specific styles for timeline titles */
-`;
 
 interface TimeLineData {
   dateTime: string;

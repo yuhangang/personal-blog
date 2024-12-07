@@ -6,6 +6,7 @@ const RetroList = styled.ul`
   max-width: 800px;
   margin: 0 auto;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: ${(props) => props.theme.colors.textColor};
 
   li {
     position: relative;
@@ -25,6 +26,10 @@ const RetroList = styled.ul`
       background: #6c6c6c;
       border-radius: 50%;
     }
+  }
+
+  &:hover {
+    color: ${(props) => props.theme.colors.focusTextColor};
   }
 `;
 

@@ -12,6 +12,7 @@ const Main = styled.main`
   display: flex;
   flex-direction: column;
   gap: 24px; // Adds consistent spacing between children
+  background-color: ${(props) => props.theme.colors.backgroundColor};
 `;
 
 const Title = styled.h1`

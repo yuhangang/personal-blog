@@ -20,10 +20,12 @@ import {
   LocationChip,
   LocationContainer,
 } from "./imageCarousel.style";
+import Link from "next/link";
 
 interface Slide {
   image: string;
   title: string;
+  description: string;
   location?: {
     description: string;
     mapsLink: string;
@@ -106,7 +108,7 @@ const ImageCarousel: React.FC<{ slides: Slide[] }> = ({ slides }) => {
             >
               <Image
                 src={memoizedSlides[slideIndex].image}
-                alt={memoizedSlides[slideIndex].title}
+                alt={`${memoizedSlides[slideIndex].title}, ${memoizedSlides[slideIndex].description}`}
                 layout="fill"
                 objectFit="cover"
                 objectPosition="50% 15%"
@@ -115,10 +117,12 @@ const ImageCarousel: React.FC<{ slides: Slide[] }> = ({ slides }) => {
               />
               {memoizedSlides[slideIndex].location && (
                 <LocationContainer>
-                  <LocationChip>
-                    <MapPin size={20} style={{ marginRight: "8px" }} />
-                    {memoizedSlides[slideIndex].location!.description}
-                  </LocationChip>
+                  <Link href={memoizedSlides[slideIndex].location!.mapsLink}>
+                    <LocationChip>
+                      <MapPin size={20} style={{ marginRight: "8px" }} />
+                      {memoizedSlides[slideIndex].location!.description}
+                    </LocationChip>
+                  </Link>
                 </LocationContainer>
               )}
             </SlideWrapper>

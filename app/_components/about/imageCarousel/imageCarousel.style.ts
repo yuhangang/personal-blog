@@ -22,6 +22,7 @@ const SlideContainer = styled.div`
   position: relative;
   width: 100%;
   overflow: hidden;
+  background-color: ${(props) => props.theme.colors.backgroundColor};
   aspect-ratio: 3 / 1;
 
   @media (max-width: 768px) {

@@ -178,7 +178,7 @@ const aboutCarouselSlides = [
     },
   },
   {
-    title: "Namjung",
+    title: "Gyaji Kang and Namjung",
     description: "Taken during descent from Larkya La",
     image: "/images/namjung.webp",
     link: "https://google.com",

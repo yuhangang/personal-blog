@@ -20,8 +20,7 @@ const AvatarWrapper = styled.div<{
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background-color: #e1e1e1;
-  color: #333;
+  background-color: black;
   font-weight: 600;
   text-transform: uppercase;
 
@@ -49,6 +48,7 @@ const AvatarWrapper = styled.div<{
 const BioText = styled.div`
   flex: 1;
   margin-left: 1rem;
+  color: ${({ theme }) => theme.colors.textColor};
 
   @media (max-width: 768px) {
     margin-left: 0;
@@ -60,6 +60,8 @@ const Name = styled.h2`
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
+
+  color: ${({ theme }) => theme.colors.primary};
 `;
 
 const Description = styled.p`

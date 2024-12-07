@@ -1,34 +1,35 @@
+import { motion } from "framer-motion";
 import styled, { css } from "styled-components";
 
 const primaryColor = "rgb(151, 37, 37)";
 const primaryColorHover = "rgb(201, 74, 74)";
 
-export const TimeLineLink = styled.div`
+const TimeLineLink = styled.div`
   width: 16rem;
   max-width: 58vw;
   align-items: center;
   text-align: center;
 `;
 
-export const TimeLineLinkFont = styled.button`
+const TimeLineLinkFont = styled.button`
   position: absolute;
   right: 15px;
   bottom: 10px;
   margin: 20px 20px;
   width: 5.5rem;
-  background-color: transparent;
   border: 1px solid rgba(200, 200, 200);
   border-radius: 1rem;
   padding: 0.2rem 1rem;
-  color: white;
+  color: ${(props) => props.theme.colors.textColor};
   cursor: pointer;
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
+    color: ${(props) => props.theme.colors.focusTextColor};
   }
 `;
 
-export const ContainerFluid = styled.div`
+const ContainerFluid = styled.div`
   .row {
     padding: 0 0 4em 0;
     &:nth-child(even) {
@@ -37,7 +38,7 @@ export const ContainerFluid = styled.div`
   }
 `;
 
-export const Timeline = styled.ul`
+const Timeline = styled.ul`
   line-height: 1.4em;
   list-style: none;
   margin: 0;
@@ -54,7 +55,7 @@ export const Timeline = styled.ul`
   }
 `;
 
-export const TimelineItem = styled.li`
+const TimelineItem = styled.li`
   margin: 20px 0px;
   padding-left: 25px;
   position: relative;
@@ -65,7 +66,7 @@ export const TimelineItem = styled.li`
   }
 `;
 
-export const TimelineInfo = styled.span`
+const TimelineInfo = styled.span`
   font-weight: 300;
   letter-spacing: 3px;
   margin: 0 0 0.5em 0;
@@ -74,7 +75,7 @@ export const TimelineInfo = styled.span`
   white-space: nowrap;
 `;
 
-export const TimelineMarker = styled.div`
+const TimelineMarker = styled.div`
   position: absolute;
   top: 0;
   bottom: 0;
@@ -116,13 +117,14 @@ export const TimelineMarker = styled.div`
   }
 `;
 
-export const TimelineContent = styled.div`
+const TimelineContent = styled.div`
   overflow: clip;
   padding-left: 10px;
   padding-bottom: 10px;
   border-radius: 10px;
   transition: 0.5s;
   font-weight: 300;
+  color: ${(props) => props.theme.colors.textColor};
 
   p:last-child {
     margin-bottom: 0;
@@ -130,15 +132,13 @@ export const TimelineContent = styled.div`
 
   h3 {
     transition: 0.5s;
-    color: rgba(115, 114, 119);
+    color: ${(props) => props.theme.colors.primary};
   }
 
   &:hover {
-    text-shadow: 2px 2px 5px grey;
-
     h3 {
       text-shadow: none;
-      color: rgba(146, 144, 130);
+      color: ${(props) => props.theme.colors.secondary};
     }
   }
 
@@ -147,7 +147,7 @@ export const TimelineContent = styled.div`
   }
 `;
 
-export const PeriodStyles = css`
+const PeriodStyles = css`
   padding: 0;
 
   ${TimelineInfo} {
@@ -181,7 +181,7 @@ export const PeriodStyles = css`
   }
 `;
 
-export const TimelineSplit = styled(Timeline)`
+const TimelineSplit = styled(Timeline)`
   @media (min-width: 768px) {
     display: table;
 
@@ -209,7 +209,7 @@ export const TimelineSplit = styled(Timeline)`
   }
 `;
 
-export const TimelineCentered = styled(TimelineSplit)`
+const TimelineCentered = styled(TimelineSplit)`
   @media (min-width: 992px) {
     &,
     ${TimelineItem}, ${TimelineInfo}, ${TimelineMarker}, ${TimelineContent} {
@@ -271,7 +271,7 @@ export const TimelineCentered = styled(TimelineSplit)`
   }
 `;
 
-export const MarkerOutline = styled.div`
+const MarkerOutline = styled.div`
   ${TimelineMarker} {
     &:before {
       background: transparent;
@@ -283,3 +283,38 @@ export const MarkerOutline = styled.div`
     background: ${primaryColor};
   }
 `;
+
+const WorkContainer = styled(motion.div)`
+  /* Add any specific styles from your work class */
+`;
+
+const WorkTitle = styled.h2`
+  /* Add any specific styles for the title */
+`;
+
+const StyledTimeline = styled(Timeline)`
+  /* Add any additional timeline styles from your scss modules */
+`;
+
+const TimelineTitle = styled.h3`
+  /* Add any specific styles for timeline titles */
+`;
+
+export {
+  TimeLineLink,
+  TimeLineLinkFont,
+  ContainerFluid,
+  Timeline,
+  TimelineItem,
+  TimelineInfo,
+  TimelineMarker,
+  TimelineContent,
+  PeriodStyles,
+  TimelineSplit,
+  TimelineCentered,
+  MarkerOutline,
+  WorkContainer,
+  WorkTitle,
+  StyledTimeline,
+  TimelineTitle,
+};

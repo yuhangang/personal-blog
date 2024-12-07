@@ -5,6 +5,11 @@ declare module "styled-components" {
     colors: {
       primary: string;
       secondary: string;
+      backgroundColor: string;
+      textColor: string;
+      focusTextColor: string;
+      toggleBg: string;
+      toggleColor: string;
     };
   }
 }
