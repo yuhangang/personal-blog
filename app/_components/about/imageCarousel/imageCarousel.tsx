@@ -110,6 +110,7 @@ const ImageCarousel: React.FC<{ slides: Slide[] }> = ({ slides }) => {
                 layout="fill"
                 objectFit="cover"
                 objectPosition="50% 15%"
+                quality={100}
                 priority={slideIndex < 2}
               />
               {memoizedSlides[slideIndex].location && (
