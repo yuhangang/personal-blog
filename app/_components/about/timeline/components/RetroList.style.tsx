@@ -11,7 +11,6 @@ const RetroList = styled.ul`
     position: relative;
     padding: 0.75rem 0 0.75rem 1.5rem;
     margin-bottom: 0.5rem;
-    color: #ffffff; /* Changed to white */
     font-size: 1rem;
     line-height: 1.5;
     letter-spacing: -0.011em;

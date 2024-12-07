@@ -1,20 +1,14 @@
 import { createGlobalStyle } from "styled-components";
 
-// TODO: fully support light/dark mode
-/*
-color: ${(props) =>
-  props.theme.mode === "dark"
-    ? "rgba(255, 255, 255, 0.87)"
-    : "rgba(0, 0, 0, 0.87)"};
-background-color: ${(props) =>
-  props.theme.mode === "dark" ? "#121212" : "#ffffff"};
-  */
-
 const GlobalStyle = createGlobalStyle`
   html,
   body {
-    color:"rgba(255, 255, 255, 0.87)";
-    background-color:  "#121212" ;
+    color: ${(props) =>
+      props.theme.mode === "dark"
+        ? "rgba(255, 255, 255, 0.87)"
+        : "rgba(0, 0, 0, 0.87)"};
+    background-color: ${(props) =>
+      props.theme.mode === "dark" ? "#121212" : "#ffffff"};
     padding: 0;
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,

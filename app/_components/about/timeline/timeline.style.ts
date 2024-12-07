@@ -123,7 +123,6 @@ export const TimelineContent = styled.div`
   border-radius: 10px;
   transition: 0.5s;
   font-weight: 300;
-  color: rgba(230, 230, 230);
 
   p:last-child {
     margin-bottom: 0;
@@ -135,7 +134,6 @@ export const TimelineContent = styled.div`
   }
 
   &:hover {
-    color: white;
     text-shadow: 2px 2px 5px grey;
 
     h3 {

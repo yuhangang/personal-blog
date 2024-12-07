@@ -63,7 +63,6 @@ const Name = styled.h2`
 `;
 
 const Description = styled.p`
-  color: #666;
   font-size: 1rem;
   line-height: 1.5;
 `;
