@@ -15,15 +15,7 @@ const SlideWrapper = styled.div<{
   width: 100%;
   height: 100%;
   opacity: ${(props) => (props.$isActive ? 1 : 0)};
-  transform: ${(props) => {
-    if (!props.$isActive) {
-      return props.$direction === "next"
-        ? "translateX(100%)"
-        : "translateX(-100%)";
-    }
-    return "translateX(0)";
-  }};
-  transition: transform 500ms ease-in-out, opacity 500ms ease-in-out;
+  transition: opacity 1s ease-in-out;
   z-index: ${(props) => (props.$isActive ? 10 : 1)};
 `;
 const SlideContainer = styled.div`

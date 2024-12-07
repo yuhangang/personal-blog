@@ -160,7 +160,7 @@ const aboutCarouselSlides = [
   {
     title: "Ridge of Mount Manaslu",
     description: "Taken on the way to Tiliche, Manang",
-    image: "/images/bhimtang.jpg",
+    image: "/images/bhimtang.webp",
     link: "https://google.com",
     location: {
       description: "Bhimtang, Manang",
@@ -170,7 +170,7 @@ const aboutCarouselSlides = [
   {
     title: "Manaslu Glacier",
     description: "Taken on the way to Manaslu Base Camp",
-    image: "/images/manaslu_glacier.jpg",
+    image: "/images/manaslu_glacier.webp",
     link: "https://google.com",
     location: {
       description: "Manaslu Glacier, Samagaun",
@@ -180,7 +180,7 @@ const aboutCarouselSlides = [
   {
     title: "Namjung",
     description: "Taken during descent from Larkya La",
-    image: "/images/namjung.jpg",
+    image: "/images/namjung.webp",
     link: "https://google.com",
     location: {
       description: "Gyaji Kang and Namjung",
@@ -190,7 +190,7 @@ const aboutCarouselSlides = [
   {
     title: "Family of yaks",
     description: "Taken during ascent from Samdo to Dharamsala",
-    image: "/images/yak.jpg",
+    image: "/images/yak.webp",
     link: "https://google.com",
     location: {
       description: "Family of yaks, Samdo",
