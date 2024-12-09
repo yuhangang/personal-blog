@@ -73,6 +73,7 @@ const TimelineInfo = styled.span`
   padding: 0px 10px;
   text-transform: uppercase;
   white-space: nowrap;
+  color: ${(props) => props.theme.colors.textColor};
 `;
 
 const TimelineMarker = styled.div`
@@ -290,6 +291,7 @@ const WorkContainer = styled(motion.div)`
 
 const WorkTitle = styled.h2`
   /* Add any specific styles for the title */
+  color: ${(props) => props.theme.colors.textColor};
 `;
 
 const StyledTimeline = styled(Timeline)`
