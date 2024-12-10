@@ -1,4 +1,3 @@
-"use client";
 import About from "./_components/about/about";
 
 export default function Home() {
