@@ -1,4 +1,5 @@
 "use client";
+
 import Head from "next/head";
 import { Container, Main } from "../sharedstyles";
 import Navbar from "../common/navbar/navbar";

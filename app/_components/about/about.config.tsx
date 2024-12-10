@@ -1,5 +1,5 @@
 import { desc } from "framer-motion/client";
-import RetroList from "./timeline/components/RetroList.style";
+import RetroList from "./timeline/components/RetroList";
 
 import Head from "next/head";
 

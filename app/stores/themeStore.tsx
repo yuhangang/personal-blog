@@ -3,7 +3,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import { type DefaultTheme } from "styled-components";
 import { th } from "framer-motion/client";
 
-const lightTheme: DefaultTheme = {
+export const lightTheme: DefaultTheme = {
   colors: {
     primary: "#9d6857",
     secondary: "#d78079",
@@ -15,9 +15,9 @@ const lightTheme: DefaultTheme = {
   },
 };
 
-const darkTheme: DefaultTheme = {
+export const darkTheme: DefaultTheme = {
   colors: {
-    primary: "#9d6857",
+    primary: "#ffffff",
     secondary: "#d78079",
     backgroundColor: "#121212",
     textColor: "#ffffff",

@@ -2,9 +2,10 @@
 
 import { ReactNode, useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
-import { useThemeStore } from "../app/stores/themeStore";
+import { darkTheme, useThemeStore } from "../app/stores/themeStore";
 import GlobalStyle from "../app/_components/globalstyles";
 import Footer from "../app/_components/common/footer/footer";
+import FloatingActionButton from "@/app/_components/about/navButton/navButton";
 
 // Styled toggle button
 const ThemeToggleButton = styled.button`
@@ -28,15 +29,18 @@ const ThemeToggleButton = styled.button`
 
 export default function ClientLayout({ children }: { children: ReactNode }) {
   // Use Zustand store for theme
-  const { theme, isDarkMode, toggleTheme } = useThemeStore();
+  //  const { theme, isDarkMode, toggleTheme } = useThemeStore();
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={darkTheme}>
       <GlobalStyle />
       {children}
+
+      {/*  
       <ThemeToggleButton onClick={toggleTheme}>
         {isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
       </ThemeToggleButton>
+      <FloatingActionButton /> */}
       <Footer />
     </ThemeProvider>
   );

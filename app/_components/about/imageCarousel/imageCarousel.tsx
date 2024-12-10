@@ -1,3 +1,5 @@
+"use client";
+
 import React, {
   useState,
   useEffect,
@@ -6,7 +8,7 @@ import React, {
   useCallback,
 } from "react";
 import styled from "styled-components";
-import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import Image from "next/image";
 import {
   CarouselContainer,
@@ -19,6 +21,7 @@ import {
   BottomIndicatorsContainer,
   LocationChip,
   LocationContainer,
+  ScrollDownIndicator,
 } from "./imageCarousel.style";
 import Link from "next/link";
 
@@ -146,6 +149,9 @@ const ImageCarousel: React.FC<{ slides: Slide[] }> = ({ slides }) => {
         <ChevronRight size={24} />
       </NavigationButton>
 
+      <ScrollDownIndicator>
+        <ChevronDown size={36} />
+      </ScrollDownIndicator>
       <BottomIndicatorsContainer>
         {slides.map((slide, index) => (
           <BottomIndicator

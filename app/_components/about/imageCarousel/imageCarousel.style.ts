@@ -23,10 +23,10 @@ const SlideContainer = styled.div`
   width: 100%;
   overflow: hidden;
   background-color: ${(props) => props.theme.colors.backgroundColor};
-  aspect-ratio: 3 / 1;
+  height: 50vh;
 
   @media (max-width: 768px) {
-    aspect-ratio: 9 / 16;
+    height: calc(100vh - 60px);
   }
 `;
 
@@ -46,6 +46,27 @@ const NavigationButton = styled.button`
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.7);
+  }
+`;
+
+const ScrollDownIndicator = styled.div`
+  visibility: hidden;
+  position: absolute;
+  color: white;
+  margin: auto;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 32px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  z-index: 30;
+
+  @media (max-width: 768px) {
+    visibility: visible;
   }
 `;
 
@@ -118,6 +139,7 @@ export {
   SlideWrapper,
   SlideContainer,
   NavigationButton,
+  ScrollDownIndicator,
   BottomIndicatorsContainer,
   BottomIndicator,
   Indicators,

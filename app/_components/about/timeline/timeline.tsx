@@ -1,25 +1,10 @@
-import { motion } from "framer-motion";
-import Link from "next/link";
 import React from "react";
-import styled from "styled-components";
-import {
-  Timeline,
-  TimelineItem as StyledTimelineItem,
-  TimelineInfo,
-  TimelineMarker,
-  TimelineContent,
-  TimeLineLinkFont,
-  TimeLineLink,
-  WorkContainer,
-  WorkTitle,
-  StyledTimeline,
-  TimelineTitle,
-} from "./timeline.style";
-import { ConstrainedSection, NavbarSpacer } from "../../common/constraint";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ConstrainedSection } from "../../common/constraint";
+import styles from "./Timeline.module.scss";
 
-// Additional styled components specific to this implementation
-
-interface TimeLineData {
+export interface TimeLineData {
   dateTime: string;
   title: string;
   detail?: string | JSX.Element;
@@ -28,26 +13,24 @@ interface TimeLineData {
 
 function TimeLineItem(props: TimeLineData): JSX.Element {
   const detail = props.link ? (
-    <TimeLineLink key={props.title}>
+    <div className={styles.timeLineLink} key={props.title}>
       <Link href={props.link}>
-        <TimeLineLinkFont as="div">Explore</TimeLineLinkFont>
+        <div className={styles.timeLineLinkFont}>Explore</div>
       </Link>
       <br />
-    </TimeLineLink>
-  ) : (
-    <div></div>
-  );
+    </div>
+  ) : null;
 
   return (
-    <StyledTimelineItem>
-      <TimelineInfo>{props.dateTime}</TimelineInfo>
-      <TimelineMarker />
-      <TimelineContent>
-        <TimelineTitle>{props.title}</TimelineTitle>
+    <li className={styles.timelineItem}>
+      <span className={styles.timelineInfo}>{props.dateTime}</span>
+      <div className={styles.timelineMarker} />
+      <div className={styles.timelineContent}>
+        <h3>{props.title}</h3>
         {props.detail || ""}
         {detail}
-      </TimelineContent>
-    </StyledTimelineItem>
+      </div>
+    </li>
   );
 }
 
@@ -60,34 +43,31 @@ export default function TimeLine({
 }) {
   return (
     <ConstrainedSection>
-      <WorkContainer
+      <motion.div
+        className={styles.workContainer}
         initial="pageInitial"
         animate="pageAnimate"
         variants={{
-          pageInitial: {
-            opacity: 0,
-          },
-          pageAnimate: {
-            opacity: 1,
-          },
+          pageInitial: { opacity: 0 },
+          pageAnimate: { opacity: 1 },
         }}
       >
-        <WorkTitle>{title}</WorkTitle>
+        <h2 className={styles.workTitle} style={{ color: "white" }}>
+          {title}
+        </h2>
         <br />
-        <StyledTimeline>
-          {items
-            ? items.map((item) => (
-                <TimeLineItem
-                  key={item.title}
-                  dateTime={item.dateTime}
-                  title={item.title}
-                  detail={item.detail}
-                  link={item.link}
-                />
-              ))
-            : []}
-        </StyledTimeline>
-      </WorkContainer>
+        <ul className={styles.timeline}>
+          {items?.map((item) => (
+            <TimeLineItem
+              key={item.title}
+              dateTime={item.dateTime}
+              title={item.title}
+              detail={item.detail}
+              link={item.link}
+            />
+          ))}
+        </ul>
+      </motion.div>
     </ConstrainedSection>
   );
 }
