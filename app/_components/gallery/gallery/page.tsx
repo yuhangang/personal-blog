@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import InfiniteGallery from "../_components/gallery/gallery";
+import InfiniteGallery from "../gallery";
 import styled from "styled-components";
 
 const Main = styled.main`
