@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ConstrainedSection } from "../../common/constraint";
-import styles from "./Timeline.module.scss";
+import styles from "./timeline.module.scss";
 
 export interface TimeLineData {
   dateTime: string;
@@ -52,9 +52,7 @@ export default function TimeLine({
           pageAnimate: { opacity: 1 },
         }}
       >
-        <h2 className={styles.workTitle} style={{ color: "white" }}>
-          {title}
-        </h2>
+        <h2 className={styles.workTitle}>{title}</h2>
         <br />
         <ul className={styles.timeline}>
           {items?.map((item) => (
