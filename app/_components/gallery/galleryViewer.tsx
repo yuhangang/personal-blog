@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import styled, { keyframes } from "styled-components";
-import { ImmersiveImage, ImmersiveOverlay } from "./galleryViewer.style";
+import styles from "./galleryViewer.module.scss";
 
 // Type Definitions
 interface ImageData {
@@ -21,7 +20,10 @@ interface ImmersiveImageViewerProps {
 const ImmersiveImageViewer: React.FC<ImmersiveImageViewerProps> = ({
   image,
   onClose,
-  clickOrigin = { x: window.innerWidth / 2, y: window.innerHeight / 2 },
+  clickOrigin = {
+    x: typeof window !== "undefined" ? window.innerWidth / 2 : 0,
+    y: typeof window !== "undefined" ? window.innerHeight / 2 : 0,
+  },
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -36,8 +38,6 @@ const ImmersiveImageViewer: React.FC<ImmersiveImageViewerProps> = ({
 
     if (image) {
       setIsVisible(true);
-
-      // Push a new state to browser history
       history.pushState({ immersiveView: true }, "");
     }
 
@@ -62,21 +62,18 @@ const ImmersiveImageViewer: React.FC<ImmersiveImageViewerProps> = ({
   if (!image) return null;
 
   return (
-    <ImmersiveOverlay
+    <div
       ref={overlayRef}
-      $originX={clickOrigin.x}
-      $originY={clickOrigin.y}
-      className={isVisible ? "active" : ""}
+      className={`${styles.immersiveOverlay} ${isVisible ? styles.active : ""}`}
       onClick={onClose}
     >
-      <ImmersiveImage
+      <img
         src={image.url}
         alt={image.title}
-        $originX={clickOrigin.x}
-        $originY={clickOrigin.y}
+        className={`${styles.immersiveImage} ${styles.zoomDefault}`}
         onClick={(e) => e.stopPropagation()}
       />
-    </ImmersiveOverlay>
+    </div>
   );
 };
 
@@ -102,34 +99,30 @@ export const ImageWithImmersiveView: React.FC<ImageWithImmersiveViewProps> = ({
   }, []);
 
   const handleClick = (e: React.MouseEvent<HTMLImageElement>) => {
-    // Capture the click coordinates relative to the viewport
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    // const x = e.clientX - rect.left;
+    // const y = e.clientY - rect.top;
 
     setClickOrigin({
       x: e.clientX,
       y: e.clientY,
     });
 
-    // Create ImageData object
     const imageData: ImageData = {
-      id: Date.now(), // Unique identifier
+      id: Date.now(),
       url: props.src || "",
       title: props.alt || "Image",
       width: e.currentTarget.naturalWidth,
       height: e.currentTarget.naturalHeight,
-      size: "medium", // You can adjust this logic as needed
+      size: "medium",
     };
 
     setImmersiveImage(imageData);
 
-    // Call original onClick if provided
     if (onClick) {
       onClick(e);
     }
 
-    // Call onImmersiveView if provided
     if (onImmersiveView) {
       onImmersiveView(imageData);
     }

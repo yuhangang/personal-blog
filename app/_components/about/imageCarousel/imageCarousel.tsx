@@ -7,23 +7,10 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import styled from "styled-components";
-import { ChevronDown, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import Image from "next/image";
-import {
-  CarouselContainer,
-  Indicator,
-  Indicators,
-  NavigationButton,
-  SlideContainer,
-  SlideWrapper,
-  BottomIndicator,
-  BottomIndicatorsContainer,
-  LocationChip,
-  LocationContainer,
-  ScrollDownIndicator,
-} from "./imageCarousel.style";
 import Link from "next/link";
+import { ChevronDown, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
+import styles from "./imageCarousel.module.scss";
 
 interface Slide {
   image: string;
@@ -94,8 +81,8 @@ const ImageCarousel: React.FC<{ slides: Slide[] }> = ({ slides }) => {
   };
 
   return (
-    <CarouselContainer>
-      <SlideContainer>
+    <div className={styles.carouselContainer}>
+      <div className={styles.slideContainer}>
         {[currentIndex, prevIndex].map((slideIndex, stackIndex) => {
           if (slideIndex === null) return null;
 
@@ -104,10 +91,13 @@ const ImageCarousel: React.FC<{ slides: Slide[] }> = ({ slides }) => {
             stackIndex === 0 && !isActive ? direction : "initial";
 
           return (
-            <SlideWrapper
+            <div
               key={`${slideIndex}`}
-              $isActive={isActive}
-              $direction={slideDirection}
+              className={`${styles.slideWrapper} ${
+                isActive
+                  ? styles.slideWrapperActive
+                  : styles.slideWrapperInactive
+              }`}
             >
               <Image
                 src={memoizedSlides[slideIndex].image}
@@ -119,49 +109,55 @@ const ImageCarousel: React.FC<{ slides: Slide[] }> = ({ slides }) => {
                 priority={slideIndex < 2}
               />
               {memoizedSlides[slideIndex].location && (
-                <LocationContainer>
+                <div className={styles.locationContainer}>
                   <Link href={memoizedSlides[slideIndex].location!.mapsLink}>
-                    <LocationChip>
+                    <div className={styles.locationChip}>
                       <MapPin size={20} style={{ marginRight: "8px" }} />
                       {memoizedSlides[slideIndex].location!.description}
-                    </LocationChip>
+                    </div>
                   </Link>
-                </LocationContainer>
+                </div>
               )}
-            </SlideWrapper>
+            </div>
           );
         })}
-      </SlideContainer>
+      </div>
 
-      <NavigationButton
+      <button
+        className={styles.navigationButton}
         style={{ left: "8px" }}
         onClick={goToPrev}
         aria-label="Previous slide"
       >
         <ChevronLeft size={24} />
-      </NavigationButton>
+      </button>
 
-      <NavigationButton
+      <button
+        className={styles.navigationButton}
         style={{ right: "8px" }}
         onClick={goToNext}
         aria-label="Next slide"
       >
         <ChevronRight size={24} />
-      </NavigationButton>
+      </button>
 
-      <ScrollDownIndicator>
+      <div className={styles.scrollDownIndicator}>
         <ChevronDown size={36} />
-      </ScrollDownIndicator>
-      <BottomIndicatorsContainer>
+      </div>
+      <div className={styles.bottomIndicatorsContainer}>
         {slides.map((slide, index) => (
-          <BottomIndicator
+          <div
             key={index}
             onClick={() => goToSlide(index)}
-            $isActive={index === currentIndex}
+            className={`${styles.bottomIndicator} ${
+              index === currentIndex
+                ? styles.bottomIndicatorActive
+                : styles.bottomIndicatorInactive
+            }`}
           />
         ))}
-      </BottomIndicatorsContainer>
-    </CarouselContainer>
+      </div>
+    </div>
   );
 };
 

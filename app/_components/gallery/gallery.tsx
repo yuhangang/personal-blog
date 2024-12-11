@@ -1,91 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useRef, FC } from "react";
-import styled from "styled-components";
 import { ImageData } from "./gallery.config";
 import ImmersiveImageViewer from "./galleryViewer";
-
-// Styled Components
-const GalleryContainer = styled.div`
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
-  background-color: #f4f4f4;
-`;
-
-const ScrollContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  position: relative;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-
-  &::-webkit-scrollbar {
-    display: none; /* WebKit */
-  }
-`;
-
-const InnerContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 300%;
-  height: 300%;
-  display: grid;
-  grid-template-columns: repeat(30, minmax(100px, 1fr));
-  grid-template-rows: repeat(30, minmax(100px, 1fr));
-  gap: 15px;
-  padding: 20px;
-  background-color: black;
-  transition: transform 0.1s ease; /* Smooth transition for repositioning */
-`;
-
-const ImageCard = styled.div<{ size: "small" | "medium" | "large" }>`
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  position: relative;
-
-  grid-column-end: span
-    ${(props) => (props.size === "small" ? 2 : props.size === "medium" ? 4 : 6)};
-  grid-row-end: span
-    ${(props) => (props.size === "small" ? 2 : props.size === "medium" ? 4 : 6)};
-
-  &:hover {
-    transform: scale(0.95);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  }
-`;
-
-const ImageThumbnail = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.2s ease;
-
-  ${ImageCard}:hover & {
-    transform: scale(1.2);
-  }
-`;
-
-const ImageTitle = styled.p`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 5px;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  text-align: center;
-  font-size: 0.8rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
+import styles from "./gallery.module.scss";
 
 // Generate image data with variable sizes
 const generateImageData = (count: number): ImageData[] => {
@@ -125,7 +43,9 @@ type ImageState = {
 };
 
 const TwoDimensionalInfiniteGallery: FC = () => {
-  const [images, setImages] = useState<ImageData[]>([]);
+  const [images, setImages] = useState<ImageData[]>(() =>
+    typeof window !== "undefined" ? generateImageData(900) : []
+  );
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const innerContainerRef = useRef<HTMLDivElement>(null);
   const [selectedImage, setSelectedImage] = useState<ImageState | null>(null);
@@ -143,7 +63,7 @@ const TwoDimensionalInfiniteGallery: FC = () => {
     container.scrollTop = centerY;
 
     const handleScroll = () => {
-      const { scrollLeft, scrollTop, clientWidth, clientHeight } = container;
+      const { scrollLeft, scrollTop } = container;
       const { offsetWidth, offsetHeight } = inner;
 
       let newScrollLeft = scrollLeft;
@@ -188,7 +108,6 @@ const TwoDimensionalInfiniteGallery: FC = () => {
   }, []);
 
   // Open image in immersive mode
-
   const openImmersiveMode = (image: ImageData, event: React.MouseEvent) => {
     // Calculate click coordinates relative to the viewport
     const rect = event.currentTarget.getBoundingClientRect();
@@ -205,22 +124,26 @@ const TwoDimensionalInfiniteGallery: FC = () => {
 
   return (
     <>
-      <GalleryContainer>
-        <ScrollContainer ref={scrollContainerRef}>
-          <InnerContainer ref={innerContainerRef}>
+      <div className={styles.galleryContainer}>
+        <div ref={scrollContainerRef} className={styles.scrollContainer}>
+          <div ref={innerContainerRef} className={styles.innerContainer}>
             {images.map((image) => (
-              <ImageCard
+              <div
                 key={image.id}
-                size={image.size}
+                className={`${styles.imageCard} ${styles[image.size]}`}
                 onClick={(e) => openImmersiveMode(image, e)}
               >
-                <ImageThumbnail src={image.url} alt={image.title} />
-                <ImageTitle>{image.title}</ImageTitle>
-              </ImageCard>
+                <img
+                  src={image.url}
+                  alt={image.title}
+                  className={styles.imageThumbnail}
+                />
+                <p className={styles.imageTitle}>{image.title}</p>
+              </div>
             ))}
-          </InnerContainer>
-        </ScrollContainer>
-      </GalleryContainer>
+          </div>
+        </div>
+      </div>
 
       <ImmersiveImageViewer
         image={selectedImage?.image ?? null}

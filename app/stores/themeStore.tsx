@@ -1,7 +1,8 @@
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-import { type DefaultTheme } from "styled-components";
-import { th } from "framer-motion/client";
+import { createJSONStorage, persist } from "zustand/middleware";
+
+// TODO: Handle app theme
+type DefaultTheme = {};
 
 export const lightTheme: DefaultTheme = {
   colors: {

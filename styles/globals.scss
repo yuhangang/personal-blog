@@ -1,0 +1,24 @@
+$backgroundColor: #000000;
+
+html,
+body {
+  color: white;
+  background-color: $backgroundColor;
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+* {
+  box-sizing: border-box;
+}
+
+.app {
+  color: #fff;
+  background-color: $backgroundColor;
+}

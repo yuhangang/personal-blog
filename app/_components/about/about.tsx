@@ -1,18 +1,16 @@
 "use client";
 
-import Head from "next/head";
-import { Container, Main } from "../sharedstyles";
-import Navbar from "../common/navbar/navbar";
-import ImageCarousel from "./imageCarousel/imageCarousel";
 import { NavbarSpacer } from "../common/constraint";
 import { Spacer } from "../common/layout/center";
-import TimeLine from "./timeline/timeline";
-import Bio from "./bio/bio";
+import { Container, Main } from "../common/sharedstyles";
 import SEO, {
   aboutCarouselSlides,
   bioBrief,
   timelineItems,
 } from "./about.config";
+import Bio from "./bio/bio";
+import ImageCarousel from "./imageCarousel/imageCarousel";
+import TimeLine from "./timeline/timeline";
 
 export default function Home() {
   return (

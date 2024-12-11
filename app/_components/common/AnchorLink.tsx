@@ -33,13 +33,6 @@ export const AnchorLink = ({ href, children, className }: AnchorLinkProps) => {
   );
 };
 
-// components/AnchorSection.tsx
-import styled from "styled-components";
-
-const Section = styled.section`
-  scroll-margin-top: 5rem; // Adjust based on your header height
-`;
-
 interface AnchorSectionProps {
   id: string;
   children: React.ReactNode;
@@ -51,9 +44,9 @@ export const AnchorSection = ({
   children,
   className,
 }: AnchorSectionProps) => (
-  <Section id={id} className={className}>
+  <section id={id} className={className} style={{ scrollMarginTop: "5rem" }}>
     {children}
-  </Section>
+  </section>
 );
 
 // Hook to handle initial scroll on page load
