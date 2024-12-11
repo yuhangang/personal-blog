@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@next/third-parties':
+        specifier: ^15.1.0
+        version: 15.1.0(next@15.0.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.82.0))(react@18.3.1)
       '@types/react-window':
         specifier: ^1.8.8
         version: 1.8.8
@@ -228,6 +231,12 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
+
+  '@next/third-parties@15.1.0':
+    resolution: {integrity: sha512-eiv8vTo5HJOE/LabnIjRNVpN0hvjXfqPrE7D/XecmWvHBs9KrIISxlb1NZizDMcvjGtnHkdupWsquM9ur25rYw==}
+    peerDependencies:
+      next: ^13.0.0 || ^14.0.0 || ^15.0.0
+      react: ^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0
 
   '@parcel/watcher-android-arm64@2.5.0':
     resolution: {integrity: sha512-qlX4eS28bUcQCdribHkg/herLe+0A9RyYC+mm2PXpncit8z5b3nSqGVzMNR3CmtAOgRutiZ02eIJJgP/b1iEFQ==}
@@ -571,6 +580,9 @@ packages:
   stylis@4.3.2:
     resolution: {integrity: sha512-bhtUjWd/z6ltJiQwg0dUfxEJ+W+jdqQd8TbWLWyeIJHlnsqmGLRFFd8e5mA0AZi/zx90smXRlN66YMTcaSFifg==}
 
+  third-party-capital@1.0.20:
+    resolution: {integrity: sha512-oB7yIimd8SuGptespDAZnNkzIz+NWaJCu2RMsbs4Wmp9zSDUM8Nhi3s2OOcqYuv3mN4hitXc8DVx+LyUmbUDiA==}
+
   to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
@@ -726,6 +738,12 @@ snapshots:
 
   '@next/swc-win32-x64-msvc@15.0.3':
     optional: true
+
+  '@next/third-parties@15.1.0(next@15.0.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.82.0))(react@18.3.1)':
+    dependencies:
+      next: 15.0.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.82.0)
+      react: 18.3.1
+      third-party-capital: 1.0.20
 
   '@parcel/watcher-android-arm64@2.5.0':
     optional: true
@@ -1063,6 +1081,8 @@ snapshots:
       react: 18.3.1
 
   stylis@4.3.2: {}
+
+  third-party-capital@1.0.20: {}
 
   to-regex-range@5.0.1:
     dependencies:
