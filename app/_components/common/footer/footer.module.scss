@@ -93,6 +93,11 @@
   font-family: "Courier New", monospace;
   font-weight: bold;
   font-size: 1rem;
+
+  @media (max-width: 768px) {
+    width: 45px;
+    height: 45px;
+  }
 }
 
 .socialText {

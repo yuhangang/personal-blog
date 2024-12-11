@@ -1,59 +1,30 @@
-import styled from "styled-components";
+import React from "react";
+import styles from "./constraint.module.scss"; // Import the Sass file
 
-// NavbarSpacer that ensures consistent spacing
-export const NavbarSpacer = styled.div<{ height?: number }>`
-  height: ${(props) => props.height || 64}px;
-  width: 100%;
-  flex-shrink: 0; // Prevents spacer from shrinking
-`;
+// Replace styled components with regular divs/sections using className
+export const NavbarSpacer: React.FC<{ height?: number }> = ({ height }) => (
+  <div
+    className={styles.navbarSpacer}
+    style={{ height: height ? `${height}px` : undefined }}
+  />
+);
 
-// Updated ConstrainedSection that properly handles padding
-export const ConstrainedSection = styled.section`
-  width: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 16px;
-  display: flex;
-  flex-direction: column;
+export const ConstrainedSection: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => <section className={styles.constrainedSection}>{children}</section>;
 
-  /* Ensure padding is applied to direct children */
-  > * {
-    width: 100%;
-    padding-left: inherit;
-    padding-right: inherit;
-  }
+export const PageLayout: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => <div className={styles.pageLayout}>{children}</div>;
 
-  /* Optional: Add spacing between sections */
-  > * + * {
-    margin-top: 24px;
-  }
-`;
+export const Container: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => <div className={styles.container}>{children}</div>;
 
-// Layout wrapper to ensure proper structure
-export const PageLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  width: 100%;
-`;
+export const NarrowContent: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => <div className={styles.narrowContent}>{children}</div>;
 
-export const Container = styled.div`
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 16px;
-`;
-
-export const NarrowContent = styled.div`
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 16px;
-`;
-
-export const WideContent = styled.div`
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 16px;
-`;
+export const WideContent: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => <div className={styles.wideContent}>{children}</div>;

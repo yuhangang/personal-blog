@@ -13,15 +13,15 @@ const socialLinks: SocialLink[] = [
     url: "https://github.com/yuhangang",
   },
   {
-    name: "Instagram",
+    name: "Insta",
     icon: "◇",
-    iconSize: 24,
+    iconSize: 16,
     url: "https://instagram.com/yuhangang",
   },
   {
     name: "X",
-    icon: "×",
-    iconSize: 24,
+    icon: "X",
+    iconSize: 20,
     url: "https://x.com/redrainhang",
   },
   {

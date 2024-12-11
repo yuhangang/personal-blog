@@ -1,0 +1,66 @@
+// _layout-utils.scss
+
+// Variables
+$default-spacer-size: 16px;
+$mobile-breakpoint: 768px;
+
+// Centering Utilities
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.centerVertical {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.centerHorizontal {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+// Column Centering
+.centerColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+// Row Layout
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+// Spacer Utility
+@mixin spacer($size) {
+  width: $size;
+  height: $size;
+
+  @media (max-width: $mobile-breakpoint) {
+    width: $size / 2;
+    height: $size / 2;
+  }
+}
+
+.spacer {
+  // Default spacer
+  &-default {
+    @include spacer($default-spacer-size);
+  }
+
+  // Custom size spacers
+  @for $i from 1 through 10 {
+    &-#{$i * 4} {
+      @include spacer(#{$i * 4}px);
+    }
+  }
+}
