@@ -1,36 +1,46 @@
-import styled from "styled-components";
+@mixin media-tablet {
+  @media (min-width: 768px) {
+    @content;
+  }
+}
 
-const FooterContainer = styled.footer`
+@mixin media-desktop {
+  @media (min-width: 1024px) {
+    @content;
+  }
+}
+
+.footerContainer {
   background-color: #f4f4f4;
   color: #333;
   text-align: center;
   font-family: "Neue Haas Grotesk", "Inter", sans-serif;
   padding: 4rem 2rem;
-`;
+}
 
-const FooterTitle = styled.h2`
+.footerTitle {
   font-weight: 300;
   letter-spacing: -1px;
   margin-bottom: 2rem;
   color: #1a1a1a;
-`;
+}
 
-const SocialLinks = styled.div`
+.socialLinks {
   display: flex;
   justify-content: center;
   margin-top: 2rem;
-  gap: 1.5rem;
+  gap: 1rem;
 
-  @media (min-width: 768px) {
-    gap: 2.5 rem;
+  @include media-tablet {
+    gap: 2rem;
   }
 
-  @media (min-width: 1024px) {
-    gap: 3rem;
+  @include media-desktop {
+    gap: 2.5rem;
   }
-`;
+}
 
-const SocialLink = styled.a`
+.socialLink {
   position: relative;
   display: inline-block;
   color: #333;
@@ -56,17 +66,22 @@ const SocialLink = styled.a`
     &::after {
       transform: scaleX(1);
     }
-  }
-`;
 
-const SocialIconWrapper = styled.div`
+    .iconCircle {
+      background-color: #333;
+      color: #f4f4f4;
+    }
+  }
+}
+
+.socialIconWrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-`;
+}
 
-const IconCircle = styled.div`
+.iconCircle {
   width: 50px;
   height: 50px;
   border: 1px solid #333;
@@ -78,42 +93,25 @@ const IconCircle = styled.div`
   font-family: "Courier New", monospace;
   font-weight: bold;
   font-size: 1rem;
+}
 
-  ${SocialLink}:hover & {
-    background-color: #333;
-    color: #f4f4f4;
-  }
-`;
-
-const SocialText = styled.span`
+.socialText {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-`;
+}
 
-const FooterText = styled.p`
+.footerText {
   margin-top: 2rem;
   font-size: 0.875rem;
   color: #666;
   font-weight: 300;
-`;
+}
 
-const Divider = styled.hr`
+.divider {
   width: 50px;
   border: none;
   height: 1px;
   background-color: #333;
   margin: 2rem auto;
-`;
-
-export {
-  FooterContainer,
-  FooterTitle,
-  SocialLinks,
-  SocialLink,
-  SocialIconWrapper,
-  IconCircle,
-  SocialText,
-  FooterText,
-  Divider,
-};
+}
