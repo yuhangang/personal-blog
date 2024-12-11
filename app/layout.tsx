@@ -4,8 +4,8 @@ import ClientLayout from "@/lib/client-layout";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  if (!process.env.NEXT_PUBLIC_API_URL) {
-    throw new Error("Missing NEXT_PUBLIC_API_URL in environment variables");
+  if (!process.env.NEXT_PUBLIC_GA_ID) {
+    throw new Error("Missing NEXT_PUBLIC_GA_ID in environment variables");
   }
 
   return (
