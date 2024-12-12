@@ -2,6 +2,7 @@ import { desc } from "framer-motion/client";
 import RetroList from "./timeline/components/RetroList";
 
 import Head from "next/head";
+import { socialLinks } from "../common/footer/footer.config";
 
 interface SEOProps {
   title?: string;
@@ -22,14 +23,18 @@ const SEO: React.FC<SEOProps> = ({
       <title>{title}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={canonicalUrl} />
-
       {/* Additional Metadata */}
       <meta
         name="keywords"
         content="  software engineer, mobile developer, flutter, react, iOS, Android, Kuala Lumpur"
       />
       <meta name="author" content="Yu Hang Ang" />
-
+      {socialLinks.map((link) => (
+        <meta key={link.name} name={link.name} content={link.url} />
+      ))}
+      /// Handle seo for avatar
+      <meta property="og:image" content={`${canonicalUrl}${image}`} />
+      {/* Open Graph */}
       {/* Geo Metadata */}
       <meta name="geo.region" content="MY-KL" />
       <meta name="geo.placename" content="Kuala Lumpur" />

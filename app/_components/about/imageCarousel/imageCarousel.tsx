@@ -106,7 +106,8 @@ const ImageCarousel: React.FC<{ slides: Slide[] }> = ({ slides }) => {
                 objectFit="cover"
                 objectPosition="50% 15%"
                 quality={100}
-                priority={slideIndex < 2}
+                placeholder={"blur"}
+                blurDataURL={memoizedSlides[slideIndex].image}
               />
               {memoizedSlides[slideIndex].location && (
                 <div className={styles.locationContainer}>

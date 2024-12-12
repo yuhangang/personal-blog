@@ -1,5 +1,3 @@
-"use client";
-
 import { NavbarSpacer } from "../common/constraint";
 import { Spacer } from "../common/layout/center";
 import { Container, Main } from "../common/sharedstyles";

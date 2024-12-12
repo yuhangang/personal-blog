@@ -1,6 +1,4 @@
-import React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { ConstrainedSection } from "../../common/constraint";
 import styles from "./timeline.module.scss";
 
@@ -43,15 +41,7 @@ export default function TimeLine({
 }) {
   return (
     <ConstrainedSection>
-      <motion.div
-        className={styles.workContainer}
-        initial="pageInitial"
-        animate="pageAnimate"
-        variants={{
-          pageInitial: { opacity: 0 },
-          pageAnimate: { opacity: 1 },
-        }}
-      >
+      <div className={styles.workContainer}>
         <h2 className={styles.workTitle}>{title}</h2>
         <br />
         <ul className={styles.timeline}>
@@ -65,7 +55,7 @@ export default function TimeLine({
             />
           ))}
         </ul>
-      </motion.div>
+      </div>
     </ConstrainedSection>
   );
 }

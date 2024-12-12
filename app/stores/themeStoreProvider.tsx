@@ -1,5 +1,3 @@
-"use client";
-
 import { createContext, ReactNode, useContext, useRef } from "react";
 import { createThemeStore, ThemeStore } from "./themeStore";
 import { useStore } from "zustand";
