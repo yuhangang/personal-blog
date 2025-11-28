@@ -1,0 +1,49 @@
+/* ===================================
+   DESIGN SYSTEM VARIABLES
+   =================================== */
+
+// Color Palette - Classic Apple / Modern
+$color-primary: #1d1d1f; // Apple Near-Black
+$color-secondary: #86868b; // Apple Gray
+$color-accent: #ff4d00; // International Orange (Kept as brand accent)
+$color-accent-light: #ff7538;
+$color-background: #f5f5f7; // Ceramic / Off-White
+$color-surface: #ffffff; // Pure White
+$color-text-primary: #1d1d1f;
+$color-text-secondary: #86868b;
+$color-text-light: #a1a1a6;
+$color-border: rgba(0, 0, 0, 0.1);
+
+// Typography
+$font-serif: 'Playfair Display', Georgia, serif;
+$font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+$font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+// Spacing
+$spacing-xs: 0.5rem;
+$spacing-sm: 1rem;
+$spacing-md: 2rem;
+$spacing-lg: 4rem;
+$spacing-xl: 6rem;
+$spacing-xxl: 8rem;
+
+// Layout
+$max-width: 1400px;
+$content-width: 800px;
+
+// Transitions
+$transition-fast: 0.2s ease;
+$transition-base: 0.3s cubic-bezier(0.25, 0.1, 0.25, 1); // Smooth ease
+$transition-slow: 0.6s ease;
+
+// Shadows & Effects
+$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+$shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+$shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.12);
+$blur-glass: 20px;
+
+// Breakpoints
+$breakpoint-small-mobile: 480px;
+$breakpoint-mobile: 768px;
+$breakpoint-tablet: 1024px;
+$breakpoint-desktop: 1440px;

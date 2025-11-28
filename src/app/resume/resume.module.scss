@@ -1,0 +1,216 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.container {
+    @include container;
+    padding-top: $spacing-xl;
+    padding-bottom: $spacing-xl;
+    max-width: 1000px; // Wider for 2 columns
+}
+
+.resumeGrid {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: $spacing-xl;
+    align-items: start;
+
+    @include mobile {
+        grid-template-columns: 1fr;
+        gap: $spacing-lg;
+    }
+}
+
+.leftColumn {
+    // Sidebar styles - specific styles can be added here if needed
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xl;
+}
+
+.rightColumn {
+    // Main content styles
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xl;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $spacing-xl;
+    padding-bottom: $spacing-md;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    grid-column: 1 / -1; // Span full width
+
+    @include mobile {
+        flex-direction: column;
+        gap: $spacing-md;
+    }
+}
+
+.titleGroup {
+    h1 {
+        font-size: 3rem;
+        margin-bottom: $spacing-xs;
+        color: $color-text-primary;
+    }
+
+    p {
+        font-family: $font-mono;
+        color: $color-accent;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+}
+
+.downloadButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: $color-text-primary;
+    color: $color-surface;
+    border-radius: 99px;
+    font-family: $font-sans;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all $transition-base;
+    box-shadow: $shadow-sm;
+
+    &:hover {
+        background: $color-accent;
+        transform: translateY(-2px);
+        box-shadow: $shadow-md;
+    }
+}
+
+.section {
+    margin-bottom: $spacing-xl;
+}
+
+.sectionTitle {
+    font-size: 1.25rem;
+    margin-bottom: $spacing-md;
+    color: $color-text-primary;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: $spacing-xs;
+}
+
+.experienceItem {
+    margin-bottom: $spacing-lg;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.roleHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: $spacing-xs;
+
+    @include mobile {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        font-family: $font-sans;
+        margin: 0;
+        color: $color-text-primary;
+    }
+
+    span {
+        font-family: $font-mono;
+        font-size: 0.8rem;
+        color: $color-text-secondary;
+    }
+}
+
+.company {
+    font-family: $font-serif;
+    font-style: italic;
+    color: $color-text-secondary;
+    margin-bottom: $spacing-sm;
+    display: block;
+}
+
+.description {
+    color: $color-text-secondary;
+    font-size: 1rem;
+    line-height: 1.6;
+
+    ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+
+            &::before {
+                content: '•';
+                position: absolute;
+                left: 0;
+                color: $color-accent;
+            }
+        }
+    }
+}
+
+.skillsGrid {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+}
+
+.skillCategory {
+    h4 {
+        font-family: $font-mono;
+        font-size: 0.875rem;
+        color: $color-text-primary;
+        margin-bottom: $spacing-sm;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .contactList {
+        list-style: none;
+        margin-bottom: $spacing-lg;
+
+        li {
+            margin-bottom: $spacing-xs;
+            font-size: 0.9rem;
+            color: $color-text-secondary;
+            display: flex;
+            align-items: center;
+            gap: $spacing-xs;
+
+            a {
+                &:hover {
+                    color: $color-accent;
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+
+    ul {
+        list-style: none;
+
+        li {
+            color: $color-text-secondary;
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+        }
+    }
+}

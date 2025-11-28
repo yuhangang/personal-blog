@@ -1,0 +1,81 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.section {
+    padding: $spacing-xxl $spacing-md;
+    max-width: $max-width;
+    margin: 0 auto;
+
+    @include mobile {
+        padding: $spacing-xl $spacing-md;
+    }
+}
+
+.header {
+    text-align: center;
+    margin-bottom: $spacing-xl;
+}
+
+.subtitle {
+    font-size: 0.875rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: $color-accent;
+    margin-bottom: $spacing-sm;
+}
+
+.title {
+    color: $color-primary;
+}
+
+.content {
+    max-width: $content-width;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.text {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    margin-bottom: $spacing-md;
+
+    @include mobile {
+        font-size: 1.1rem;
+    }
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: $spacing-lg;
+    margin-top: $spacing-xl;
+
+    @include mobile {
+        grid-template-columns: 1fr;
+        gap: $spacing-md;
+    }
+}
+
+.statItem {
+    text-align: center;
+    padding: $spacing-md;
+}
+
+.number {
+    font-family: $font-serif;
+    font-size: 3rem;
+    color: $color-accent;
+    display: block;
+    margin-bottom: $spacing-xs;
+
+    @include mobile {
+        font-size: 2.5rem;
+    }
+}
+
+.label {
+    font-size: 0.875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $color-text-secondary;
+}

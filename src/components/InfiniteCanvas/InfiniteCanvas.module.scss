@@ -1,0 +1,105 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.canvasContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: $color-background;
+    cursor: grab;
+    touch-action: none; // Prevent browser scrolling
+    z-index: 1; // Behind navbar if needed, or manage z-index carefully
+
+    &:active {
+        cursor: grabbing;
+    }
+}
+
+.canvasLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    will-change: transform;
+    // We'll use inline styles for the transform
+}
+
+// The Chunk Layout
+.chunk {
+    position: absolute;
+    width: 1200px; // Fixed chunk size
+    height: 800px;
+    padding: $spacing-md;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: $spacing-md;
+
+    // Debug border
+    // border: 1px dashed rgba(0,0,0,0.1);
+}
+
+.card {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: scale(1.02);
+        z-index: 10;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+// Bento Grid Placements (Custom classes for variety)
+.span2x2 {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.span2x1 {
+    grid-column: span 2;
+}
+
+.span1x2 {
+    grid-row: span 2;
+}
+
+// Overlay Info
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: $spacing-md;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s;
+
+    .card:hover & {
+        opacity: 1;
+    }
+}
+
+.title {
+    font-family: $font-serif;
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+}
+
+.meta {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}

@@ -1,0 +1,94 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    @include mobile {
+        height: 80vh;
+        min-height: 600px;
+    }
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
+    z-index: 0;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: white;
+    padding: $spacing-md;
+
+    @include mobile {
+        padding: $spacing-sm;
+    }
+}
+
+.subtitle {
+    font-size: 0.875rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background-color: transparent; // No background needed for subtitle
+}
+
+.title {
+    color: white;
+    margin-bottom: $spacing-md;
+}
+
+.description {
+    font-size: 1.25rem;
+    max-width: 600px;
+    margin: 0 auto $spacing-lg;
+    color: rgba(255, 255, 255, 0.9);
+
+    @include mobile {
+        font-size: 1rem;
+        max-width: 100%;
+    }
+}
+
+.cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2.5rem;
+    background: $color-text-primary;
+    color: $color-surface;
+    font-family: $font-sans;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    border-radius: 99px; // Pill shape
+    transition: all $transition-base;
+    border: none;
+    box-shadow: $shadow-md;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: $shadow-lg;
+        background: $color-accent;
+    }
+}

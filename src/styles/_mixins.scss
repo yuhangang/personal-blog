@@ -1,0 +1,89 @@
+/* ===================================
+   SCSS MIXINS
+   =================================== */
+
+@use './variables' as *;
+
+// Responsive breakpoints
+@mixin small-mobile {
+    @media (max-width: $breakpoint-small-mobile) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: $breakpoint-mobile) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (max-width: $breakpoint-tablet) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media (min-width: $breakpoint-desktop) {
+        @content;
+    }
+}
+
+// Flexbox utilities
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+// Typography
+@mixin heading-base {
+    font-family: $font-serif;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+@mixin text-small {
+    font-size: 0.875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+// Animations
+@mixin fade-in($delay: 0s) {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: $delay;
+}
+
+// Container
+@mixin container {
+    max-width: $max-width;
+    margin: 0 auto;
+    padding: 0 $spacing-md;
+
+    @include mobile {
+        padding: 0 $spacing-sm;
+    }
+
+    @include small-mobile {
+        padding: 0 1rem;
+    }
+}
+
+// Hover effects
+@mixin hover-lift {
+    transition: transform $transition-base, box-shadow $transition-base;
+
+    &:hover {
+        transform: translateY(-8px);
+        box-shadow: $shadow-lg;
+    }
+}

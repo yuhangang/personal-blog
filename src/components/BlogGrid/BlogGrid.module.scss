@@ -1,0 +1,52 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.section {
+    padding: $spacing-xxl $spacing-md;
+    max-width: $max-width;
+    margin: 0 auto;
+
+    @include mobile {
+        padding: $spacing-xl $spacing-md;
+    }
+}
+
+.header {
+    text-align: center;
+    margin-bottom: $spacing-xl;
+}
+
+.subtitle {
+    font-size: 0.875rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: $color-accent;
+    margin-bottom: $spacing-sm;
+}
+
+.title {
+    color: $color-primary;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: $spacing-lg;
+    margin-top: $spacing-xl;
+
+    @include mobile {
+        grid-template-columns: 1fr;
+        gap: $spacing-md;
+    }
+}
+
+.cardWrapper {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+
+    &.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

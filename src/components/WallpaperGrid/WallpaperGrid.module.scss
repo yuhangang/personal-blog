@@ -1,0 +1,162 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.gridContainer {
+    padding: $spacing-xl $spacing-md;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.masonryGrid {
+    column-count: 1;
+    column-gap: $spacing-lg;
+
+    @include tablet {
+        column-count: 2;
+    }
+
+    @include desktop {
+        column-count: 3;
+    }
+}
+
+.gridItem {
+    break-inside: avoid;
+    margin-bottom: $spacing-lg;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: zoom-in;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+
+    &.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    &:hover {
+        .overlay {
+            opacity: 1;
+        }
+
+        // Separate hover transform to avoid conflict with entry animation
+        // We'll use a wrapper or just rely on overlay for hover feedback to keep it clean like Vovi
+    }
+}
+
+.image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform $transition-slow;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: $spacing-md;
+    opacity: 0;
+    transition: opacity $transition-base;
+}
+
+.info {
+    color: white;
+    transform: translateY(0);
+}
+
+.title {
+    font-family: $font-serif;
+    font-size: 1.25rem;
+    margin-bottom: $spacing-xs;
+}
+
+.meta {
+    font-family: $font-sans;
+    font-size: 0.875rem;
+    opacity: 0.9;
+    display: flex;
+    gap: $spacing-sm;
+}
+
+// Lightbox Styles
+.lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-lg;
+    opacity: 0;
+    visibility: hidden;
+    transition: all $transition-base;
+
+    &.open {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+.lightboxContent {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+
+    img {
+        max-width: 100%;
+        max-height: 90vh;
+        object-fit: contain;
+        border-radius: 4px;
+    }
+}
+
+.closeButton {
+    position: absolute;
+    top: $spacing-lg;
+    right: $spacing-lg;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 2001;
+    padding: $spacing-sm;
+    line-height: 1;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.downloadButton {
+    position: absolute;
+    bottom: $spacing-lg;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    color: black;
+    padding: $spacing-sm $spacing-xl;
+    border-radius: 24px;
+    font-family: $font-sans;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all $transition-fast;
+
+    &:hover {
+        background: $color-primary;
+        color: white;
+    }
+}
