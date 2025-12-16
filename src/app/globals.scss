@@ -45,7 +45,7 @@ a {
 }
 
 button {
-    font-family: inherit;
+    font-family: var(--font-sans), $font-sans;
     cursor: pointer;
     border: none;
     background: none;
@@ -62,7 +62,7 @@ h4,
 h5,
 h6 {
     font-family: var(--font-serif), $font-serif;
-    font-weight: 400;
+    font-weight: 700; // Bold for modern sans-serif headers
     line-height: 1.2;
     letter-spacing: -0.02em;
 }

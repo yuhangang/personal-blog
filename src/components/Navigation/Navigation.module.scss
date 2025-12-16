@@ -6,110 +6,250 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1000;
-    padding: $spacing-sm $spacing-lg;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur($blur-glass);
-    -webkit-backdrop-filter: blur($blur-glass);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 1101; // Ensure it sits ABOVE the mobile menu overlay (z=1000)
+    padding: 24px 40px;
+    background: transparent;
+    pointer-events: none; // Allow clicking through the empty space
     transition: all $transition-base;
+    display: flex;
+    justify-content: center;
 
     @include mobile {
-        padding: $spacing-sm $spacing-md;
+        padding: 16px;
     }
 }
 
 .container {
-    @include container;
-    @include flex-between;
+    width: 100%;
+    max-width: 1600px; // Wide container for the "spread" look
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+// Reusable mixin for the glass islands/pills
+@mixin glass-pill {
+    background: rgba(255, 255, 255, 0.85); // Lighter, more solid "panel" look
+    backdrop-filter: blur(12px) saturate(120%); // Sharper blur
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    border-radius: 0px; // Square
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    pointer-events: auto;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); // Apple-style ease
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        transform: translateY(-1px);
+    }
 }
 
 .logo {
-    font-family: $font-serif;
-    font-size: 1.5rem;
-    color: $color-text-primary;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    z-index: 1001;
-    transition: opacity $transition-base;
+    // We remove the glass-pill for the "clean" look
+    // Or we keep it? Let's assume user wants clean text if it's changing color.
+    // Actually, let's keep the block for now but make it transparent background if adapting?
+    // User asked for "white/black text".
 
-    &:hover {
-        opacity: 0.7;
+    // Let's reset the glass-pill to be TRANSPARENT background but with correct text color
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    z-index: 1102;
+    pointer-events: auto; // Allow clicking
+    text-decoration: none;
+    color: $color-text-primary;
+    transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+    // Theme Overrides
+    .nav[data-nav-theme='dark'] & {
+        color: #ffffff; // White on dark backgrounds
     }
 
-    @include mobile {
-        font-size: 1.25rem;
+    .nav[data-nav-theme='light'] & {
+        color: #000000; // Black on light backgrounds
+    }
+
+    // When nav is open (class added by parent .navOpen)
+    .navOpen & {
+        color: #000000 !important; // Always black in menu
+    }
+
+    &:hover {
+        transform: scale(1.02);
     }
 }
 
-// Desktop Navigation
-.links {
+.logoContainer {
     display: flex;
-    gap: $spacing-lg;
-    list-style: none;
+    align-items: center;
+    justify-content: center;
+}
 
-    @include mobile {
-        display: none;
+.logoIcon {
+    width: 60px;
+    height: 60px;
+    display: block;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 1;
+    transform: scale(1);
+
+    // Color Inherited from parent color property via currentColor in SVG
+    color: inherit;
+
+    // Trigger state: Nav Open OR Logo Hover OR Logo Active (Touch)
+    .navOpen &,
+    .logo:not(.noHover):hover &,
+    .logo:not(.noHover):active &,
+    .logo:not(.noHover):focus-visible & {
+        opacity: 0;
+        width: 0;
+        transform: scale(0.8);
     }
+}
+
+.logoText {
+    height: 24px; // Adjust height to match logo visual weight
+    width: auto;
+    color: inherit; // Inherit from .logo
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateX(-10px);
+
+    // SVG specific
+    display: block; // Ensure it behaves like a box
+
+    // Trigger state: Nav Open OR Logo Hover OR Logo Active (Touch)
+    .navOpen &,
+    .logo:not(.noHover):hover &,
+    .logo:not(.noHover):active &,
+    .logo:not(.noHover):focus-visible & {
+        opacity: 1;
+        max-width: 200px;
+        transform: translateX(0);
+        margin-left: 12px;
+    }
+}
+
+// Desktop Navigation Pill (Hidden in favor of Hamburger)
+.links {
+    display: none; // Hide inline links to enforce Hamburger on Desktop
+    gap: 4px; // Tight gap for internal items
+    list-style: none;
+    padding: 6px; // Padding around the internal pills
 }
 
 .link {
+    display: none;
     color: $color-text-secondary;
-    font-family: $font-sans; // Switch to Sans for cleaner Apple look, or keep Mono if user insists. Plan said "Sharp". Sans is sharper for UI.
-    font-size: 0.8rem;
+    font-family: $font-sans;
+    font-size: 0.9rem;
     font-weight: 500;
     letter-spacing: -0.01em;
-    text-transform: none; // Remove uppercase for modern feel
+    text-transform: none;
     position: relative;
-    padding: 0.5rem 0;
-    transition: color $transition-base;
+    padding: 8px 20px;
+    border-radius: 8px; // Inner rounded corners
+    transition: all 0.3s ease;
 
     &:hover {
-        color: $color-accent;
+        color: $color-text-primary;
+        background: rgba(0, 0, 0, 0.04);
+    }
+
+    &.active {
+        background: #fff;
+        color: #000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     }
 }
 
-// Mobile Menu Button
+// Menu Button (Hamburger)
 .menuButton {
-    display: none;
-    background: none;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-    z-index: 1001;
+    // Removed glass-pill for transparent look
+    display: flex; // Visible on ALL screens
+    align-items: center;
+    justify-content: center;
+    padding: 16px; // Square-ish touch target
 
     @include mobile {
-        display: block;
+        padding: 8px;
+    }
+
+    cursor: pointer;
+    z-index: 1102;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    pointer-events: auto; // Fix clickability
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: scale(1.0); // Remove scale, rely on line animation
     }
 }
 
 .hamburger {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    width: 24px;
-    height: 18px;
+    justify-content: center;
+    align-items: center; // Ensure lines scale from center
+    gap: 16px; // Slightly larger gap for the long lines
+    width: 44px; // Same as mobile - shorter hamburger
+    height: auto; // Allow content to define height for alignment
+
+    @include mobile {
+        width: 44px;
+    }
 
     span {
         display: block;
         width: 100%;
-        height: 2px;
-        background: white;
-        transition: all $transition-base;
-        border-radius: 2px;
+        height: 4px; // Thicker lines (requested)
+        background: $color-text-primary;
+        transition: background 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), width 0.4s ease; // Smooth easing
+        transform-origin: center;
+    }
+
+    // Theme Overrides
+    .nav[data-nav-theme='dark'] & span {
+        background: #ffffff;
+    }
+
+    .nav[data-nav-theme='light'] & span {
+        background: #000000;
+    }
+
+    // Open State Overrides (Always Black)
+    .navOpen & span {
+        background: #000000 !important;
+    }
+
+    // Hover/Active (Touch) State - Creative "Split Slide" Effect
+    .menuButton:hover {
+        &:not(.open):not(.noHover) {
+            span:nth-child(1) {
+                transform: translateX(12.5%); // Slide top right (12.5% of 80% width = 10% of container)
+                width: 80%; // Shrink slightly for dynamic sizing
+            }
+
+            span:nth-child(2) {
+                transform: translateX(-12.5%); // Slide bottom left
+                width: 80%;
+            }
+        }
     }
 
     &.open {
         span:nth-child(1) {
-            transform: rotate(45deg) translate(7px, 7px);
+            transform: translateY(10px) rotate(45deg); // Adjusted for new thickness/gap
         }
 
         span:nth-child(2) {
-            opacity: 0;
-        }
-
-        span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
+            transform: translateY(-10px) rotate(-45deg);
         }
     }
 }
@@ -117,24 +257,33 @@
 // Mobile Menu Overlay
 .mobileMenu {
     position: fixed;
-    top: 80px; // Start below navbar
+    top: 0; // Cover entire screen including behind transparent header
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 1001; // Above navbar (which is 1000)
+    z-index: 1000; // Behind the buttons (1102) but above the page content
     visibility: hidden;
     opacity: 0;
     transition: all $transition-base;
-    pointer-events: none; // Prevent interaction when closed
-
-    @include mobile {
-        top: 70px; // Adjust for smaller navbar on mobile
-    }
+    pointer-events: none;
 
     &.open {
         visibility: visible;
         opacity: 1;
-        pointer-events: auto; // Enable interaction when open
+        pointer-events: auto;
+    }
+}
+
+// Transparent state when menu is open
+.navOpen {
+
+    .logo,
+    .menuButton {
+        background: transparent;
+        box-shadow: none;
+        border-color: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
     }
 }
 
@@ -144,8 +293,39 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: #faf8f5; // Solid background color
+    // background: rgba(255, 255, 255, 0.98); // REMOVED standard bg
+    // backdrop-filter: blur(20px); // REMOVED blur for preview clarity
+    z-index: 1;
+}
+
+// Preview Background Layer
+.previewContainer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: #fff; // Fallback base
     overflow: hidden;
+}
+
+.previewImage {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    transform: scale(1.05);
+
+    &.active {
+        opacity: 1;
+        transform: scale(1);
+        transition: opacity 0.4s ease-in-out, transform 8s linear; // Slow zoom
+    }
+}
+
+.dimmer {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.85); // Heavy frosted glass effect over image
+    backdrop-filter: blur(10px);
 }
 
 .mobileMenuContent {
@@ -159,10 +339,10 @@
     align-items: center;
     justify-content: center;
     padding: $spacing-md;
-    overflow-y: auto;
-    opacity: 0;
+    opacity: 0; // Fixed: was overflow-y: auto which might conflict flex center
     transform: scale(0.95);
     transition: all $transition-base;
+    z-index: 2; // Above preview
 
     .mobileMenu.open & {
         opacity: 1;
@@ -181,17 +361,16 @@
 .mobileLink {
     display: block;
     padding: $spacing-sm 0;
-    font-size: 1.75rem;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    color: $color-primary;
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+    color: $color-text-primary;
     transition: all $transition-fast;
-    min-height: 44px; // Minimum touch target
+    min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: $font-serif;
-    font-weight: 400;
+    font-weight: 500;
 
     @include small-mobile {
         font-size: 1.5rem;
@@ -200,6 +379,6 @@
 
     &:hover {
         color: $color-accent;
-        transform: translateX(8px);
+        transform: scale(1.05);
     }
 }

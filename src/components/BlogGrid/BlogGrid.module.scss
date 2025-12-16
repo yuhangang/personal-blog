@@ -2,18 +2,36 @@
 @use '../../styles/mixins' as *;
 
 .section {
-    padding: $spacing-xxl $spacing-md;
-    max-width: $max-width;
-    margin: 0 auto;
+    height: 600vh; // Increased to 600vh for much smoother, slower scroll
+    position: relative;
+}
+
+.stickyWrapper {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; // Align to top to respect padding
+    overflow: hidden;
+    background: $color-background;
+    z-index: 10; // Ensure it covers header/other elements
+    padding-top: $spacing-xxl; // Offset app bar
+    box-sizing: border-box; // Ensure padding doesn't increase height
 
     @include mobile {
-        padding: $spacing-xl $spacing-md;
+        padding-top: $spacing-lg; // Reduce padding on mobile to prevent clipping
     }
 }
 
 .header {
     text-align: center;
-    margin-bottom: $spacing-xl;
+    margin-bottom: $spacing-lg; // Reduced from xl to save vertical space
+    padding: 0 $spacing-md;
+
+    @include mobile {
+        margin-bottom: $spacing-md; // Further reduce on mobile
+    }
 }
 
 .subtitle {
@@ -28,25 +46,25 @@
     color: $color-primary;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: $spacing-lg;
-    margin-top: $spacing-xl;
+.overflowWrapper {
+    width: 100%;
+    overflow: hidden;
+}
 
-    @include mobile {
-        grid-template-columns: 1fr;
-        gap: $spacing-md;
-    }
+.cardList {
+    display: flex;
+    gap: $spacing-md; // Reduced from xl
+    padding-left: $spacing-xxl;
+    width: max-content;
 }
 
 .cardWrapper {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.6s ease;
+    width: 50vh; // Scale with viewport height
+    height: 60vh; // Reduced from 70vh to prevent cropping with top padding
+    flex-shrink: 0;
 
-    &.visible {
-        opacity: 1;
-        transform: translateY(0);
+    @include mobile {
+        width: 85vw; // Wider for immersive feel
+        height: 70vh; // Taller to fill screen
     }
 }

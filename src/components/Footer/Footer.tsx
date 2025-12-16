@@ -1,10 +1,13 @@
+'use client';
+
 import Link from 'next/link';
 import styles from './Footer.module.scss';
+import FlowCanvas from './FlowCanvas';
 
 const footerLinks = [
   { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
-  { label: 'Journal', href: '#blog' },
+  { label: 'About', href: '/about' },
+  { label: 'Journal', href: '/blog' },
   { label: 'Contact', href: 'mailto:contact@yuhangang.com' },
 ];
 
@@ -41,6 +44,9 @@ const socialLinks = [
 export default function Footer() {
   return (
     <footer className={styles.footer} id="contact">
+      <div className={styles.background}>
+        <FlowCanvas />
+      </div>
       <div className={styles.content}>
         <h2 className={styles.logo}>Yu Hang Ang</h2>
 

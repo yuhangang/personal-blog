@@ -1,19 +1,22 @@
 'use client';
 
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { wallpapers } from '@/data/wallpapers';
+import { wallpapers, Wallpaper } from '@/data/wallpapers';
 import WallpaperChunk from './WallpaperChunk';
+import WallpaperOverlay from '../WallpaperOverlay/WallpaperOverlay';
 import styles from './InfiniteCanvas.module.scss';
 
 const CHUNK_WIDTH = 1200;
 const CHUNK_HEIGHT = 800;
 
 export default function InfiniteCanvas() {
+  const [selectedWallpaper, setSelectedWallpaper] = useState<Wallpaper | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
   const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
+  const hasDragged = useRef(false);
 
   // Handle window resize
   useEffect(() => {
@@ -33,6 +36,7 @@ export default function InfiniteCanvas() {
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
     setLastPosition({ x: e.clientX, y: e.clientY });
+    hasDragged.current = false;
   };
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
@@ -41,6 +45,10 @@ export default function InfiniteCanvas() {
     const dx = e.clientX - lastPosition.x;
     const dy = e.clientY - lastPosition.y;
     
+    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
+        hasDragged.current = true;
+    }
+
     setOffset(prev => ({
       x: prev.x + dx,
       y: prev.y + dy
@@ -93,6 +101,12 @@ export default function InfiniteCanvas() {
     return chunks;
   };
 
+  const handleWallpaperClick = (wallpaper: Wallpaper) => {
+    if (!hasDragged.current) {
+        setSelectedWallpaper(wallpaper);
+    }
+  };
+
   return (
     <div 
       ref={containerRef}
@@ -118,9 +132,16 @@ export default function InfiniteCanvas() {
             y={chunk.y}
             chunkSize={{ width: CHUNK_WIDTH, height: CHUNK_HEIGHT }}
             wallpapers={wallpapers}
+            onWallpaperClick={handleWallpaperClick}
           />
         ))}
       </div>
+      
+      <WallpaperOverlay 
+        wallpaper={selectedWallpaper} 
+        wallpapers={wallpapers}
+        onClose={() => setSelectedWallpaper(null)} 
+      />
     </div>
   );
 }

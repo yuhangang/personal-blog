@@ -9,6 +9,9 @@
     border: 1px solid rgba(0, 0, 0, 0.05); // Subtle hairline
     border-radius: 16px; // Soft Apple-like corners
     box-shadow: $shadow-sm;
+    display: flex;
+    flex-direction: column;
+    height: 100%; // Fill the wrapper
 
     &:hover {
         transform: translateY(-4px);
@@ -27,14 +30,22 @@
     }
 }
 
+.link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+}
+
 .imageWrapper {
     width: 100%;
-    height: 300px;
+    height: 65%; // Take up more space within the taller card
     overflow: hidden;
     position: relative;
 
     @include mobile {
-        height: 200px;
+        height: 55%;
     }
 }
 
@@ -47,6 +58,9 @@
 
 .content {
     padding: $spacing-md;
+    flex: 1; // Take remaining space
+    display: flex;
+    flex-direction: column;
 
     @include mobile {
         padding: $spacing-sm;
@@ -91,7 +105,7 @@
     color: $color-text-secondary;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
     padding-top: $spacing-sm;
-    margin-top: $spacing-md;
+    margin-top: auto; // Push to bottom
 }
 
 .readMore {

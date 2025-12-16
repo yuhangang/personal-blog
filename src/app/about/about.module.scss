@@ -1,0 +1,140 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.container {
+    padding: $spacing-xxl $spacing-md;
+    max-width: $max-width;
+    margin: 0 auto;
+    min-height: 100vh;
+
+    @include mobile {
+        padding: $spacing-xl $spacing-md;
+    }
+}
+
+.header {
+    margin-bottom: $spacing-xl;
+}
+
+.backLink {
+    display: inline-block;
+    margin-bottom: $spacing-lg;
+    color: $color-text-secondary;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+
+    &:hover {
+        color: $color-accent;
+    }
+}
+
+.title {
+    font-size: 3rem;
+    color: $color-primary;
+    margin-bottom: $spacing-md;
+
+    @include mobile {
+        font-size: 2.5rem;
+    }
+}
+
+.content {
+    max-width: $content-width;
+}
+
+.bio {
+    margin-bottom: $spacing-xxl;
+}
+
+.text {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    color: $color-text-primary;
+
+    @include mobile {
+        font-size: 1.1rem;
+    }
+}
+
+.timeline {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xl;
+    position: relative;
+    padding-left: $spacing-lg;
+    border-left: 1px solid rgba($color-text-secondary, 0.2);
+
+    @include mobile {
+        padding-left: $spacing-md;
+    }
+}
+
+.timelineItem {
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: calc(-#{$spacing-lg} - 5px);
+        top: 0.5rem;
+        width: 9px;
+        height: 9px;
+        background-color: $color-accent;
+        border-radius: 50%;
+
+        @include mobile {
+            left: calc(-#{$spacing-md} - 5px);
+        }
+    }
+}
+
+.timelineHeader {
+    margin-bottom: $spacing-sm;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+}
+
+.role {
+    font-size: 1.5rem;
+    color: $color-primary;
+    margin: 0;
+
+    @include mobile {
+        font-size: 1.25rem;
+    }
+}
+
+.company {
+    font-size: 1.1rem;
+    color: $color-text-secondary;
+    font-weight: 500;
+}
+
+.period {
+    font-size: 0.9rem;
+    color: $color-text-secondary;
+    font-style: italic;
+}
+
+.description {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    color: $color-text-secondary;
+    line-height: 1.6;
+
+    li {
+        margin-bottom: $spacing-xs;
+        position: relative;
+        padding-left: $spacing-md;
+
+        &::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: $color-accent;
+        }
+    }
+}

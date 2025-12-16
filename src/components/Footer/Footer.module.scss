@@ -2,13 +2,31 @@
 @use '../../styles/mixins' as *;
 
 .footer {
+    position: relative;
     background: $color-primary;
     color: white;
     padding: $spacing-xl $spacing-md $spacing-md;
     text-align: center;
+    overflow: hidden;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+
+    // Optional: Add a gradient mask to fade it out at the top if desired
+    mask-image: linear-gradient(to bottom, transparent, black 20%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%);
 }
 
 .content {
+    position: relative;
+    z-index: 1;
     max-width: $max-width;
     margin: 0 auto;
 }
@@ -75,5 +93,4 @@
     font-size: 0.875rem;
     color: rgba(255, 255, 255, 0.5);
     padding-top: $spacing-md;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }

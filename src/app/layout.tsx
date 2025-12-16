@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
-import { Playfair_Display, Inter } from 'next/font/google';
+import { Plus_Jakarta_Sans, Inter } from 'next/font/google';
+import SmoothScroll from '@/components/SmoothScroll/SmoothScroll';
 import Navigation from '@/components/Navigation/Navigation';
 import Footer from '@/components/Footer/Footer';
 import './globals.scss';
 
-const playfair = Playfair_Display({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
+  weight: ['400', '500', '600', '700', '800'],
   variable: '--font-serif',
   display: 'swap',
 });
@@ -18,27 +19,24 @@ const inter = Inter({
   display: 'swap',
 });
 
-export const metadata: Metadata = {
-  title: 'Yu Hang Ang - Developer & Creator',
-  description: 'Personal blog featuring insights on software development, mobile apps, and technology.',
-  openGraph: {
-    title: 'Yu Hang Ang - Developer & Creator',
-    description: 'Personal blog featuring insights on software development, mobile apps, and technology.',
-    type: 'website',
-  },
+export const metadata = {
+  title: 'Yu Hang Ang | Developer & Creator',
+  description: 'Personal portfolio and blog of Yu Hang Ang.',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
+    <html lang="en" className={`${plusJakarta.variable} ${inter.variable}`}>
       <body>
-        <Navigation />
-        {children}
-        <Footer />
+        <SmoothScroll>
+          <Navigation />
+          <main>{children}</main>
+          <Footer />
+        </SmoothScroll>
       </body>
     </html>
   );
