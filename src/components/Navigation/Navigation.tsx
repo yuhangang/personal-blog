@@ -10,11 +10,8 @@ import Logo from './Logo';
 import LogoWordmark from './LogoWordmark';
 
 const navLinks = [
-  { label: 'Blog', href: '/#blog', preview: '/blog_hero_simple.png' },
-  { label: 'About', href: '/#about', preview: '/wallpaper_mountain_dusk.png' },
-  { label: 'Wallpapers', href: '/wallpapers', preview: '/wallpaper_abstract_waves.png' },
+  { label: 'About', href: '/about', preview: '/wallpaper_mountain_dusk.png' },
   { label: 'Create', href: '/create', preview: '/projects/yoymedia.png' },
-  { label: 'Journal', href: '#blog', preview: '/blog_hero_simple.png' },
   { label: 'Connect', href: '#contact', preview: '/wallpaper_mountain_dusk.png' },
 ];
 
@@ -33,6 +30,7 @@ export default function Navigation() {
     
     // Observer options: Trigger when 10% of the section is visible
     // But we specifically care about what is at the TOP of the screen (where nav is)
+    // So rootMargin should be set to inspect the top area.
     // So rootMargin should be set to inspect the top area.
     const observerOptions = {
         root: null,
@@ -131,8 +129,6 @@ export default function Navigation() {
       }
     }
   };
-
-  if (pathname === '/wallpapers') return null;
 
   return (
     <>

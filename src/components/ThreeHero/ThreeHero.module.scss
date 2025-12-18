@@ -47,29 +47,23 @@
 
 .title {
     font-family: var(--font-serif);
-    font-size: 5rem;
-    color: #1d1d1f; // Dark text
-    margin-bottom: 16px;
-    letter-spacing: -0.02em;
-    // Removed shadows for cleaner look
-    background: linear-gradient(to bottom, #1d1d1f, #4a4a4a);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-size: 6rem;
+    color: #1d1d1f;
 
     @include mobile {
-        font-size: 3rem;
+        font-size: 4rem;
     }
 }
 
 .subtitle {
     font-family: var(--font-sans);
-    font-size: 1.5rem;
+    font-size: 2rem;
     color: rgba(0, 0, 0, 0.6); // Dark grey
     font-weight: 300;
     letter-spacing: 0.05em;
 
     @include mobile {
-        font-size: 1rem;
+        font-size: 1.5rem;
     }
 }
 

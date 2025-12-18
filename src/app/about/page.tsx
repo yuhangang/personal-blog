@@ -4,6 +4,7 @@ import FadeIn from '@/components/Animations/FadeIn';
 import styles from './about.module.scss';
 import Link from 'next/link';
 import { calculateAge } from '@/utils/date';
+import MessyThreads from '@/components/MessyThreads/MessyThreads';
 
 const experiences = [
   {
@@ -46,11 +47,14 @@ export default function AboutPage() {
   const age = calculateAge('1998-01-06');
 
   return (
-    <main className={styles.container}>
+    <main className={styles.container} data-theme="light">
       <div className={styles.header}>
-        <FadeIn direction="up">
-          <Link href="/" className={styles.backLink}>← Back to Home</Link>
-        </FadeIn>
+        <div className={styles.threadsWrapper}>
+            <FadeIn direction="down" delay={0.5}>
+                <MessyThreads />
+            </FadeIn>
+        </div>
+     
         <FadeIn direction="up" delay={0.1}>
           <h1 className={styles.title}>My Journey</h1>
         </FadeIn>

@@ -2,7 +2,7 @@
 @use '../../styles/mixins' as *;
 
 .container {
-    padding-top: 120px; // Clear fixed nav
+    padding-top: 0; // Removed offset to let hero sit at top
     min-height: 100vh;
     background: #000;
     color: #fff;

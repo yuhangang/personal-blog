@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
+import Link from 'next/link';
 import { useRef } from 'react';
 import FadeIn from '@/components/Animations/FadeIn';
 import styles from './About.module.scss';
-import Link from 'next/link';
 import { calculateAge } from '@/utils/date';
+import MessyThreads from '@/components/MessyThreads/MessyThreads';
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -12,26 +13,45 @@ export default function About() {
 
   return (
     <section className={styles.section} id="about" ref={sectionRef}>
-      <div className={styles.header}>
-        <FadeIn direction="up">
-          <p className={styles.subtitle}>My Journey</p>
-        </FadeIn>
-        <FadeIn direction="up" delay={0.2}>
-          <h2 className={styles.title}>Yu Hang Ang</h2>
-        </FadeIn>
-      </div>
-      
-      <div className={styles.content}>
-        <FadeIn direction="up" delay={0.3}>
-          <div className={styles.bio}>
-            <p className={styles.text}>
-              {age}, software engineer based in Kuala Lumpur, Malaysia. Open for new opportunities for collaboration and learning.
-            </p>
-            <Link href="/about" className={styles.readMore}>
-              Read More →
-            </Link>
+      <div className={styles.container}>
+        {/* Visual Decoration */}
+        <div className={styles.visualContainer}>
+            <FadeIn direction="down" delay={0.2}>
+                <div className={styles.threadsWrapper}>
+                    <MessyThreads />
+                </div>
+            </FadeIn>
+        </div>
+
+        {/* Text Content */}
+        <div className={styles.content}>
+          <div className={styles.header}>
+            <FadeIn direction="up">
+              <span className={styles.subtitle}>01 — Who am I?</span>
+            </FadeIn>
           </div>
-        </FadeIn>
+
+          <FadeIn direction="up" delay={0.2}>
+            <h2 className={styles.title}>
+              Creating digital <br/>
+              <span className={styles.accent}>experiences</span> that matter.
+            </h2>
+          </FadeIn>
+
+          <FadeIn direction="up" delay={0.4}>
+            <div className={styles.bio}>
+              <p className={styles.text}>
+                I'm a {age}-year-old software engineer based in Kuala Lumpur, Malaysia. 
+                I specialize in building accessible, inclusive, and high-performance web applications.
+              </p>
+              <div className={styles.actions}>
+                <Link href="/about" className={styles.readMore}>
+                    Read Full Story
+                </Link>
+              </div>
+            </div>
+          </FadeIn>
+        </div>
       </div>
     </section>
   );
