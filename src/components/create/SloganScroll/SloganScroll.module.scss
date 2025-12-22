@@ -1,0 +1,137 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.section {
+    position: relative;
+    background: #111; // Very dark grey
+    color: #fff;
+    z-index: 10;
+    padding-bottom: 10vh;
+}
+
+.layoutGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 1600px; // Wider for immersion
+    margin: 0 auto;
+    position: relative;
+    padding: 0 40px;
+
+    @include mobile {
+        grid-template-columns: 1fr;
+        padding: 0; // Removing padding as requested
+    }
+}
+
+// --- LEFT COLUMN: SLOGANS (SCROLLING) ---
+.sloganList {
+    position: relative;
+    z-index: 2;
+    padding-top: 20vh;
+    padding-bottom: 20vh;
+
+    @include mobile {
+        grid-column: 1;
+        grid-row: 1;
+        padding-left: 20px; // Keep some text padding so it doesn't hit edge
+        padding-right: 20px;
+    }
+}
+
+.sloganItem {
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transform-origin: center left;
+    perspective: 1000px;
+
+    @include mobile {
+        height: 50vh;
+        align-items: center;
+        text-align: center;
+        transform-origin: center center;
+    }
+}
+
+.sloganContent {
+    transition: all 0.5s ease-out;
+}
+
+.sloganTitle {
+    font-family: var(--font-display);
+    font-size: 5.5rem; // Increased for impact
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    font-style: italic;
+
+    background: linear-gradient(to right, #fff 0%, #aaa 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    @include mobile {
+        font-size: 3rem;
+    }
+}
+
+.sloganDesc {
+    font-family: var(--font-sans);
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+    max-width: 500px;
+    font-weight: 300;
+
+    @include mobile {
+        font-size: 1rem;
+        max-width: 90%;
+    }
+}
+
+// --- RIGHT COLUMN: VISUALS (STICKY) ---
+.stickyVisualWrapper {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+
+    @include mobile {
+        grid-column: 1;
+        grid-row: 1;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        z-index: 1;
+        opacity: 0.6;
+        pointer-events: none;
+    }
+}
+
+.visualContainer {
+    // IMMERSIVE DESKTOP: Rounded + Black BG as requested
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    aspect-ratio: auto;
+
+    // User requested "Animation canvas has round border, fully black bg"
+    border-radius: 40px;
+    background: #000;
+
+    border: none;
+    overflow: hidden;
+    position: relative;
+
+    @include mobile {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        background: transparent; // Keep transparent on mobile for layering
+    }
+}

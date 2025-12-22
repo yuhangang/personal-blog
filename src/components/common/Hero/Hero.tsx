@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import FadeIn from '@/components/Animations/FadeIn';
+import FadeIn from '@/components/common/Animations/FadeIn';
 import styles from './Hero.module.scss';
 
 export default function Hero() {

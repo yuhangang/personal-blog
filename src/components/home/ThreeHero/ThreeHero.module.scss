@@ -1,5 +1,5 @@
-@use '../../styles/variables' as *;
-@use '../../styles/mixins' as *;
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
 
 .container {
     position: relative;
@@ -35,20 +35,43 @@
 
 .overlay {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    text-align: center;
-    pointer-events: none; // Let clicks pass through to canvas
+    top: 0;
+    left: 0;
     width: 100%;
-    padding: 20px;
+    height: 100%;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
+
+
 .title {
-    font-family: var(--font-serif);
-    font-size: 6rem;
-    color: #1d1d1f;
+    font-family: var(--font-geom);
+    font-size: 8rem;
+    font-weight: 600;
+    margin-bottom: 0px;
+
+    // Bright Stainless Steel Gradient (Double Spot)
+    background: linear-gradient(135deg,
+            #f0f0f0 0%,
+            #e2e2e4 10%,
+            #9ba8b4 25%,
+            #e2e2e4 50%,
+            #9ba8b4 80%,
+            #e2e2e4 90%,
+            #f0f0f0 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+
+    // Soft, floating shadow (Glass/Premium feel)
+    filter: drop-shadow(8px 12px 24px rgba(0, 0, 0, 0.2));
 
     @include mobile {
         font-size: 4rem;
@@ -57,10 +80,11 @@
 
 .subtitle {
     font-family: var(--font-sans);
-    font-size: 2rem;
-    color: rgba(0, 0, 0, 0.6); // Dark grey
+    font-size: 2.5rem;
+    color: #fff; // Dark grey
     font-weight: 300;
     letter-spacing: 0.05em;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 
     @include mobile {
         font-size: 1.5rem;

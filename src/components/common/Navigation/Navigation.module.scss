@@ -1,5 +1,5 @@
-@use '../../styles/variables' as *;
-@use '../../styles/mixins' as *;
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
 
 .nav {
     position: fixed;
@@ -15,7 +15,7 @@
     justify-content: center;
 
     @include mobile {
-        padding: 16px;
+        padding: 12px; // Reduced from 16px
     }
 }
 
@@ -98,6 +98,11 @@
     // Color Inherited from parent color property via currentColor in SVG
     color: inherit;
 
+    @include mobile {
+        width: 40px; // Smaller on mobile
+        height: 40px;
+    }
+
     // Trigger state: Nav Open OR Logo Hover OR Logo Active (Touch)
     .navOpen &,
     .logo:not(.noHover):hover &,
@@ -176,7 +181,7 @@
     padding: 16px; // Square-ish touch target
 
     @include mobile {
-        padding: 8px;
+        padding: 4px; // Tighter touch target visual, still large enough
     }
 
     cursor: pointer;
@@ -202,7 +207,7 @@
     height: auto; // Allow content to define height for alignment
 
     @include mobile {
-        width: 44px;
+        width: 32px; // Smaller hamburger width
     }
 
     span {
@@ -210,7 +215,14 @@
         width: 100%;
         height: 4px; // Thicker lines (requested)
         background: $color-text-primary;
-        transition: background 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), width 0.4s ease; // Smooth easing
+
+        @include mobile {
+            height: 2px; // Thinner on mobile
+        }
+
+        transition: background 0.4s ease,
+        transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+        width 0.4s ease; // Smooth easing
         transform-origin: center;
     }
 
@@ -245,11 +257,19 @@
 
     &.open {
         span:nth-child(1) {
-            transform: translateY(10px) rotate(45deg); // Adjusted for new thickness/gap
+            transform: translateY(10px) rotate(45deg);
+
+            @include mobile {
+                transform: translateY(9px) rotate(45deg); // (2px height + 16px gap) / 2 = 9px
+            }
         }
 
         span:nth-child(2) {
             transform: translateY(-10px) rotate(-45deg);
+
+            @include mobile {
+                transform: translateY(-9px) rotate(-45deg);
+            }
         }
     }
 }

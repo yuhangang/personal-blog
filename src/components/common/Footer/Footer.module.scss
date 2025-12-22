@@ -1,5 +1,5 @@
-@use '../../styles/variables' as *;
-@use '../../styles/mixins' as *;
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
 
 .footer {
     position: relative;
@@ -32,7 +32,8 @@
 }
 
 .logo {
-    font-family: $font-serif;
+    font-family: var(--font-geom);
+    font-weight: 600;
     font-size: 2rem;
     margin-bottom: $spacing-md;
     color: white;

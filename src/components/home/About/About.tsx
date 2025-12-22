@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { useRef } from 'react';
-import FadeIn from '@/components/Animations/FadeIn';
+import FadeIn from '@/components/common/Animations/FadeIn';
 import styles from './About.module.scss';
 import { calculateAge } from '@/utils/date';
-import MessyThreads from '@/components/MessyThreads/MessyThreads';
+import MessyThreads from '@/components/common/MessyThreads/MessyThreads';
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);

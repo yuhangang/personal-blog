@@ -1,0 +1,435 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.container {
+    padding-top: 0;
+    min-height: 100vh;
+    background: #050505; // Deepest black for contrast
+    color: #fff;
+    padding-bottom: 120px;
+}
+
+.hero {
+    padding: 100px 20px 80px; // More top padding
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    h1 {
+        font-family: var(--font-geom); // Geometric font
+        font-size: 5rem; // Larger
+        font-weight: 800;
+        margin-bottom: 24px;
+        letter-spacing: -0.03em;
+
+        // Bright Stainless Steel Gradient
+        background: linear-gradient(to bottom,
+                #ffffff 0%,
+                #f4f4f6 35%,
+                #aebbc7 50%,
+                #f4f4f6 65%,
+                #ffffff 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+
+        @include mobile {
+            font-size: 3rem;
+        }
+    }
+
+    p {
+        font-family: var(--font-sans);
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, 0.6);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+        font-weight: 300;
+    }
+}
+
+.gridHeader {
+    max-width: 1300px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+
+    h2 {
+        font-family: var(--font-geom);
+        font-size: 4rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        // Metallic Gradient
+        background: linear-gradient(to bottom right, #fff 0%, #aaa 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+
+        @include mobile {
+            font-size: 2.5rem;
+        }
+    }
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(580px, 1fr)); // Massive cards (approx 2 columns)
+    gap: 40px;
+    padding: 0 20px; // Remove top padding
+    max-width: 1300px;
+    margin: 0 auto;
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+// ... Card styles handled in previous step ...
+
+.services {
+    margin-top: 160px;
+    padding: 100px 20px;
+    background: linear-gradient(to bottom, #050505, #0a0a0a); // Subtle shift
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+    .servicesContent {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    h2 {
+        font-family: var(--font-geom);
+        font-size: 3.5rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 24px;
+        letter-spacing: -0.02em;
+
+        // Metallic Gradient
+        background: linear-gradient(to bottom, #fff 0%, #999 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+
+        @include mobile {
+            font-size: 2.2rem;
+        }
+    }
+
+    .lead {
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto 80px;
+        font-family: var(--font-sans);
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.6;
+        font-weight: 300;
+    }
+
+    .serviceGrid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 40px;
+        margin-bottom: 80px;
+
+        @include mobile {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .serviceCard {
+        background: rgba(255, 255, 255, 0.02); // Minimal glass
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 40px;
+        border-radius: 20px;
+        transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+
+        &:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        h3 {
+            font-family: var(--font-geom);
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: #fff;
+            letter-spacing: -0.01em;
+        }
+
+        p {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+        }
+    }
+
+    .cta {
+        margin-top: 60px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .ctaLink {
+        display: inline-flex;
+        align-items: center;
+        padding: 18px 40px;
+        background: #fff;
+        color: #000;
+        border-radius: 100px;
+        text-decoration: none;
+        font-family: var(--font-sans);
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.3s ease;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+
+        &:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.4);
+        }
+    }
+}
+
+.card {
+    position: relative;
+    background: #000; // Pure black like Apple Pro pages
+    border-radius: 32px; // Classic Apple "continuous" curve feel
+    overflow: hidden;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    aspect-ratio: 1 / 1;
+    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+
+    // Apple-style border: very subtle inner glow/border
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+
+    &:hover {
+
+        // Apple grid hover: Scale content down slightly or zoom image in
+        // We'll zoom image in for immersive feel
+        .cardImage img {
+            transform: scale(1.06);
+        }
+
+        .cardContent {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+        }
+
+        .cardTitle {
+            // Brighten text on hover
+            background: linear-gradient(to bottom, #fff 0%, #fff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    }
+
+    .cardImage {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        background: #000;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1); // Smooth Apple ease
+        }
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+            // Full card shadow/overlay as requested
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.2) 100%);
+            opacity: 1;
+        }
+    }
+
+    .cardContent {
+        position: absolute; // Float firmly at bottom
+        bottom: 24px;
+        left: 24px;
+        right: 24px;
+        z-index: 1;
+        padding: 32px;
+        border-radius: 24px;
+
+        // Glass Background for Legibility
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        transition: all 0.4s ease;
+    }
+
+    .cardTitle {
+        font-family: var(--font-geom);
+        font-size: 2.5rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        letter-spacing: -0.01em;
+        line-height: 1.1;
+
+        // Titanium Gradient (Natural Titanium)
+        background: linear-gradient(to bottom right,
+                #e2e2e4 0%,
+                #9b9ba0 50%,
+                #7e7e83 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+
+        transition: all 0.4s ease;
+    }
+
+    .cardDesc {
+        font-family: var(--font-sans);
+        font-size: 1.05rem;
+        color: #86868b; // Apple "Pro" grey text
+        line-height: 1.4;
+        font-weight: 400;
+        max-width: 90%;
+        margin-bottom: 20px;
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .tag {
+        font-family: var(--font-sans);
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 6px 12px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 100px;
+        color: #f5f5f7; // Off-white
+        border: none; // Cleaner look
+    }
+
+    .highlights {
+        display: none;
+    }
+}
+
+.services {
+    margin-top: 120px;
+    padding: 80px 20px;
+    background: linear-gradient(to bottom, #000, #0a0a0a);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+    .servicesContent {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    h2 {
+        font-family: var(--font-serif);
+        font-size: 3rem;
+        text-align: center;
+        margin-bottom: 20px;
+        background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+        @include mobile {
+            font-size: 2.2rem;
+        }
+    }
+
+    .lead {
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto 60px;
+        font-family: var(--font-sans);
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.6;
+    }
+
+    .serviceGrid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-bottom: 60px;
+
+        @include mobile {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .serviceCard {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 30px;
+        border-radius: 16px;
+        transition: transform 0.3s ease;
+
+        &:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        h3 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        p {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
+        }
+    }
+
+    .cta {
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .ctaLink {
+        display: inline-block;
+        padding: 16px 32px;
+        background: #fff;
+        color: #000;
+        border-radius: 100px;
+        text-decoration: none;
+        font-family: 'Inter', sans-serif !important;
+        /* Hardcoded fallback */
+        font-weight: 600;
+        transition: transform 0.2s ease;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+}

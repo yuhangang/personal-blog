@@ -1,0 +1,106 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.section {
+    position: relative;
+    padding: 80px 40px;
+    background: #000;
+    color: #fff;
+    min-height: 600px;
+    overflow: hidden;
+
+    @include mobile {
+        padding: 60px 20px;
+    }
+}
+
+.visualWrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0.6;
+    pointer-events: none;
+    mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+}
+
+.grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); // 3x2 Grid (Desktop)
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    @include mobile {
+        grid-template-columns: repeat(2, 1fr); // 2x3 Grid (Mobile)
+        gap: 16px;
+    }
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 32px 24px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    @include mobile {
+        min-height: 180px;
+        padding: 24px 16px;
+    }
+
+    &:hover,
+    &.active {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-4px);
+    }
+}
+
+.cardTitle {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: 16px;
+    line-height: 1.1;
+    color: #fff;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+
+    .card:hover &,
+    .card.active & {
+        opacity: 1;
+    }
+
+    @include mobile {
+        font-size: 1.5rem;
+    }
+}
+
+.cardDesc {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+
+    .card:hover &,
+    .card.active & {
+        opacity: 1;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    @include mobile {
+        font-size: 0.85rem;
+    }
+}

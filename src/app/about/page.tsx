@@ -1,10 +1,10 @@
 'use client';
 
-import FadeIn from '@/components/Animations/FadeIn';
+import FadeIn from '@/components/common/Animations/FadeIn';
 import styles from './about.module.scss';
 import Link from 'next/link';
 import { calculateAge } from '@/utils/date';
-import MessyThreads from '@/components/MessyThreads/MessyThreads';
+import MessyThreads from '@/components/common/MessyThreads/MessyThreads';
 
 const experiences = [
   {

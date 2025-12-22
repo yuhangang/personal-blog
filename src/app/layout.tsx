@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
-import { Plus_Jakarta_Sans, Inter, Playfair_Display } from 'next/font/google';
-import SmoothScroll from '@/components/SmoothScroll/SmoothScroll';
-import Navigation from '@/components/Navigation/Navigation';
-import Footer from '@/components/Footer/Footer';
+import { Plus_Jakarta_Sans, Inter, Playfair_Display, Outfit } from 'next/font/google';
+import SmoothScroll from '@/components/common/SmoothScroll/SmoothScroll';
+import Navigation from '@/components/common/Navigation/Navigation';
+import Footer from '@/components/common/Footer/Footer';
 import './globals.scss';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -21,9 +22,16 @@ const inter = Inter({
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'], // Added italics support implicitly by import? Need style normally, but standard import usually works.
+  weight: ['400', '500', '600', '700', '800'],
   style: ['normal', 'italic'],
   variable: '--font-display',
+  display: 'swap',
+});
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  variable: '--font-geom',
   display: 'swap',
 });
 
@@ -38,7 +46,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${plusJakarta.variable} ${inter.variable} ${playfair.variable}`}>
+    <html lang="en" className={`${plusJakarta.variable} ${inter.variable} ${playfair.variable} ${outfit.variable}`}>
       <body>
         <SmoothScroll>
           <Navigation />
@@ -46,6 +54,9 @@ export default function RootLayout({
           <Footer />
         </SmoothScroll>
       </body>
+      {process.env.NODE_ENV === 'production' && (
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
+      )}
     </html>
   );
 }

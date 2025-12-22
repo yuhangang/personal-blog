@@ -1,0 +1,99 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.container {
+    margin-top: 120px;
+    padding: 80px 20px;
+    background: linear-gradient(to bottom, #000, #0a0a0a);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.title {
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    @include mobile {
+        font-size: 2.2rem;
+    }
+}
+
+.lead {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 60px;
+    font-family: var(--font-sans);
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 60px;
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 30px;
+    border-radius: 16px;
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    h3 {
+        font-family: var(--font-serif);
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+        color: #fff;
+    }
+
+    p {
+        font-family: var(--font-sans);
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.5;
+    }
+}
+
+.cta {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.ctaLink {
+    display: inline-block;
+    padding: 16px 32px;
+    background: #fff;
+    color: #000;
+    border-radius: 100px;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 600;
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: scale(1.05);
+    }
+}

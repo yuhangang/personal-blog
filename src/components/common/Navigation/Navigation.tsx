@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import styles from './Navigation.module.scss';
-import { useLenis } from '@/components/SmoothScroll/SmoothScroll';
+import { useLenis } from '@/components/common/SmoothScroll/SmoothScroll';
 import Logo from './Logo';
 import LogoWordmark from './LogoWordmark';
 

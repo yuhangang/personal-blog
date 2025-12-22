@@ -252,7 +252,7 @@ export default function ThreeHero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
                 >
-                    Yu Hang Ang
+                   Explore, Evolve
                 </motion.h1>
                 <motion.p 
                     className={styles.subtitle}
@@ -260,7 +260,7 @@ export default function ThreeHero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
                 >
-                    Developer & Creator
+                    Discover my world
                 </motion.p>
             </div>
 

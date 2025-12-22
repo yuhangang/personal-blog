@@ -256,6 +256,70 @@ function InstancedParticles() {
     );
 }
 
+// --- RIVER BED MESH ---
+function RiverBed() {
+    const { size } = useThree();
+    
+    const curves = useMemo(() => {
+        // Match shader bezier points (average)
+        // Gombak (Top Left)
+        const gombakCurve = new THREE.CubicBezierCurve3(
+            new THREE.Vector3(-2.2, 2.0, -0.1), // Slightly behind particles
+            new THREE.Vector3(-0.5, 0.1, -0.1),
+            new THREE.Vector3(1.0, 0.1, -0.1),
+            new THREE.Vector3(2.5, 0.1, -0.1)
+        );
+
+        // Klang (Bottom Left)
+        const klangCurve = new THREE.CubicBezierCurve3(
+            new THREE.Vector3(-2.2, -2.0, -0.1),
+            new THREE.Vector3(-0.5, -0.1, -0.1),
+            new THREE.Vector3(1.0, 0.1, -0.1),
+            new THREE.Vector3(2.5, 0.1, -0.1)
+        );
+
+        return [gombakCurve, klangCurve];
+    }, []);
+
+    return (
+        <group>
+            {curves.map((curve, i) => (
+                <mesh key={i} position={[0,0,-0.05]} scale={[1, 1, 0.15]}> 
+                    <tubeGeometry args={[curve, 64, 0.6, 8, false]} />
+                    {/* "Half Transparent" Solid River Bed */}
+                    <meshPhysicalMaterial 
+                        color={i === 0 ? "#F5E6D3" : "#C9A86C"} 
+                        transparent 
+                        opacity={0.4} // Half-transparent-ish (0.4-0.5)
+                        roughness={0.2}
+                        metalness={0.1}
+                        transmission={0.0} // Ensure it's not fully glass, just transparent
+                        depthWrite={false} // Prevent z-fighting
+                        side={THREE.DoubleSide}
+                        // wireframe={false} // Removed to make it a "mesh/surface"
+                    />
+                </mesh>
+            ))}
+            
+            {/* Overlay Wireframe for "Like a Mesh" texture */}
+            {curves.map((curve, i) => (
+                <mesh key={`grid-${i}`} position={[0,0,-0.04]} scale={[1, 1, 0.16]}> 
+                     <tubeGeometry args={[curve, 64, 0.61, 8, false]} />
+                     <meshBasicMaterial
+                        color={i === 0 ? "#ffffff" : "#ffffff"}
+                        transparent
+                        opacity={0.1}
+                        wireframe={true}
+                        depthWrite={false}
+                     />
+                </mesh>
+            ))}
+        </group>
+    );
+}
+
+// ... existing InstancedParticles ...
+
 export default function CreateHero() {
     // Fixed ref type with assertion
     const containerRef = useRef<HTMLElement>(null!); 
@@ -265,6 +329,7 @@ export default function CreateHero() {
         <section className={styles.container} ref={containerRef} aria-label="River Confluence Animation">
             <div className={styles.canvasContainer} aria-hidden="true" style={{ background: '#000000' }}>
                 <Canvas camera={{ position: [0, 0, 2], fov: 60 }} frameloop={frameloop}>
+                    <RiverBed />
                     <InstancedParticles />
                 </Canvas>
             </div>
