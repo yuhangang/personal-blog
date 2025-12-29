@@ -15,7 +15,7 @@ export default function Home() {
       <div data-theme="dark">
         <ThreeHero />
       </div>
-       <div data-theme="light">
+       <div data-theme="dark">
         <About />
       </div>
       

@@ -3,26 +3,30 @@
 
 .section {
     position: relative;
-    padding: $spacing-xxl $spacing-md;
-    max-width: $max-width;
-    margin: 0 auto;
-    overflow: hidden; // Contain the messy threads
-    min-height: 80vh; // Give it presence
+    padding: $spacing-lg 0; // Padding only on top/bottom
+    width: 100%; // Fill screen
+    margin: 0;
+    overflow: hidden;
+    min-height: auto; // Remove high min-height to reduce empty space
     display: flex;
     align-items: center;
+    background: #0a0a0a; // Dark background
+    color: #fff;
 
     @include mobile {
-        padding: $spacing-xl $spacing-md;
-        min-height: auto;
+        padding: $spacing-lg 1.25rem;
     }
 }
 
 .container {
     width: 100%;
+    max-width: 1100px; // Tighter container to bring elements together
+    margin: 0 auto;
+    padding: 0 1.25rem; // Moved padding here
     position: relative;
     display: grid;
-    grid-template-columns: 1.2fr 1fr; // Text takes slightly more space? Or visuals? Let's do split.
-    gap: $spacing-xl;
+    grid-template-columns: 1fr auto;
+    gap: $spacing-sm;
     align-items: center;
 
     @include mobile {
@@ -32,34 +36,36 @@
 }
 
 .visualContainer {
-    position: absolute;
-    right: -10%;
-    top: 50%;
-    transform: translateY(-50%);
+    position: relative; // part of grid flow
+    display: flex;
+    justify-content: center;
+    align-items: center;
     z-index: 0;
     pointer-events: none;
     opacity: 0.6;
+    margin-right: -10%; // Pull it closer to edge but keep in flow
 
     @include mobile {
         position: relative;
         right: auto;
         top: auto;
         transform: none;
-        order: -1; // Show on top or bottom? Maybe subtle background.
-        height: 200px;
+        order: -1;
+        height: 180px;
         opacity: 0.3;
-        margin-bottom: -50px;
+        margin-bottom: -30px;
+        margin-right: 0;
     }
 }
 
 .threadsWrapper {
-    width: 600px;
-    height: 600px;
+    width: 400px; // Tight desktop width
+    height: 400px;
 
     @include mobile {
         width: 100%;
-        height: 100%;
-        transform: scale(0.8);
+        height: 180px;
+        transform: scale(0.65);
     }
 }
 
@@ -88,12 +94,14 @@
     font-size: 3.5rem;
     line-height: 1.1;
     font-weight: 700;
-    color: $color-primary;
-    margin-bottom: $spacing-lg;
+    color: #fff; // White in dark theme
+    margin-bottom: $spacing-md; // Reduced gap
     letter-spacing: -0.02em;
+    overflow-wrap: break-word;
+    hyphens: none; // Fix "expe-riences"
 
     @include mobile {
-        font-size: 2.5rem;
+        font-size: 1.8rem;
     }
 }
 
@@ -102,9 +110,13 @@
     font-weight: 400;
     font-style: italic;
     color: $color-accent;
-    font-size: 1.1em; // Slightly larger visually
-    letter-spacing: 0; // Serifs usually don't want negative tracking
-    margin-right: 0.1em; // Fix optical spacing
+    font-size: 1.1em;
+    letter-spacing: 0;
+    margin-right: 0.1em;
+
+    @include mobile {
+        font-size: 1em; // No extra swelling on mobile
+    }
 }
 
 .bio {
@@ -114,12 +126,12 @@
 .text {
     font-size: 1.5rem;
     line-height: 1.6;
-    color: $color-text-secondary;
-    margin-bottom: $spacing-xl;
+    color: rgba(255, 255, 255, 0.9); // Brighter for better visibility
+    margin-bottom: $spacing-lg; // Reduced gap
     font-weight: 400;
 
     @include mobile {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
 }
 
@@ -132,19 +144,31 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 16px 32px;
-    background: $color-primary;
-    color: $color-surface;
+    gap: 12px;
+    padding: 14px 28px;
+    background: transparent;
+    color: #fff; // White button text
     text-decoration: none;
     font-weight: 500;
-    font-size: 1rem;
+    font-size: 0.95rem;
     border-radius: 100px;
-    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-    border: 1px solid transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2); // White border
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+
+    svg {
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
     &:hover {
+        background: transparent;
+        border-color: $color-accent;
+        color: $color-accent;
         transform: translateY(-2px);
-        background: $color-accent;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+
+        svg {
+            transform: translateX(4px);
+        }
     }
 }

@@ -2,41 +2,60 @@
 @use '../../styles/mixins' as *;
 
 .container {
-    padding: $spacing-xxl $spacing-md;
+    padding: $spacing-lg 0;
+    width: 100%;
+    margin: 0;
+    min-height: 100vh;
+    background: #0a0a0a;
+    color: #fff;
+}
+
+.innerContainer {
     max-width: $max-width;
     margin: 0 auto;
-    min-height: 100vh;
+    padding: 0 1.25rem;
+}
+
+.headerGrid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: $spacing-sm;
+    align-items: center;
+    margin-bottom: $spacing-xl;
+    position: relative;
+    max-width: 1000px; // Keep it tight
 
     @include mobile {
-        padding: $spacing-xl $spacing-md;
+        grid-template-columns: 1fr;
+        gap: $spacing-md;
     }
 }
 
-.header {
-    margin-bottom: 40px;
-    position: relative; // Establish context for threads
+.visualContainer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.6;
+
+    @include mobile {
+        order: -1;
+        margin-right: 0;
+        margin-bottom: -30px;
+        opacity: 0.3;
+    }
 }
 
 .threadsWrapper {
-    position: absolute;
-    top: -250px; // Pull up to align center with "My Journey"
-    right: -25px; // Sit on the right
-    left: auto;
-    transform: none;
-    width: 600px;
-    height: 600px;
-    max-width: 100vw;
-    z-index: -1;
-    pointer-events: none;
+    width: 450px;
+    height: 450px;
 
     @include mobile {
-        right: auto;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 450px;
-        height: 450px;
-        top: -240px;
-        opacity: 0.3; // Reduce visibility on mobile
+        width: 100%;
+        height: 180px;
+        transform: scale(0.7);
     }
 }
 
@@ -57,13 +76,15 @@
 
 .title {
     font-size: 3rem;
-    color: $color-primary;
+    color: #fff;
     margin-bottom: $spacing-md;
     position: relative;
     z-index: 1;
+    overflow-wrap: break-word;
+    hyphens: none;
 
     @include mobile {
-        font-size: 2.5rem;
+        font-size: 1.8rem;
     }
 }
 
@@ -80,7 +101,7 @@
 .text {
     font-size: 1.25rem;
     line-height: 1.8;
-    color: $color-text-primary;
+    color: rgba(255, 255, 255, 0.9); // Brighter for dark theme
 
     @include mobile {
         font-size: 1.1rem;
@@ -93,7 +114,7 @@
     gap: $spacing-xl;
     position: relative;
     padding-left: $spacing-lg;
-    border-left: 1px solid rgba($color-text-secondary, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
 
     @include mobile {
         padding-left: $spacing-md;
@@ -128,7 +149,7 @@
 
 .role {
     font-size: 1.5rem;
-    color: $color-primary;
+    color: #fff;
     margin: 0;
 
     @include mobile {
@@ -138,13 +159,13 @@
 
 .company {
     font-size: 1.1rem;
-    color: $color-text-secondary;
+    color: rgba(255, 255, 255, 0.85); // Brightened
     font-weight: 500;
 }
 
 .period {
     font-size: 0.9rem;
-    color: $color-text-secondary;
+    color: rgba(255, 255, 255, 0.6); // Slightly brightened but still secondary
     font-style: italic;
 }
 
@@ -152,7 +173,7 @@
     list-style-type: none;
     padding: 0;
     margin: 0;
-    color: $color-text-secondary;
+    color: rgba(255, 255, 255, 0.82); // Brightened for readability
     line-height: 1.6;
 
     li {

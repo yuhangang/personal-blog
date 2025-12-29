@@ -44,7 +44,9 @@ function NeuroStrand({ activeIndex, strandIndex }: { activeIndex: number, strand
         const targetOpacity = isActive ? 1.0 : 0.0;
         
         // 1. Interpolate Params
-        const lerpFactor = delta * 2.0; // Responsive speed
+        // Fix for glitch on resume: Clamp delta to avoid large jumps
+        const safeDelta = Math.min(delta, 0.1);
+        const lerpFactor = safeDelta * 2.0; // Responsive speed
         
         currentParams.current.speed = THREE.MathUtils.lerp(currentParams.current.speed, target.speed, lerpFactor);
         currentParams.current.noiseScale = THREE.MathUtils.lerp(currentParams.current.noiseScale, target.noiseScale, lerpFactor);

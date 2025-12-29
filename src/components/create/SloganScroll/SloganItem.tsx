@@ -27,11 +27,50 @@ export default function SloganItem({ title, desc, index, setActiveIndex }: Props
     const rotateY = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [10, 0, 10]);
     const scale = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0.9, 1, 0.9]);
     
-    const opacity = useTransform(scrollYProgress, [0.25, 0.4, 0.6, 0.75], [0.3, 1, 1, 0.3]);
+    // Logarithmic visibility logic to increase "clear" area
+    // Center is 0.5. We want a wide clear zone, then fast falloff.
+    // Logic: 
+    // 1. Calculate distance from center (abs(v - 0.5))
+    // 2. Define a "safe zone" (e.g., +/- 0.15 = 0.35 to 0.65) where op=1, blur=0
+    // 3. Outside safe zone, use log to fall off.
     
-    // Wide clear window
-    const blurValue = useTransform(scrollYProgress, [0.25, 0.4, 0.6, 0.75], [4, 0, 0, 4]);
+    // Helper to calculate visibility factor (0 to 1)
+    const getVisibility = (v: number) => {
+        const dist = Math.abs(v - 0.5);
+        const safeZone = 0.15; // 30% of viewport height is fully clear
+        
+        if (dist <= safeZone) return 1;
+        
+        // Logarithmic falloff
+        // dist - safeZone goes from 0 to ~0.35
+        // We want it to drop to 0 relatively linearly or log-like
+        // Let's use a power curve for "log-like" steepness or just simple remapping
+        const falloffDist = dist - safeZone;
+        const maxFalloff = 0.5 - safeZone; // ~0.35
+        const normalizedFalloff = falloffDist / maxFalloff; // 0 to 1
+        
+        // Log-like curve: slow start, then fast drop? Or fast drop then slow tail?
+        // User asked for "log function to increase area".
+        // Usually log(x) rises fast. 1 - log(x+1) drops fast.
+        // Let's try 1 - (falloff ^ 0.5) or similar.
+        // Or simply:
+        return Math.max(0, 1 - Math.pow(normalizedFalloff, 0.5)); 
+    };
+
+    const opacity = useTransform(scrollYProgress, (v) => {
+        const val = getVisibility(v);
+        // Base opacity 0.2, max 1
+        return 0.2 + (val * 0.8);
+    });
+
+    const blurValue = useTransform(scrollYProgress, (v) => {
+        const val = getVisibility(v);
+        // Max blur 8px, min 0
+        return (1 - val) * 8;
+    });
+
     const filter = useTransform(blurValue, (v) => `blur(${v}px)`);
+
 
     // Detect active
     useEffect(() => {

@@ -8,37 +8,56 @@ import MessyThreads from '@/components/common/MessyThreads/MessyThreads';
 
 const experiences = [
   {
-    role: 'App Developer',
-    company: 'Lumi News',
-    period: 'Mar 2023 - Present',
+    role: 'Mobile Application Developer (Contract)',
+    company: 'Cloud Kinetics (Client: POS Malaysia)',
+    period: 'May 2025 - Present',
     description: [
-      'Actively engaged in product planning and contribute ideas in one of the most popular news apps in Malaysia.',
-      'Working closely with different stakeholders from drafting, design, development, testing, deployment, monitoring, and tracking.',
-      'Develop highly interactive features and widgets to enhance users’ news reading experience.',
-      'HTML-based news reader containing embedded images, recommendations, videos, and social media posts.',
-      'Experiment with new technologies, product ideas, and various improvements and optimizations.',
-      'Native IOS/Android home widget for displaying latest news on user device home screen.'
+      'Spearheading the end-to-end development of the "Pos Mini App," a distributed mobile point-of-sale system used by agents countrywide.',
+      'Designing and architecting a modular vendor system for seamless third-party service integration into the consumer Super App.',
+      'Developing critical modules for the flagship Pos Mobile App, including secure payment gateways and real-time notification services.',
+      'Collaborating with public sector stakeholders to digitize complex workflows and identify operational bottlenecks.',
+      'Leading the migration strategy from legacy applications to modern Flutter architectures.'
     ]
   },
   {
-    role: 'Software Engineer',
-    company: 'Snappymob Sdn Bhd',
+    role: 'Mobile Application Developer',
+    company: 'Lumi News Malaysia',
+    period: 'Mar 2023 - May 2025',
+    description: [
+      'Managed full lifecycle development from initial design through deployment, collaborating closely with product and backend teams.',
+      'Engineered a high-performance HTML-based news reader for complex content rendering with native fluidity.',
+      'Developed native home screen widgets using Swift (WidgetKit) and Kotlin (Jetpack Glance).',
+      'Implemented comprehensive production monitoring and logging systems for rapid performance optimization.',
+      'Prototyped and implemented offline reading capabilities and in-article search features.'
+    ]
+  },
+  {
+    role: 'Mobile Application Developer',
+    company: 'Snappymob',
     period: 'Feb 2022 - Feb 2023',
     description: [
-      'Working on MyAstro App, as part of a staff augmentation team for the client.',
-      'Worked closely with various roles within the scrum team.',
-      'Writing documentation unit tests and practicing peer code review, to ensure software quality.',
-      'Engaged in development of new reward, inbox features and deep linking infrastructure.',
-      'Troubleshooting and refactor various features and modules.'
+      'Contributed as a key developer in a staff augmentation team for the high-traffic MyAstro Super App.',
+      'Developed new reward systems, inbox features, and robust deep-linking infrastructure.',
+      'Authored comprehensive unit tests and documentation to ensure high software stability.',
+      'Troubleshot and refactored legacy modules to improve code readability and performance.'
     ]
   },
   {
-    role: 'Mobile Developer',
+    role: 'Mobile Application Developer',
     company: 'Artisan IT Solutions',
-    period: 'Jan 2021 - Feb 2022',
+    period: 'Jul 2021 - Feb 2022',
     description: [
-      'Develop a mobile application for clients to manage and monitor inventories and outstation tasks.',
-      'Design a flexible optimised relation Sqlite DB to help client’s engineers access data and perform updates in any circumstances.'
+      'Developed a mobile application for a healthcare device company to monitor inventories and manage outstation tasks.',
+      'Designed a flexible and optimized relational SQLite database schema for reliable offline data access and synchronization.'
+    ]
+  },
+  {
+    role: 'Mobile Developer Intern',
+    company: 'Fehux',
+    period: 'Dec 2020 - Feb 2021',
+    description: [
+      'Troubleshot and resolved production issues for a React Native project.',
+      'Developed features for a live streaming shopping initiative.'
     ]
   }
 ];
@@ -47,45 +66,51 @@ export default function AboutPage() {
   const age = calculateAge('1998-01-06');
 
   return (
-    <main className={styles.container} data-theme="light">
-      <div className={styles.header}>
-        <div className={styles.threadsWrapper}>
-            <FadeIn direction="down" delay={0.5}>
-                <MessyThreads />
+    <main className={styles.container} data-theme="dark">
+      <div className={styles.innerContainer}>
+        <div className={styles.headerGrid}>
+          <div className={styles.headerContent}>
+            <FadeIn direction="up" delay={0.1}>
+              <h1 className={styles.title}>My Journey</h1>
             </FadeIn>
-        </div>
-     
-        <FadeIn direction="up" delay={0.1}>
-          <h1 className={styles.title}>My Journey</h1>
-        </FadeIn>
-      </div>
-
-      <div className={styles.content}>
-        <FadeIn direction="up" delay={0.2}>
-          <div className={styles.bio}>
-            <p className={styles.text}>
-              {age}, software engineer based in Kuala Lumpur, Malaysia. Open for new opportunities for collaboration and learning.
-            </p>
           </div>
-        </FadeIn>
 
-        <div className={styles.timeline}>
-          {experiences.map((exp, index) => (
-            <FadeIn key={index} direction="up" delay={0.3 + index * 0.1}>
-              <div className={styles.timelineItem}>
-                <div className={styles.timelineHeader}>
-                  <h3 className={styles.role}>{exp.role}</h3>
-                  <span className={styles.company}>{exp.company}</span>
-                  <span className={styles.period}>{exp.period}</span>
+          <div className={styles.visualContainer}>
+              <FadeIn direction="down" delay={0.5}>
+                  <div className={styles.threadsWrapper}>
+                      <MessyThreads />
+                  </div>
+              </FadeIn>
+          </div>
+        </div>
+
+        <div className={styles.content}>
+          <FadeIn direction="up" delay={0.2}>
+            <div className={styles.bio}>
+              <p className={styles.text}>
+                {age}, software engineer based in Kuala Lumpur, Malaysia. Open for new opportunities for collaboration and learning.
+              </p>
+            </div>
+          </FadeIn>
+
+          <div className={styles.timeline}>
+            {experiences.map((exp, index) => (
+              <FadeIn key={index} direction="up" delay={0.3 + index * 0.1}>
+                <div className={styles.timelineItem}>
+                  <div className={styles.timelineHeader}>
+                    <h3 className={styles.role}>{exp.role}</h3>
+                    <span className={styles.company}>{exp.company}</span>
+                    <span className={styles.period}>{exp.period}</span>
+                  </div>
+                  <ul className={styles.description}>
+                    {exp.description.map((item, i) => (
+                      <li key={i}>{item}</li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className={styles.description}>
-                  {exp.description.map((item, i) => (
-                    <li key={i}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            </FadeIn>
-          ))}
+              </FadeIn>
+            ))}
+          </div>
         </div>
       </div>
     </main>
