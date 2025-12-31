@@ -27,6 +27,20 @@ export default function HomeSlogan() {
         }
     });
 
+    const handleCardClick = (i: number) => {
+        if (!containerRef.current) return;
+        const container = containerRef.current;
+        const containerTop = container.offsetTop;
+        const scrollRange = container.offsetHeight - window.innerHeight;
+        // Center the item in its scroll range
+        const targetProgress = (i + 0.5) / SLOGAN_ITEMS.length;
+        
+        window.scrollTo({
+            top: containerTop + (targetProgress * scrollRange),
+            behavior: 'smooth'
+        });
+    };
+
     // Subtle parallax for visuals
     const yVisuals = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
@@ -47,6 +61,7 @@ export default function HomeSlogan() {
                         <div 
                             key={i} 
                             className={`${styles.card} ${i === activeIndex ? styles.active : ''}`}
+                            onClick={() => handleCardClick(i)}
                         >
                             <h2 className={styles.cardTitle}>{item.title}</h2>
                             <p className={styles.cardDesc}>{item.desc}</p>

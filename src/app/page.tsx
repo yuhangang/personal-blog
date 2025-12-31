@@ -4,7 +4,6 @@ import type { Viewport } from 'next';
 export const viewport: Viewport = {
   themeColor: '#ffffff',
 };
-import HomePortfolio from '@/components/home/HomePortfolio/HomePortfolio';
 import HomeSlogan from '@/components/home/HomeSlogan/HomeSlogan';
 import About from '@/components/home/About/About';
 
@@ -24,9 +23,6 @@ export default function Home() {
          <HomeSlogan />
       </div>
 
-      <div data-theme="dark">
-        <HomePortfolio />
-      </div>
      
 
     </main>

@@ -1,11 +1,21 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
+import { useThreeOptimization } from '@/hooks/useThreeOptimization';
 import styles from './MessyThreads.module.scss';
 
 export default function MessyThreads() {
+    const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const frameRef = useRef<number>(0);
+    const frameloop = useThreeOptimization(containerRef as React.RefObject<HTMLElement>);
+    const isActiveRef = useRef(true);
+
+    // Sync ref for the animation closure
+    useEffect(() => {
+        isActiveRef.current = frameloop === 'always';
+    }, [frameloop]);
+
     const penRef = useRef({
         angle: 0,
         radius: 100,
@@ -48,6 +58,11 @@ export default function MessyThreads() {
         const MAX_POINTS = 800; 
 
         const animate = () => {
+            if (!isActiveRef.current) {
+                frameRef.current = requestAnimationFrame(animate);
+                return;
+            }
+
             ctx.clearRect(0, 0, rect.width, rect.height);
             
             // 1. Chaotic Physics
@@ -103,7 +118,7 @@ export default function MessyThreads() {
     }, []);
 
     return (
-        <div className={styles.container} aria-hidden="true">
+        <div ref={containerRef} className={styles.container} aria-hidden="true">
             <canvas ref={canvasRef} />
         </div>
     );

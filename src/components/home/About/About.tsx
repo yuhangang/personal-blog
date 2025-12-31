@@ -9,7 +9,6 @@ import MessyThreads from '@/components/common/MessyThreads/MessyThreads';
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
-  const age = calculateAge('1998-01-06');
 
   return (
     <section className={styles.section} id="about" ref={sectionRef}>
@@ -31,9 +30,9 @@ export default function About() {
           <FadeIn direction="up" delay={0.4}>
             <div className={styles.bio}>
               <p className={styles.text}>
-                I'm a senior software engineer based in Kuala Lumpur, Malaysia, specializing in architecting 
+                I'm a software engineer based in Kuala Lumpur, Malaysia, specializing in architecting 
                 high-performance mobile and web applications. My expertise lies in building scalable, 
-                user-centric digital solutions for logistics and media leaders.
+                user-centric applications.
               </p>
               <div className={styles.actions}>
                 <Link href="/about" className={styles.readMore}>

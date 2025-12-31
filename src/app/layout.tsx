@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans, Inter, Playfair_Display, Outfit } from 'next/font/google';
 import SmoothScroll from '@/components/common/SmoothScroll/SmoothScroll';
 import Navigation from '@/components/common/Navigation/Navigation';
-import Footer from '@/components/common/Footer/Footer';
+import Footer from '@/components/common/Footer/Footer';  
 import './globals.scss';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { TransitionProvider } from '@/context/TransitionContext';
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -46,13 +47,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${plusJakarta.variable} ${inter.variable} ${playfair.variable} ${outfit.variable}`}>
+    <html lang="en" className={`${plusJakarta.variable} ${inter.variable} ${playfair.variable} ${outfit.variable}`} suppressHydrationWarning={true}>
       <body>
-        <SmoothScroll>
-          <Navigation />
-          <main>{children}</main>
-          <Footer />
-        </SmoothScroll>
+        <TransitionProvider>
+          <SmoothScroll>
+            <Navigation />
+            <main style={{ backgroundColor: '#1d1d1f', minHeight: '100vh' }}>{children}</main>
+            <Footer />
+          </SmoothScroll>
+        </TransitionProvider>
       </body>
       {process.env.NODE_ENV === 'production' && (
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />

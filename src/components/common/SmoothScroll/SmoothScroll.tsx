@@ -28,7 +28,8 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       gestureOrientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 1,
-      touchMultiplier: 2,
+      touchMultiplier: 1.5, // Reduced slightly for more control on mobile
+      lerp: 0.1, // Custom lerp for smoother feel
     });
 
     setLenis(lenisInstance);

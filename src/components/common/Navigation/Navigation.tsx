@@ -130,6 +130,8 @@ export default function Navigation() {
     }
   };
 
+  if (pathname === '/resume') return null;
+
   return (
     <>
       <nav 

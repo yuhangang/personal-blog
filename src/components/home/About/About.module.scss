@@ -20,13 +20,11 @@
 
 .container {
     width: 100%;
-    max-width: 1100px; // Tighter container to bring elements together
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 0 1.25rem; // Moved padding here
+    padding: 0 1.25rem;
     position: relative;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: $spacing-sm;
+    display: block; // No more grid, so content and background can overlap
     align-items: center;
 
     @include mobile {
@@ -36,36 +34,35 @@
 }
 
 .visualContainer {
-    position: relative; // part of grid flow
+    position: absolute;
+    top: -100px;
+    right: -100px;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 0;
     pointer-events: none;
     opacity: 0.6;
-    margin-right: -10%; // Pull it closer to edge but keep in flow
 
     @include mobile {
-        position: relative;
-        right: auto;
-        top: auto;
+        top: 0;
+        right: 0;
+        left: 0;
         transform: none;
-        order: -1;
-        height: 180px;
+        height: 350px; // Taller to avoid clipping
         opacity: 0.3;
-        margin-bottom: -30px;
-        margin-right: 0;
+        margin-bottom: 0;
     }
 }
 
 .threadsWrapper {
-    width: 400px; // Tight desktop width
-    height: 400px;
+    width: 600px; // Larger to avoid clipping
+    height: 600px;
 
     @include mobile {
         width: 100%;
-        height: 180px;
-        transform: scale(0.65);
+        height: 350px;
+        transform: scale(0.8);
     }
 }
 

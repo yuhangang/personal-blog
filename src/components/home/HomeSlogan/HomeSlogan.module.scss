@@ -12,7 +12,7 @@
 .stickyContainer {
     position: sticky;
     top: 0;
-    height: 100vh;
+    height: 100dvh;
     width: 100%;
     display: flex;
     align-items: center;
@@ -127,7 +127,7 @@
 .cardDesc {
     font-family: var(--font-sans);
     font-size: 0.95rem;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255);
     line-height: 1.5;
     margin: 0;
     opacity: 0.7;
@@ -136,7 +136,6 @@
     .card:hover &,
     .card.active & {
         opacity: 1;
-        color: rgba(255, 255, 255, 0.9);
     }
 
     @include mobile {

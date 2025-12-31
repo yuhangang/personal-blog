@@ -7,6 +7,7 @@ import FlowCanvas from './FlowCanvas';
 const footerLinks = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
+  {label: 'Create', href: '/create'},
   { label: 'Contact', href: 'mailto:contact@yuhangang.com' },
 ];
 
@@ -41,7 +42,12 @@ const socialLinks = [
  
 ];
 
+import { usePathname } from 'next/navigation';
+
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname === '/resume') return null;
+
   return (
     <footer className={styles.footer} id="contact">
       <div className={styles.background}>

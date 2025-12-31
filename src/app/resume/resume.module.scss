@@ -1,216 +1,299 @@
 @use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
 
-.container {
-    @include container;
-    padding-top: $spacing-xl;
-    padding-bottom: $spacing-xl;
-    max-width: 1000px; // Wider for 2 columns
-}
-
-.resumeGrid {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: $spacing-xl;
-    align-items: start;
+.pageWrapper {
+    background-color: #f5f5f7;
+    min-height: 100vh;
+    color: #111111;
+    padding: 80px 20px;
+    font-family: var(--font-sans), $font-sans;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     @include mobile {
-        grid-template-columns: 1fr;
-        gap: $spacing-lg;
+        padding: 40px 10px;
     }
 }
 
-.leftColumn {
-    // Sidebar styles - specific styles can be added here if needed
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-xl;
+.resumeContainer {
+    width: 210mm;
+    min-height: 297mm;
+    background: #ffffff;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.1);
+    padding: 20mm; // Standard A4 padding
+    position: relative;
+    transform-origin: top center;
+    transition: transform 0.3s ease;
+
+    // Force A4 on smaller screens by scaling instead of reflowing
+    @media (max-width: 220mm) {
+        $scale: 0.85;
+        transform: scale($scale);
+        margin-bottom: calc(297mm * (#{$scale} - 1));
+    }
+
+    @media (max-width: 180mm) {
+        $scale: 0.7;
+        transform: scale($scale);
+        margin-bottom: calc(297mm * (#{$scale} - 1));
+    }
+
+    @include mobile {
+        $scale: 0.42; // Approx for typical mobile width
+        transform: scale($scale);
+        margin-bottom: calc(297mm * (#{$scale} - 1));
+    }
 }
 
-.rightColumn {
-    // Main content styles
+@media print {
+    @page {
+        size: A4;
+        margin: 15mm; // Use browser margins for multi-page consistency
+    }
+
+    html,
+    body {
+        width: 210mm !important;
+        height: auto !important;
+        min-height: 297mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .pageWrapper {
+        padding: 0 !important;
+        margin: 0 !important;
+        background: white !important;
+        display: block !important;
+        min-height: auto !important;
+    }
+
+    .resumeContainer {
+        width: 100% !important; // Fill the printable area (inside margins)
+        height: auto !important;
+        min-height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important; // Let @page handle margins
+        box-shadow: none !important;
+        transform: none !important;
+        background: white !important;
+        border: none !important;
+    }
+
+    .topActions {
+        display: none !important;
+    }
+
+    // Ensure colors and fonts are preserved
+    :global(*) {
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+    }
+}
+
+.topActions {
+    position: absolute;
+    top: -50px;
+    right: 0;
     display: flex;
-    flex-direction: column;
-    gap: $spacing-xl;
+    gap: $spacing-md;
+
+    @include mobile {
+        position: static;
+        margin-bottom: $spacing-lg;
+        justify-content: space-between;
+    }
+}
+
+.actionBtn {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+
+    &:hover {
+        border-color: $color-accent;
+        color: $color-accent;
+        transform: translateY(-2px);
+    }
+
+    &.primary {
+        background: $color-accent;
+        color: #fff;
+        border-color: $color-accent;
+
+        &:hover {
+            filter: brightness(1.1);
+        }
+    }
 }
 
 .header {
+    border-bottom: none;
+    padding-bottom: $spacing-md;
+    margin-bottom: $spacing-md;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: $spacing-xl;
-    padding-bottom: $spacing-md;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    grid-column: 1 / -1; // Span full width
 
     @include mobile {
         flex-direction: column;
+        align-items: flex-start;
         gap: $spacing-md;
     }
 }
 
-.titleGroup {
+.titleArea {
     h1 {
-        font-size: 3rem;
-        margin-bottom: $spacing-xs;
-        color: $color-text-primary;
+        font-size: 2.75rem;
+        margin: 0;
+        color: #000;
+        letter-spacing: -0.02em;
+        line-height: 1;
     }
 
     p {
-        font-family: $font-mono;
-        color: $color-accent;
-        font-size: 1rem;
+        font-size: 1.15rem;
+        color: #666;
+        margin: 10px 0 0;
+        font-weight: 500;
         text-transform: uppercase;
         letter-spacing: 0.05em;
     }
 }
 
-.downloadButton {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    background: $color-text-primary;
-    color: $color-surface;
-    border-radius: 99px;
-    font-family: $font-sans;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: all $transition-base;
-    box-shadow: $shadow-sm;
+.contactInfo {
+    text-align: right;
+    font-size: 0.8rem;
+    color: #444;
+    line-height: 1.4;
 
-    &:hover {
-        background: $color-accent;
-        transform: translateY(-2px);
-        box-shadow: $shadow-md;
+    @include mobile {
+        text-align: left;
+    }
+
+    p {
+        margin: 2px 0;
+    }
+
+    a {
+        color: #000;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.2s ease;
+
+        &:hover {
+            border-bottom-color: $color-accent;
+        }
     }
 }
 
 .section {
-    margin-bottom: $spacing-xl;
+    margin-bottom: $spacing-md;
+
+    h2 {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: $color-accent;
+        margin-bottom: $spacing-md;
+        border-bottom: 1px solid #eeeeee;
+        padding-bottom: 8px;
+        font-weight: 700;
+    }
 }
 
-.sectionTitle {
-    font-size: 1.25rem;
-    margin-bottom: $spacing-md;
-    color: $color-text-primary;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 600;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    padding-bottom: $spacing-xs;
+.summary {
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: #333;
 }
 
 .experienceItem {
-    margin-bottom: $spacing-lg;
+    margin-bottom: $spacing-md;
+    break-inside: avoid;
+    page-break-inside: avoid;
 
     &:last-child {
         margin-bottom: 0;
     }
 }
 
-.roleHeader {
+.expHeader {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    margin-bottom: $spacing-xs;
+    margin-bottom: 4px;
 
     @include mobile {
         flex-direction: column;
-        gap: 0.25rem;
+        gap: 2px;
     }
 
     h3 {
-        font-size: 1.1rem;
-        font-weight: 600;
-        font-family: $font-sans;
+        font-size: 1.15rem;
         margin: 0;
-        color: $color-text-primary;
+        color: #000;
     }
 
-    span {
-        font-family: $font-mono;
-        font-size: 0.8rem;
-        color: $color-text-secondary;
+    .period {
+        font-size: 0.85rem;
+        color: #888;
+        font-style: italic;
     }
 }
 
 .company {
-    font-family: $font-serif;
-    font-style: italic;
-    color: $color-text-secondary;
-    margin-bottom: $spacing-sm;
+    font-weight: 600;
+    color: #444;
     display: block;
+    font-size: 0.95rem;
+    margin-bottom: $spacing-sm;
 }
 
 .description {
-    color: $color-text-secondary;
-    font-size: 1rem;
-    line-height: 1.6;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 
-    ul {
-        list-style: none;
-        padding: 0;
+    li {
+        margin-bottom: 5px;
+        position: relative;
+        padding-left: 20px;
+        color: #444;
+        line-height: 1.45;
+        font-size: 0.95rem;
 
-        li {
-            position: relative;
-            padding-left: 1.5rem;
-            margin-bottom: 0.5rem;
-
-            &::before {
-                content: '•';
-                position: absolute;
-                left: 0;
-                color: $color-accent;
-            }
+        &::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #999;
         }
     }
 }
 
-.skillsGrid {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-md;
-}
+.footer {
+    display: none;
 
-.skillCategory {
-    h4 {
-        font-family: $font-mono;
-        font-size: 0.875rem;
-        color: $color-text-primary;
-        margin-bottom: $spacing-sm;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-
-    .contactList {
-        list-style: none;
-        margin-bottom: $spacing-lg;
-
-        li {
-            margin-bottom: $spacing-xs;
-            font-size: 0.9rem;
-            color: $color-text-secondary;
-            display: flex;
-            align-items: center;
-            gap: $spacing-xs;
-
-            a {
-                &:hover {
-                    color: $color-accent;
-                    text-decoration: underline;
-                }
-            }
-        }
-    }
-
-    ul {
-        list-style: none;
-
-        li {
-            color: $color-text-secondary;
-            margin-bottom: 0.25rem;
-            font-size: 0.95rem;
-        }
+    @media print {
+        display: block !important;
+        margin-top: $spacing-lg;
+        font-size: 0.75rem;
+        text-align: center;
+        color: #aaa;
     }
 }
