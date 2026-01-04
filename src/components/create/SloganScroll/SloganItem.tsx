@@ -88,6 +88,7 @@ export default function SloganItem({ title, desc, index, setActiveIndex }: Props
                 className={styles.sloganContent}
                 style={{ x, opacity, rotateY, scale, filter, perspective: 1000 }}
             >
+                <span className={styles.sloganIndex}>({String(index + 1).padStart(2, '0')})</span>
                 <h2 className={styles.sloganTitle}>{title}</h2>
                 <p className={styles.sloganDesc}>{desc}</p>
             </motion.div>

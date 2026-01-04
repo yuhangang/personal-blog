@@ -54,7 +54,9 @@ export default function Footer() {
         <FlowCanvas />
       </div>
       <div className={styles.content}>
-        <h2 className={styles.logo}>Yu Hang Ang</h2>
+        <Link href="/">
+          <h2 className={styles.logo}>Yu Hang Ang</h2>
+        </Link>
 
         <ul className={styles.links}>
           {footerLinks.map((link) => (

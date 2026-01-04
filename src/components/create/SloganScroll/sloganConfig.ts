@@ -14,10 +14,11 @@ export interface SloganItemData {
     visual: VisualParams;
 }
 
+
 export const SLOGAN_ITEMS: SloganItemData[] = [
     {
-        title: "Organic Fluidity",
-        desc: "We prioritize natural motion over rigid grids. Our interfaces breathe, adapt, and flow like living organisms.",
+        title: "Cultural Fluidity",
+        desc: "Interfaces that breathe and adapt. We craft digital ecosystems that flow seamlessly across cultural boundaries.",
         visual: {
             color: '#00f2fe',
             speed: 0.8,
@@ -29,8 +30,8 @@ export const SLOGAN_ITEMS: SloganItemData[] = [
         }
     },
     {
-        title: "Weaving Stories",
-        desc: "Every interaction is a thread in a larger tapestry. We intertwine functionality with narrative.",
+        title: "Narrative Threads",
+        desc: "Every interaction weaves a story. We intertwine functionality with deep cultural resonance to build brands that matter.",
         visual: {
             color: '#fee140',
             speed: 0.4,
@@ -42,8 +43,8 @@ export const SLOGAN_ITEMS: SloganItemData[] = [
         }
     },
     {
-        title: "Vision & Resonance",
-        desc: "Design that echoes your core values. We create digital spaces that vibrate with your brand's frequency.",
+        title: "Global Resonance",
+        desc: "Designing frequencies that amplify your vision. We build hyper-connected brands that vibrate with purpose and impact.",
         visual: {
             color: '#fa709a',
             speed: 1.5,
@@ -55,8 +56,8 @@ export const SLOGAN_ITEMS: SloganItemData[] = [
         }
     },
     {
-        title: "Raw Material",
-        desc: "Celebrating the grain of the web. Unpolished, authentic, and brutally honest experiences.",
+        title: "Authentic Textures",
+        desc: "Celebrating the raw grain of reality. Unpolished, genuine connections that embed your brand in cultural memory.",
         visual: {
             color: '#ffffff',
             speed: 0.5,
@@ -68,8 +69,8 @@ export const SLOGAN_ITEMS: SloganItemData[] = [
         }
     },
     {
-        title: "Eternal Structure",
-        desc: "Foundations built to last. We architect systems that stand the test of time and scale.",
+        title: "Purpose-Led Architecture",
+        desc: "Foundations built for meaningful growth. We architect systems that scale your influence and define your legacy.",
         visual: {
             color: '#7b7b7b',
             speed: 0.1,

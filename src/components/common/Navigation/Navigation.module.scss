@@ -57,27 +57,22 @@
     justify-content: center;
     padding: 12px;
     z-index: 1102;
-    pointer-events: auto; // Allow clicking
+    pointer-events: auto;
     text-decoration: none;
     color: $color-text-primary;
     transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
     // Theme Overrides
     .nav[data-nav-theme='dark'] & {
-        color: #ffffff; // White on dark backgrounds
+        color: #ffffff;
     }
 
     .nav[data-nav-theme='light'] & {
-        color: #000000; // Black on light backgrounds
+        color: #000000;
     }
 
-    // When nav is open (class added by parent .navOpen)
     .navOpen & {
-        color: #000000 !important; // Always black in menu
-    }
-
-    &:hover {
-        transform: scale(1.02);
+        color: #000000 !important;
     }
 }
 
@@ -88,55 +83,21 @@
 }
 
 .logoIcon {
-    width: 60px;
-    height: 60px;
+    font-family: var(--font-geom);
+    font-size: 2.25rem;
+    font-weight: 600;
+    letter-spacing: -0.04em;
     display: block;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    opacity: 1;
-    transform: scale(1);
-
-    // Color Inherited from parent color property via currentColor in SVG
-    color: inherit;
+    transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
 
     @include mobile {
-        width: 40px; // Smaller on mobile
-        height: 40px;
-    }
-
-    // Trigger state: Nav Open OR Logo Hover OR Logo Active (Touch)
-    .navOpen &,
-    .logo:not(.noHover):hover &,
-    .logo:not(.noHover):active &,
-    .logo:not(.noHover):focus-visible & {
-        opacity: 0;
-        width: 0;
-        transform: scale(0.8);
+        font-size: 1.5rem;
     }
 }
 
 .logoText {
-    height: 24px; // Adjust height to match logo visual weight
-    width: auto;
-    color: inherit; // Inherit from .logo
-    opacity: 0;
-    max-width: 0;
-    overflow: hidden;
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    transform: translateX(-10px);
-
-    // SVG specific
-    display: block; // Ensure it behaves like a box
-
-    // Trigger state: Nav Open OR Logo Hover OR Logo Active (Touch)
-    .navOpen &,
-    .logo:not(.noHover):hover &,
-    .logo:not(.noHover):active &,
-    .logo:not(.noHover):focus-visible & {
-        opacity: 1;
-        max-width: 200px;
-        transform: translateX(0);
-        margin-left: 12px;
-    }
+    display: none;
 }
 
 // Desktop Navigation Pill (Hidden in favor of Hamburger)

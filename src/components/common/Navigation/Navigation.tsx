@@ -7,7 +7,6 @@ import { usePathname } from 'next/navigation';
 import styles from './Navigation.module.scss';
 import { useLenis } from '@/components/common/SmoothScroll/SmoothScroll';
 import Logo from './Logo';
-import LogoWordmark from './LogoWordmark';
 
 const navLinks = [
   { label: 'About', href: '/about', preview: '/wallpaper_mountain_dusk.png' },
@@ -141,14 +140,11 @@ export default function Navigation() {
         <div className={styles.container}>
           <Link 
             href="/" 
-            className={`${styles.logo} ${interactionDisabled ? styles.noHover : ''}`} 
+            className={styles.logo} 
             onClick={(e) => handleClick(e, '/')}
             aria-label="Yu Hang Ang - Home"
           >
-            <div className={styles.logoContainer}>
-              <Logo className={styles.logoIcon} />
-              <LogoWordmark className={styles.logoText} />
-            </div>
+            <Logo className={styles.logoIcon} />
           </Link>
 
           {/* Desktop Navigation */}

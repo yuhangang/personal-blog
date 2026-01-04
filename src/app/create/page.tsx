@@ -17,8 +17,7 @@ export const metadata: Metadata = {
 
 
 import Portfolio from '@/components/create/Portfolio/Portfolio';
-
-// ...
+import CreateContact from '@/components/create/CreateContact/CreateContact';
 
 export default function PortfolioPage() {
   return (
@@ -37,6 +36,9 @@ export default function PortfolioPage() {
     
           <CreateServices />
       </div>
+     <div data-theme="light">
+      <CreateContact />
+    </div>
     </main>
   );
 }

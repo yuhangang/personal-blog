@@ -49,19 +49,33 @@
 @media print {
     @page {
         size: A4;
-        margin: 15mm; // Use browser margins for multi-page consistency
+        margin: 20mm; // Increased margin to prevent clipping
     }
 
-    html,
-    body {
+    :global(html),
+    :global(body) {
         width: 210mm !important;
         height: auto !important;
         min-height: 297mm !important;
         margin: 0 !important;
         padding: 0 !important;
         background: white !important;
+        overflow: visible !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
+    }
+
+    :global(main) {
+        background: white !important;
+        height: auto !important;
+        display: block !important;
+    }
+
+    // Reset potential animation wrappers
+    :global(main)> :global(div) {
+        transform: none !important;
+        filter: none !important;
+        opacity: 1 !important;
     }
 
     .pageWrapper {
@@ -92,6 +106,11 @@
     :global(*) {
         print-color-adjust: exact !important;
         -webkit-print-color-adjust: exact !important;
+    }
+
+    :global(nav),
+    :global(footer) {
+        display: none !important;
     }
 }
 
@@ -149,14 +168,11 @@
     justify-content: space-between;
     align-items: flex-start;
 
-    @include mobile {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: $spacing-md;
-    }
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
-.titleArea {
+.headerLeft {
     h1 {
         font-size: 2.75rem;
         margin: 0;
@@ -175,15 +191,14 @@
     }
 }
 
-.contactInfo {
+.headerRight {
     text-align: right;
     font-size: 0.8rem;
     color: #444;
     line-height: 1.4;
 
-    @include mobile {
-        text-align: left;
-    }
+    color: #444;
+    line-height: 1.4;
 
     p {
         margin: 2px 0;
@@ -191,12 +206,12 @@
 
     a {
         color: #000;
-        text-decoration: none;
-        border-bottom: 1px solid transparent;
-        transition: border-color 0.2s ease;
+        text-decoration: underline;
+        position: relative;
+        z-index: 10;
 
         &:hover {
-            border-bottom-color: $color-accent;
+            color: $color-accent;
         }
     }
 }
@@ -238,10 +253,8 @@
     align-items: baseline;
     margin-bottom: 4px;
 
-    @include mobile {
-        flex-direction: column;
-        gap: 2px;
-    }
+    align-items: baseline;
+    margin-bottom: 4px;
 
     h3 {
         font-size: 1.15rem;
@@ -253,6 +266,17 @@
         font-size: 0.85rem;
         color: #888;
         font-style: italic;
+
+        a {
+            color: inherit;
+            text-decoration: underline;
+            position: relative;
+            z-index: 10;
+
+            &:hover {
+                color: $color-accent;
+            }
+        }
     }
 }
 

@@ -58,19 +58,28 @@
     transition: all 0.5s ease-out;
 }
 
-.sloganTitle {
-    font-family: var(--font-display);
-    font-size: 5.5rem; // Increased for impact
-    font-weight: 400;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    margin-bottom: 16px;
-    font-style: italic;
+.sloganIndex {
+    font-family: var(--font-mono); // Structural feel
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+    display: block;
+    margin-bottom: 8px;
+    letter-spacing: 0.1em;
+}
 
-    background: linear-gradient(to right, #fff 0%, #aaa 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.sloganTitle {
+    font-family: var(--font-display); // Playfair
+    font-size: 5rem;
+    font-weight: 500; // Slightly bolder than 400 for solid presence
+    letter-spacing: -0.03em; // Tighter for headlines
+    line-height: 1.05;
+    margin-bottom: 24px;
+    font-style: italic;
+    color: #ffffff; // Solid white
+
+    // Removed gradient for premium "print-like" feel
+    background: none;
+    -webkit-text-fill-color: #fff;
 
     @include mobile {
         font-size: 3rem;
@@ -78,12 +87,13 @@
 }
 
 .sloganDesc {
-    font-family: var(--font-sans);
-    font-size: 1.2rem;
-    color: rgba(255, 255, 255, 0.7);
-    line-height: 1.5;
-    max-width: 500px;
+    font-family: var(--font-sans); // Inter/Outfit
+    font-size: 1.1rem; // Slightly smaller but cleaner
+    color: rgba(255, 255, 255, 0.8); // Higher contrast
+    line-height: 1.6; // More breathing room
+    max-width: 480px;
     font-weight: 300;
+    margin-left: 2px; // Slight visual alignment with serif letters
 
     @include mobile {
         font-size: 1rem;
