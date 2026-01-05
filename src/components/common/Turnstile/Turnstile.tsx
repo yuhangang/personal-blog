@@ -26,6 +26,17 @@ export default function Turnstile({ siteKey, onVerify, onError, onExpire, theme 
     const widgetId = useRef<string | null>(null);
     const [scriptLoaded, setScriptLoaded] = useState(false);
 
+    // Refs to keep track of latest callbacks without triggering effect
+    const onVerifyRef = useRef(onVerify);
+    const onErrorRef = useRef(onError);
+    const onExpireRef = useRef(onExpire);
+
+    useEffect(() => {
+        onVerifyRef.current = onVerify;
+        onErrorRef.current = onError;
+        onExpireRef.current = onExpire;
+    }, [onVerify, onError, onExpire]);
+
     useEffect(() => {
         if (scriptLoaded) return;
 
@@ -52,9 +63,9 @@ export default function Turnstile({ siteKey, onVerify, onError, onExpire, theme 
 
         const id = window.turnstile.render(containerRef.current, {
             sitekey: siteKey,
-            callback: (token: string) => onVerify(token),
-            'error-callback': () => onError?.(),
-            'expired-callback': () => onExpire?.(),
+            callback: (token: string) => onVerifyRef.current(token),
+            'error-callback': () => onErrorRef.current?.(),
+            'expired-callback': () => onExpireRef.current?.(),
             theme,
         });
 
@@ -66,7 +77,7 @@ export default function Turnstile({ siteKey, onVerify, onError, onExpire, theme 
                 widgetId.current = null;
             }
         };
-    }, [scriptLoaded, siteKey, onVerify, onError, onExpire, theme]);
+    }, [scriptLoaded, siteKey, theme]);
 
     return <div ref={containerRef} style={{ minHeight: '65px' }} />;
 }
