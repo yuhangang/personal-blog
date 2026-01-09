@@ -14,11 +14,19 @@ export interface SloganItemData {
     visual: VisualParams;
 }
 
+/*
+
+Story
+Character
+Substance
+
+
+*/
 
 export const SLOGAN_ITEMS: SloganItemData[] = [
     {
-        title: "Cultural Fluidity",
-        desc: "Interfaces that breathe and adapt. We craft digital ecosystems that flow seamlessly across cultural boundaries.",
+        title: "Your Identity",
+        desc: "We don't just build websites—we bring your brand to life. Every detail reflects who you are and what you stand for.",
         visual: {
             color: '#00f2fe',
             speed: 0.8,
@@ -30,34 +38,8 @@ export const SLOGAN_ITEMS: SloganItemData[] = [
         }
     },
     {
-        title: "Narrative Threads",
-        desc: "Every interaction weaves a story. We intertwine functionality with deep cultural resonance to build brands that matter.",
-        visual: {
-            color: '#fee140',
-            speed: 0.4,
-            noiseScale: 2.0,
-            amplitude: 1.5,
-            thickness: 0.08, // Thin like thread
-            distort: 1.5,
-            type: 'weave'
-        }
-    },
-    {
-        title: "Global Resonance",
-        desc: "Designing frequencies that amplify your vision. We build hyper-connected brands that vibrate with purpose and impact.",
-        visual: {
-            color: '#fa709a',
-            speed: 1.5,
-            noiseScale: 0.5,
-            amplitude: 2.0,
-            thickness: 0.2,
-            distort: 0.8,
-            type: 'pulse' // Heartbeat
-        }
-    },
-    {
-        title: "Authentic Textures",
-        desc: "Celebrating the raw grain of reality. Unpolished, genuine connections that embed your brand in cultural memory.",
+        title: "Immersive Experiences",
+        desc: "More than pages—journeys. We build sites that captivate, guiding visitors through a seamless, memorable experience.",
         visual: {
             color: '#ffffff',
             speed: 0.5,
@@ -65,18 +47,45 @@ export const SLOGAN_ITEMS: SloganItemData[] = [
             amplitude: 1.0,
             thickness: 0.15,
             distort: 2.5,
-            type: 'noise' // Granular
+            type: 'noise'
         }
     },
     {
-        title: "Purpose-Led Architecture",
-        desc: "Foundations built for meaningful growth. We architect systems that scale your influence and define your legacy.",
+        title: "Stories That Draw People In",
+        desc: "Your story is your strength. We craft websites that invite visitors into your world and make them want to stay.",
+        visual: {
+            color: '#fee140',
+            speed: 0.4,
+            noiseScale: 2.0,
+            amplitude: 1.5,
+            thickness: 0.08,
+            distort: 1.5,
+            type: 'weave'
+        }
+    },
+    {
+        title: "Design That Resonates",
+        desc: "When a website truly fits, people feel it. We create experiences that connect on a deeper level—not just inform, but inspire.",
+        visual: {
+            color: '#fa709a',
+            speed: 1.5,
+            noiseScale: 0.5,
+            amplitude: 2.0,
+            thickness: 0.2,
+            distort: 0.8,
+            type: 'pulse'
+        }
+    },
+
+    {
+        title: "A Foundation for Growth",
+        desc: "Great websites evolve with you. We build with intention—flexible, scalable, and ready for whatever comes next.",
         visual: {
             color: '#7b7b7b',
             speed: 0.1,
             noiseScale: 0.1,
             amplitude: 0.5,
-            thickness: 0.6, // Thick block
+            thickness: 0.6,
             distort: 0.0,
             type: 'structure'
         }

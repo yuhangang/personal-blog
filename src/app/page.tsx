@@ -11,7 +11,7 @@ import About from '@/components/home/About/About';
 export default function Home() {
   return (
     <main>
-      <div data-theme="dark">
+      <div id="home" data-theme="dark">
         <ThreeHero />
       </div>
        <div data-theme="dark">
@@ -19,7 +19,7 @@ export default function Home() {
       </div>
       
       {/* New Compact Slogans */}
-      <div data-theme="dark">
+      <div id="identity" data-theme="dark">
          <HomeSlogan />
       </div>
 

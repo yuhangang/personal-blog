@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     try {
         const { currentAnalysis, userMessage, chatHistory } = await request.json();
 
-        const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+        const model = genAI.getGenerativeModel({ model: 'gemini-3-flash-preview' });
 
         const historyContext = chatHistory.map((msg: any) =>
             `${msg.role === 'user' ? 'User' : 'Agent'}: ${msg.content}`

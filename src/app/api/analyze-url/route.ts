@@ -36,7 +36,7 @@ async function performSearch(query: string): Promise<string> {
 }
 
 async function analyzeWithGemini(url: string, content: string, isSearchContext: boolean = false) {
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-3-flash-preview' });
 
     const truncatedContent = content.substring(0, 15000);
 
@@ -97,23 +97,27 @@ export async function POST(request: Request) {
         }
 
         // --- VERIFY TURNSTILE ---
-        if (!token) {
-            return NextResponse.json({ error: 'Verification failed. Please refresh.' }, { status: 401 });
-        }
+        // --- VERIFY TURNSTILE ---
+        // Skip in development
+        if (process.env.NODE_ENV !== 'development') {
+            if (!token) {
+                return NextResponse.json({ error: 'Verification failed. Please refresh.' }, { status: 401 });
+            }
 
-        const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
-        if (turnstileSecret) {
-            const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    secret: turnstileSecret,
-                    response: token
-                })
-            });
-            const verifyData = await verifyRes.json();
-            if (!verifyData.success) {
-                return NextResponse.json({ error: 'Human verification failed.' }, { status: 401 });
+            const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
+            if (turnstileSecret) {
+                const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        secret: turnstileSecret,
+                        response: token
+                    })
+                });
+                const verifyData = await verifyRes.json();
+                if (!verifyData.success) {
+                    return NextResponse.json({ error: 'Human verification failed.' }, { status: 401 });
+                }
             }
         }
 

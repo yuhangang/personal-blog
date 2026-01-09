@@ -45,22 +45,34 @@
     }
 }
 
-.logo {
-    // We remove the glass-pill for the "clean" look
-    // Or we keep it? Let's assume user wants clean text if it's changing color.
-    // Actually, let's keep the block for now but make it transparent background if adapting?
-    // User asked for "white/black text".
-
-    // Let's reset the glass-pill to be TRANSPARENT background but with correct text color
+// Identity Anchor Layout
+.identityAnchor {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 12px;
+    gap: 12px;
     z-index: 1102;
     pointer-events: auto;
+    font-family: inherit; // Inherit or set specific
+}
+
+.name {
+    font-family: var(--font-geom); // Consistent with logo
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: currentColor;
     text-decoration: none;
-    color: $color-text-primary;
-    transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.3s ease;
+    white-space: nowrap; // Prevent wrapping
+
+    // Large Screen Scaling
+    @media (min-width: 1440px) {
+        font-size: 2rem;
+    }
+
+    &:hover {
+        opacity: 0.7;
+    }
 
     // Theme Overrides
     .nav[data-nav-theme='dark'] & {
@@ -72,64 +84,140 @@
     }
 
     .navOpen & {
-        color: #000000 !important;
+        color: #000000;
     }
 }
 
-.logoContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.separator {
+    font-family: var(--font-geom);
+    font-size: 1.8rem; // Match name size
+    font-weight: 300;
+    color: currentColor;
+    opacity: 0.3;
+    margin: 0 4px; // Tight spacing
+
+    @media (min-width: 1440px) {
+        font-size: 2.4rem;
+    }
+
+    .nav[data-nav-theme='dark'] & {
+        color: #ffffff;
+    }
+
+    .nav[data-nav-theme='light'] & {
+        color: #000000;
+    }
+
+    .navOpen & {
+        color: #000000;
+    }
 }
 
-.logoIcon {
-    font-family: var(--font-geom);
-    font-size: 2.25rem;
-    font-weight: 600;
-    letter-spacing: -0.04em;
-    display: block;
-    transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    white-space: nowrap;
+.anchorWrapper {
+    position: relative;
+    display: flex; // To hold the inner items
+    align-items: center;
+    height: 1.8rem; // Fixed height for crop container
+    overflow: hidden; // ESSENTIAL for the crop effect
 
-    @include mobile {
+    @media (min-width: 1440px) {
+        height: 2.4rem;
+    }
+}
+
+.anchorText {
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: currentColor;
+    white-space: nowrap;
+    align-self: center;
+    // position: absolute; removed to allow width calculation
+    // left: 0;
+
+    @media (min-width: 1440px) {
         font-size: 1.8rem;
     }
-}
 
-.logoText {
-    display: none;
-}
-
-// Desktop Navigation Pill (Hidden in favor of Hamburger)
-.links {
-    display: none; // Hide inline links to enforce Hamburger on Desktop
-    gap: 4px; // Tight gap for internal items
-    list-style: none;
-    padding: 6px; // Padding around the internal pills
-}
-
-.link {
-    display: none;
-    color: $color-text-secondary;
-    font-family: $font-sans;
-    font-size: 0.9rem;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    text-transform: none;
-    position: relative;
-    padding: 8px 20px;
-    border-radius: 8px; // Inner rounded corners
-    transition: all 0.3s ease;
-
-    &:hover {
-        color: $color-text-primary;
-        background: rgba(0, 0, 0, 0.04);
+    .nav[data-nav-theme='dark'] & {
+        color: #ffffff;
     }
 
-    &.active {
-        background: #fff;
-        color: #000;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    .nav[data-nav-theme='light'] & {
+        color: #000000;
+    }
+
+    .navOpen & {
+        color: #000000;
+    }
+}
+
+// Film Light Animation
+.filmLight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 60px; // Width of the beam
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.8) 50%,
+            rgba(255, 255, 255, 0) 100%);
+    transform: skewX(-20deg);
+    pointer-events: none;
+    mix-blend-mode: overlay; // Make it shine
+    z-index: 2;
+
+    .nav[data-nav-theme='light'] & {
+        background: linear-gradient(90deg,
+                rgba(0, 0, 0, 0) 0%,
+                rgba(0, 0, 0, 0.4) 50%,
+                rgba(0, 0, 0, 0) 100%);
+    }
+}
+
+// Navigation Links
+.links {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    z-index: 1102; // Ensure clickable
+}
+
+.desktopOnly {
+    @include mobile {
+        display: none;
+    }
+}
+
+.menuTrigger {
+    background: transparent;
+    border: none;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: currentColor;
+    cursor: pointer;
+    text-transform: lowercase;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+    padding: 8px 16px;
+
+    &:hover {
+        opacity: 1;
+    }
+
+    .nav[data-nav-theme='dark'] & {
+        color: #ffffff;
+    }
+
+    .nav[data-nav-theme='light'] & {
+        color: #000000;
+    }
+
+    // Hide when menu open if you want, or keep visible
+    .navOpen & {
+        display: none;
     }
 }
 

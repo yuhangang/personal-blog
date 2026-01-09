@@ -10,7 +10,9 @@ import Turnstile from '../../common/Turnstile/Turnstile';
 export default function CreateContact() {
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [message, setMessage] = useState('');
-    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+    const [captchaToken, setCaptchaToken] = useState<string | null>(
+        process.env.NODE_ENV === 'development' ? 'dev_bypass' : null
+    );
     const [analysis, setAnalysis] = useState<{
         title?: string;
         description?: string;
@@ -54,7 +56,58 @@ export default function CreateContact() {
             setIsAnalyzing(false);
         }
     };
+
+    
     const [activeTab, setActiveTab] = useState<'smart' | 'manual'>('smart');
+    const [manualForm, setManualForm] = useState({ name: '', email: '', business: '' });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Reset captcha on tab switch to prevent token reuse/confusion
+    const handleTabChange = (tab: 'smart' | 'manual') => {
+        setActiveTab(tab);
+        setCaptchaToken(process.env.NODE_ENV === 'development' ? 'dev_bypass' : null);
+    };
+
+    const handleContactSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        
+        if (!captchaToken) {
+            alert("Please complete the verification check.");
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: manualForm.name,
+                    email: manualForm.email,
+                    business: manualForm.business,
+                    message,
+                    token: captchaToken
+                })
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                alert("Message sent! We'll be in touch.");
+                setMessage('');
+                setManualForm({ name: '', email: '', business: '' });
+                // Reset token
+                setCaptchaToken(process.env.NODE_ENV === 'development' ? 'dev_bypass' : null);
+
+            } else {
+                alert(data.error || "Failed to send message.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("An error occurred.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     // ... (keep handleUrlAnalyze)
 
@@ -142,20 +195,20 @@ export default function CreateContact() {
                     <div className={styles.tabsHelpers}>
                         <button 
                             className={`${styles.tabBtn} ${activeTab === 'smart' ? styles.active : ''}`}
-                            onClick={() => setActiveTab('smart')}
+                            onClick={() => handleTabChange('smart')}
                         >
                             Your Desire
                         </button>
                         <button 
                             className={`${styles.tabBtn} ${activeTab === 'manual' ? styles.active : ''}`}
-                            onClick={() => setActiveTab('manual')}
+                            onClick={() => handleTabChange('manual')}
                         >
                             Contact
                         </button>
                     </div>
 
-                    <form className={styles.formGrid}>
-                        {activeTab === 'smart' ? (
+                    {activeTab === 'smart' ? (
+                        <div className={styles.formGrid}>
                             <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
                                 <label>Your Website / Social Link</label>
                                 <input 
@@ -167,7 +220,7 @@ export default function CreateContact() {
                                 />
 
                                 {/* Verification Widget */}
-                                {!analysis && !isAnalyzing && (
+                                {!analysis && !isAnalyzing && process.env.NODE_ENV !== 'development' && (
                                     <div style={{ marginTop: '16px' }}>
                                         <Turnstile 
                                             siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ''}
@@ -246,39 +299,70 @@ export default function CreateContact() {
                                     </div>
                                 )}
                             </div>
-                        ) : (
-                            <>
-                                <div className={styles.inputGroup}>
-                                    <label>Your Name *</label>
-                                    <input type="text" required />
-                                </div>
-        
-                                <div className={styles.inputGroup}>
-                                    <label>Email *</label>
-                                    <input type="email" required />
-                                </div>
-        
-                                <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
-                                    <label>Your Business Name</label>
-                                    <input type="text" />
-                                </div>
-        
-                                <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
-                                    <label>Message *</label>
-                                    <textarea 
-                                        rows={4} 
-                                        required 
-                                        value={message}
-                                        onChange={(e) => setMessage(e.target.value)}
+                        </div>
+                    ) : (
+
+                        <form className={styles.formGrid} onSubmit={handleContactSubmit}>
+                            <div className={styles.inputGroup}>
+                                <label>Your Name *</label>
+                                <input 
+                                    type="text" 
+                                    required 
+                                    value={manualForm.name}
+                                    onChange={(e) => setManualForm({...manualForm, name: e.target.value})}
+                                />
+                            </div>
+    
+                            <div className={styles.inputGroup}>
+                                <label>Email *</label>
+                                <input 
+                                    type="email" 
+                                    required 
+                                    value={manualForm.email}
+                                    onChange={(e) => setManualForm({...manualForm, email: e.target.value})}
+                                />
+                            </div>
+    
+                            <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
+                                <label>Your Business Name</label>
+                                <input 
+                                    type="text" 
+                                    value={manualForm.business}
+                                    onChange={(e) => setManualForm({...manualForm, business: e.target.value})}
+                                />
+                            </div>
+    
+                            <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
+                                <label>Message *</label>
+                                <textarea 
+                                    rows={4} 
+                                    required 
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)}
+                                />
+                            </div>
+
+                            {/* Manual Verification Widget */}
+                            {process.env.NODE_ENV !== 'development' && (
+                                <div className={styles.fullWidth} style={{ marginTop: '0px' }}>
+                                    <Turnstile 
+                                        siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ''}
+                                        onVerify={(token) => setCaptchaToken(token)}
                                     />
                                 </div>
-        
-                                <div className={styles.fullWidth}>
-                                    <button type="submit" className={styles.submitBtn}>SEND</button>
-                                </div>
-                            </>
-                        )}
-                    </form>
+                            )}
+    
+                            <div className={styles.fullWidth}>
+                                <button 
+                                    type="submit" 
+                                    className={styles.submitBtn}
+                                    disabled={isSubmitting}
+                                >
+                                    {isSubmitting ? 'SENDING...' : 'SEND'}
+                                </button>
+                            </div>
+                        </form>
+                    )}
                 </div>
             </div>
         </section>
