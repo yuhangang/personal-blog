@@ -519,12 +519,15 @@ export default function CreateHero() {
             </div>
             
             <div className={styles.overlay}>
-                <h1 className={styles.title}>Where Rivers Meet.<br/>Ideas Flow.</h1>
-                <p className={styles.subtitle}>
-                    Like the Klang and Gombak rivers that gave Kuala Lumpur its name, 
-                    creativity flows from the confluence of technology, art, and vision. 
-                    From this meeting point, new possibilities emerge.
-                </p>
+                <div className={styles.heroContent}>
+                    <h1 className={styles.title}>
+                        <span className={styles.titlePrimary}>Where ideas converge</span>
+                        <span className={styles.titleSecondary}> to create momentum.</span>
+                    </h1>
+                    <p className={styles.subtitle}>
+                        Blending data-driven strategy with premium design to craft digital experiences that accelerate your vision.
+                    </p>
+                </div>
             </div>
         </section>
     );

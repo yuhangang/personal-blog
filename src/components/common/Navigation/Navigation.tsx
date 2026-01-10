@@ -70,12 +70,30 @@ export default function Navigation() {
             });
         };
     } else {
-        // Non-home pages
+        // Non-home pages: Still observe 'contact' (Footer)
         const cleanPath = pathname.replace('/', '') || 'home';
+        
+        // Default to page name
         setActiveSection(cleanPath);
+
+        const contactObserver = new IntersectionObserver((entries) => {
+             entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    setActiveSection('contact');
+                } else {
+                    // When contact leaves view, revert to page name
+                    setActiveSection(cleanPath);
+                }
+             });
+        }, { rootMargin: '-10% 0px -10% 0px', threshold: 0.1 }); // More sensitive for footer
+
+        const contactEl = document.getElementById('contact');
+        if (contactEl) contactObserver.observe(contactEl);
+
         return () => {
             window.removeEventListener('scroll', handleScroll);
             themeSections.forEach((s) => themeObserver.unobserve(s));
+            if (contactEl) contactObserver.unobserve(contactEl);
         };
     }
   }, [pathname]);
@@ -136,12 +154,14 @@ export default function Navigation() {
                 {/* Logic: Only show anchor if mapped to a valid label */}
                 <AnimatePresence>
                     {(() => {
-                        const displayText = 
-                            activeSection === 'about' ? 'About' :
-                            activeSection === 'identity' ? 'Create' :
-                            activeSection === 'contact' ? 'Contact' :
-                            null; // 'home' or others -> null
+                        const SECTION_LABELS: Record<string, string> = {
+                            'about': 'About',
+                            'contact': 'Contact',
+                            'identity': 'Create', // Homepage section alias
+                            'create': 'Create',   // Actual page
+                        };
 
+                        const displayText = SECTION_LABELS[activeSection] || null;
 
                         if (!displayText) return null;
 
