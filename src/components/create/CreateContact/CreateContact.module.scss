@@ -19,7 +19,7 @@
     color: #1a1a1a;
     min-height: 100vh; // Occupy full screen height
     display: flex;
-    align-items: center; // Center content vertically if needed
+    align-items: flex-start; // Center content vertically if needed
     position: relative;
     z-index: 10;
     padding: 0; // Reset padding for full control
@@ -180,7 +180,9 @@
     &.active {
         color: #000;
         border-bottom: 2px solid #000;
-        font-weight: 600;
+        // font-weight: 600; // CAUSES LAYOUT SHIFT.
+        // Use text-shadow to simulate bold without changing width:
+        text-shadow: 0 0 0.75px currentColor;
     }
 }
 

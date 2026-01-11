@@ -15,16 +15,22 @@
     justify-content: center;
 
     @include mobile {
-        padding: 12px; // Reduced from 16px
+        padding: 12px;
+    }
+
+    @media (min-width: 1440px) {
+        padding: 40px 60px;
     }
 }
 
 .container {
     width: 100%;
-    max-width: 1600px; // Wide container for the "spread" look
+    max-width: 1600px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
+    height: 56px; // LOCKED height to prevent any layout shift from children
 }
 
 // Reusable mixin for the glass islands/pills
@@ -45,14 +51,23 @@
     }
 }
 
-// Identity Anchor Layout
+// Identity Anchor Layout - prevents layout shift
 .identityAnchor {
     display: flex;
     align-items: center;
     gap: 12px;
     z-index: 1102;
     pointer-events: auto;
-    font-family: inherit; // Inherit or set specific
+    font-family: inherit;
+    position: relative;
+    height: 100%; // Match container height
+}
+
+// Anchor container - use absolute positioning to prevent layout shift
+.anchorContainer {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
 }
 
 .name {
@@ -64,6 +79,7 @@
     text-decoration: none;
     transition: opacity 0.3s ease;
     white-space: nowrap; // Prevent wrapping
+    line-height: 1;
 
     // Large Screen Scaling
     @media (min-width: 1440px) {
@@ -95,6 +111,7 @@
     color: currentColor;
     opacity: 0.3;
     margin: 0 4px; // Tight spacing
+    line-height: 1;
 
     @media (min-width: 1440px) {
         font-size: 2.4rem;
@@ -132,7 +149,8 @@
     letter-spacing: 0.02em;
     color: currentColor;
     white-space: nowrap;
-    align-self: center;
+    align-self: baseline;
+    line-height: 1;
     // position: absolute; removed to allow width calculation
     // left: 0;
 
@@ -221,28 +239,30 @@
     }
 }
 
-// Menu Button (Hamburger)
+// Menu Button (Hamburger) - Fixed size to prevent position shift
 .menuButton {
-    // Removed glass-pill for transparent look
-    display: flex; // Visible on ALL screens
+    display: flex;
     align-items: center;
     justify-content: center;
-    padding: 16px; // Square-ish touch target
-
-    @include mobile {
-        padding: 4px; // Tighter touch target visual, still large enough
-    }
-
+    width: 56px;  // Fixed width!
+    height: 56px; // Fixed height!
     cursor: pointer;
     z-index: 1102;
     background: transparent;
     border: none;
+    border-radius: 12px;
     box-shadow: none;
-    pointer-events: auto; // Fix clickability
-    transition: transform 0.3s ease;
+    pointer-events: auto;
+    transition: background 0.2s ease;
 
-    &:hover {
-        transform: scale(1.0); // Remove scale, rely on line animation
+    @include mobile {
+        width: 48px;
+        height: 48px;
+    }
+
+    // Dark background when menu is open
+    .navOpen & {
+        background: #1a1a1c;
     }
 }
 
@@ -250,29 +270,22 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; // Ensure lines scale from center
-    gap: 16px; // Slightly larger gap for the long lines
-    width: 44px; // Same as mobile - shorter hamburger
-    height: auto; // Allow content to define height for alignment
+    align-items: center;
+    gap: 10px;
+    width: 32px;  // Bigger
 
     @include mobile {
-        width: 32px; // Smaller hamburger width
+        width: 28px;
+        gap: 8px;
     }
 
     span {
         display: block;
         width: 100%;
-        height: 4px; // Thicker lines (requested)
-        background: $color-text-primary;
-
-        @include mobile {
-            height: 2px; // Thinner on mobile
-        }
-
-        transition: background 0.4s ease,
-        transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-        width 0.4s ease; // Smooth easing
-        transform-origin: center;
+        height: 3px;  // Thicker lines
+        background: currentColor;
+        transition: all 0.3s ease;
+        border-radius: 2px;
     }
 
     // Theme Overrides
@@ -281,7 +294,7 @@
     }
 
     .nav[data-nav-theme='light'] & span {
-        background: #000000;
+        background: #1d1d1f;
     }
 
     // Open State Overrides (Always Black)
@@ -450,4 +463,170 @@
         color: $color-accent;
         transform: scale(1.05);
     }
+}
+
+// ==========================================
+// NEW DARK FLOATING MENU
+// ==========================================
+
+.closeIcon {
+    font-size: 1.75rem;  // Bigger X
+    font-weight: 300;
+    color: currentColor;
+    line-height: 1;
+
+    .nav[data-nav-theme='dark'] & {
+        color: #ffffff;
+    }
+
+    .nav[data-nav-theme='light'] & {
+        color: #1d1d1f;
+    }
+
+    .navOpen & {
+        color: #ffffff;
+    }
+}
+
+.menuBackdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.menuOverlay {
+    position: absolute; // Relative to .container
+    // Align top-right with the container edge (where the button is)
+    top: -16px; // Shift up for "padding" around button
+    right: -16px; // Shift right for "padding" around button
+    
+    max-height: calc(100vh - 24px);
+    width: min(420px, calc(100vw - 24px)); // Constrain width
+    z-index: 1100; // Below nav button (1102)
+    pointer-events: auto; // Ensure clickable inside the transparent nav container
+    background: #0a0a0a;
+    border-radius: 20px;
+    overflow-y: auto;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+    padding-top: 80px; // Space for nav button to sit on top (56px + ~24px gap)
+
+    @include mobile {
+        position: fixed; // On mobile, behave like a full/floating modal relative to screen
+        top: 4px;
+        right: 4px;
+        left: 4px;
+        width: auto;
+        max-height: calc(100vh - 8px);
+        border-radius: 16px;
+        padding-top: 64px;
+        z-index: 1100;
+    }
+}
+
+
+
+.menuContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px;
+    min-height: 400px;
+
+    @include mobile {
+        padding: 20px;
+        min-height: 350px;
+    }
+}
+
+.menuNav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.menuLink {
+    font-family: var(--font-serif);
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    font-weight: 400;
+    color: #ffffff;
+    text-decoration: none;
+    line-height: 1.4;
+    padding: 4px 0;
+    transition: all 0.3s ease;
+    display: inline-block;
+
+    &:hover {
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    &.active {
+        text-decoration: underline;
+        text-underline-offset: 6px;
+        text-decoration-thickness: 1px;
+    }
+}
+
+.menuFooter {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 32px;
+}
+
+.socialCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: #1a1a1c;
+    border-radius: 12px;
+}
+
+.socialLabel {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.socialIcons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.socialIcon {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+
+    &:hover {
+        opacity: 0.6;
+    }
+}
+
+.infoCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: #1a1a1c;
+    border-radius: 12px;
+}
+
+.infoLabel {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.infoValue {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
 }
