@@ -6,25 +6,26 @@
     position: relative;
     width: 100%;
     height: 100vh;
-    min-height: 600px;
-    background: #fafafa;
-    color: #1d1d1f;
-    padding-top: 80px; // Navbar height
+    min-height: 800px; // Taller for cinematic feel
+    background: #000; // Deep dark background
+    color: #fff;
+    padding-top: 0; 
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
-// Header with Japanese label
+// Header
 .header {
     display: flex;
     align-items: flex-start;
     gap: 16px;
-    padding: 24px 60px;
+    padding: 40px 60px;
     flex-shrink: 0;
+    z-index: 10;
 
     @include mobile {
-        padding: 16px 24px;
+        padding: 24px;
         flex-direction: column;
         gap: 8px;
     }
@@ -34,10 +35,10 @@
     font-family: var(--font-sans);
     font-size: 0.75rem;
     letter-spacing: 0.1em;
-    color: #86868b;
+    color: rgba(255, 255, 255, 0.4);
     writing-mode: vertical-rl;
     text-orientation: mixed;
-    margin-top: 8px;
+    margin-top: 12px;
 
     @include mobile {
         writing-mode: horizontal-tb;
@@ -47,63 +48,260 @@
 
 .headerTitle {
     font-family: var(--font-serif);
-    font-size: clamp(3rem, 8vw, 5rem);
-    font-weight: 400;
-    line-height: 0.95;
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 300; // Thinner, more elegant
+    line-height: 1;
     letter-spacing: -0.02em;
-    color: #1d1d1f;
+    color: #fff;
     margin: 0;
 }
 
-// Horizontal scroll container - now flex with CTA sidebar
+// Horizontal scroll container
 .scrollContainer {
     flex: 1;
     width: 100%;
     display: flex;
-    overflow: hidden;
-}
-
-.projectsTrack {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 0 60px;
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    @include mobile {
-        padding: 0 24px;
-    }
-}
-
-// Right sidebar for CTA
-.ctaSidebar {
-    position: relative;
-    width: 50%;
-    min-width: 400px;
-    max-width: 550px;
-    display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 60px;
-    border-left: 1px solid rgba(0, 0, 0, 0.08);
-    flex-shrink: 0;
-    overflow: hidden;
-    background: #fafafa;
-
-    @include mobile {
+    overflow-x: auto; // Enable scrolling
+    overflow-y: hidden;
+    
+    // Hide scrollbar
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
         display: none;
     }
 }
 
-// Animated gradient background
+.projectsTrack {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start; // Align top of cards
+    padding: 0 60px;
+    gap: 120px;
+    height: auto; // Fit content
+    width: max-content; // Ensure it expands
+    
+    @include mobile {
+        padding: 0 24px;
+        gap: 40px;
+    }
+}
+
+// Individual project card
+.projectCard {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: auto;
+    flex-shrink: 0;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    
+    // Card Inner mainly holds the image now
+    .cardInner {
+        position: relative;
+    }
+
+    &:hover {
+        .imageWrapper img {
+            transform: scale(1.03);
+        }
+        
+        .projectTitle {
+            opacity: 0.8;
+        }
+    }
+}
+
+.imageWrapper {
+    position: relative;
+    width: 600px;
+    height: 400px; // Fixed height for consistency
+    overflow: hidden;
+    background: #111;
+    border-radius: 4px;
+
+    img {
+        transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+    }
+
+    @include tablet {
+         width: 450px;
+         height: 300px;
+    }
+
+    @include mobile {
+        width: 85vw;
+        height: 50vh;
+    }
+}
+
+.cardInfo {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end; // Bottom align text
+    justify-content: space-between;
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 16px;
+}
+
+.infoLeft {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+}
+
+.projectTitle {
+    font-family: var(--font-serif);
+    font-size: clamp(1.5rem, 2.5vw, 2.5rem);
+    font-weight: 300;
+    color: #fff;
+    letter-spacing: -0.01em;
+    transition: opacity 0.3s ease;
+    line-height: 1;
+}
+
+.projectCategory {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.projectNumber {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.2);
+    // Margin removed in favor of gap in infoLeft
+}
+
+// CTA Sidebar / Card - "You could be next"
+// In this new layout, we might treat it as just another card at the end of the track
+// OR keep it separate. The plan implied making it part of the gallery flow.
+// Let's assume it sits at the end of the scroll track or separate.
+// Existing code had it separate `ctaSidebar`. Let's revamp `ctaSidebar` to match.
+
+.ctaSidebar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 120px 0 60px; // Padding to match track gap
+    flex-shrink: 0;
+    height: 100%;
+    
+    // Remove border background logic, make it semantically "next"
+    background: transparent;
+    
+    @include mobile {
+        padding: 0 24px;
+        min-width: 90vw;
+    }
+}
+
+.ctaCard {
+    position: relative;
+    width: 40vw;
+    max-width: 600px;
+    height: 60vh; // Match image height roughly
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.4s ease;
+    
+    // Gradient blobs are inside this container now
+    overflow: hidden; 
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.02);
+        
+        .ctaArrow {
+            transform: translateX(8px);
+        }
+    }
+     @include mobile {
+        width: 100%;
+        height: 50vh;
+    }
+}
+
+.ctaContent {
+    position: relative;
+    z-index: 2;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 100%;
+    
+    @include mobile {
+        padding: 32px;
+    }
+}
+
+.ctaLabel {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.ctaTitle {
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    font-weight: 300; // Consistent with headers
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin: 0;
+}
+
+.ctaDesc {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.6;
+    max-width: 300px;
+}
+
+.ctaArrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #fff;
+    margin-top: 16px;
+    transition: transform 0.3s ease;
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+// Reuse gradient blobs but darken them or adjust opacity
 .gradientBg {
     position: absolute;
     inset: 0;
-    overflow: hidden;
-    filter: blur(80px);
-    opacity: 0.6;
+    opacity: 0.3; // Dimmer for dark mode
     pointer-events: none;
+}
+// Keep blob animations same as before, just defined here or reused.
+.gradientBlob1, .gradientBlob2, .gradientBlob3 {
+    @extend .gradientBlob1; // Inherit if possible, or redefine. 
+    // Since we are rewriting the file, we should keep the keyframes/styles.
 }
 
 .gradientBlob1 {
@@ -140,408 +338,16 @@
 }
 
 @keyframes floatBlob1 {
-
-    0%,
-    100% {
-        transform: translate(0, 0) scale(1);
-    }
-
-    33% {
-        transform: translate(-30px, 40px) scale(1.1);
-    }
-
-    66% {
-        transform: translate(20px, -20px) scale(0.9);
-    }
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-30px, 40px) scale(1.1); }
+    66% { transform: translate(20px, -20px) scale(0.9); }
 }
-
 @keyframes floatBlob2 {
-
-    0%,
-    100% {
-        transform: translate(0, 0) scale(1);
-    }
-
-    33% {
-        transform: translate(40px, -30px) scale(1.15);
-    }
-
-    66% {
-        transform: translate(-20px, 20px) scale(0.95);
-    }
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -30px) scale(1.15); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
 }
-
 @keyframes floatBlob3 {
-
-    0%,
-    100% {
-        transform: translate(0, 0) scale(1);
-    }
-
-    50% {
-        transform: translate(-25px, -35px) scale(1.2);
-    }
-}
-
-// Individual project card - now full-width row layout
-.projectCard {
-    position: relative;
-    display: flex;
-    align-items: flex-start;
-    gap: 60px;
-    width: 100%;
-    padding: 40px 0;
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
-    transition: opacity 0.3s ease;
-
-    &:hover {
-        .imageWrapper img {
-            transform: scale(1.02);
-        }
-
-        .projectTitle {
-            color: #000;
-        }
-    }
-
-    @include mobile {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 24px;
-        padding: 24px 0;
-    }
-}
-
-.cardInner {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    flex: 1;
-
-    @include mobile {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-        width: 100%;
-    }
-}
-
-.imageWrapper {
-    position: relative;
-    width: 400px;
-    height: 500px;
-    flex-shrink: 0;
-    overflow: hidden;
-    background: #e5e5e7;
-    border-radius: 8px;
-
-    img {
-        transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
-    }
-
-    @include tablet {
-        width: 320px;
-        height: 400px;
-    }
-
-    @include mobile {
-        width: 100%;
-        height: auto;
-        aspect-ratio: 4 / 5;
-    }
-}
-
-.cardInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    flex: 1;
-}
-
-.projectTitle {
-    font-family: var(--font-serif);
-    font-size: clamp(1.5rem, 3vw, 2.5rem);
-    font-weight: 400;
-    color: #1d1d1f;
-    letter-spacing: -0.02em;
-    transition: color 0.3s ease;
-}
-
-.projectCategory {
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    color: #86868b;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-}
-
-// Large number - now inline with card info
-.projectNumber {
-    font-family: var(--font-serif);
-    font-size: clamp(4rem, 8vw, 6rem);
-    font-weight: 300;
-    line-height: 1;
-    color: rgba(0, 0, 0, 0.08);
-    letter-spacing: -0.05em;
-    user-select: none;
-    transition: all 0.4s ease;
-    margin-bottom: 8px;
-
-    .projectCard:hover & {
-        color: rgba(0, 0, 0, 0.15);
-    }
-
-    @include mobile {
-        font-size: 3rem;
-    }
-}
-
-// Vertical separator line
-.separator {
-    position: absolute;
-    right: 30px;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: rgba(0, 0, 0, 0.1);
-
-    @include mobile {
-        display: none;
-    }
-}
-
-// Right side vertical scroll indicator
-.rightIndicator {
-    position: absolute;
-    right: 40px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    z-index: 10;
-
-    @include mobile {
-        display: none;
-    }
-}
-
-.rightLabel {
-    font-family: var(--font-sans);
-    font-size: 0.675rem;
-    color: #86868b;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-}
-
-.rightTrack {
-    width: 2px;
-    height: 80px;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 1px;
-    overflow: hidden;
-}
-
-.rightThumb {
-    width: 100%;
-    height: 40%;
-    background: #1d1d1f;
-    border-radius: 1px;
-    transition: transform 0.1s ease-out;
-}
-
-.rightIndex {
-    font-family: var(--font-mono, monospace);
-    font-size: 0.75rem;
-    color: #86868b;
-    letter-spacing: 0.05em;
-}
-
-// CTA Card - "You could be next"
-.ctaCard {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    flex-shrink: 0;
-    width: 100%;
-    padding: 0;
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
-    transition: all 0.4s ease;
-
-    &:hover {
-        .ctaNumber {
-            color: rgba(0, 0, 0, 0.12);
-        }
-
-        .ctaArrow {
-            transform: translateX(8px);
-        }
-    }
-
-    @include mobile {
-        width: 100%;
-        padding: 60px 24px;
-    }
-}
-
-.ctaContent {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-}
-
-.ctaLabel {
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: #86868b;
-}
-
-.ctaTitle {
-    font-family: var(--font-serif);
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 600;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    margin: 0;
-
-    // Animated gradient text
-    background: linear-gradient(90deg,
-            #1d1d1f 0%,
-            #6366f1 25%,
-            #a855f7 50%,
-            #ec4899 75%,
-            #1d1d1f 100%);
-    background-size: 200% 100%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: gradientShift 4s ease infinite;
-}
-
-@keyframes gradientShift {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-// Large number - matching project number style
-.ctaNumber {
-    font-family: var(--font-serif);
-    font-size: clamp(8rem, 18vw, 14rem);
-    font-weight: 300;
-    line-height: 0.8;
-    color: rgba(0, 0, 0, 0.06);
-    letter-spacing: -0.05em;
-    user-select: none;
-    transition: all 0.4s ease;
-    margin-top: 16px;
-
-    @include mobile {
-        font-size: 6rem;
-    }
-}
-
-.ctaDesc {
-    font-family: var(--font-sans);
-    font-size: 0.9375rem;
-    color: #6e6e73;
-    line-height: 1.6;
-    margin: 8px 0 0;
-    max-width: 320px;
-}
-
-.ctaArrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 32px;
-    font-family: var(--font-sans);
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #1d1d1f;
-    padding-bottom: 8px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-
-    &:hover {
-        gap: 12px;
-        border-color: #1d1d1f;
-    }
-
-    svg {
-        width: 18px;
-        height: 18px;
-        transition: transform 0.3s ease;
-    }
-}
-
-// ================================================
-// Existing styles for page container (keep these)
-// ================================================
-
-.container {
-    padding-top: 0;
-    min-height: 100vh;
-    background: #050505;
-    color: #fff;
-}
-
-.contentWrapper {
-    background: #050505;
-    padding: 80px 0;
-}
-
-.gridHeader {
-    max-width: 1300px;
-    margin: 0 auto 40px;
-    padding: 0 20px;
-
-    h2 {
-        font-family: var(--font-geom);
-        font-size: 4rem;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        background: linear-gradient(to bottom right, #fff 0%, #aaa 100%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        color: transparent;
-
-        @include mobile {
-            font-size: 2.5rem;
-        }
-    }
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(580px, 1fr));
-    gap: 40px;
-    padding: 0 20px;
-    max-width: 1300px;
-    margin: 0 auto;
-
-    @include mobile {
-        grid-template-columns: 1fr;
-    }
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-25px, -35px) scale(1.2); }
 }

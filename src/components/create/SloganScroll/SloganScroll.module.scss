@@ -3,145 +3,104 @@
 
 .section {
     position: relative;
-    background: #111; // Very dark grey
-    color: #fff;
-    z-index: 10;
-    padding-bottom: 10vh;
+    background: #000;
+    width: 100%;
 }
 
 .layoutGrid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    max-width: 1600px; // Wider for immersion
-    margin: 0 auto;
+    grid-template-areas: "stack";
+    width: 100%;
     position: relative;
-    padding: 0 40px;
-
-    @include mobile {
-        grid-template-columns: 1fr;
-        padding: 0; // Removing padding as requested
-    }
 }
 
-// --- LEFT COLUMN: SLOGANS (SCROLLING) ---
-.sloganList {
-    position: relative;
-    z-index: 2;
-    padding-top: 20vh;
-    padding-bottom: 20vh;
-
-    @include mobile {
-        grid-column: 1;
-        grid-row: 1;
-        padding-left: 20px; // Keep some text padding so it doesn't hit edge
-        padding-right: 20px;
-    }
-}
-
-.sloganItem {
-    height: 40vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    transform-origin: center left;
-    perspective: 1000px;
-
-    @include mobile {
-        height: 50vh;
-        align-items: center;
-        text-align: center;
-        transform-origin: center center;
-    }
-}
-
-.sloganContent {
-    transition: all 0.5s ease-out;
-}
-
-.sloganIndex {
-    font-family: var(--font-mono); // Structural feel
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.5);
-    display: block;
-    margin-bottom: 8px;
-    letter-spacing: 0.1em;
-}
-
-.sloganTitle {
-    font-family: var(--font-display); // Playfair
-    font-size: 5rem;
-    font-weight: 500; // Slightly bolder than 400 for solid presence
-    letter-spacing: -0.03em; // Tighter for headlines
-    line-height: 1.05;
-    margin-bottom: 24px;
-    font-style: italic;
-    color: #ffffff; // Solid white
-
-    // Removed gradient for premium "print-like" feel
-    background: none;
-    -webkit-text-fill-color: #fff;
-
-    @include mobile {
-        font-size: 3rem;
-    }
-}
-
-.sloganDesc {
-    font-family: var(--font-sans); // Inter/Outfit
-    font-size: 1.1rem; // Slightly smaller but cleaner
-    color: rgba(255, 255, 255, 0.8); // Higher contrast
-    line-height: 1.6; // More breathing room
-    max-width: 480px;
-    font-weight: 300;
-    margin-left: 2px; // Slight visual alignment with serif letters
-
-    @include mobile {
-        font-size: 1rem;
-        max-width: 90%;
-    }
-}
-
-// --- RIGHT COLUMN: VISUALS (STICKY) ---
 .stickyVisualWrapper {
+    grid-area: stack;
     position: sticky;
     top: 0;
     height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
     z-index: 1;
-
-    @include mobile {
-        grid-column: 1;
-        grid-row: 1;
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        z-index: 1;
-        opacity: 0.6;
-        pointer-events: none;
-    }
+    overflow: hidden;
 }
 
 .visualContainer {
-    // IMMERSIVE DESKTOP: Rounded + Black BG as requested
     width: 100%;
     height: 100%;
-    max-width: none;
-    aspect-ratio: auto;
-
-    // User requested "Animation canvas has round border, fully black bg"
-    border-radius: 40px;
-    background: #000;
-
-    border: none;
-    overflow: hidden;
     position: relative;
 
-    @include mobile {
-        width: 100%;
-        height: 100%;
-        border-radius: 0;
-        background: transparent; // Keep transparent on mobile for layering
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.1);
+        pointer-events: none;
+        z-index: 5;
     }
 }
+
+.sloganList {
+    grid-area: stack;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    pointer-events: none; 
+    // Add padding to ensure first and last items can be centered
+    padding: 0; 
+}
+
+.sloganItem {
+    height: 75vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    // Ensure item has its own stacking context if needed
+    position: relative;
+}
+
+.sloganContent {
+    max-width: 1000px;
+    padding: 0 40px;
+    text-align: center;
+    color: #fff;
+    will-change: transform, opacity;
+    
+    @include mobile {
+        padding: 0 20px;
+    }
+}
+
+.sloganIndex {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    margin-bottom: 24px;
+    opacity: 0.5;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.sloganTitle {
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 7vw, 8rem);
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 32px;
+    letter-spacing: -0.02em;
+    
+    // Optional: add a subtle gradient or texture
+    color: #fff;
+}
+
+.sloganDesc {
+    font-family: var(--font-sans);
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+

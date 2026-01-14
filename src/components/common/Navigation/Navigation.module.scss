@@ -492,7 +492,8 @@
     position: fixed;
     inset: 0;
     z-index: 999;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.2); // Subtle dim, not too dark
+    pointer-events: auto; // Ensure clicks register to close menu
 }
 
 .menuOverlay {
@@ -505,10 +506,18 @@
     width: min(420px, calc(100vw - 24px)); // Constrain width
     z-index: 1100; // Below nav button (1102)
     pointer-events: auto; // Ensure clickable inside the transparent nav container
-    background: #0a0a0a;
+    
+    // iOS 26 Frosted Glass Effect
+    background: rgba(20, 20, 22, 0.75); // Translucent dark
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
     border-radius: 20px;
     overflow-y: auto;
-    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+    box-shadow: 
+        0 25px 80px rgba(0, 0, 0, 0.5),
+        inset 0 0 0 0.5px rgba(255, 255, 255, 0.05); // Inner glow
     padding-top: 80px; // Space for nav button to sit on top (56px + ~24px gap)
 
     @include mobile {

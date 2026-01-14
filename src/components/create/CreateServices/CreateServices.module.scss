@@ -4,26 +4,28 @@
 .section {
     position: relative;
     width: 100%;
-    background: #0a0a0a;
+    background: #050505; // Deep dark background
     color: #ffffff;
-    padding: 120px 0;
+    padding: 160px 0;
 }
 
 .container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
+    grid-template-columns: 0.8fr 1.2fr; // Bias grid towards content
+    gap: 100px;
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 60px;
+    align-items: flex-start;
 
     @include tablet {
         grid-template-columns: 1fr;
-        gap: 60px;
+        gap: 80px;
     }
 
     @include mobile {
         padding: 0 24px;
+        gap: 60px;
     }
 }
 
@@ -31,9 +33,14 @@
 .visualColumn {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+    gap: 40px; // Space between Header and Image
 
     @include tablet {
+        position: relative;
+        top: 0;
         order: 2;
     }
 }
@@ -41,28 +48,33 @@
 .imageWrapper {
     position: relative;
     width: 100%;
-    aspect-ratio: 1;
-    border-radius: 16px;
+    aspect-ratio: 4/5;
     overflow: hidden;
-    background: #1a1a1a;
+    background: #111;
+    // Removed border radius for sharper look or kept minimal
+    border-radius: 4px;
 
-    // Glow effect
+    img {
+        opacity: 0.8;
+        transition: opacity 0.5s ease;
+    }
+    
+    // Smooth gradient overlay
     &::after {
         content: '';
         position: absolute;
-        inset: -2px;
-        background: linear-gradient(135deg, rgba(30, 220, 170, 0.3) 0%, transparent 50%, rgba(255, 51, 102, 0.3) 100%);
-        border-radius: 18px;
-        z-index: -1;
-        filter: blur(20px);
-        opacity: 0.6;
+        inset: 0;
+        background: linear-gradient(to bottom, transparent 20%, rgba(0,0,0,0.6) 100%);
+        pointer-events: none;
     }
 }
 
 .visualCaption {
+    margin-top: 24px;
     display: flex;
     align-items: center;
     gap: 16px;
+    opacity: 0; // Hiding for minimal look as per plan
 }
 
 .captionNumber {
@@ -76,31 +88,40 @@
 .contentColumn {
     display: flex;
     flex-direction: column;
-    gap: 48px;
-
+    gap: 80px;
+    padding-top: 240px; // Offset to align Lead text appropriately against the sticky header/image on the left? 
+    // OR just minimal padding since header is on left now.
+    // If we want Lead to start alongside Header, 0 is fine.
+    // Assuming we want Lead to start LOWER so the Header gets attention first?
+    // Let's try 0 first, but Visual Column has header THEN image. 
+    // If Header is top of Visual, and Lead is top of Content, they align.
+    
     @include tablet {
         order: 1;
+        gap: 60px;
+        padding-top: 0;
     }
 }
 
 .header {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 24px;
 }
 
 .headerLabel {
     font-family: var(--font-sans);
     font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
 }
 
 .title {
     font-family: var(--font-serif);
-    font-size: clamp(2.5rem, 6vw, 4rem);
-    font-weight: 400;
-    line-height: 0.95;
+    font-size: clamp(3rem, 6vw, 5.5rem); // Huge editorial header
+    font-weight: 300;
+    line-height: 1;
     letter-spacing: -0.02em;
     color: #ffffff;
     margin: 0;
@@ -108,11 +129,12 @@
 
 .lead {
     font-family: var(--font-sans);
-    font-size: clamp(1rem, 1.5vw, 1.125rem);
-    color: rgba(255, 255, 255, 0.6);
-    line-height: 1.7;
-    max-width: 550px;
+    font-size: clamp(1.125rem, 1.5vw, 1.25rem);
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    max-width: 600px;
     margin: 0;
+    font-weight: 300;
 }
 
 // Services grid
@@ -120,104 +142,102 @@
     display: flex;
     flex-direction: column;
     gap: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .serviceCard {
     display: grid;
     grid-template-columns: 60px 1fr;
-    gap: 24px;
-    padding: 32px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 32px;
+    padding: 48px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
+    cursor: default;
 
-    @include mobile {
-        grid-template-columns: 50px 1fr;
-        gap: 16px;
-        padding: 24px 0;
+    &:last-child {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
+    @include mobile {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 32px 0;
+    }
+    
     &:hover {
-        padding-left: 16px;
-        background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
-
-        .serviceNumber {
-            color: #1edcaa;
-        }
-
         .serviceTitle {
-            color: #1edcaa;
+            color: #fff;
+        }
+        .serviceDesc {
+            color: rgba(255, 255, 255, 0.9);
         }
     }
 }
 
 .serviceNumber {
-    font-family: var(--font-mono, monospace);
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 300;
     color: rgba(255, 255, 255, 0.3);
-    line-height: 1.5;
-    transition: color 0.3s ease;
+    margin-top: 6px;
 
     @include mobile {
-        font-size: 0.75rem;
+        font-size: 1rem;
+        margin-bottom: 8px;
     }
 }
 
 .serviceContent {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 16px;
 }
 
 .serviceTitle {
-    font-family: var(--font-sans);
-    font-size: 1.25rem;
-    font-weight: 500;
-    color: #ffffff;
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.9);
     margin: 0;
     letter-spacing: -0.01em;
+    line-height: 1.1;
     transition: color 0.3s ease;
 
     @include mobile {
-        font-size: 1.125rem;
+        font-size: 1.5rem;
     }
 }
 
 .serviceDesc {
     font-family: var(--font-sans);
-    font-size: 0.9375rem;
+    font-size: 1rem;
     color: rgba(255, 255, 255, 0.5);
     line-height: 1.6;
     margin: 0;
-    max-width: 450px;
+    max-width: 500px;
+    transition: color 0.3s ease;
 }
 
 // CTA
 .cta {
-    padding-top: 16px;
+    padding-top: 40px;
 }
 
 .ctaLink {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
     font-family: var(--font-sans);
-    font-size: 1rem;
+    font-size: 1.125rem;
     font-weight: 500;
     color: #ffffff;
     text-decoration: none;
-    padding: 16px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0;
+    border: none;
     transition: all 0.3s ease;
 
     &:hover {
-        gap: 16px;
-        border-color: #ffffff;
-
-        svg {
-            transform: translate(4px, -4px);
-        }
+        gap: 20px;
+        opacity: 0.8;
     }
 
     span {

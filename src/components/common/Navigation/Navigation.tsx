@@ -110,13 +110,18 @@ export default function Navigation() {
     if (mobileMenuOpen) {
       lenis?.stop();
       document.body.classList.add("nav-open");
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
+
+      // Close on Esc key
+      const handleEsc = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          setMobileMenuOpen(false);
+        }
+      };
+      window.addEventListener("keydown", handleEsc);
+      return () => window.removeEventListener("keydown", handleEsc);
     } else {
       lenis?.start();
       document.body.classList.remove("nav-open");
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
     }
   }, [mobileMenuOpen, lenis]);
 
@@ -159,38 +164,44 @@ export default function Navigation() {
             </Link>
 
             {/* Logic: Only show anchor if mapped to a valid label */}
-            <AnimatePresence>
-              {(() => {
-                const SECTION_LABELS: Record<string, string> = {
-                  about: "About",
-                  contact: "Contact",
-                  identity: "Create", // Homepage section alias
-                  create: "Create", // Actual page
-                };
+            <motion.div
+              animate={{ opacity: mobileMenuOpen ? 0 : 1 }}
+              transition={{ duration: 0.2 }}
+              style={{ pointerEvents: mobileMenuOpen ? "none" : "auto" }}
+            >
+              <AnimatePresence>
+                {(() => {
+                  const SECTION_LABELS: Record<string, string> = {
+                    about: "About",
+                    contact: "Contact",
+                    identity: "Create", // Homepage section alias
+                    create: "Create", // Actual page
+                  };
 
-                const displayText = SECTION_LABELS[activeSection] || null;
+                  const displayText = SECTION_LABELS[activeSection] || null;
 
-                if (!displayText) return null;
+                  if (!displayText) return null;
 
-                return (
-                  <motion.div
-                    key="anchor-container"
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: "auto" }}
-                    exit={{ opacity: 0, width: 0 }}
-                    className={styles.anchorContainer}
-                    style={{
-                      display: "flex",
-                      alignItems: "baseline",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <span className={styles.separator}>|</span>
-                    <FilmLightText text={displayText} />
-                  </motion.div>
-                );
-              })()}
-            </AnimatePresence>
+                  return (
+                    <motion.div
+                      key="anchor-container"
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: "auto" }}
+                      exit={{ opacity: 0, width: 0 }}
+                      className={styles.anchorContainer}
+                      style={{
+                        display: "flex",
+                        alignItems: "baseline",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <span className={styles.separator}>|</span>
+                      <FilmLightText text={displayText} />
+                    </motion.div>
+                  );
+                })()}
+              </AnimatePresence>
+            </motion.div>
           </div>
 
           {/* New Desktop Navigation (Minimal) */}
@@ -235,10 +246,10 @@ export default function Navigation() {
 
                 <motion.div
                   className={styles.menuOverlay}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                  initial={{ opacity: 0, y: 24, filter: "blur(10px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, y: 16, filter: "blur(10px)" }}
+                  transition={{ type: "spring", damping: 28, stiffness: 350 }}
                 >
                   <div className={styles.menuContent}>
                     <nav className={styles.menuNav}>

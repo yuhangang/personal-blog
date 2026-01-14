@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useRef, useEffect, useState } from 'react';
-import Image from 'next/image';
-import styles from './Portfolio.module.scss';
+import { useRef, useEffect } from "react";
+import Image from "next/image";
+import styles from "./Portfolio.module.scss";
 
 const PROJECTS = [
   {
@@ -17,8 +17,6 @@ const PROJECTS = [
 
 export default function Portfolio() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -27,12 +25,15 @@ export default function Portfolio() {
     const handleWheel = (e: WheelEvent) => {
       // Only hijack scroll when we're in the horizontal scroll zone
       const rect = container.getBoundingClientRect();
-      const isInView = rect.top <= 100 && rect.bottom >= window.innerHeight - 100;
-      
+      const isInView =
+        rect.top <= 100 && rect.bottom >= window.innerHeight - 100;
+
       if (isInView && container.scrollWidth > container.clientWidth) {
         const atStart = container.scrollLeft <= 0;
-        const atEnd = container.scrollLeft >= container.scrollWidth - container.clientWidth - 1;
-        
+        const atEnd =
+          container.scrollLeft >=
+          container.scrollWidth - container.clientWidth - 1;
+
         // Only prevent default if we can scroll in the direction of the delta
         if ((e.deltaY > 0 && !atEnd) || (e.deltaY < 0 && !atStart)) {
           e.preventDefault();
@@ -41,18 +42,10 @@ export default function Portfolio() {
       }
     };
 
-    const handleScroll = () => {
-      const maxScroll = container.scrollWidth - container.clientWidth;
-      const progress = maxScroll > 0 ? container.scrollLeft / maxScroll : 0;
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    container.addEventListener('scroll', handleScroll);
+    window.addEventListener("wheel", handleWheel, { passive: false });
 
     return () => {
-      window.removeEventListener('wheel', handleWheel);
-      container.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("wheel", handleWheel);
     };
   }, []);
 
@@ -60,69 +53,90 @@ export default function Portfolio() {
     <section className={styles.section}>
       <div className={styles.header}>
         <span className={styles.headerLabel}>yuhangang</span>
-        <h2 className={styles.headerTitle}>PROJECT<br/>LISTS</h2>
+        <h2 className={styles.headerTitle}>
+          PROJECT
+          <br />
+          LISTS
+        </h2>
       </div>
 
       <div className={styles.scrollContainer} ref={containerRef}>
         <div className={styles.projectsTrack}>
           {PROJECTS.map((project, index) => {
-            const number = String(index + 1).padStart(2, '0');
-            
+            const number = String(index + 1).padStart(2, "0");
+
             return (
-              <a 
+              <a
                 key={index}
-                href={project.href} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+                href={project.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.projectCard}
               >
                 <div className={styles.cardInner}>
                   <div className={styles.imageWrapper}>
-                    <Image 
-                      src={project.image} 
+                    <Image
+                      src={project.image}
                       alt={`${project.title} Preview`}
                       fill
-                      style={{ objectFit: 'cover' }}
+                      style={{ objectFit: "cover" }}
                     />
                   </div>
                   <div className={styles.cardInfo}>
-                    <div className={styles.projectNumber}>{number}</div>
-                    <span className={styles.projectTitle}>{project.title}</span>
+                    <div className={styles.infoLeft}>
+                      <span className={styles.projectNumber}>{number}</span>
+                      <span className={styles.projectTitle}>
+                        {project.title}
+                      </span>
+                    </div>
                     {project.category && (
-                      <span className={styles.projectCategory}>{project.category}</span>
+                      <span className={styles.projectCategory}>
+                        {project.category}
+                      </span>
                     )}
                   </div>
                 </div>
               </a>
             );
           })}
-        </div>
 
-        {/* CTA Sidebar */}
-        <div className={styles.ctaSidebar}>
-          {/* Animated gradient blobs */}
-          <div className={styles.gradientBg}>
-            <div className={styles.gradientBlob1} />
-            <div className={styles.gradientBlob2} />
-            <div className={styles.gradientBlob3} />
-          </div>
-          
-          <a href="#contact" className={styles.ctaCard}>
-            <div className={styles.ctaContent}>
-              <span className={styles.ctaLabel}>Open for partnerships</span>
-              <h3 className={styles.ctaTitle}>You could<br/>be next.</h3>
-              <p className={styles.ctaDesc}>
-                Looking for collaborations, agency partnerships, and exciting projects. 
-                Let&apos;s build something remarkable together.
-              </p>
-              <div className={styles.ctaArrow}>
-                <span>Get in touch</span>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </div>
+          {/* CTA Sidebar - Now part of the flow */}
+          <div className={styles.ctaSidebar}>
+            {/* Animated gradient blobs */}
+            <div className={styles.gradientBg}>
+              <div className={styles.gradientBlob1} />
+              <div className={styles.gradientBlob2} />
+              <div className={styles.gradientBlob3} />
             </div>
-          </a>
+
+            <a href="#contact" className={styles.ctaCard}>
+              <div className={styles.ctaContent}>
+                <span className={styles.ctaLabel}>Open for partnerships</span>
+                <h3 className={styles.ctaTitle}>
+                  You could
+                  <br />
+                  be next.
+                </h3>
+                <p className={styles.ctaDesc}>
+                  Looking for collaborations, agency partnerships, and exciting
+                  projects. Let&apos;s build something remarkable together.
+                </p>
+                <div className={styles.ctaArrow}>
+                  <span>Get in touch</span>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            </a>
+          </div>
         </div>
       </div>
     </section>

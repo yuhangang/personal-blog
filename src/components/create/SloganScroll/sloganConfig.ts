@@ -5,7 +5,7 @@ export interface VisualParams {
     amplitude: number;
     thickness: number;
     distort: number;
-    type: 'fluid' | 'weave' | 'pulse' | 'noise' | 'structure';
+    type: 'fluid' | 'weave' | 'pulse' | 'noise' | 'structure' | 'dna';
 }
 
 export interface SloganItemData {
@@ -34,20 +34,7 @@ export const SLOGAN_ITEMS: SloganItemData[] = [
             amplitude: 2.5,
             thickness: 0.25,
             distort: 0.2,
-            type: 'fluid'
-        }
-    },
-    {
-        title: "Immersive Experiences",
-        desc: "More than pages—journeys. We build sites that captivate, guiding visitors through a seamless, memorable experience.",
-        visual: {
-            color: '#ffffff',
-            speed: 0.5,
-            noiseScale: 3.5,
-            amplitude: 1.0,
-            thickness: 0.15,
-            distort: 2.5,
-            type: 'noise'
+            type: 'dna'
         }
     },
     {
@@ -65,7 +52,7 @@ export const SLOGAN_ITEMS: SloganItemData[] = [
     },
     {
         title: "Design That Resonates",
-        desc: "When a website truly fits, people feel it. We create experiences that connect on a deeper level—not just inform, but inspire.",
+        desc: "More than pages—journeys. We create immersive experiences that connect on a deeper level, guiding visitors through a seamless path that doesn't just inform, but inspires.",
         visual: {
             color: '#fa709a',
             speed: 1.5,
@@ -76,7 +63,19 @@ export const SLOGAN_ITEMS: SloganItemData[] = [
             type: 'pulse'
         }
     },
-
+    {
+        title: "Stand Out From The Crowd",
+        desc: "In a digital world full of noise, we ensure your presence is unmistakable. We combine bold aesthetics with singular functionality to make you impossible to ignore.",
+        visual: {
+            color: '#72e9f3',
+            speed: 0.6,
+            noiseScale: 1.2,
+            amplitude: 1.8,
+            thickness: 0.1,
+            distort: 0.4,
+            type: 'noise'
+        }
+    },
     {
         title: "A Foundation for Growth",
         desc: "Great websites evolve with you. We build with intention—flexible, scalable, and ready for whatever comes next.",
