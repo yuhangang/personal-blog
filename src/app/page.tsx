@@ -1,12 +1,7 @@
-import ThreeHero from '@/components/home/ThreeHero/ThreeHero';
-import type { Viewport } from 'next';
+import ThreeHero from "@/components/home/ThreeHero/ThreeHero";
 
-export const viewport: Viewport = {
-  themeColor: '#ffffff',
-};
-import HomeSlogan from '@/components/home/HomeSlogan/HomeSlogan';
-import About from '@/components/home/About/About';
-
+import HomeSlogan from "@/components/home/HomeSlogan/HomeSlogan";
+import About from "@/components/home/About/About";
 
 export default function Home() {
   return (
@@ -14,17 +9,14 @@ export default function Home() {
       <div id="home" data-theme="dark">
         <ThreeHero />
       </div>
-       <div data-theme="dark">
+      <div data-theme="dark">
         <About />
       </div>
-      
+
       {/* New Compact Slogans */}
       <div id="identity" data-theme="dark">
-         <HomeSlogan />
+        <HomeSlogan />
       </div>
-
-     
-
     </main>
   );
 }

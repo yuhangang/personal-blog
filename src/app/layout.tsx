@@ -41,6 +41,14 @@ const outfit = Outfit({
   display: "swap",
 });
 
+export const viewport = {
+  themeColor: "#050505", // Matches black background
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1, // Prevent zoom on mobile inputs
+  viewportFit: "cover", // Ensures background extends to edges (notch area)
+};
+
 export const metadata = {
   title: "Yu Hang Ang | Developer & Creator",
   description: "Personal portfolio and blog of Yu Hang Ang.",
@@ -61,7 +69,7 @@ export default function RootLayout({
         <TransitionProvider>
           <SmoothScroll>
             <Navigation />
-            <main style={{ backgroundColor: "#1d1d1f", minHeight: "100vh" }}>
+            <main style={{ backgroundColor: "#1d1d1f", minHeight: "100dvh" }}>
               {children}
             </main>
             <Footer />

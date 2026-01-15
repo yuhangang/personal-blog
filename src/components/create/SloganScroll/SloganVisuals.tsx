@@ -104,14 +104,13 @@ function NeuroStrand({
       if (strandIndex % 3 === 0) targetColor.set("#00f2fe"); // Cyan
       else if (strandIndex % 3 === 1) targetColor.set("#ffffff"); // White
       else targetColor.set("#4facfe"); // Deep Blue/Teal
-    } else if (type === "dna") {
-      // DNA PALETTE: Split Rungs (Red/Teal) + White Backbone
+      // DNA PALETTE: Split Rungs (Red/Teal) + Blue Backbone
       if (strandIndex < 2) {
-        targetColor.set("#FFFFFF"); // White Backbone
+        targetColor.set("#4facfe"); // Deep Blue Backbone
       } else if (strandIndex < 7) {
-        targetColor.set("#FF6B6B"); // Left Rungs (Red)
+        targetColor.set("#ff4444"); // Left Rungs (Red)
       } else {
-        targetColor.set("#4ECDC4"); // Right Rungs (Teal)
+        targetColor.set("#ff4444"); // Right Rungs (Red) - All rungs red as requested
       }
     } else if (strandIndex > 0) {
       // Dimmer outer strands for depth
@@ -199,80 +198,123 @@ function NeuroStrand({
           break;
 
         case "dna":
-          // DNA DOUBLE HELIX + SPLIT RUNGS
+          // DNA DOUBLE HELIX + CONNECTED RUNGS
+          const helixRadius = 1.8;
+          const twistFreq = 0.4; // Tighter twist
+          const dnaSpeed = time * 0.4;
 
-          const helixRadius = 2.0;
-          const twistFreq = 0.5;
-          const dnaSpeed = time * 0.5;
+          // Calculate helix positions for this segment t
+          // Strand A
+          const angleA = x * twistFreq + dnaSpeed;
+          const yA = Math.sin(angleA) * helixRadius;
+          const zA = Math.cos(angleA) * helixRadius;
+
+          // Strand B (180 deg offset)
+          const angleB = angleA + Math.PI;
+          const yB = Math.sin(angleB) * helixRadius;
+          const zB = Math.cos(angleB) * helixRadius;
 
           // BACKBONES (Strands 0 & 1)
           if (strandIndex < 2) {
-            let phase = x * twistFreq + dnaSpeed;
-            if (strandIndex === 1) phase += Math.PI; // Helix B
-
-            y = Math.sin(phase) * helixRadius;
-            z = Math.cos(phase) * helixRadius;
-
+            if (strandIndex === 0) {
+              y = yA;
+              z = zA;
+            } else {
+              y = yB;
+              z = zB;
+            }
+            // Add slight organic movement
             y += Math.sin(x + time) * 0.1;
           }
           // RUNG STRANDS (2..11)
           else {
-            // Calculate phases for Backbone A and B at this X
-            const phaseA = x * twistFreq + dnaSpeed;
-            const phaseB = phaseA + Math.PI;
+            // Distribute 10 rung strands along the helix.
+            // We want them to form distinct "bridges" between A and B.
+            // Each strandIndex can represent a "bridge position" along the wave?
+            // No, we want them to draw the LINES connecting A and B.
 
-            const ay = Math.sin(phaseA) * helixRadius;
-            const az = Math.cos(phaseA) * helixRadius;
+            // To make a solid rung, we can interpolate between Position A and Position B
+            // at a specific X.
+            // Since we are drawing a tube along X, we can't make vertical rungs easily with one tube
+            // unless the tube ITSELF goes across.
+            // BUT, our loop iterates 'x'. This draws lines parallel to X-axis roughly.
 
-            const by = Math.sin(phaseB) * helixRadius;
-            const bz = Math.cos(phaseB) * helixRadius;
+            // TRICK: making horizontal rungs with longitudinal tubes?
+            // VISUAL ILLUSION:
+            // We want short segments connecting A and B.
+            // If we use the strands to be "floating segments" that align with the normal?
 
-            // Rung Logic:
-            // 5 Pairs of Red/Teal strands.
-            // Left Rungs (2-6): Red. Start at A, go to center.
-            // Right Rungs (7-11): Teal. Start at B, go to center.
+            // ALTERNATIVE:
+            // Use the strands as "floating genes" that orbit in the middle.
+            // OR use them as "secondary helices" that are tighter?
 
-            const isLeft = strandIndex < 7;
-            const pairIndex = (strandIndex - 2) % 5; // 0..4
+            // "fix the DNA" usually means "make it look like a ladder".
+            // Since we are drawing continuous lines (NeuroStrand is a tube), we cannot draw discrete rungs easily
+            // unless we zigzag the tube back and forth between A and B? That looks messy.
 
-            const rungFreq = 8.0;
-            // Synchronize phases: Pair 0 (Left) and Pair 0 (Right) must have same phase offset
-            const rungPhase = x * rungFreq + pairIndex * (Math.PI / 2.5);
+            // BETTER VISUAL:
+            // Make strands 2-6 follow Helix A but slightly offset (thickening A)
+            // Make strands 7-11 follow Helix B but slightly offset (thickening B)
+            // AND periodically "reach out".
 
-            // Step Function
-            // signal > 0.9 ? Extend : Retract
-            const signal = Math.sin(rungPhase);
+            // LET'S TRY:
+            // Draw strands that spiral IN BETWEEN A and B.
+            // Like a 3rd and 4th helix that are tighter?
 
-            // Smooth transition to 0.45 extension (meeting in middle-ish)
-            let extension = 0;
-            const threshold = 0.5;
+            // User wants "DNA". The classic look is the ladder.
+            // Let's approximate rungs by having these strands oscilate RAPIDLY between A and B?
+            // No, that looks like noise.
 
-            if (signal > threshold) {
-              // Max extension is 0.45 (leaving 10% gap in middle)
-              extension = 0.45;
-            }
+            // Let's use them to form a "Ghost Cylinder" in the middle,
+            // representing the base pairs.
+            // 10 strands clustered in the center, rotating?
+            // Distribute them radially inside the helix?
 
-            // Smooth step for nicer visuals
-            const k = 10.0;
-            let smoothExt = 0.45 / (1 + Math.exp(-k * (signal - threshold)));
+            // Let's do INTERPOLATION based on X.
+            // At specific X intervals (the rungs), bring opacity to 1?
+            // We can't change opacity per vertex only per mesh.
 
-            // Interpolate
-            // Left: A -> B (0 -> 1)
-            // Right: B -> A (0 -> 1)
+            // REFINED APPROACH:
+            // Make the inner strands travel closer to the center line (radius 0),
+            // but modulated to look like "bases" pairing up.
 
-            if (isLeft) {
-              // From A towards B
-              y = THREE.MathUtils.lerp(ay, by, smoothExt);
-              z = THREE.MathUtils.lerp(az, bz, smoothExt);
+            // Let's stick to the previous "partial rung" idea but improve it.
+            // Have them originate from Helix A or B and extend inwards.
+
+            const isLeft = strandIndex < 7; // attached to A
+
+            const sourceY = isLeft ? yA : yB;
+            const sourceZ = isLeft ? zA : zB;
+
+            const targetY = isLeft ? yB : yA;
+            const targetZ = isLeft ? zB : zA;
+
+            // Animate them reaching out
+            // Use a square wave or sharp sine to strictly define "Rung exist here".
+            const rungFreq = 2.0; // Fewer, clearer rungs
+            const rungPhase = x * rungFreq;
+
+            // Rung width check
+            const rungCheck = Math.sin(rungPhase);
+
+            if (rungCheck > 0.8) {
+              // Rung Zone! Connect fully!
+              // But we are drawing a continuous line.
+              // It will lock into a rung shape.
+              // Lerp fully to center?
+              y = (sourceY + targetY) * 0.5;
+              z = (sourceZ + targetZ) * 0.5;
+              // "small line is vibrating" -> replaced Random with deterministic noise
+              // Use sine waves based on X and Time to creates organic "glitch" without frame-by-frame chaos
+              const noise =
+                Math.sin(x * 23.0 + time * 5.0) * Math.cos(x * 17.0);
+              y += noise * 0.15;
             } else {
-              // From B towards A
-              y = THREE.MathUtils.lerp(by, ay, smoothExt);
-              z = THREE.MathUtils.lerp(bz, az, smoothExt);
+              // Hide inside the backbone
+              y = sourceY * 0.9;
+              z = sourceZ * 0.9;
             }
-
-            y += Math.sin(x + time) * 0.1;
           }
-
           break;
 
         case "structure":
@@ -289,10 +331,10 @@ function NeuroStrand({
           const dirY = radius_dir * Math.sin(theta_dir);
           const dirZ = z_dir;
 
-          // 2. Compute Basis Vectors for Spiral (Perpendicular to Dir)
           const vDir = new THREE.Vector3(dirX, dirY, dirZ).normalize();
-          let vUp = new THREE.Vector3(0, 1, 0);
-          if (Math.abs(dirY) > 0.9) vUp.set(1, 0, 0);
+          const tempUp = new THREE.Vector3(0, 1, 0);
+          if (Math.abs(dirY) > 0.9) tempUp.set(1, 0, 0);
+          const vUp = tempUp;
           const vRight = new THREE.Vector3()
             .crossVectors(vDir, vUp)
             .normalize();

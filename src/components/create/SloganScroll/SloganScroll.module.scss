@@ -18,7 +18,7 @@
     grid-area: stack;
     position: sticky;
     top: 0;
-    height: 100vh;
+    height: 100dvh;
     width: 100%;
     z-index: 1;
     overflow: hidden;
@@ -46,11 +46,12 @@
     width: 100%;
     pointer-events: none; 
     // Add padding to ensure first and last items can be centered
+    // Add padding to ensure first and last items can be centered
     padding: 0; 
 }
 
 .sloganItem {
-    height: 75vh;
+    height: 100dvh;
     width: 100%;
     display: flex;
     align-items: center;
@@ -92,15 +93,18 @@
     
     // Optional: add a subtle gradient or texture
     color: #fff;
+    // Softer shadow as requested (glow instead of outline)
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
 }
 
 .sloganDesc {
     font-family: var(--font-sans);
     font-size: clamp(1.25rem, 3vw, 1.75rem);
     line-height: 1.6;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.95); 
     max-width: 600px;
     margin: 0 auto;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.4);
 }
 
 

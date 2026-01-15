@@ -15,7 +15,7 @@
     justify-content: center;
 
     @include mobile {
-        padding: 12px;
+        padding: 24px 24px; // Adjusted lateral padding for alignment
     }
 
     @media (min-width: 1440px) {
@@ -54,13 +54,42 @@
 // Identity Anchor Layout - prevents layout shift
 .identityAnchor {
     display: flex;
-    align-items: center;
-    gap: 12px;
+    align-items: center; // Vertically center the WHOLE group in the navbar
+    gap: 0;
     z-index: 1102;
     pointer-events: auto;
     font-family: inherit;
     position: relative;
     height: 100%; // Match container height
+}
+
+.identityInner {
+    display: flex;
+    align-items: baseline; // Align text baselines
+    gap: 12px;
+    height: 1.8rem; // FIXED HEIGHT to strictly prevent centering jumps (matches largest element)
+    margin-top: -3px; // Optical adjustment to center the Name (since Separator is taller)
+    margin-left: -4px;
+
+    @media (min-width: 1440px) {
+        height: 2.4rem;
+        margin-top: -4px;
+    }
+
+    // STABLE BASELINE STRUT:
+    // Forces the baseline to remain calculated based on the largest element (Separator)
+    // even when it is not present in the DOM. Prevents "jumping" layout.
+    &::before {
+        content: '|'; // Use actual separator character for exact metrics
+        visibility: hidden; // Hide it, but keep it in the layout computation
+        font-family: var(--font-geom); // Match font metrics of separator
+        font-size: 1.8rem;
+        line-height: 1;
+        
+        @media (min-width: 1440px) {
+            font-size: 2.4rem;
+        }
+    }
 }
 
 // Anchor container - use absolute positioning to prevent layout shift
@@ -110,7 +139,7 @@
     font-weight: 300;
     color: currentColor;
     opacity: 0.3;
-    margin: 0 4px; // Tight spacing
+    margin-right: 4px;
     line-height: 1;
 
     @media (min-width: 1440px) {
@@ -297,9 +326,9 @@
         background: #1d1d1f;
     }
 
-    // Open State Overrides (Always Black)
+    // Open State Overrides (Always White)
     .navOpen & span {
-        background: #000000 !important;
+        background: #ffffff !important;
     }
 
     // Hover/Active (Touch) State - Creative "Split Slide" Effect
@@ -319,18 +348,18 @@
 
     &.open {
         span:nth-child(1) {
-            transform: translateY(10px) rotate(45deg);
+            transform: translateY(6.5px) rotate(45deg);
 
             @include mobile {
-                transform: translateY(9px) rotate(45deg); // (2px height + 16px gap) / 2 = 9px
+                transform: translateY(5.5px) rotate(45deg); // (3px height + 8px gap) / 2 = 5.5px
             }
         }
 
         span:nth-child(2) {
-            transform: translateY(-10px) rotate(-45deg);
+            transform: translateY(-6.5px) rotate(-45deg);
 
             @include mobile {
-                transform: translateY(-9px) rotate(-45deg);
+                transform: translateY(-5.5px) rotate(-45deg);
             }
         }
     }
@@ -470,10 +499,14 @@
 // ==========================================
 
 .closeIcon {
-    font-size: 1.75rem;  // Bigger X
+    font-size: 2rem;  // Match desktop hamburger (32px)
     font-weight: 300;
     color: currentColor;
     line-height: 1;
+    
+    @include mobile {
+        font-size: 1.75rem; // Match mobile hamburger (28px)
+    }
 
     .nav[data-nav-theme='dark'] & {
         color: #ffffff;
@@ -522,12 +555,12 @@
 
     @include mobile {
         position: fixed; // On mobile, behave like a full/floating modal relative to screen
-        top: 4px;
-        right: 4px;
-        left: 4px;
+        top: 12px;   // Increased margin/padding from edge
+        right: 12px;
+        left: 12px;
         width: auto;
-        max-height: calc(100vh - 8px);
-        border-radius: 16px;
+        max-height: calc(100vh - 24px);
+        border-radius: 20px;
         padding-top: 64px;
         z-index: 1100;
     }
@@ -544,7 +577,7 @@
     min-height: 400px;
 
     @include mobile {
-        padding: 20px;
+        padding: 40px 24px; // Increased padding to visually align with Title
         min-height: 350px;
     }
 }
@@ -565,6 +598,8 @@
     padding: 4px 0;
     transition: all 0.3s ease;
     display: inline-block;
+    user-select: none;
+    -webkit-user-select: none;
 
     &:hover {
         color: rgba(255, 255, 255, 0.6);
@@ -591,6 +626,12 @@
     padding: 16px 20px;
     background: #1a1a1c;
     border-radius: 12px;
+
+    @include mobile {
+        padding-bottom: 8px;
+        padding-top: 12px;
+        padding: 12px 20px 8px 20px;
+    }
 }
 
 .socialLabel {

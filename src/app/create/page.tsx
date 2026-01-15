@@ -4,7 +4,6 @@ export const viewport: Viewport = {
   themeColor: "#000000",
 };
 
-import styles from "./page.module.scss";
 import CreateHero from "@/components/create/CreateHero/CreateHero";
 import SloganScroll from "@/components/create/SloganScroll/SloganScroll";
 import CreateServices from "@/components/create/CreateServices/CreateServices";
@@ -19,13 +18,12 @@ export const metadata: Metadata = {
 
 export default function PortfolioPage() {
   return (
-    <main className={styles.container}>
+    <main>
       {/* Dark theme hero section */}
       <div data-theme="dark">
         <CreateHero />
         <SloganScroll />
       </div>
-
       {/* Light theme projects and services sections */}
       <div data-theme="dark">
         <Portfolio />
@@ -33,7 +31,6 @@ export default function PortfolioPage() {
       <div data-theme="dark">
         <CreateServices />
       </div>
-
       {/* Contact section */}
       <div data-theme="dark">
         <CreateContact />

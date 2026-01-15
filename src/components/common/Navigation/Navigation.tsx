@@ -12,7 +12,18 @@ export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [navTheme, setNavTheme] = useState<"light" | "dark">("dark");
-  const [activeSection, setActiveSection] = useState("home");
+
+  // State initialization based on current path
+  const [activeSection, setActiveSection] = useState(
+    () => pathname.replace("/", "") || "home"
+  );
+  const [prevPath, setPrevPath] = useState(pathname);
+
+  // Render-time state reset (Pattern: Derived State)
+  if (pathname !== prevPath) {
+    setPrevPath(pathname);
+    setActiveSection(pathname.replace("/", "") || "home");
+  }
 
   // Dynamic Theme & Scroll Spy
   useEffect(() => {
@@ -48,7 +59,6 @@ export default function Navigation() {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               setActiveSection(entry.target.id);
-              console.log("Active Section Check:", entry.target.id); // Debug Log
             }
           });
         },
@@ -72,8 +82,8 @@ export default function Navigation() {
       // Non-home pages: Still observe 'contact' (Footer)
       const cleanPath = pathname.replace("/", "") || "home";
 
-      // Default to page name
-      setActiveSection(cleanPath);
+      // Note: activeSection is already set by the render-time check above.
+      // We only need to observe the contact section here.
 
       const contactObserver = new IntersectionObserver(
         (entries) => {
@@ -155,53 +165,55 @@ export default function Navigation() {
           {/* Identity Anchor */}
           {/* Identity Anchor */}
           <div className={styles.identityAnchor}>
-            <Link
-              href="/"
-              className={styles.name}
-              onClick={(e) => handleClick(e, "/#home")}
-            >
-              Yu Hang Ang
-            </Link>
+            <div className={styles.identityInner}>
+              <Link
+                href="/"
+                className={styles.name}
+                onClick={(e) => handleClick(e, "/#home")}
+              >
+                Yu Hang Ang
+              </Link>
 
-            {/* Logic: Only show anchor if mapped to a valid label */}
-            <motion.div
-              animate={{ opacity: mobileMenuOpen ? 0 : 1 }}
-              transition={{ duration: 0.2 }}
-              style={{ pointerEvents: mobileMenuOpen ? "none" : "auto" }}
-            >
-              <AnimatePresence>
-                {(() => {
-                  const SECTION_LABELS: Record<string, string> = {
-                    about: "About",
-                    contact: "Contact",
-                    identity: "Create", // Homepage section alias
-                    create: "Create", // Actual page
-                  };
+              {/* Logic: Only show anchor if mapped to a valid label */}
+              <motion.div
+                animate={{ opacity: mobileMenuOpen ? 0 : 1 }}
+                transition={{ duration: 0.2 }}
+                style={{ pointerEvents: mobileMenuOpen ? "none" : "auto" }}
+              >
+                <AnimatePresence>
+                  {(() => {
+                    const SECTION_LABELS: Record<string, string> = {
+                      about: "About",
+                      contact: "Contact",
+                      identity: "Create", // Homepage section alias
+                      create: "Create", // Actual page
+                    };
 
-                  const displayText = SECTION_LABELS[activeSection] || null;
+                    const displayText = SECTION_LABELS[activeSection] || null;
 
-                  if (!displayText) return null;
+                    if (!displayText) return null;
 
-                  return (
-                    <motion.div
-                      key="anchor-container"
-                      initial={{ opacity: 0, width: 0 }}
-                      animate={{ opacity: 1, width: "auto" }}
-                      exit={{ opacity: 0, width: 0 }}
-                      className={styles.anchorContainer}
-                      style={{
-                        display: "flex",
-                        alignItems: "baseline",
-                        overflow: "hidden",
-                      }}
-                    >
-                      <span className={styles.separator}>|</span>
-                      <FilmLightText text={displayText} />
-                    </motion.div>
-                  );
-                })()}
-              </AnimatePresence>
-            </motion.div>
+                    return (
+                      <motion.div
+                        key="anchor-container"
+                        initial={{ opacity: 0, width: 0 }}
+                        animate={{ opacity: 1, width: "auto" }}
+                        exit={{ opacity: 0, width: 0 }}
+                        className={styles.anchorContainer}
+                        style={{
+                          display: "flex",
+                          alignItems: "baseline",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <span className={styles.separator}>|</span>
+                        <FilmLightText text={displayText} />
+                      </motion.div>
+                    );
+                  })()}
+                </AnimatePresence>
+              </motion.div>
+            </div>
           </div>
 
           {/* New Desktop Navigation (Minimal) */}
@@ -221,14 +233,14 @@ export default function Navigation() {
             onClick={handleMenuClick}
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? (
-              <span className={styles.closeIcon}>✕</span>
-            ) : (
-              <span className={styles.hamburger}>
-                <span></span>
-                <span></span>
-              </span>
-            )}
+            <span
+              className={`${styles.hamburger} ${
+                mobileMenuOpen ? styles.open : ""
+              }`}
+            >
+              <span></span>
+              <span></span>
+            </span>
           </button>
 
           {/* New Dark Floating Menu - Moved inside container for relative positioning */}
