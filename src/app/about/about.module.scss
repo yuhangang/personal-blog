@@ -238,7 +238,53 @@
             content: '•';
             position: absolute;
             left: 0;
-            color: $color-accent;
         }
+    }
+}
+
+.projectCta {
+    margin-top: $spacing-xl;
+    padding: $spacing-xl;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-md;
+    transition: background 0.3s ease;
+    
+    &:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+}
+
+.ctaTitle {
+    font-size: 1.5rem;
+    color: #fff;
+    margin: 0;
+    font-family: var(--font-serif);
+    
+    @include mobile {
+        font-size: 1.25rem;
+    }
+}
+
+.ctaButton {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 28px;
+    background: #fff;
+    color: #000;
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.9rem;
+    transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+    
+    &:hover {
+        background: $color-accent;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 }

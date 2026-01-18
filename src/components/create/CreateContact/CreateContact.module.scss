@@ -9,28 +9,30 @@
     width: 100%;
     height: 100%;
     z-index: -1;
-    opacity: 0.3; // Lower opacity for dark mode subtlety
+    opacity: 0.15; // Subtle texture
     pointer-events: none;
     overflow: hidden;
-    filter: invert(1) brightness(0.5); // Invert messy threads to look good on dark
+    filter: brightness(0.7) contrast(1.2); 
+    mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
 }
 
 .section {
-    background-color: #050505; // Deep dark background
+    background-color: #050505; 
     color: #ffffff;
-    min-height: 100dvh; // Dynamic viewport height
+    min-height: 100dvh;
     display: flex;
-    align-items: flex-start;
+    // align-items: center; // Removed to prevent layout shift on height change
+    justify-content: center;
     position: relative;
     z-index: 10;
-    padding: 0;
+    padding: 100px 0; // consistent vertical padding
 }
 
 .container {
     max-width: 1400px;
     width: 100%;
     margin: 0 auto;
-    padding: 120px 60px;
+    padding: 0 60px;
     display: grid;
     grid-template-columns: 0.8fr 1.2fr;
     gap: 120px;
@@ -38,7 +40,7 @@
 
     @include mobile {
         grid-template-columns: 1fr;
-        padding: 80px 24px;
+        padding: 0 24px;
         gap: 60px;
     }
 }
@@ -49,7 +51,7 @@
     flex-direction: column;
     justify-content: space-between;
     position: sticky;
-    top: 120px;
+    top: 140px;
     height: fit-content;
     z-index: 2;
 
@@ -60,19 +62,19 @@
 }
 
 .headline {
-    font-family: var(--font-serif); // Use the serif font like other sections
-    font-size: clamp(3rem, 6vw, 5rem);
+    font-family: var(--font-serif);
+    font-size: clamp(3.5rem, 5vw, 6rem); // Larger, more impact
     line-height: 1;
     font-weight: 300;
     margin-bottom: 32px;
     color: #ffffff;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
 
     em {
         font-family: var(--font-serif);
         font-style: italic;
         font-weight: 300;
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(255, 255, 255, 0.7);
     }
 }
 
@@ -80,24 +82,18 @@
     font-family: var(--font-sans);
     font-size: 1.125rem;
     line-height: 1.6;
-    color: rgba(255, 255, 255, 0.6);
-    max-width: 450px;
+    color: rgba(255, 255, 255, 0.5);
+    max-width: 480px;
     font-weight: 300;
     margin-bottom: 40px;
-}
-
-.footerInfo {
-    margin-top: auto;
-    // ... kept if needed, but wasn't in original file recently?
-    // If it exists in TSX, style it.
+    min-height: 3.6rem; // Prevent layout shift (approx 2 lines)
 }
 
 // --- TABS ---
 .tabsHelpers {
     display: flex;
-    gap: 40px;
-    margin-bottom: 60px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 32px;
+    margin-bottom: 48px;
     
     @include mobile {
         gap: 24px;
@@ -109,22 +105,24 @@
     background: none;
     border: none;
     font-family: var(--font-sans);
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     cursor: pointer;
-    padding-bottom: 16px;
+    padding: 12px 24px;
+    border-radius: 100px;
     color: rgba(255, 255, 255, 0.4);
-    transition: all 0.3s ease;
-    border-bottom: 2px solid transparent;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    background: rgba(255, 255, 255, 0.05);
 
     &:hover {
         color: #ffffff;
+        background: rgba(255, 255, 255, 0.1);
     }
 
     &.active {
-        color: #ffffff;
-        border-bottom: 2px solid #ffffff;
+        color: #000000;
+        background: #ffffff;
     }
 }
 
@@ -133,17 +131,18 @@
     position: relative;
     z-index: 2;
     padding-top: 12px; 
+    min-height: 550px; // Prevent layout shift between tabs
+    transition: min-height 0.3s ease;
 }
 
 .formGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 40px;
-    row-gap: 60px;
+    column-gap: 24px;
+    row-gap: 32px;
 
     @include mobile {
         grid-template-columns: 1fr;
-        gap: 40px;
     }
 }
 
@@ -151,6 +150,7 @@
     grid-column: 1 / -1;
 }
 
+// PREMIUM INPUTS
 .inputGroup {
     position: relative;
     display: flex;
@@ -158,86 +158,145 @@
 
     label {
         font-family: var(--font-sans);
-        font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.5);
-        margin-bottom: 12px;
+        font-size: 0.7rem;
+        color: rgba(255, 255, 255, 0.4);
+        margin-bottom: 10px;
         text-transform: uppercase;
         letter-spacing: 0.1em;
+        font-weight: 500;
     }
 
     input,
     textarea {
         width: 100%;
-        background: transparent;
-        border: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 12px 0;
+        background: rgba(255, 255, 255, 0.03); // Subtle surface
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 16px 20px;
         font-family: var(--font-sans);
-        font-size: 1.125rem;
+        font-size: 1rem;
         color: #ffffff;
         outline: none;
-        border-radius: 0;
-        transition: border-color 0.3s ease;
+        border-radius: 12px; // Modern curve
+        transition: all 0.3s ease;
 
         &::placeholder {
             color: rgba(255, 255, 255, 0.2);
         }
 
         &:focus {
-            border-bottom: 1px solid #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.02);
         }
     }
 
     textarea {
         resize: vertical;
-        min-height: 40px;
+        min-height: 120px;
     }
+}
+
+// Specific Smart Input Wrapper for the button
+.smartInputWrapper {
+    .inputWithAction {
+        position: relative;
+        display: flex;
+        align-items: center;
+        
+        input {
+            padding-right: 60px; // Space for button
+        }
+    }
+}
+
+.analyzeBtn {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    bottom: 6px;
+    width: 48px;
+    background: #ffffff;
+    border: none;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    svg {
+        width: 20px;
+        height: 20px;
+        stroke: #000;
+    }
+
+    &:hover {
+        transform: scale(0.95);
+        background: #f0f0f0;
+    }
+    
+    &:disabled {
+        opacity: 0.7;
+        cursor: wait;
+    }
+}
+
+.loaderSpinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(0,0,0,0.1);
+    border-top: 2px solid #000;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
 // --- CHAT INTERFACE ---
 .chatContainer {
-    margin-top: 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 24px;
+    margin-top: 32px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
 .chatMessages {
-    max-height: 250px;
+    max-height: 300px;
     overflow-y: auto;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding-right: 4px;
+    gap: 16px;
+    padding-right: 8px;
 
-    &::-webkit-scrollbar {
-        width: 4px;
-    }
-    &::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 4px;
-    }
+    &::-webkit-scrollbar { width: 4px; }
+    &::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
 }
 
 .chatBubble {
-    max-width: 90%;
-    padding: 10px 16px;
-    font-size: 0.9rem;
+    max-width: 85%;
+    padding: 12px 18px;
+    font-size: 0.95rem;
     line-height: 1.5;
-    border-radius: 8px;
+    border-radius: 12px;
+    font-weight: 300;
 
     &.agent {
         align-self: flex-start;
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.08);
         color: #ffffff;
-        border-bottom-left-radius: 0;
+        border-top-left-radius: 2px;
     }
 
     &.user {
         align-self: flex-end;
         background: #ffffff;
         color: #000000;
-        border-bottom-right-radius: 0;
+        border-top-right-radius: 2px;
+        font-weight: 400;
     }
 }
 
@@ -247,18 +306,19 @@
 
     input {
         flex: 1;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 100px;
-        padding: 12px 20px;
+        padding: 14px 24px;
         font-size: 0.9rem;
-        background: transparent;
+        background: rgba(0,0,0,0.2);
         color: #fff;
         font-family: var(--font-sans);
         outline: none;
-        transition: border-color 0.3s ease;
+        transition: all 0.3s ease;
 
         &:focus {
-            border-color: #fff;
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(0,0,0,0.4);
         }
     }
 
@@ -266,41 +326,32 @@
         background: #fff;
         color: #000;
         border: none;
-        width: 44px;
-        height: 44px;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: opacity 0.2s;
+        transition: transform 0.2s;
 
         &:hover {
-            opacity: 0.9;
+            transform: scale(0.95);
         }
-
-        &:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        svg {
-            width: 18px;
-            height: 18px;
-            fill: currentColor;
-        }
+        &:disabled { opacity: 0.5; }
+        svg { width: 20px; height: 20px; fill: currentColor; }
     }
 }
 
-// --- AGENT CARD (HUD STYLE) ---
+// --- AGENT CARD ---
 .agentCard {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    padding: 24px;
-    margin-top: 24px;
-    border-radius: 12px;
-    backdrop-filter: blur(10px);
+    background: rgba(20, 20, 20, 0.6); // Slightly cleaner dark
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+    padding: 32px;
+    margin-top: 40px;
+    border-radius: 24px;
+    backdrop-filter: blur(20px);
     font-family: var(--font-sans);
 }
 
@@ -308,143 +359,197 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 12px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 16px;
 }
 
 .agentLabel {
     font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    color: #1edcaa; // Tech teal accent
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: #fff;
+    opacity: 0.5;
     text-transform: uppercase;
 }
 
 .agentImage {
-    width: 32px;
-    height: 32px;
-    border-radius: 4px;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
     object-fit: cover;
     filter: grayscale(100%);
+    opacity: 0.8;
 }
 
 .agentTitle {
     font-family: var(--font-serif);
     font-weight: 300;
-    font-size: 1.5rem;
-    margin-bottom: 8px;
+    font-size: 1.75rem;
+    margin-bottom: 12px;
     color: #ffffff;
 }
 
 .agentDesc {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: rgba(255, 255, 255, 0.7);
     line-height: 1.6;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
 }
 
 .critiqueBox {
-    margin-bottom: 24px;
-    background: rgba(255, 59, 48, 0.1);
-    border-left: 2px solid #ff3b30;
-    padding: 12px 16px;
+    margin-bottom: 32px;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(255, 100, 100, 0.08); // Softer red bg
+    border: 1px solid rgba(255, 59, 48, 0.2);
+    
+    .verdictLabel {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #ff5e57;
+        letter-spacing: 0.1em;
+        margin-bottom: 8px;
+        display: block;
+    }
 
     p {
         font-family: var(--font-serif);
-        font-size: 1.1rem;
+        font-size: 1.125rem;
         font-style: italic;
-        color: #ffcccb;
-        line-height: 1.4;
+        color: #ffa8a8;
+        line-height: 1.5;
     }
 }
 
-.verdictLabel {
-    font-size: 0.65rem;
-    font-weight: 700;
-    color: #ff3b30;
-    letter-spacing: 0.1em;
-    display: block;
-    margin-bottom: 8px;
-}
-
 .planBox {
-    background: rgba(255, 255, 255, 0.03);
-    padding: 16px;
-    border-radius: 6px;
-    margin-bottom: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: transparent;
+    padding: 0;
+    border: none;
+    margin-bottom: 32px;
+
+    .planLabel {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #fff;
+        opacity: 0.5;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 16px;
+    }
 
     ul {
         list-style: none;
         padding: 0;
-        margin: 12px 0 0 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
     }
 
     li {
-        font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.8);
-        padding-left: 20px;
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.9);
+        padding-left: 24px;
         position: relative;
-        margin-bottom: 10px;
         line-height: 1.5;
 
         &:before {
-            content: "•";
+            content: "→";
             position: absolute;
             left: 0;
-            color: #1edcaa;
+            top: 0;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.9rem;
         }
     }
 }
 
-.planLabel {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-}
-
 .suggestionBox {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 16px;
-    border-radius: 6px;
-    border: 1px dashed rgba(255, 255, 255, 0.2);
+    background: #ffffff; // Invert for contrast? Or keep dark? 
+    // Let's keep dark but high contrast borders
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 2px;
+        background: linear-gradient(90deg, transparent, #fff, transparent);
+        opacity: 0.5;
+    }
 
     label {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         color: rgba(255, 255, 255, 0.5);
         display: block;
-        margin-bottom: 8px;
+        margin-bottom: 12px;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.1em;
     }
 
     p {
-        font-size: 1rem;
+        font-size: 1.1rem;
         font-family: var(--font-serif);
         font-style: italic;
         color: #fff;
-        margin-bottom: 16px;
+        margin-bottom: 20px;
         line-height: 1.6;
     }
 }
 
 .useBtn {
+    width: 100%;
     background: #fff;
     color: #000;
     border: none;
-    padding: 8px 16px;
-    font-size: 0.8rem;
-    border-radius: 4px;
+    padding: 14px;
+    font-size: 0.85rem;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    transition: transform 0.2s ease;
 
     &:hover {
-        background: #f0f0f0;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255,255,255,0.15);
+    }
+}
+
+.submitBtn {
+    margin-top: 40px;
+    width: 100%;
+    padding: 18px;
+    text-align: center;
+    border: none;
+    border-radius: 100px;
+    background: #ffffff;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #000000;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px -5px rgba(255,255,255,0.3);
+    }
+    
+    &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
     }
 }
 
@@ -453,38 +558,12 @@
     font-size: 0.9rem;
     font-style: italic;
     animation: pulse 1.5s infinite;
+    text-align: center;
+    margin-top: 20px;
 }
 
 @keyframes pulse {
     0% { opacity: 0.5; }
     50% { opacity: 1; }
     100% { opacity: 0.5; }
-}
-
-.submitBtn {
-    margin-top: 60px;
-    width: 100%;
-    padding: 20px;
-    text-align: center;
-    border: 1px solid #ffffff;
-    border-radius: 100px;
-    background: transparent;
-    font-family: var(--font-sans);
-    font-size: 1rem;
-    font-weight: 500;
-    color: #ffffff;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-        background: #ffffff;
-        color: #000000;
-    }
-    
-    &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
 }

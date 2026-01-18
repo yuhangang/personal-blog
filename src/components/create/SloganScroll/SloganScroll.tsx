@@ -7,6 +7,7 @@ import styles from "./SloganScroll.module.scss";
 import SloganVisuals from "./SloganVisuals";
 import SloganItem from "./SloganItem";
 import { SLOGAN_ITEMS } from "./sloganConfig";
+import { useScroll } from "framer-motion";
 
 export default function SloganScroll() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -15,10 +16,18 @@ export default function SloganScroll() {
    * Lenis Integration for Snapping
    */
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isInteracting = useRef(false); // Track if user is holding the screen
   const { lenis } = useLenis();
 
+  // Track global list progress to drive the "Sticky Fade" of the last item
+  const listRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: listProgress } = useScroll({
+    target: listRef,
+    offset: ["start start", "end end"],
+  });
+
   useEffect(() => {
-    // If no Lenis instance, we can't snap elegantly (or could fallback, but let's rely on Lenis)
+    // If no Lenis instance, we can't snap elegantly
     if (!lenis) return;
 
     const handleScroll = () => {
@@ -27,11 +36,14 @@ export default function SloganScroll() {
         clearTimeout(scrollTimeoutRef.current);
       }
 
+      // If user is holding the screen, DO NOT schedule a snap.
+      // We will only snap when they release (onInteractEnd will trigger this).
+      if (isInteracting.current) return;
+
       // Set new timeout to detect scroll stop (Debounce period)
-      // "auto scroll only move after a debounce period"
       scrollTimeoutRef.current = setTimeout(() => {
         snapToClosest();
-      }, 300); // 300ms debounce as requested for a bit of a pause
+      }, 300); // Increased debounce to 300ms for better stability
     };
 
     const snapToClosest = () => {
@@ -44,24 +56,23 @@ export default function SloganScroll() {
       const viewportCenter = viewportHeight / 2;
 
       // BOUNDARY CHECK:
-      // Check if the slogan list container is actually covering the center of the screen.
-      // If the user has scrolled past it (top is way above, bottom is above center)
-      // or hasn't reached it (top is below center), we shouldn't snap.
       const listRect = listContainer.getBoundingClientRect();
       const listTop = listRect.top;
       const listBottom = listRect.bottom;
 
-      // Allow a small buffer? No, strict check is safer for "not the cover".
-      // If center of screen is NOT inside the list container, abort.
-      if (viewportCenter < listTop || viewportCenter > listBottom) {
-        return;
-      }
+      if (viewportCenter < listTop || viewportCenter > listBottom) return;
+
+      // MOMENTUM CHECK:
+      // If the scroll is still carrying significant momentum, do not snap yet.
+      if (Math.abs(lenis.velocity) > 0.5) return;
 
       let closestItem: Element | null = null;
       let minDistance = Infinity;
 
       items.forEach((item) => {
         const rect = item.getBoundingClientRect();
+        // Snap target: Align container center to viewport center.
+        // SloganItem is 100vh, so this means full alignment.
         const itemCenter = rect.top + rect.height / 2;
         const distance = Math.abs(itemCenter - viewportCenter);
 
@@ -72,39 +83,78 @@ export default function SloganScroll() {
       });
 
       if (closestItem) {
-        // "not necessrily need to alaways center it"
-        // Magnetic Snap: Only snap if we are reasonably close (e.g. within 30% of viewport)
-        const SNAP_THRESHOLD = window.innerHeight * 0.3;
-
-        if (minDistance > SNAP_THRESHOLD) {
-          return;
-        }
-
-        // "make it slower" + hyogen feel
-        // Hyogen feel = Viscous, heavy inertia.
-        // Use EaseInOutQuart (Power 4) for heavy startup/slowdown.
-        // Duration 2.5s for that slow, luxurious drift.
-
+        // ALWAYS SNAP if we are in the zone.
         lenis.scrollTo(closestItem as HTMLElement, {
-          offset:
-            -window.innerHeight / 2 +
-            (closestItem as HTMLElement).offsetHeight / 2,
-          duration: 2.5,
+          offset: 0,
+          duration: 1.2,
           lock: false,
           easing: (t) =>
-            t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2, // EaseInOutQuart
+            t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
         });
       }
     };
 
-    // Use Lenis's scroll event
-    // lenis.on returns an unsubscribe function in recent versions?
-    // Checking SmoothScroll.tsx, it creates `new Lenis({...})`.
-    // The library usually returns the instance. We can use .on().
+    // Interaction Handlers
+    const onInteractStart = () => {
+      isInteracting.current = true;
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    };
+
+    const onInteractEnd = () => {
+      isInteracting.current = false;
+      // Trigger a check immediately in case we are stopped
+      handleScroll();
+    };
+
+    // Wheel Handler
+    const onWheel = () => {
+      // Treat wheel as interaction: clear existing snap timer
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+      // Reschedule snap
+      scrollTimeoutRef.current = setTimeout(() => {
+        isInteracting.current = false; // ensuring this reset
+        snapToClosest();
+      }, 300);
+    };
+
+    // Bind interaction events to window with CAPTURE to catch everything
+    // Use both Pointer and Touch to be absolutely sure on all devices
+    const opts = { capture: true };
+    const passiveOpts = { capture: true, passive: true };
+
+    window.addEventListener("pointerdown", onInteractStart, opts);
+    window.addEventListener("pointerup", onInteractEnd, opts);
+    window.addEventListener("pointercancel", onInteractEnd, opts);
+
+    window.addEventListener("touchstart", onInteractStart, passiveOpts);
+    window.addEventListener("touchend", onInteractEnd, opts);
+    window.addEventListener("touchcancel", onInteractEnd, opts);
+
+    // Fallback for non-pointer browsers (rare but safe)
+    window.addEventListener("mousedown", onInteractStart, opts);
+    window.addEventListener("mouseup", onInteractEnd, opts);
+
+    // Wheel listener for trackpads
+    window.addEventListener("wheel", onWheel, passiveOpts);
+
+    // Lenis Scroll Event
     const unsubscribe = lenis.on("scroll", handleScroll);
 
     return () => {
       // Clean up
+      window.removeEventListener("pointerdown", onInteractStart, opts);
+      window.removeEventListener("pointerup", onInteractEnd, opts);
+      window.removeEventListener("pointercancel", onInteractEnd, opts);
+
+      window.removeEventListener("touchstart", onInteractStart, passiveOpts);
+      window.removeEventListener("touchend", onInteractEnd, opts);
+      window.removeEventListener("touchcancel", onInteractEnd, opts);
+
+      window.removeEventListener("mousedown", onInteractStart, opts);
+      window.removeEventListener("mouseup", onInteractEnd, opts);
+
+      window.removeEventListener("wheel", onWheel, passiveOpts);
+
       if (typeof unsubscribe === "function") {
         unsubscribe();
       } else {
@@ -120,7 +170,7 @@ export default function SloganScroll() {
     <section className={styles.section} ref={containerRef}>
       <div className={styles.layoutGrid}>
         {/* LEFT: SLOGANS (SCROLLING) */}
-        <div className={styles.sloganList}>
+        <div className={styles.sloganList} ref={listRef}>
           {SLOGAN_ITEMS.map(
             (feature: { title: string; desc: string }, i: number) => (
               <SloganItem
@@ -129,8 +179,11 @@ export default function SloganScroll() {
                 title={feature.title}
                 desc={feature.desc}
                 setActiveIndex={setActiveIndex}
+                isLast={i === SLOGAN_ITEMS.length - 1}
+                listProgress={listProgress}
+                totalCount={SLOGAN_ITEMS.length}
               />
-            )
+            ),
           )}
         </div>
 

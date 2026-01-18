@@ -9,10 +9,18 @@
     min-height: 800px; // Taller for cinematic feel
     background: #000; // Deep dark background
     color: #fff;
-    padding-top: 0; 
+    // padding-top: 0; // Removed 0 padding
+    padding-top: 120px; // Added padding for navbar clearance
+    // scroll-margin-top logic removed as per request
     display: flex;
     flex-direction: column;
     overflow: hidden;
+
+    @include mobile {
+        height: auto;
+        min-height: auto;
+        padding-bottom: 80px;
+    }
 }
 
 // Header
@@ -200,6 +208,38 @@
     @include mobile {
         padding: 0 24px;
         min-width: 90vw;
+    }
+}
+
+.desktopOnly {
+    @include mobile {
+        display: none !important;
+    }
+}
+
+.mobileOnly {
+    display: none !important;
+    @include mobile {
+        display: flex !important;
+    }
+}
+
+.ctaSectionMobile {
+    width: 100%;
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    
+    .ctaSidebar {
+        padding: 0 24px;
+        width: 100%;
+    }
+    
+    .ctaCard {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4/5;
+        min-width: 0;
     }
 }
 

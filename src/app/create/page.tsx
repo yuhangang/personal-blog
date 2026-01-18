@@ -5,6 +5,7 @@ export const viewport: Viewport = {
 };
 
 import CreateHero from "@/components/create/CreateHero/CreateHero";
+import ServiceIntro from "@/components/create/ServiceIntro/ServiceIntro";
 import SloganScroll from "@/components/create/SloganScroll/SloganScroll";
 import CreateServices from "@/components/create/CreateServices/CreateServices";
 import Portfolio from "@/components/create/Portfolio/Portfolio";
@@ -22,6 +23,8 @@ export default function PortfolioPage() {
       {/* Dark theme hero section */}
       <div data-theme="dark">
         <CreateHero />
+        {/* Service Intro: Transitional section with parallax */}
+        <ServiceIntro />
         <SloganScroll />
       </div>
       {/* Light theme projects and services sections */}

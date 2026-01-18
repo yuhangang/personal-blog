@@ -3,8 +3,12 @@
 
 .section {
     position: relative;
+    // Transparent at top (0%) to Solid Black (25vh) -> This creates soft stack over CreateHero
+    // Transparent at top (0%) to Solid Black (10vh)
+    // Eased gradient (Sine/Quad) using fixed VH units for consistency
     background: #000;
     width: 100%;
+    z-index: 10;
 }
 
 .layoutGrid {
@@ -47,7 +51,14 @@
     pointer-events: none; 
     // Add padding to ensure first and last items can be centered
     // Add padding to ensure first and last items can be centered
+    // Add padding to ensure first and last items can be centered
     padding: 0; 
+    padding-top: 50vh; // Push first item down significantly (half screen) to ensure pitch black BG
+    // Add buffer at the end so the last text item can scroll completely off-screen
+    // while the sticky visual remains pinned. This creates the "unstick only after text disappears" effect.
+    padding-bottom: 100vh;
+    overflow: visible; // Critical for sticky children to work if parent height is constrained
+    background: rgba(0, 0, 0, 0.25);
 }
 
 .sloganItem {
@@ -59,6 +70,26 @@
     pointer-events: auto;
     // Ensure item has its own stacking context if needed
     position: relative;
+    box-sizing: border-box;
+
+    // Full Height Tint as requested
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+
+    // Vertical Positioning Adjustment
+    // Center logic: Padding + (100 - Padding)/2 = Goal%
+    // Goal: 60% from top (40% from bottom) -> Padding = 20vh
+    // Applied consistently across mobile/desktop as requested.
+    padding-top: 20vh;
+
+    padding-top: 20vh;
+}
+
+// Explicit Sticky Class for Last Item
+.stickyItem {
+    position: sticky;
+    top: 0;
+    z-index: 20; // High z-index to overlay buffer if needed
 }
 
 .sloganContent {
@@ -67,6 +98,7 @@
     text-align: center;
     color: #fff;
     will-change: transform, opacity;
+    // Removed box styling (background/border-radius) as it's now full height
     
     @include mobile {
         padding: 0 20px;

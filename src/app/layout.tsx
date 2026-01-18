@@ -72,7 +72,9 @@ export default function RootLayout({
             <main style={{ backgroundColor: "#1d1d1f", minHeight: "100dvh" }}>
               {children}
             </main>
-            <Footer />
+            <div id="contact" style={{ scrollMarginTop: "100px" }}>
+              <Footer />
+            </div>
           </SmoothScroll>
         </TransitionProvider>
       </body>

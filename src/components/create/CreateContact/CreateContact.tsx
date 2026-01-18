@@ -10,7 +10,7 @@ export default function CreateContact() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [message, setMessage] = useState("");
   const [captchaToken, setCaptchaToken] = useState<string | null>(
-    process.env.NODE_ENV === "development" ? "dev_bypass" : null
+    process.env.NODE_ENV === "development" ? "dev_bypass" : null,
   );
   const [analysis, setAnalysis] = useState<{
     title?: string;
@@ -110,7 +110,7 @@ export default function CreateContact() {
         setManualForm({ name: "", email: "", business: "" });
         // Reset token
         setCaptchaToken(
-          process.env.NODE_ENV === "development" ? "dev_bypass" : null
+          process.env.NODE_ENV === "development" ? "dev_bypass" : null,
         );
       } else {
         alert(data.error || "Failed to send message.");
@@ -242,14 +242,46 @@ export default function CreateContact() {
             <div
               style={{ display: activeTab === "smart" ? "contents" : "none" }}
             >
-              <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
+              <div
+                className={`${styles.inputGroup} ${styles.fullWidth} ${styles.smartInputWrapper}`}
+              >
                 <label>Your Website / Social Link</label>
-                <input
-                  type="text"
-                  placeholder="e.g. yourwebsite.com"
-                  onBlur={(e) => handleUrlAnalyze(e.target.value)}
-                  autoFocus
-                />
+                <div className={styles.inputWithAction}>
+                  <input
+                    type="text"
+                    placeholder="e.g. yourwebsite.com"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        const target = e.target as HTMLInputElement;
+                        handleUrlAnalyze(target.value);
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className={styles.analyzeBtn}
+                    onClick={(e) => {
+                      const input = e.currentTarget
+                        .previousElementSibling as HTMLInputElement;
+                      handleUrlAnalyze(input.value);
+                    }}
+                    disabled={isAnalyzing}
+                  >
+                    {isAnalyzing ? (
+                      <span className={styles.loaderSpinner} />
+                    ) : (
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
 

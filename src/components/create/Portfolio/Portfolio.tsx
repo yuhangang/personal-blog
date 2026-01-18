@@ -50,7 +50,7 @@ export default function Portfolio() {
   }, []);
 
   return (
-    <section className={styles.section}>
+    <section id="projects" className={styles.section}>
       <div className={styles.header}>
         <span className={styles.headerLabel}>yuhangang</span>
         <h2 className={styles.headerTitle}>
@@ -100,8 +100,8 @@ export default function Portfolio() {
             );
           })}
 
-          {/* CTA Sidebar - Now part of the flow */}
-          <div className={styles.ctaSidebar}>
+          {/* CTA Sidebar - Desktop Only (In Scroll) */}
+          <div className={`${styles.ctaSidebar} ${styles.desktopOnly}`}>
             {/* Animated gradient blobs */}
             <div className={styles.gradientBg}>
               <div className={styles.gradientBlob1} />
@@ -137,6 +137,46 @@ export default function Portfolio() {
               </div>
             </a>
           </div>
+        </div>
+      </div>
+
+      {/* CTA Sidebar - Mobile Only (Below Scroll) */}
+      <div className={`${styles.ctaSectionMobile} ${styles.mobileOnly}`}>
+        <div className={styles.ctaSidebar}>
+          {/* Animated gradient blobs */}
+          <div className={styles.gradientBg}>
+            <div className={styles.gradientBlob1} />
+            <div className={styles.gradientBlob2} />
+            <div className={styles.gradientBlob3} />
+          </div>
+
+          <a href="#contact" className={styles.ctaCard}>
+            <div className={styles.ctaContent}>
+              <span className={styles.ctaLabel}>Open for partnerships</span>
+              <h3 className={styles.ctaTitle}>
+                You could
+                <br />
+                be next.
+              </h3>
+              <p className={styles.ctaDesc}>
+                Looking for collaborations, agency partnerships, and exciting
+                projects. Let&apos;s build something remarkable together.
+              </p>
+              <div className={styles.ctaArrow}>
+                <span>Get in touch</span>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </a>
         </div>
       </div>
     </section>

@@ -95,3 +95,12 @@
     color: rgba(255, 255, 255, 0.5);
     padding-top: $spacing-md;
 }
+
+.wipRemark {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.05em;
+    font-style: italic;
+    margin-bottom: 8px;
+}
