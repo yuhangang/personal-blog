@@ -1,30 +1,47 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { MotionValue, useScroll, useTransform, motion } from "framer-motion";
 import styles from "./SloganScroll.module.scss";
+import { AlternateTitle } from "./sloganConfig";
 
 interface Props {
   title: string;
+  alternateTitles: AlternateTitle[]; // Required for this component
   desc: string;
   index: number;
   setActiveIndex: (i: number) => void;
+  isLast?: boolean;
+  listProgress?: MotionValue<number>;
+  totalCount?: number;
 }
 
-export default function SloganItem({
-  title,
+export default function IdentitySloganItem({
+  // title prop ignored as "Your" is static
+  alternateTitles,
   desc,
   index,
   setActiveIndex,
   isLast,
   listProgress,
   totalCount,
-}: Props & {
-  isLast?: boolean;
-  listProgress?: MotionValue<number>;
-  totalCount?: number;
-}) {
+}: Props) {
   const ref = useRef<HTMLDivElement>(null);
+
+  // Title Cycling Logic
+  const [titleIndex, setTitleIndex] = useState(0);
+
+  useEffect(() => {
+    // Uniform Rotation: Cycle continuously
+    const interval = setInterval(() => {
+      setTitleIndex((prev) => (prev + 1) % alternateTitles.length);
+    }, 100); // 0.1s hyper-fast glitch speed
+
+    return () => clearInterval(interval);
+  }, [alternateTitles]);
+
+  // Use current alternate title
+  const currentTitleObj = alternateTitles[titleIndex];
 
   // Standard Scroll Progress (Item-relative) - Used for non-sticky items
   const { scrollYProgress: itemProgress } = useScroll({
@@ -96,7 +113,34 @@ export default function SloganItem({
           ({String(index + 1).padStart(2, "0")})
         </span>
 
-        <h2 className={styles.sloganTitle}>{title}</h2>
+        {/* Animated Title Switcher (Reserved height to prevent jumping) */}
+        {/* Animated Title Switcher */}
+        <div className={styles.identityWrapper}>
+          {/* Static "Your" */}
+          <h2 className={`${styles.sloganTitle} ${styles.identityStatic}`}>
+            Your
+          </h2>
+
+          {/* Dynamic "Identity" */}
+          <h2
+            className={`${styles.sloganTitle} ${styles.identityDynamic}`}
+            style={{
+              color: currentTitleObj.color,
+              fontFamily: currentTitleObj.fontFamily,
+              lineHeight: currentTitleObj.lineHeight || "1.0",
+              fontWeight: currentTitleObj.lang === "jv" ? 700 : 600,
+              direction: currentTitleObj.lang === "jv" ? "rtl" : "ltr",
+              fontSize:
+                currentTitleObj.lang === "ta"
+                  ? "clamp(4.5rem, 9vw, 8rem)"
+                  : currentTitleObj.lang === "jv"
+                    ? "clamp(4.5rem, 10vw, 9rem)"
+                    : "clamp(5.5rem, 13vw, 12rem)", // Increased base size for mobile impact
+            }}
+          >
+            {currentTitleObj.text}
+          </h2>
+        </div>
 
         <p className={styles.sloganDesc}>{desc}</p>
       </motion.div>

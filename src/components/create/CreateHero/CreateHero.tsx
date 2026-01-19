@@ -2,8 +2,9 @@
 /* eslint-disable react-hooks/purity */
 "use client";
 
-import { useRef, useMemo, useEffect } from "react";
+import { useRef, useMemo, useEffect, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import * as THREE from "three";
 import styles from "./CreateHero.module.scss";
 import { useThreeOptimization } from "@/hooks/useThreeOptimization";
@@ -529,35 +530,41 @@ function SilkyBackgroundFlow() {
   );
 }
 
-// --- CIRCULAR BADGE ---
-function CircularBadge() {
-  return (
-    <div className={styles.badgeContainer}>
-      <svg
-        viewBox="0 0 100 100"
-        width="100"
-        height="100"
-        className={styles.badgeSvg}
-      >
-        <defs>
-          <path
-            id="circlePath"
-            d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"
-          />
-        </defs>
-        <text className={styles.badgeText}>
-          <textPath href="#circlePath" startOffset="0%">
-            SCROLL DOWN
-          </textPath>
-        </text>
-      </svg>
-      <div className={styles.badgeIcon}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M16.01 11H4v2h12.01v3L20 12l-3.99-4z" />
-        </svg>
-      </div>
-    </div>
-  );
+// --- CAMERA RIG ---
+function CameraRig({
+  scrollY,
+  windowHeight,
+}: {
+  scrollY: MotionValue<number>;
+  windowHeight: number;
+}) {
+  const { camera } = useThree();
+
+  useFrame(() => {
+    // 0 to 1 progress based on window height
+    const currentScroll = scrollY.get();
+    const progress = Math.min(1, Math.max(0, currentScroll / windowHeight));
+
+    // Zoom: 2.0 -> 1.43 (Approx 1.4x scale)
+    const targetZ = THREE.MathUtils.lerp(2.0, 1.43, progress);
+
+    // Shift Left (Camera Right): 0 -> 0.3 (Adjusted for visual feel)
+    // 15% of width is tricky in 3D, tuning by eye. 0.3 units is significant float drift.
+    // Previous "15%" on screen is roughly 0.6 units in world space at Z=2.
+    const targetX = THREE.MathUtils.lerp(0, 0.6, progress);
+
+    // Shift Down (Camera Up): 0 -> 0.35
+    const targetY = THREE.MathUtils.lerp(0, 0.35, progress);
+
+    camera.position.set(targetX, targetY, targetZ);
+    camera.lookAt(targetX, targetY, 0); // Look straight ahead relative to new pos?
+    // Actually, simple panning keeps lookAt parallel usually.
+    // If we just move position, the perspective shifts.
+    // If we want "2D Pan", we move position.
+    // camera.position.z is updated, so we just set it.
+  });
+
+  return null;
 }
 
 export default function CreateHero() {
@@ -567,44 +574,33 @@ export default function CreateHero() {
   const contentRef = useRef<HTMLDivElement>(null!);
   const frameloop = useThreeOptimization(containerRef);
 
-  // Scroll Dimming Logic
+  // --- SCROLL ANIMATIONS (Framer Motion) ---
+  const { scrollY } = useScroll();
+
+  // Dynamic Window Height for accurate scroll mapping
+  const [windowHeight, setWindowHeight] = useState(1000); // Default fallback
+
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
+    // Avoid sync state update lint error and ensure window exists
+    requestAnimationFrame(() => {
+      setWindowHeight(window.innerHeight);
+    });
 
-      // 1. Canvas Background Fade (Slow)
-      // Start dimming at 70vh, fully dimmed at 250vh to keep particles visible through ServiceIntro
-      const startThreshold = windowHeight * 0.7;
-      const endThreshold = windowHeight * 2.5;
-
-      let bgOpacity = 0;
-      if (scrollY > startThreshold) {
-        bgOpacity = Math.min(
-          1,
-          (scrollY - startThreshold) / (endThreshold - startThreshold),
-        );
-      }
-      if (dimOverlayRef.current) {
-        dimOverlayRef.current.style.opacity = bgOpacity.toString();
-      }
-
-      // 2. Content Title/Text Fade (Fast)
-      // Fade out completely by 70vh (when ServiceIntro starts appearing)
-      if (contentRef.current) {
-        const textFadeEnd = windowHeight * 0.7;
-        const textOpacity = Math.max(0, 1 - scrollY / textFadeEnd);
-        contentRef.current.style.opacity = textOpacity.toString();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    const handleResize = () => setWindowHeight(window.innerHeight);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Opacity Effects (Visuals)
+  // Dim overlay: 70vh start -> 250vh end
+  const dimOpacity = useTransform(
+    scrollY,
+    [windowHeight * 0.7, windowHeight * 2.5],
+    [0, 1],
+  );
+
+  // Text Fade: 0 -> 70vh
+  const textOpacity = useTransform(scrollY, [0, windowHeight * 0.7], [1, 0]);
 
   return (
     <section
@@ -615,9 +611,14 @@ export default function CreateHero() {
       <div
         className={styles.canvasContainer}
         aria-hidden="true"
-        style={{ background: "#000000" }}
+        style={{
+          background: "#000000",
+        }}
       >
         <Canvas camera={{ position: [0, 0, 2], fov: 60 }} frameloop={frameloop}>
+          {/* Camera Animation Rig */}
+          <CameraRig scrollY={scrollY} windowHeight={windowHeight} />
+
           {/* RiverBed removed to fix transparency mismatch with shader fade */}
           {/* <RiverBed /> */}
           <SilkyBackgroundFlow />
@@ -626,13 +627,13 @@ export default function CreateHero() {
       </div>
 
       {/* Black overlay that fades IN on scroll for true "fade to black" effect */}
-      <div
+      <motion.div
         ref={dimOverlayRef}
         style={{
           position: "absolute",
           inset: 0,
           backgroundColor: "#000000",
-          opacity: 0,
+          opacity: dimOpacity,
           pointerEvents: "none",
           zIndex: 5,
         }}
@@ -642,7 +643,11 @@ export default function CreateHero() {
       {/* Top Scrim for Navbar Contrast */}
       <div className={styles.topScrim} aria-hidden="true" />
 
-      <div className={styles.overlay} ref={contentRef}>
+      <motion.div
+        className={styles.overlay}
+        ref={contentRef}
+        style={{ opacity: textOpacity }}
+      >
         {/* HERO TITLE (Moved to Top) */}
         <div className={styles.bottomHero}>
           <h1 className={styles.title}>
@@ -660,7 +665,7 @@ export default function CreateHero() {
             with premium design.
           </p>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

@@ -9,7 +9,7 @@
     width: 100%;
     height: 100%;
     z-index: -1;
-    opacity: 0.15; // Subtle texture
+    opacity: 0.5; // Subtle texture
     pointer-events: none;
     overflow: hidden;
     filter: brightness(0.7) contrast(1.2); 
@@ -50,13 +50,11 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    position: sticky;
-    top: 140px;
+    position: relative; // Removed sticky
     height: fit-content;
     z-index: 2;
 
     @include mobile {
-        position: relative;
         top: 0;
     }
 }
@@ -523,47 +521,146 @@
     }
 }
 
+// --- BUTTON CONTAINER ---
+.buttonWrapper {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end; // Align to bottom right
+    padding-top: 24px;
+
+    @include mobile {
+        justify-content: center;
+    }
+}
+
 .submitBtn {
-    margin-top: 40px;
-    width: 100%;
-    padding: 18px;
+    width: fit-content;
+    min-width: 200px; // Slightly larger min-width
+    padding: 20px 60px; // Larger padding
     text-align: center;
-    border: none;
     border-radius: 100px;
-    background: #ffffff;
+    
+    // Frosted Glass Effect
+    background: rgba(255, 255, 255, 0.05); // Slightly stronger base
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    
     font-family: var(--font-sans);
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #000000;
+    font-size: 1rem; // Larger font
+    font-weight: 500;
+    color: #ffffff;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.15em; // More spacing
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     position: relative;
     overflow: hidden;
 
     &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 30px -5px rgba(255,255,255,0.3);
+        transform: translateY(-4px) scale(1.02); // More pronounced lift
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.3);
+        box-shadow: 0 15px 40px -10px rgba(255,255,255,0.15);
+    }
+    
+    &:active {
+        transform: translateY(-1px);
     }
     
     &:disabled {
-        opacity: 0.7;
+        opacity: 0.5;
         cursor: not-allowed;
+        transform: none;
+    }
+
+    @include mobile {
+        width: 100%;
     }
 }
 
-.analyzing {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.9rem;
-    font-style: italic;
-    animation: pulse 1.5s infinite;
-    text-align: center;
-    margin-top: 20px;
+// --- VALIDATION & ERROR STYLES ---
+.errorInput {
+    border-color: #ff5e57 !important;
+    background: rgba(255, 94, 87, 0.05) !important;
 }
 
-@keyframes pulse {
-    0% { opacity: 0.5; }
-    50% { opacity: 1; }
-    100% { opacity: 0.5; }
+.errorMessage {
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    color: #ff5e57;
+    font-size: 0.75rem;
+    font-family: var(--font-sans);
+    letter-spacing: 0.05em;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+// --- SUCCESS STATE ---
+.successContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    text-align: center;
+    animation: fadeIn 0.8s ease;
+}
+
+.successIcon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 24px;
+    color: #4cd964;
+    border: 2px solid #4cd964;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    svg {
+        width: 32px;
+        height: 32px;
+        stroke-width: 2.5;
+    }
+}
+
+.successTitle {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    margin-bottom: 16px;
+    color: #ffffff;
+}
+
+.successText {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.6;
+    max-width: 400px;
+    margin: 0 auto 40px;
+}
+
+.resetBtn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 12px 32px;
+    border-radius: 100px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: #ffffff;
+        color: #ffffff;
+    }
 }

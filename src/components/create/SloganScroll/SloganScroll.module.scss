@@ -53,10 +53,8 @@
     // Add padding to ensure first and last items can be centered
     // Add padding to ensure first and last items can be centered
     padding: 0; 
-    padding-top: 50vh; // Push first item down significantly (half screen) to ensure pitch black BG
-    // Add buffer at the end so the last text item can scroll completely off-screen
-    // while the sticky visual remains pinned. This creates the "unstick only after text disappears" effect.
-    padding-bottom: 100vh;
+    padding-top: 20vh;
+    padding-bottom: 80vh; // Increased buffer to allow natural scroll past last item
     overflow: visible; // Critical for sticky children to work if parent height is constrained
     background: rgba(0, 0, 0, 0.25);
 }
@@ -94,6 +92,7 @@
 
 .sloganContent {
     max-width: 1000px;
+    width: 100%; // Fix horizontal jitter by forcing full width
     padding: 0 40px;
     text-align: center;
     color: #fff;
@@ -126,7 +125,7 @@
     // Optional: add a subtle gradient or texture
     color: #fff;
     // Softer shadow as requested (glow instead of outline)
-    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 20px rgba(0,0,0,0.1);
 }
 
 .sloganDesc {
@@ -139,4 +138,61 @@
     text-shadow: 0 2px 10px rgba(0,0,0,0.4);
 }
 
+// --- IDENTITY ITEM SPECIFIC CLASSES ---
+.identityWrapper {
+    position: relative;
+    height: clamp(5rem, 15vw, 15rem);
+    margin-bottom: 32px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); // Strict 50/50 split
+    align-items: center;
+    gap: 2rem;
 
+    @include mobile {
+        // Vertical Grid for Mobile stability
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr; 
+        height: 60vh; // Fixed height to prevent vertical jitter
+        gap: 0; 
+        margin-bottom: 0;
+        padding: 0;
+        align-items: stretch; // Allow cells to fill height
+    }
+}
+
+.identityStatic {
+    margin: 0;
+    text-align: right;
+    color: #fff;
+    font-family: var(--font-serif);
+    line-height: 1.0;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: clamp(4.5rem, 11vw, 11rem);
+
+    @include mobile {
+        text-align: center;
+        align-self: end; // Pin to bottom of top cell
+        font-size: 3rem; // Mobile static size
+        line-height: 0.9;
+        padding-bottom: 0px; // Minimal gap
+    }
+}
+
+.identityDynamic {
+    margin: 0;
+    text-align: left;
+    white-space: nowrap;
+    // Color/Font/Size handled inline due to dynamic nature
+    
+    @include mobile {
+        text-align: center;
+        width: 100%;
+        display: flex;       // Needed to center text in div if it wraps or just for alignment
+        justify-content: center;
+        align-items: flex-start; // Pin to top of bottom cell
+        align-self: start;
+        padding-top: 0px; // Minimal gap
+    }
+}

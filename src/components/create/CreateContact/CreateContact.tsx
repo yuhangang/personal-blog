@@ -1,191 +1,157 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import MessyThreads from "../../common/MessyThreads/MessyThreads";
 import styles from "./CreateContact.module.scss";
 
 import Turnstile from "../../common/Turnstile/Turnstile";
 
 export default function CreateContact() {
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [message, setMessage] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    website: "",
+    business: "",
+    message: "",
+  });
+
+  const [status, setStatus] = useState<
+    "idle" | "submitting" | "success" | "error"
+  >("idle");
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
   const [captchaToken, setCaptchaToken] = useState<string | null>(
     process.env.NODE_ENV === "development" ? "dev_bypass" : null,
   );
-  const [analysis, setAnalysis] = useState<{
-    title?: string;
-    description?: string;
-    image?: string;
-    suggestion?: string;
-    critique?: string;
-    plan?: string[];
-  } | null>(null);
 
-  const handleUrlAnalyze = async (url: string) => {
-    if (!url || url.length < 4) return;
+  // Refs for navigation
+  const emailRef = useRef<HTMLInputElement>(null);
+  const websiteRef = useRef<HTMLInputElement>(null);
+  const businessRef = useRef<HTMLInputElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
 
-    // Require Captcha
-    if (!captchaToken) {
-      alert("Please complete the verification check first.");
-      return;
+  const validateField = (name: string, value: string) => {
+    if (name === "name" && !value.trim()) return "Name is required";
+    if (name === "email") {
+      if (!value.trim()) return "Email is required";
+      if (!/^\S+@\S+\.\S+$/.test(value)) return "Please enter a valid email";
     }
+    if (name === "message" && !value.trim()) return "Message is required";
+    return "";
+  };
 
-    setIsAnalyzing(true);
-    setAnalysis(null);
-
-    try {
-      const res = await fetch("/api/analyze-url", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url, token: captchaToken }),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        if (data.title || data.suggestion) {
-          setAnalysis(data);
-        }
+  const handleKeyDown = (
+    e: React.KeyboardEvent,
+    fieldName: string,
+    nextRef: React.RefObject<HTMLElement | null>,
+  ) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const error = validateField(
+        fieldName,
+        formData[fieldName as keyof typeof formData],
+      );
+      if (error) {
+        setErrors((prev) => ({ ...prev, [fieldName]: error }));
       } else {
-        const errData = await res.json();
-        alert(errData.error || "Analysis failed");
+        setErrors((prev) => ({ ...prev, [fieldName]: "" }));
+        nextRef.current?.focus();
       }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsAnalyzing(false);
     }
   };
 
-  const [activeTab, setActiveTab] = useState<"smart" | "manual">("smart");
-  const [manualForm, setManualForm] = useState({
-    name: "",
-    email: "",
-    business: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const validate = () => {
+    const newErrors: { [key: string]: string } = {};
+    const nameError = validateField("name", formData.name);
+    if (nameError) newErrors.name = nameError;
+    const emailError = validateField("email", formData.email);
+    if (emailError) newErrors.email = emailError;
+    const messageError = validateField("message", formData.message);
+    if (messageError) newErrors.message = messageError;
 
-  // Reset captcha on tab switch to prevent token reuse/confusion
-  const handleTabChange = (tab: "smart" | "manual") => {
-    setActiveTab(tab);
-    // Don't reset token to allow reuse across tabs
-    // setCaptchaToken(process.env.NODE_ENV === "development" ? "dev_bypass" : null);
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validate()) return;
 
     if (!captchaToken) {
       alert("Please complete the verification check.");
       return;
     }
 
-    setIsSubmitting(true);
+    setStatus("submitting");
+
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: manualForm.name,
-          email: manualForm.email,
-          business: manualForm.business,
-          message,
+          ...formData,
           token: captchaToken,
-          // Include AI analysis if available
-          analysis: analysis
-            ? {
-                title: analysis.title,
-                description: analysis.description,
-                critique: analysis.critique,
-                plan: analysis.plan,
-                suggestion: analysis.suggestion,
-              }
-            : null,
         }),
       });
 
       const data = await res.json();
       if (res.ok) {
-        alert("Message sent! We'll be in touch.");
-        setMessage("");
-        setManualForm({ name: "", email: "", business: "" });
+        setStatus("success");
+        setFormData({
+          name: "",
+          email: "",
+          website: "",
+          business: "",
+          message: "",
+        });
         // Reset token
         setCaptchaToken(
           process.env.NODE_ENV === "development" ? "dev_bypass" : null,
         );
       } else {
+        setStatus("error");
         alert(data.error || "Failed to send message.");
       }
     } catch (error) {
       console.error(error);
+      setStatus("error");
       alert("An error occurred.");
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
-  // ... (keep handleUrlAnalyze)
-
-  const [chatHistory, setChatHistory] = useState<
-    Array<{ role: "user" | "agent"; content: string }>
-  >([]);
-  const [chatInput, setChatInput] = useState("");
-  const [isChatting, setIsChatting] = useState(false);
-
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!chatInput.trim() || !analysis) return;
-
-    const userMsg = chatInput;
-    setChatInput("");
-    setChatHistory((prev) => [...prev, { role: "user", content: userMsg }]);
-    setIsChatting(true);
-
-    try {
-      const res = await fetch("/api/agent-chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          currentAnalysis: analysis,
-          userMessage: userMsg,
-          chatHistory: chatHistory,
-        }),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-
-        // Add agent reply
-        if (data.reply) {
-          setChatHistory((prev) => [
-            ...prev,
-            { role: "agent", content: data.reply },
-          ]);
-        }
-
-        // Update analysis state if agent suggests changes
-        setAnalysis((prev) => {
-          if (!prev) return null;
-          return {
-            ...prev,
-            plan: data.updatedPlan || prev.plan,
-            suggestion: data.updatedSuggestion || prev.suggestion,
-            critique: data.updatedCritique || prev.critique,
-          };
-        });
-      }
-    } catch (err) {
-      console.error("Chat failed", err);
-    } finally {
-      setIsChatting(false);
-    }
-  };
-
-  const handleUseDraft = () => {
-    if (analysis?.suggestion) {
-      setMessage(analysis.suggestion);
-      setActiveTab("manual"); // Switch to manual tab to finish
-    }
-  };
+  if (status === "success") {
+    return (
+      <section className={styles.section} id="contact">
+        <div className={styles.container}>
+          <div className={`${styles.fullWidth} ${styles.successContainer}`}>
+            <div className={styles.successIcon}>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <h2 className={styles.successTitle}>Message Sent</h2>
+            <p className={styles.successText}>
+              Thank you for reaching out. We&apos;ve received your message and
+              will get back to you within 24-48 hours.
+            </p>
+            <button
+              className={styles.resetBtn}
+              onClick={() => setStatus("idle")}
+            >
+              Send Another Message
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className={styles.section} id="contact">
@@ -200,154 +166,96 @@ export default function CreateContact() {
               Ready to <em>elevate</em> your brand?
             </h2>
             <p className={styles.subhead}>
-              {activeTab === "smart"
-                ? "Let our AI agent draft the perfect inquiry for you. Just drop your link."
-                : "Tell us about your project. We're ready to listen."}
+              Tell us about your project. We&apos;re ready to listen.
             </p>
           </div>
         </div>
 
         {/* Right Column: Form */}
         <div className={styles.formColumn}>
-          <div className={styles.tabsHelpers}>
-            <button
-              className={`${styles.tabBtn} ${
-                activeTab === "smart" ? styles.active : ""
-              }`}
-              onClick={() => handleTabChange("smart")}
-            >
-              Your Desire
-            </button>
-            <button
-              className={`${styles.tabBtn} ${
-                activeTab === "manual" ? styles.active : ""
-              }`}
-              onClick={() => handleTabChange("manual")}
-            >
-              Contact
-            </button>
-          </div>
-
-          <form
-            className={styles.formGrid}
-            onSubmit={(e) => {
-              if (activeTab === "manual") {
-                handleContactSubmit(e);
-              } else {
-                e.preventDefault();
-              }
-            }}
-          >
-            {/* --- SMART TAB CONTENT --- */}
-            <div
-              style={{ display: activeTab === "smart" ? "contents" : "none" }}
-            >
-              <div
-                className={`${styles.inputGroup} ${styles.fullWidth} ${styles.smartInputWrapper}`}
-              >
-                <label>Your Website / Social Link</label>
-                <div className={styles.inputWithAction}>
-                  <input
-                    type="text"
-                    placeholder="e.g. yourwebsite.com"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        const target = e.target as HTMLInputElement;
-                        handleUrlAnalyze(target.value);
-                      }
-                    }}
-                  />
-                  <button
-                    type="button"
-                    className={styles.analyzeBtn}
-                    onClick={(e) => {
-                      const input = e.currentTarget
-                        .previousElementSibling as HTMLInputElement;
-                      handleUrlAnalyze(input.value);
-                    }}
-                    disabled={isAnalyzing}
-                  >
-                    {isAnalyzing ? (
-                      <span className={styles.loaderSpinner} />
-                    ) : (
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                      </svg>
-                    )}
-                  </button>
-                </div>
-              </div>
+          <form className={styles.formGrid} onSubmit={handleContactSubmit}>
+            <div className={styles.inputGroup}>
+              <label>Your Name *</label>
+              <input
+                type="text"
+                className={errors.name ? styles.errorInput : ""}
+                value={formData.name}
+                onChange={(e) => {
+                  setFormData({ ...formData, name: e.target.value });
+                  if (errors.name) setErrors({ ...errors, name: "" });
+                }}
+                onKeyDown={(e) => handleKeyDown(e, "name", emailRef)}
+              />
+              {errors.name && (
+                <span className={styles.errorMessage}>{errors.name}</span>
+              )}
             </div>
 
-            {/* --- MANUAL TAB CONTENT --- */}
-            <div
-              style={{ display: activeTab === "manual" ? "contents" : "none" }}
-            >
-              <div className={styles.inputGroup}>
-                <label>Your Name *</label>
-                <input
-                  type="text"
-                  required={activeTab === "manual"}
-                  value={manualForm.name}
-                  onChange={(e) =>
-                    setManualForm({ ...manualForm, name: e.target.value })
-                  }
-                />
-              </div>
+            <div className={styles.inputGroup}>
+              <label>Email *</label>
+              <input
+                ref={emailRef}
+                type="email"
+                className={errors.email ? styles.errorInput : ""}
+                value={formData.email}
+                onChange={(e) => {
+                  setFormData({ ...formData, email: e.target.value });
+                  if (errors.email) setErrors({ ...errors, email: "" });
+                }}
+                onKeyDown={(e) => handleKeyDown(e, "email", websiteRef)}
+              />
+              {errors.email && (
+                <span className={styles.errorMessage}>{errors.email}</span>
+              )}
+            </div>
 
-              <div className={styles.inputGroup}>
-                <label>Email *</label>
-                <input
-                  type="email"
-                  required={activeTab === "manual"}
-                  value={manualForm.email}
-                  onChange={(e) =>
-                    setManualForm({ ...manualForm, email: e.target.value })
-                  }
-                />
-              </div>
+            <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
+              <label>Your Website / Social Link</label>
+              <input
+                ref={websiteRef}
+                type="text"
+                value={formData.website}
+                placeholder="e.g. yourwebsite.com"
+                onChange={(e) =>
+                  setFormData({ ...formData, website: e.target.value })
+                }
+                onKeyDown={(e) => handleKeyDown(e, "website", businessRef)}
+              />
+            </div>
 
-              <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
-                <label>Your Business Name</label>
-                <input
-                  type="text"
-                  value={manualForm.business}
-                  onChange={(e) =>
-                    setManualForm({ ...manualForm, business: e.target.value })
-                  }
-                />
-              </div>
+            <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
+              <label>Your Business Name</label>
+              <input
+                ref={businessRef}
+                type="text"
+                value={formData.business}
+                onChange={(e) =>
+                  setFormData({ ...formData, business: e.target.value })
+                }
+                onKeyDown={(e) => handleKeyDown(e, "business", messageRef)}
+              />
+            </div>
 
-              <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
-                <label>Message *</label>
-                <textarea
-                  rows={4}
-                  required={activeTab === "manual"}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                />
-              </div>
+            <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
+              <label>Message *</label>
+              <textarea
+                ref={messageRef}
+                rows={4}
+                className={errors.message ? styles.errorInput : ""}
+                value={formData.message}
+                onChange={(e) => {
+                  setFormData({ ...formData, message: e.target.value });
+                  if (errors.message) setErrors({ ...errors, message: "" });
+                }}
+              />
+              {errors.message && (
+                <span className={styles.errorMessage}>{errors.message}</span>
+              )}
             </div>
 
             {/* --- SHARED TURNSTILE --- */}
-            {/* Always mounted in production, visibility toggled via CSS */}
             {process.env.NODE_ENV !== "development" && (
-              <div
-                className={styles.fullWidth}
-                style={{
-                  marginTop: activeTab === "smart" ? "16px" : "0px",
-                  display:
-                    activeTab === "smart" && (isAnalyzing || analysis)
-                      ? "none"
-                      : "block",
-                }}
-              >
+              <div className={styles.fullWidth} style={{ marginTop: "16px" }}>
                 <Turnstile
                   siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
                   onVerify={(token) => setCaptchaToken(token)}
@@ -355,122 +263,14 @@ export default function CreateContact() {
               </div>
             )}
 
-            {/* --- SMART TAB RESULTS --- */}
-            <div
-              style={{ display: activeTab === "smart" ? "contents" : "none" }}
-            >
-              <div className={styles.fullWidth}>
-                {isAnalyzing && (
-                  <div className={styles.analyzing}>
-                    Agent is analyzing your brand...
-                  </div>
-                )}
-
-                {analysis && (
-                  <div className={styles.agentCard}>
-                    <div className={styles.agentHeader}>
-                      <span className={styles.agentLabel}>STRATEGIC AUDIT</span>
-                      {analysis.image && (
-                        <img
-                          src={analysis.image}
-                          alt=""
-                          className={styles.agentImage}
-                        />
-                      )}
-                    </div>
-                    <p className={styles.agentTitle}>{analysis.title}</p>
-                    <p className={styles.agentDesc}>{analysis.description}</p>
-
-                    {analysis.critique && (
-                      <div className={styles.critiqueBox}>
-                        <span className={styles.verdictLabel}>VERDICT:</span>
-                        <p>&quot;{analysis.critique}&quot;</p>
-                      </div>
-                    )}
-
-                    {analysis.plan && (
-                      <div className={styles.planBox}>
-                        <span className={styles.planLabel}>GROWTH PLAN</span>
-                        <ul>
-                          {analysis.plan.map((step, i) => (
-                            <li key={i}>{step}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    <div className={styles.suggestionBox}>
-                      <label>Drafted Inquiry:</label>
-                      <p>&quot;{analysis.suggestion}&quot;</p>
-                      <button
-                        type="button"
-                        className={styles.useBtn}
-                        onClick={handleUseDraft}
-                      >
-                        Use this Plan
-                      </button>
-                    </div>
-
-                    {/* CHAT INTERFACE */}
-                    <div className={styles.chatContainer}>
-                      <div className={styles.chatMessages}>
-                        {chatHistory.map((msg, i) => (
-                          <div
-                            key={i}
-                            className={`${styles.chatBubble} ${
-                              msg.role === "user" ? styles.user : styles.agent
-                            }`}
-                          >
-                            {msg.content}
-                          </div>
-                        ))}
-                        {isChatting && (
-                          <div
-                            className={`${styles.chatBubble} ${styles.agent}`}
-                          >
-                            Thinking...
-                          </div>
-                        )}
-                      </div>
-                      <form
-                        onSubmit={handleSendMessage}
-                        className={styles.chatInputGroup}
-                      >
-                        <input
-                          type="text"
-                          placeholder="Refine plan (e.g. 'Make it more punchy')"
-                          value={chatInput}
-                          onChange={(e) => setChatInput(e.target.value)}
-                          disabled={isChatting}
-                        />
-                        <button
-                          type="submit"
-                          disabled={!chatInput.trim() || isChatting}
-                        >
-                          <svg viewBox="0 0 24 24">
-                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-                          </svg>
-                        </button>
-                      </form>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* --- MANUAL TAB SUBMIT --- */}
-            <div
-              style={{ display: activeTab === "manual" ? "contents" : "none" }}
-            >
-              <div className={styles.fullWidth}>
-                <button
-                  type="submit"
-                  className={styles.submitBtn}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "SENDING..." : "SEND"}
-                </button>
-              </div>
+            <div className={styles.buttonWrapper}>
+              <button
+                type="submit"
+                className={styles.submitBtn}
+                disabled={status === "submitting"}
+              >
+                {status === "submitting" ? "SENDING..." : "SEND"}
+              </button>
             </div>
           </form>
         </div>

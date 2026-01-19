@@ -2,7 +2,7 @@ export const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Create", href: "/create" },
-  { label: "Contact", href: "#contact" }, // Anchor link (requires id="contact" on page or footer)
+  { label: "Contact", href: "/#contact" }, // Universal anchor link
 ] as const;
 
 export const FOOTER_LINKS = [

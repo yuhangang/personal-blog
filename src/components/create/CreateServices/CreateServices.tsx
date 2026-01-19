@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import styles from "./CreateServices.module.scss";
 
 const SERVICES = [
@@ -67,22 +66,6 @@ export default function CreateServices() {
                 </div>
               );
             })}
-          </div>
-
-          <div className={styles.cta}>
-            <Link href="#contact" className={styles.ctaLink}>
-              <span>Ready to amplify your story?</span>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M7 17L17 7M17 7H7M17 7V17" />
-              </svg>
-            </Link>
           </div>
         </div>
       </div>

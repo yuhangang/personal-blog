@@ -6,6 +6,7 @@ import styles from "./SloganScroll.module.scss";
 
 import SloganVisuals from "./SloganVisuals";
 import SloganItem from "./SloganItem";
+import IdentitySloganItem from "./IdentitySloganItem";
 import { SLOGAN_ITEMS } from "./sloganConfig";
 import { useScroll } from "framer-motion";
 
@@ -60,19 +61,21 @@ export default function SloganScroll() {
       const listTop = listRect.top;
       const listBottom = listRect.bottom;
 
-      if (viewportCenter < listTop || viewportCenter > listBottom) return;
-
       // MOMENTUM CHECK:
-      // If the scroll is still carrying significant momentum, do not snap yet.
       if (Math.abs(lenis.velocity) > 0.5) return;
 
-      let closestItem: Element | null = null;
+      if (viewportCenter < listTop || viewportCenter > listBottom) return;
+
+      // EXIT CHECK:
+      // Leave more room at the end for natural scrolling
+      if (listBottom < viewportHeight * 1.1) return;
+
+      let closestItem: HTMLElement | null = null;
       let minDistance = Infinity;
 
-      items.forEach((item) => {
+      items.forEach((node) => {
+        const item = node as HTMLElement;
         const rect = item.getBoundingClientRect();
-        // Snap target: Align container center to viewport center.
-        // SloganItem is 100vh, so this means full alignment.
         const itemCenter = rect.top + rect.height / 2;
         const distance = Math.abs(itemCenter - viewportCenter);
 
@@ -82,11 +85,16 @@ export default function SloganScroll() {
         }
       });
 
-      if (closestItem) {
-        // ALWAYS SNAP if we are in the zone.
-        lenis.scrollTo(closestItem as HTMLElement, {
+      // ONLY SNAP IF VERY CLOSE
+      // Threshold 0.25 creates a "dead zone" between items where you can free-scroll
+      if (closestItem && minDistance < viewportHeight * 0.25) {
+        const item = closestItem as HTMLElement;
+
+        // Sticky Trap Guard Removed
+
+        lenis.scrollTo(item, {
           offset: 0,
-          duration: 1.2,
+          duration: 0.8,
           lock: false,
           easing: (t) =>
             t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2,
@@ -172,18 +180,45 @@ export default function SloganScroll() {
         {/* LEFT: SLOGANS (SCROLLING) */}
         <div className={styles.sloganList} ref={listRef}>
           {SLOGAN_ITEMS.map(
-            (feature: { title: string; desc: string }, i: number) => (
-              <SloganItem
-                key={i}
-                index={i}
-                title={feature.title}
-                desc={feature.desc}
-                setActiveIndex={setActiveIndex}
-                isLast={i === SLOGAN_ITEMS.length - 1}
-                listProgress={listProgress}
-                totalCount={SLOGAN_ITEMS.length}
-              />
-            ),
+            (
+              feature: {
+                title: string;
+                desc: string;
+                alternateTitles?: { text: string; lang: string }[];
+              },
+              i: number,
+            ) => {
+              // Conditional Render: Use IdentityComponent if it has alternate titles
+              if (feature.alternateTitles) {
+                return (
+                  <IdentitySloganItem
+                    key={i}
+                    index={i}
+                    title={feature.title}
+                    alternateTitles={feature.alternateTitles}
+                    desc={feature.desc}
+                    setActiveIndex={setActiveIndex}
+                    isLast={i === SLOGAN_ITEMS.length - 1}
+                    // Since it replaces the first item, it likely won't be the last, but keep prop for safety
+                    listProgress={listProgress}
+                    totalCount={SLOGAN_ITEMS.length}
+                  />
+                );
+              }
+
+              return (
+                <SloganItem
+                  key={i}
+                  index={i}
+                  title={feature.title}
+                  desc={feature.desc}
+                  setActiveIndex={setActiveIndex}
+                  isLast={i === SLOGAN_ITEMS.length - 1}
+                  listProgress={listProgress}
+                  totalCount={SLOGAN_ITEMS.length}
+                />
+              );
+            },
           )}
         </div>
 
