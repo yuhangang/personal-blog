@@ -90,6 +90,21 @@
     z-index: 20; // High z-index to overlay buffer if needed
 }
 
+// Sticky First Item (Static Hero)
+.stickyFirst {
+    position: sticky;
+    top: 0;
+    z-index: 1; // Low z-index so subsequent items slide OVER it
+    padding-top: 0 !important; // Override default padding to force true center
+}
+
+.identityTrack {
+    height: 150vh; // 100vh visible + 50vh scroll buffer
+    width: 100%;
+    position: relative;
+    // Ensure the track takes up space in the flow
+}
+
 .sloganContent {
     max-width: 1000px;
     width: 100%; // Fix horizontal jitter by forcing full width

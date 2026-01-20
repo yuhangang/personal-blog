@@ -86,8 +86,8 @@ export default function SloganScroll() {
       });
 
       // ONLY SNAP IF VERY CLOSE
-      // Threshold 0.25 creates a "dead zone" between items where you can free-scroll
-      if (closestItem && minDistance < viewportHeight * 0.25) {
+      // Threshold 0.1 creates a smaller "magnet zone" so users don't get stuck
+      if (closestItem && minDistance < viewportHeight * 0.1) {
         const item = closestItem as HTMLElement;
 
         // Sticky Trap Guard Removed
@@ -198,6 +198,7 @@ export default function SloganScroll() {
                     alternateTitles={feature.alternateTitles}
                     desc={feature.desc}
                     setActiveIndex={setActiveIndex}
+                    isFirst={i === 0}
                     isLast={i === SLOGAN_ITEMS.length - 1}
                     // Since it replaces the first item, it likely won't be the last, but keep prop for safety
                     listProgress={listProgress}
