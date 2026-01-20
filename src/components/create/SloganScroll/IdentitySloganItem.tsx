@@ -197,7 +197,7 @@ export default function IdentitySloganItem({
                 ? "clamp(4.5rem, 9vw, 8rem)"
                 : currentTitleObj.lang === "jv"
                   ? "clamp(4.5rem, 10vw, 9rem)"
-                  : "clamp(5.5rem, 13vw, 12rem)", // Increased base size for mobile impact
+                  : "clamp(5rem, 13vw, 12rem)", // Larger than "Your" (4rem)
           }}
         >
           {currentTitleObj.text}

@@ -24,7 +24,8 @@ export default function ServiceIntro() {
 
   // Parallax Y: Move content slightly slower than scroll (or counter-move)
   // Mapping scroll progress to a vertical shift
-  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+  // Reduced range to prevent content from shifting out of the viewport
+  const y = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
 
   return (
     <section ref={sectionRef} className={styles.section}>

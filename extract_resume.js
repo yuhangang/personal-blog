@@ -3,7 +3,7 @@ const pdfParse = require('pdf-parse');
 
 console.log('Exports:', JSON.stringify(pdfParse, null, 2));
 
-let dataBuffer = fs.readFileSync('public/resume.pdf');
+let dataBuffer = fs.readFileSync('public/resume_yuhangang.pdf');
 
 if (typeof pdfParse === 'function') {
     pdfParse(dataBuffer).then(function (data) {

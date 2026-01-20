@@ -168,11 +168,12 @@
         // Vertical Grid for Mobile stability
         grid-template-columns: 1fr;
         grid-template-rows: 1fr 1fr; 
-        height: 60vh; // Fixed height to prevent vertical jitter
+        height: 35vh; // Fixed compact height to prevent jitter
         gap: 0; 
         margin-bottom: 0;
         padding: 0;
-        align-items: stretch; // Allow cells to fill height
+        align-items: center;
+        justify-content: center;
     }
 }
 
@@ -188,10 +189,11 @@
 
     @include mobile {
         text-align: center;
-        align-self: end; // Pin to bottom of top cell
-        font-size: 3rem; // Mobile static size
+        align-self: end; // Bottom of top cell
+        padding-bottom: 0.5rem; // Slight gap
+        font-size: 4rem; 
         line-height: 0.9;
-        padding-bottom: 0px; // Minimal gap
+        margin-bottom: 0;
     }
 }
 
@@ -204,10 +206,10 @@
     @include mobile {
         text-align: center;
         width: 100%;
-        display: flex;       // Needed to center text in div if it wraps or just for alignment
+        display: flex;       
         justify-content: center;
-        align-items: flex-start; // Pin to top of bottom cell
+        align-items: flex-start; // Top of bottom cell
+        padding-top: 0.5rem; 
         align-self: start;
-        padding-top: 0px; // Minimal gap
     }
 }

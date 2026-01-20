@@ -34,111 +34,113 @@
     mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
 }
 
-.grid {
+// --- IDENTITY ITEM STYLES (Adapted for Home) ---
+.identityWrapper {
     position: relative;
-    z-index: 2;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px; // Slightly larger gap for clarity
-    max-width: 1300px; // Larger grid for desktop
-    margin: 0 auto;
+    height: clamp(5rem, 15vw, 15rem);
     width: 100%;
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); // Strict 50/50 split
+    align-items: center;
+    gap: 2rem;
+    z-index: 10; // Above visuals
 
     @include mobile {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        // Vertical Grid for Mobile stability
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr; 
+        height: 35vh; // Fixed compact height to prevent jitter
+        gap: 0; 
+        margin-bottom: 0;
+        padding: 0;
+        align-items: center;
+        justify-content: center;
     }
 }
 
-.card {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
-    padding: 32px 28px; // Larger padding
-    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    cursor: pointer;
-    min-height: 240px; // Larger items
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    opacity: 0.3;
-    transform: scale(0.95);
+.identityStatic {
+    margin: 0;
+    text-align: right;
+    color: #fff;
+    font-family: var(--font-serif);
+    line-height: 1.0;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: clamp(4.5rem, 11vw, 11rem);
 
     @include mobile {
-        min-height: 140px;
-        padding: 16px;
-    }
-
-    &.active {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.2);
-        opacity: 1;
-        transform: scale(1) translateY(-4px);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+        text-align: center;
+        align-self: end; // Bottom of top cell
+        padding-bottom: 0.5rem; // Slight gap
+        font-size: 4rem; 
+        line-height: 0.9;
+        margin-bottom: 0;
     }
 }
 
-// Distinguished CTA Card - Refined Design (No Frost Glass)
-.ctaCard {
-    background: #0a0a0a72 !important; // Solid` very dark backdrop
-    backdrop-filter: none !important; // Explicitly remove blur
-    border: 2px solid rgba(30, 220, 170, 0.3) !important; // Soft Gombak Teal border
-    opacity: 1 !important;
-    transform: scale(1) !important;
-    box-shadow: 0 0 20px rgba(30, 220, 170, 0.05); // Very subtle teal glow
+.identityDynamic {
+    margin: 0;
+    text-align: left;
+    white-space: nowrap;
+    // Color/Font/Size handled inline due to dynamic nature
+    
+    @include mobile {
+        text-align: center;
+        width: 100%;
+        display: flex;       
+        justify-content: center;
+        align-items: flex-start; // Top of bottom cell
+        padding-top: 0.5rem; 
+        align-self: start;
+    }
+}
+
+.identityDesc {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    max-width: 600px;
+    margin-top: 2rem;
+    line-height: 1.6;
+    font-weight: 300;
+    
+    @include mobile {
+        font-size: 1.25rem; // Increased from 0.95rem
+        max-width: 90%;
+        margin-top: 2rem;
+        line-height: 1.5;
+    }
+}
+
+.exploreButton {
+    margin-top: 4rem;
+    padding: 1rem 3rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    z-index: 10;
+    font-size: 0.9rem;
 
     &:hover {
-        background: #0a0a0a94 !important;
-        border-color: rgba(30, 220, 170, 0.8) !important; // Brighten teal border
-        transform: translateY(-4px) scale(1.02) !important;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(30, 220, 170, 0.2) !important; // Intesify glow
-    }
-
-    .cardTitle {
-        opacity: 1 !important;
-        color: #1edcaa !important; // Teal title for contrast
-        text-shadow: 0 0 20px rgba(30, 220, 170, 0.4);
+        background: #fff;
+        color: #000;
+        border-color: #fff;
     }
 }
 
-.cardTitle {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 2.8rem; // Larger title
-    font-weight: 400;
-    margin-bottom: 16px;
-    line-height: 1.1;
-    color: #fff;
-    opacity: 0.7;
-    transition: all 0.3s ease;
-
-    .card:hover &,
-    .card.active &,
-    .ctaCard & {
-        opacity: 1;
-    }
-
-    @include mobile {
-        font-size: 1.5rem;
-    }
-}
-
-.cardDesc {
-    font-family: var(--font-sans);
-    font-size: 0.95rem;
-    color: rgba(255, 255, 255);
-    line-height: 1.5;
-    margin: 0;
-    opacity: 0.7;
-    transition: all 0.3s ease;
-
-    .card:hover &,
-    .card.active & {
-        opacity: 1;
-    }
-
-    @include mobile {
-        font-size: 0.85rem;
-    }
+.contentWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }

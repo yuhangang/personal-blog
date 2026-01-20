@@ -51,21 +51,21 @@ export const SLOGAN_ITEMS: SloganItemData[] = [
         lineHeight: "1.0",
       }, // Malay - Gold, Serif
       {
-        text: "定位", // 你的 removed
+        text: "身份",
         lang: "zh",
         color: "#FF4D4D",
         fontFamily: "'Noto Serif SC', serif",
         lineHeight: "1.1",
       }, // Chinese - Red
       {
-        text: "ايدينتيتي", // اندا removed
+        text: "ايدينتيتي",
         lang: "jv",
         color: "#4ADE80",
         fontFamily: "Arial, sans-serif",
         lineHeight: "1.3",
       }, // Jawi - Green
       {
-        text: "அடையாளம்", // உங்கள் removed
+        text: "அடையாளம்",
         lang: "ta",
         color: "#A855F7",
         fontFamily: "'Noto Sans Tamil', sans-serif",

@@ -22,7 +22,7 @@ const path = require('path');
         await new Promise(resolve => setTimeout(resolve, 2000));
 
         // Generate PDF
-        const pdfPath = path.join(__dirname, 'public', 'resume.pdf');
+        const pdfPath = path.join(__dirname, '..', 'public', 'resume_yuhangang.pdf');
         console.log(`Generating PDF at ${pdfPath}...`);
 
         await page.pdf({

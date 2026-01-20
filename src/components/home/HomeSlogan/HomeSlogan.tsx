@@ -1,83 +1,82 @@
-'use client';
+"use client";
 
-import { useRef, useState, useEffect } from 'react';
-import Link from 'next/link';
-import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
-import styles from './HomeSlogan.module.scss';
-import SloganVisuals from '@/components/create/SloganScroll/SloganVisuals';
-import { SLOGAN_ITEMS } from '@/components/create/SloganScroll/sloganConfig';
+import { useRef, useState, useEffect, useMemo } from "react";
+import Link from "next/link";
+import { motion, useScroll, useTransform } from "framer-motion";
+import styles from "./HomeSlogan.module.scss";
+import SloganVisuals from "@/components/create/SloganScroll/SloganVisuals";
+import { SLOGAN_ITEMS } from "@/components/create/SloganScroll/sloganConfig";
 
 export default function HomeSlogan() {
-    const [activeIndex, setActiveIndex] = useState(0);
-    const containerRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const [titleIndex, setTitleIndex] = useState(0);
 
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start start", "end end"]
-    });
+  // Identity Data (First Item)
+  const identityItem = SLOGAN_ITEMS[0];
+  const alternateTitles = useMemo(
+    () => identityItem.alternateTitles || [],
+    [identityItem],
+  );
 
-    // Drive activeIndex based on scroll
-    useMotionValueEvent(scrollYProgress, "change", (latest: number) => {
-        const index = Math.min(
-            SLOGAN_ITEMS.length - 1,
-            Math.floor(latest * SLOGAN_ITEMS.length)
-        );
-        if (index !== activeIndex) {
-            setActiveIndex(index);
-        }
-    });
+  // Cycle Titles
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTitleIndex((prev) => (prev + 1) % alternateTitles.length);
+    }, 100);
+    return () => clearInterval(interval);
+  }, [alternateTitles]);
 
-    const handleCardClick = (i: number) => {
-        if (!containerRef.current) return;
-        const container = containerRef.current;
-        const containerTop = container.offsetTop;
-        const scrollRange = container.offsetHeight - window.innerHeight;
-        // Center the item in its scroll range
-        const targetProgress = (i + 0.5) / SLOGAN_ITEMS.length;
-        
-        window.scrollTo({
-            top: containerTop + (targetProgress * scrollRange),
-            behavior: 'smooth'
-        });
-    };
+  const currentTitleObj = alternateTitles[titleIndex] || alternateTitles[0];
 
-    // Subtle parallax for visuals
-    const yVisuals = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
 
-    return (
-        <section ref={containerRef} className={styles.section}>
-            <div className={styles.stickyContainer}>
-                {/* Background Visuals */}
-                <motion.div 
-                    className={styles.visualWrapper}
-                    style={{ y: yVisuals }}
-                >
-                     <SloganVisuals activeIndex={activeIndex} />
-                </motion.div>
+  // Subtle parallax for visuals
+  const yVisuals = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
-                {/* Compact Grid */}
-                <div className={styles.grid}>
-                    {SLOGAN_ITEMS.map((item, i) => (
-                        <div 
-                            key={i} 
-                            className={`${styles.card} ${i === activeIndex ? styles.active : ''}`}
-                            onClick={() => handleCardClick(i)}
-                        >
-                            <h2 className={styles.cardTitle}>{item.title}</h2>
-                            <p className={styles.cardDesc}>{item.desc}</p>
-                        </div>
-                    ))}
-                    
-                    {/* 6th Slot: Call to Action */}
-                    <Link 
-                        href="/create" 
-                        className={`${styles.card} ${styles.ctaCard}`} 
-                        style={{ justifyContent: 'center', alignItems: 'center', textDecoration: 'none' }}
-                    >
-                        <h2 className={styles.cardTitle} style={{ margin: 0 }}>Explore &rarr;</h2>
-                    </Link>
-                </div>
-            </div>
-        </section>
-    );
+  return (
+    <section ref={containerRef} className={styles.section}>
+      <div className={styles.stickyContainer}>
+        {/* Background Visuals - Single Active State */}
+        <motion.div className={styles.visualWrapper} style={{ y: yVisuals }}>
+          <SloganVisuals activeIndex={0} />
+        </motion.div>
+
+        <div className={styles.contentWrapper}>
+          {/* Identity Slogan Display */}
+          <div className={styles.identityWrapper}>
+            <h2 className={styles.identityStatic}>Your</h2>
+
+            <h2
+              className={styles.identityDynamic}
+              style={{
+                color: currentTitleObj.color,
+                fontFamily: currentTitleObj.fontFamily,
+                lineHeight: currentTitleObj.lineHeight || "1.0",
+                fontWeight: currentTitleObj.lang === "jv" ? 700 : 600,
+                direction: currentTitleObj.lang === "jv" ? "rtl" : "ltr",
+                fontSize:
+                  currentTitleObj.lang === "ta"
+                    ? "clamp(4.5rem, 9vw, 8rem)"
+                    : currentTitleObj.lang === "jv"
+                      ? "clamp(4.5rem, 10vw, 9rem)"
+                      : "clamp(5rem, 13vw, 12rem)", // Matched strict mobile sizing
+              }}
+            >
+              {currentTitleObj.text}
+            </h2>
+          </div>
+
+          {/* Service Brief */}
+          <p className={styles.identityDesc}>{identityItem.desc}</p>
+
+          <Link href="/create" className={styles.exploreButton}>
+            Explore Creation
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
 }

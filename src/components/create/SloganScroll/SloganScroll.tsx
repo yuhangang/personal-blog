@@ -75,6 +75,11 @@ export default function SloganScroll() {
 
       items.forEach((node) => {
         const item = node as HTMLElement;
+
+        // Skip the sticky first item from snapping to avoid a "scroll trap"
+        // Since it stays centered visually for 50vh, snapping to it forces scroll back to 0.
+        if (item.classList.contains(styles.stickyFirst)) return;
+
         const rect = item.getBoundingClientRect();
         const itemCenter = rect.top + rect.height / 2;
         const distance = Math.abs(itemCenter - viewportCenter);
@@ -86,9 +91,15 @@ export default function SloganScroll() {
       });
 
       // ONLY SNAP IF VERY CLOSE
-      // Threshold 0.1 creates a smaller "magnet zone" so users don't get stuck
-      if (closestItem && minDistance < viewportHeight * 0.1) {
+      // Threshold: 10% of viewport OR max 150px (prevents huge snap zones on large screens)
+      const snapThreshold = Math.min(viewportHeight * 0.1, 150);
+
+      // console.log(`[SloganSnap] Checking snap. Threshold: ${snapThreshold}px`, { viewportCenter, listTop, listBottom });
+
+      if (closestItem && minDistance < snapThreshold) {
         const item = closestItem as HTMLElement;
+
+        // console.log(`[SloganSnap] Snapping to item `, item.innerText.substring(0, 20), ` Distance: ${minDistance}`);
 
         // Sticky Trap Guard Removed
 

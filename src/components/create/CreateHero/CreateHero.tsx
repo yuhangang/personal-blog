@@ -602,6 +602,9 @@ export default function CreateHero() {
   // Text Fade: 0 -> 70vh
   const textOpacity = useTransform(scrollY, [0, windowHeight * 0.7], [1, 0]);
 
+  // Force Scroll to Top on Mount (Fix for navigation not resetting scroll)
+  // HANDLED GLOBALLY IN SmoothScroll.tsx
+
   return (
     <section
       className={styles.container}

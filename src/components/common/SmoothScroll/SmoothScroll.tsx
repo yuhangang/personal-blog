@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useEffect, useState } from 'react';
-import Lenis from 'lenis';
+import { createContext, useContext, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import Lenis from "lenis";
 
 type LenisContextType = {
   lenis: Lenis | null;
@@ -11,21 +12,33 @@ const LenisContext = createContext<LenisContextType>({ lenis: null });
 
 export const useLenis = () => useContext(LenisContext);
 
-export default function SmoothScroll({ children }: { children: React.ReactNode }) {
+export default function SmoothScroll({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [lenis, setLenis] = useState<Lenis | null>(null);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (lenis) {
+      // Force immediate scroll to top on route change
+      lenis.scrollTo(0, { immediate: true });
+    }
+  }, [pathname, lenis]);
 
   useEffect(() => {
     // Force scroll to top on reload/refresh
-    if (typeof window !== 'undefined') {
-      window.history.scrollRestoration = 'manual';
+    if (typeof window !== "undefined") {
+      window.history.scrollRestoration = "manual";
       window.scrollTo(0, 0);
     }
 
     const lenisInstance = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
+      orientation: "vertical",
+      gestureOrientation: "vertical",
       smoothWheel: true,
       wheelMultiplier: 1,
       touchMultiplier: 1.5, // Reduced slightly for more control on mobile
@@ -48,8 +61,6 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
   }, []);
 
   return (
-    <LenisContext.Provider value={{ lenis }}>
-      {children}
-    </LenisContext.Provider>
+    <LenisContext.Provider value={{ lenis }}>{children}</LenisContext.Provider>
   );
 }
