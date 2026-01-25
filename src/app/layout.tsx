@@ -8,7 +8,6 @@ import {
 } from "next/font/google";
 import SmoothScroll from "@/components/common/SmoothScroll/SmoothScroll";
 import Footer from "@/components/common/Footer/Footer";
-import ChatWidget from "@/components/chat/ChatWidget";
 import "./globals.scss";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { TransitionProvider } from "@/context/TransitionContext";

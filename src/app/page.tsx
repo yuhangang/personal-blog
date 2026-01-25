@@ -4,8 +4,6 @@ import ServiceIntro from "@/components/create/ServiceIntro/ServiceIntro";
 // [Removed unused HomeSlogan]
 import About from "@/components/home/About/About";
 
-import SectionDivider from "@/components/common/SectionDivider/SectionDivider";
-
 export default function Home() {
   return (
     <main>

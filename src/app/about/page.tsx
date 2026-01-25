@@ -1,11 +1,10 @@
 "use client";
 
 import FadeIn from "@/components/common/Animations/FadeIn";
-import styles from "./about.module.scss";
-import Link from "next/link";
-import Image from "next/image";
 import { calculateAge } from "@/utils/date";
-import SectionDivider from "@/components/common/SectionDivider/SectionDivider";
+import Image from "next/image";
+import Link from "next/link";
+import styles from "./about.module.scss";
 
 export default function AboutPage() {
   // Calculate age directly to avoid "synchronous setState in useEffect" warning
