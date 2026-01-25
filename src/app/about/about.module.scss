@@ -71,17 +71,7 @@
     font-family: var(--font-sans);
     box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 
-    // Location Dot
-    &::before {
-        content: '';
-        display: block;
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background-color: #ef4444; // Subtle red for location pin
-        box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
-    }
-
+  
     @include mobile {
         bottom: calc(#{$spacing-xl} + 80px); 
         right: $spacing-lg;

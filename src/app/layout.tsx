@@ -87,7 +87,6 @@ export default function RootLayout({
             </div>
           </SmoothScroll>
         </TransitionProvider>
-        <ChatWidget />
       </body>
       {process.env.NODE_ENV === "production" && (
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
