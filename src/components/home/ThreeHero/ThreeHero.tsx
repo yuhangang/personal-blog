@@ -1,78 +1,31 @@
-'use client';
+"use client";
 
-import React, { useMemo, useRef } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Float, Stars, Text, Html, ContactShadows, Environment, MeshDistortMaterial } from '@react-three/drei';
-import * as THREE from 'three';
-import styles from './ThreeHero.module.scss';
-import { motion } from 'framer-motion';
-
-function MountainRidge({ 
-    z, 
-    color, 
-    width, 
-    yOffset, 
-    speed, 
-    scale 
-}: { 
-    z: number; 
-    color: string; 
-    width: number; 
-    yOffset: number; 
-    speed: number; 
-    scale: number; 
-}) {
-    const meshRef = useRef<THREE.Mesh>(null);
-
-    // Create a curve based on sine waves (guaranteed to generate valid points)
-    const curve = useMemo(() => {
-        const points = [];
-        const segments = 100;
-        for (let i = 0; i <= segments; i++) {
-            const t = i / segments;
-            const x = (t - 0.5) * width; // Center x around 0
-            
-            // Simulating jagged peaks with high-frequency sines
-            // Base arch
-            let y = Math.sin(t * Math.PI) * 2; 
-            // "Noise" details
-            y += Math.sin(x * 0.5 * scale) * 2;
-            y += Math.abs(Math.sin(x * 1.5 * scale)) * 1.5; // Abs adds sharpness (ridges)
-            y += Math.sin(x * 3.0 * scale) * 0.5;
-
-            points.push(new THREE.Vector3(x, y + yOffset, z));
-        }
-        return new THREE.CatmullRomCurve3(points);
-    }, [z, width, yOffset, scale]);
-
-    return (
-        <mesh ref={meshRef} position={[0, -5, 0]}>
-            <tubeGeometry args={[curve, 200, 0.2, 8, false]} /> {/* tube radius 0.2 ensures visibility */}
-            <meshStandardMaterial color={color} roughness={0.4} />
-        </mesh>
-    );
-}
+import React, { useRef } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import * as THREE from "three";
+import styles from "./ThreeHero.module.scss";
+import { motion } from "framer-motion";
 
 const GradientShader = {
-    uniforms: {
-        uTime: { value: 0 },
-        uScroll: { value: 0 },
-        uColor1: { value: new THREE.Color('#4facfe') }, // Vibrant Sky Blue
-        uColor2: { value: new THREE.Color('#00f2fe') }, // Electric Cyan
-        uColor3: { value: new THREE.Color('#fa709a') }, // Vibrant Pink
-        uColor4: { value: new THREE.Color('#fee140') }, // Warm Yellow/Gold
-        uMouse: { value: new THREE.Vector2(0.5, 0.5) }, // Normalized mouse position
-        uStrength: { value: 0 }, // Press strength (0 to 1)
-        uResolution: { value: new THREE.Vector2(1, 1) }
-    },
-    vertexShader: `
+  uniforms: {
+    uTime: { value: 0 },
+    uScroll: { value: 0 },
+    uColor1: { value: new THREE.Color("#4facfe") }, // Vibrant Sky Blue
+    uColor2: { value: new THREE.Color("#00f2fe") }, // Electric Cyan
+    uColor3: { value: new THREE.Color("#fa709a") }, // Vibrant Pink
+    uColor4: { value: new THREE.Color("#fee140") }, // Warm Yellow/Gold
+    uMouse: { value: new THREE.Vector2(0.5, 0.5) }, // Normalized mouse position
+    uStrength: { value: 0 }, // Press strength (0 to 1)
+    uResolution: { value: new THREE.Vector2(1, 1) },
+  },
+  vertexShader: `
         varying vec2 vUv;
         void main() {
             vUv = uv;
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
     `,
-    fragmentShader: `
+  fragmentShader: `
         uniform float uTime;
         uniform float uScroll;
         uniform vec3 uColor1;
@@ -174,99 +127,111 @@ const GradientShader = {
 
             gl_FragColor = vec4(finalColor, 1.0);
         }
-    `
+    `,
 };
 
 function GradientPlane() {
-    const meshRef = useRef<THREE.Mesh>(null);
-    const materialRef = useRef<THREE.ShaderMaterial>(null);
-    const { viewport, size } = useThree();
+  const meshRef = useRef<THREE.Mesh>(null);
+  const materialRef = useRef<THREE.ShaderMaterial>(null);
+  const { viewport, size } = useThree();
 
-    // Interaction State
-    const mouseRef = useRef(new THREE.Vector2(0.5, 0.5));
-    const targetStrength = useRef(0);
-    const currentStrength = useRef(0);
+  // Interaction State
+  const mouseRef = useRef(new THREE.Vector2(0.5, 0.5));
+  const targetStrength = useRef(0);
+  const currentStrength = useRef(0);
 
-    useFrame((state) => {
-        if (materialRef.current) {
-            // Update Uniforms
-            materialRef.current.uniforms.uTime.value = state.clock.getElapsedTime();
-            materialRef.current.uniforms.uScroll.value = window.scrollY;
-            materialRef.current.uniforms.uResolution.value.set(size.width, size.height);
+  useFrame((state) => {
+    if (materialRef.current) {
+      // Update Uniforms
+      materialRef.current.uniforms.uTime.value = state.clock.getElapsedTime();
+      materialRef.current.uniforms.uScroll.value = window.scrollY;
+      materialRef.current.uniforms.uResolution.value.set(
+        size.width,
+        size.height,
+      );
 
-            // Smooth Interpolation for fluidity
-            currentStrength.current = THREE.MathUtils.lerp(currentStrength.current, targetStrength.current, 0.1);
-            materialRef.current.uniforms.uStrength.value = currentStrength.current;
+      // Smooth Interpolation for fluidity
+      currentStrength.current = THREE.MathUtils.lerp(
+        currentStrength.current,
+        targetStrength.current,
+        0.1,
+      );
+      materialRef.current.uniforms.uStrength.value = currentStrength.current;
 
-            // Smooth Mouse Follow
-            materialRef.current.uniforms.uMouse.value.lerp(mouseRef.current, 0.1);
-        }
-    });
+      // Smooth Mouse Follow
+      materialRef.current.uniforms.uMouse.value.lerp(mouseRef.current, 0.1);
+    }
+  });
 
-    const handlePointerMove = (e: any) => {
-        if (e.uv) {
-            mouseRef.current.set(e.uv.x, e.uv.y);
-            targetStrength.current = 1.0;
-        }
-    };
+  const handlePointerMove = (e: { uv?: THREE.Vector2 }) => {
+    if (e.uv) {
+      mouseRef.current.set(e.uv.x, e.uv.y);
+      targetStrength.current = 1.0;
+    }
+  };
 
-    const handlePointerLeave = () => {
-        targetStrength.current = 0;
-    };
+  const handlePointerLeave = () => {
+    targetStrength.current = 0;
+  };
 
-    return (
-        <mesh
-            ref={meshRef}
-            scale={[viewport.width, viewport.height, 1]}
-            onPointerMove={handlePointerMove}
-            onPointerLeave={handlePointerLeave}
-        >
-            <planeGeometry args={[1, 1]} />
-            <shaderMaterial
-                ref={materialRef}
-                args={[GradientShader]}
-                side={THREE.DoubleSide}
-            />
-        </mesh>
-    );
+  return (
+    <mesh
+      ref={meshRef}
+      scale={[viewport.width, viewport.height, 1]}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+    >
+      <planeGeometry args={[1, 1]} />
+      <shaderMaterial
+        ref={materialRef}
+        args={[GradientShader]}
+        side={THREE.DoubleSide}
+      />
+    </mesh>
+  );
 }
 
-import { useThreeOptimization } from '@/hooks/useThreeOptimization';
+import { useThreeOptimization } from "@/hooks/useThreeOptimization";
 
 export default function ThreeHero() {
-    const containerRef = useRef<HTMLElement>(null);
-    const frameloop = useThreeOptimization(containerRef as React.RefObject<HTMLElement>);
+  const containerRef = useRef<HTMLElement>(null);
+  const frameloop = useThreeOptimization(
+    containerRef as React.RefObject<HTMLElement>,
+  );
 
-    return (
-        <section className={styles.container} ref={containerRef}>
-            <div className={styles.canvasContainer}>
-                <Canvas camera={{ position: [0, 0, 1], fov: 75 }} resize={{ scroll: false }} frameloop={frameloop}> 
-                    <GradientPlane />
-                </Canvas>
-            </div>
-            
-            <div className={styles.overlay}>
-                 <motion.h1 
-                    className={styles.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                >
-                   Explore, Evolve
-                </motion.h1>
-                <motion.p 
-                    className={styles.subtitle}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                >
-                    Discover my world
-                </motion.p>
-            </div>
+  return (
+    <section className={styles.container} ref={containerRef}>
+      <div className={styles.canvasContainer}>
+        <Canvas
+          camera={{ position: [0, 0, 1], fov: 75 }}
+          resize={{ scroll: false }}
+          frameloop={frameloop}
+          style={{ touchAction: "pan-y" }}
+        >
+          <GradientPlane />
+        </Canvas>
+      </div>
 
-            <div className={styles.scrollIndicator}>
-                Scroll to explore
-            </div>
-        </section>
-    );
+      <div className={styles.overlay}>
+        <motion.h1
+          className={styles.title}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          Explore, Evolve
+        </motion.h1>
+        <motion.p
+          className={styles.subtitle}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
+          Discover my world
+        </motion.p>
+      </div>
+
+      <div className={styles.scrollIndicator}>Scroll to explore</div>
+    </section>
+  );
 }

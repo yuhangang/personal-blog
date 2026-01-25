@@ -2,44 +2,36 @@
 @use '../../styles/mixins' as *;
 
 .container {
-    padding: 0; // Edge-to-edge immersive
+    padding: 0;
     width: 100%;
     margin: 0;
-    min-height: 100dvh;
+    min-height: 100vh;
     background: #0a0a0a;
     color: #fff;
-}
-
-.innerContainer {
-    max-width: $max-width;
-    margin: 0 auto;
-    padding: 0 1.25rem;
-}
-
-.headerGrid {
-    display: block; // Changed from grid to block for easier overlap
     position: relative;
-    margin-bottom: $spacing-xl;
-    max-width: 1000px;
-
-    @include mobile {
-        gap: $spacing-md;
-    }
+    overflow-x: hidden;
 }
 
 .coverWrapper {
+    position: fixed; // Fixed to stay as background while scrolling
+    top: 0;
+    left: 0;
     width: 100%;
-    margin: 0 auto;
-    height: 500px;
-    position: relative;
+    height: 100vh;
+    z-index: 0;
     overflow: hidden;
-    margin-top: 50px;
-    margin-bottom: $spacing-xl;
 
-    @include mobile {
-        height: 250px;
-        margin-top: 25px;
-        margin-bottom: $spacing-lg;
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.3) 0%,
+            rgba(0, 0, 0, 0.6) 50%,
+            rgba(0, 0, 0, 0.95) 100%
+        );
+        z-index: 1;
     }
 }
 
@@ -47,59 +39,99 @@
     object-fit: cover;
     object-position: center 25%;
     transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-
+    
     @include mobile {
-        transform: scale(1.2);
+        object-position: 50% center; // Shifted right to show face
+    }
+}
+
+.imageLabel {
+    position: absolute;
+    bottom: $spacing-xl;
+    right: $spacing-xl;
+    z-index: 2;
+    
+    // Glassmorphism Pill Style
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 100px;
+    
+    // Typography
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: var(--font-sans);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+
+    // Location Dot
+    &::before {
+        content: '';
+        display: block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: #ef4444; // Subtle red for location pin
+        box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
     }
 
-    &:hover {
-        transform: scale(1.05);
+    @include mobile {
+        bottom: calc(#{$spacing-xl} + 80px); 
+        right: $spacing-lg;
+        font-size: 0.7rem;
+        padding: 6px 12px;
+    }
+}
 
-        @include mobile {
-            transform: scale(1.25);
-        }
+.innerContainer {
+    position: relative;
+    z-index: 1; // Above the cover
+    max-width: $max-width;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; // Align content to start lower down
+    padding-bottom: 100px;
+    
+    // Add margin-top to push content down if we want the image to be fully visible initially
+    padding-top: 60vh;
+
+    @include mobile {
+        padding-top: 45vh; // Bring content up higher on mobile
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+.headerGrid {
+    display: block;
+    position: relative;
+    margin-bottom: $spacing-md;
+    
+    @include mobile {
+        gap: $spacing-md;
     }
 }
 
 .visualContainer {
-    position: absolute;
-    top: -100px;
-    right: -100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.6;
-
-    @include mobile {
-        top: -50px;
-        right: 0;
-        left: 0;
-        transform: none;
-        height: 350px; // Taller to avoid clipping
-        opacity: 0.3;
-    }
-}
-
-.threadsWrapper {
-    width: 500px;
-    height: 500px;
-
-    @include mobile {
-        width: 100%;
-        height: 350px;
-        transform: scale(0.8);
-    }
+    display: none; // Hide messy threads for cleaner immersive look, or position differently
 }
 
 .backLink {
     display: inline-block;
     margin-bottom: $spacing-lg;
-    color: $color-text-secondary;
+    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     font-size: 0.9rem;
-    transition: color 0.2s ease;
     position: relative;
     z-index: 1;
 
@@ -109,16 +141,17 @@
 }
 
 .title {
-    font-size: 3rem;
+    font-size: 4rem; // Larger title
     color: #fff;
-    margin-bottom: $spacing-md;
+    margin-bottom: $spacing-sm;
     position: relative;
     z-index: 1;
     overflow-wrap: break-word;
-    hyphens: none;
+    font-family: var(--font-serif);
+    text-shadow: 0 4px 12px rgba(0,0,0,0.3);
 
     @include mobile {
-        font-size: 1.8rem;
+        font-size: 2.5rem;
     }
 }
 
@@ -133,12 +166,13 @@
 }
 
 .text {
-    font-size: 1.25rem;
-    line-height: 1.8;
-    color: rgba(255, 255, 255, 0.9); // Brighter for dark theme
+    font-size: 1.35rem; // Slightly larger for readability over image
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 
     @include mobile {
-        font-size: 1.1rem;
+        font-size: 1.15rem;
     }
 }
 

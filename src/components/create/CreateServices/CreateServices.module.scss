@@ -10,13 +10,68 @@
 }
 
 .container {
-    display: grid;
-    grid-template-columns: 0.8fr 1.2fr; // Bias grid towards content
-    gap: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 60px;
+
+    @include mobile {
+        padding: 0 24px;
+        gap: 40px; // Reduced total gap
+    }
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    
+    // Desktop: Left align or center? "Full width" usually implies taking space.
+    // Let's keep distinct strong alignment.
+    
+    @include mobile {
+        margin-bottom: 0px; // Reduced padding bottom as requested (gap handles it, or minimal margin)
+    }
+}
+
+.title {
+    font-family: var(--font-serif);
+    font-size: clamp(3.5rem, 8vw, 7.5rem); // EVEN BIGGER for full width impact
+    font-weight: 300;
+    line-height: 0.9; 
+    letter-spacing: -0.03em;
+    margin: 0;
+    
+    // Premium Metallic Gradient
+    background: linear-gradient(135deg, 
+        #ffffff 0%, 
+        #f0f0f0 20%, 
+        #a0a0a0 40%, 
+        #ffffff 60%, 
+        #e0e0e0 80%, 
+        #b0b0b0 100%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    
+    text-transform: uppercase;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+    
+    @include mobile {
+        font-size: 3.5rem; // Ensure it doesn't break layout
+    }
+}
+
+.contentGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
     align-items: flex-start;
+    width: 100%;
 
     @include tablet {
         grid-template-columns: 1fr;
@@ -24,34 +79,38 @@
     }
 
     @include mobile {
-        padding: 0 24px;
+        display: flex;
+        flex-direction: column;
         gap: 60px;
     }
 }
 
-// Left column - Visual
+// Left column - Visual (Now just holds image)
 .visualColumn {
     display: flex;
     flex-direction: column;
     position: sticky;
     top: 100px;
     height: fit-content;
-    gap: 40px; // Space between Header and Image
 
     @include tablet {
         position: relative;
         top: 0;
         order: 2;
     }
+    
+    @include mobile {
+        order: 1; // Visual first in the grid section (Title is above grid)
+        width: 100%; // Ensure it takes space
+    }
 }
 
 .imageWrapper {
     position: relative;
     width: 100%;
-    aspect-ratio: 4/5;
+    aspect-ratio: 1;
     overflow: hidden;
     background: #111;
-    // Removed border radius for sharper look or kept minimal
     border-radius: 4px;
 
     img {
@@ -67,6 +126,10 @@
         background: linear-gradient(to bottom, transparent 20%, rgba(0,0,0,0.6) 100%);
         pointer-events: none;
     }
+    
+    @include mobile {
+        aspect-ratio: 4/5;
+    }
 }
 
 .visualCaption {
@@ -74,7 +137,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    opacity: 0; // Hiding for minimal look as per plan
+    opacity: 0; 
 }
 
 .captionNumber {
@@ -89,52 +152,38 @@
     display: flex;
     flex-direction: column;
     gap: 80px;
-    padding-top: 240px; // Offset to align Lead text appropriately against the sticky header/image on the left? 
-    // OR just minimal padding since header is on left now.
-    // If we want Lead to start alongside Header, 0 is fine.
-    // Assuming we want Lead to start LOWER so the Header gets attention first?
-    // Let's try 0 first, but Visual Column has header THEN image. 
-    // If Header is top of Visual, and Lead is top of Content, they align.
+    padding-top: 80px; // Reduced offset since title is gone from left
     
     @include tablet {
-        order: 1;
         gap: 60px;
         padding-top: 0;
+        order: 1;
+    }
+
+    @include mobile {
+        // UNGROUP CHILDREN: Lead text becomes direct flex item
     }
 }
 
-.header {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-}
-
-.headerLabel {
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    color: rgba(255, 255, 255, 0.5);
-    text-transform: uppercase;
-}
-
-.title {
-    font-family: var(--font-serif);
-    font-size: clamp(3rem, 6vw, 5.5rem); // Huge editorial header
-    font-weight: 300;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: #ffffff;
-    margin: 0;
-}
-
+// Target the Lead text specifically if possible, or just the whole content column elements
 .lead {
-    font-family: var(--font-sans);
-    font-size: clamp(1.125rem, 1.5vw, 1.25rem);
-    color: rgba(255, 255, 255, 0.7);
-    line-height: 1.6;
-    max-width: 600px;
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.4;
+    max-width: 700px;
     margin: 0;
     font-weight: 300;
+
+    @include mobile {
+        margin-top: -120px; // Pull text up to overlap bottom of image
+        position: relative;
+        z-index: 10;
+        text-shadow: 0 4px 20px rgba(0,0,0,0.8); 
+        color: #fff;
+        padding-left: 5%;
+        order: 2; // Below visual in the stack
+    }
 }
 
 // Services grid

@@ -1,7 +1,10 @@
 import ThreeHero from "@/components/home/ThreeHero/ThreeHero";
 
-import HomeSlogan from "@/components/home/HomeSlogan/HomeSlogan";
+import ServiceIntro from "@/components/create/ServiceIntro/ServiceIntro";
+// [Removed unused HomeSlogan]
 import About from "@/components/home/About/About";
+
+import SectionDivider from "@/components/common/SectionDivider/SectionDivider";
 
 export default function Home() {
   return (
@@ -9,13 +12,20 @@ export default function Home() {
       <div id="home" data-theme="dark">
         <ThreeHero />
       </div>
+
       <div data-theme="dark">
         <About />
       </div>
 
       {/* New Compact Slogans */}
       <div id="identity" data-theme="dark">
-        <HomeSlogan />
+        <ServiceIntro
+          ctaText="Explore Creation"
+          ctaLink="/create"
+          variant="fullscreen"
+          title="Software  Development"
+          description="I built website and applications, every detail reflects who you are and what you stand for. Opening for new projects and collaborations"
+        />
       </div>
     </main>
   );

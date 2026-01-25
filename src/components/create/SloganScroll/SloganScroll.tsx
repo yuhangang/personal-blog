@@ -7,12 +7,14 @@ import styles from "./SloganScroll.module.scss";
 import SloganVisuals from "./SloganVisuals";
 import SloganItem from "./SloganItem";
 import IdentitySloganItem from "./IdentitySloganItem";
+import SloganControls from "./SloganControls";
 import { SLOGAN_ITEMS } from "./sloganConfig";
 import { useScroll } from "framer-motion";
 
 export default function SloganScroll() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null!);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   /*
    * Lenis Integration for Snapping
    */
@@ -186,7 +188,7 @@ export default function SloganScroll() {
   }, [lenis]);
 
   return (
-    <section className={styles.section} ref={containerRef}>
+    <section className={styles.section} ref={sectionRef}>
       <div className={styles.layoutGrid}>
         {/* LEFT: SLOGANS (SCROLLING) */}
         <div className={styles.sloganList} ref={listRef}>
@@ -199,7 +201,6 @@ export default function SloganScroll() {
               },
               i: number,
             ) => {
-              // Conditional Render: Use IdentityComponent if it has alternate titles
               if (feature.alternateTitles) {
                 return (
                   <IdentitySloganItem
@@ -211,9 +212,11 @@ export default function SloganScroll() {
                     setActiveIndex={setActiveIndex}
                     isFirst={i === 0}
                     isLast={i === SLOGAN_ITEMS.length - 1}
-                    // Since it replaces the first item, it likely won't be the last, but keep prop for safety
                     listProgress={listProgress}
                     totalCount={SLOGAN_ITEMS.length}
+                    itemRef={(el) => {
+                      itemRefs.current[i] = el;
+                    }}
                   />
                 );
               }
@@ -228,6 +231,9 @@ export default function SloganScroll() {
                   isLast={i === SLOGAN_ITEMS.length - 1}
                   listProgress={listProgress}
                   totalCount={SLOGAN_ITEMS.length}
+                  itemRef={(el) => {
+                    itemRefs.current[i] = el;
+                  }}
                 />
               );
             },
@@ -241,6 +247,14 @@ export default function SloganScroll() {
           </div>
         </div>
       </div>
+
+      {/* CONTROLS (Fixed at bottom) */}
+      <SloganControls
+        activeIndex={activeIndex}
+        totalCount={SLOGAN_ITEMS.length}
+        itemRefs={itemRefs}
+        sectionRef={sectionRef}
+      />
     </section>
   );
 }

@@ -204,7 +204,6 @@ export default function Navigation() {
                   {(() => {
                     const SECTION_LABELS: Record<string, string> = {
                       about: "About",
-                      contact: "Contact",
                       identity: "Create", // Homepage section alias
                       create: "Create", // Actual page
                     };

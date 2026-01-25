@@ -5,103 +5,189 @@
     position: relative;
     z-index: 1;
     width: 100%;
-    height: 200dvh; // Extended height for parallax scroll
-    background: linear-gradient(
-        to bottom,
-        rgba(0,0,0,0) 0%,
-        rgba(0,0,0,0.3) 20%,
-        rgba(0,0,0,0.7) 60%,
-        rgba(0,0,0,1) 100%
-    );
+    // Height determines the scroll distance.
+    height: 300vh; 
+    // Remove black background to let CreateHero show through
+    background: transparent;
+    margin-top: 50vh; 
+}
+
+.sectionFullscreen {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100dvh; // No scroll distance, just one screen
+    margin-top: 0;
+    // Dark background as requested
+    background: #050505; 
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-// Sticky Wrapper: Sticks to viewport, handles centering via Flexbox
-.stickyWrapper {
+.header {
+    font-family: var(--font-sans);
+    font-size: clamp(1rem, 1.5vw, 1.5rem);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 10;
+}
+
+// .description moved to bottom for specific styling
+
+// Sticky Wrapper for ALL content
+.stickyContent {
     position: sticky;
     top: 0;
     height: 100vh;
+    width: 100%;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    overflow: hidden; // Ensure content doesn't spill
 }
 
-.content {
-    // No longer needs sticky or transform centering
+// Visual Container: Logical Wrapper & Layout
+.visualContainer {
     position: relative;
+    
+    // Desktop Size: 70%
+    width: 70%;
+    max-width: 1600px;
+    
+    // Enable Container Queries (Parent)
+    container: service-frame / inline-size;
+    
     display: flex;
-    flex-direction: column;
+    flex-direction: column; // To stack frame and button on mobile if needed (desktop absolute overrides)
+    
+    @include mobile {
+        width: 95%;
+    }
+}
+
+// Frame: The actual card visual (Image + Text)
+.frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    
+    // Visual Styling
+    z-index: 10;
+    overflow: hidden;
+    box-shadow: 0 0 50px rgba(0,0,0,0.5); 
+    background: #000;
+    
+    will-change: transform; 
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
+
+    // Hover Interaction (On Frame)
+    &:hover {
+        transform: scale(1.02); 
+        box-shadow: 0 0 80px rgba(0,0,0,0.7);
+        
+        // Inner image
+        .bgImage {
+            opacity: 0.4;
+            transform: scale(1.05);
+        }
+    }
+}
+
+// Mobile specific frame overrides
+
+// Mobile specific frame overrides
+@include mobile {
+    .frame {
+        aspect-ratio: 3/4; 
+        
+        // Disable hover scale on mobile
+        &:hover { transform: none; }
+    }
+}
+
+
+.bgImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.25; 
+    display: block; 
+    transition: opacity 0.6s ease, transform 0.8s ease; 
+}
+
+.noiseOverlay {
+    position: absolute;
+    inset: -50%; // Expand to allow movement without edges showing
+    width: 200%;
+    height: 200%;
+    // Use the actual image texture for "dusty" effect
+    background-image: url("/images/noise-overlay.png");
+    background-size: 50%; 
+    background-repeat: repeat;
+    pointer-events: none;
+    opacity: 0.3; // More subtle
+    mix-blend-mode: screen; 
+    z-index: 2; 
+    
+    // Smooth linear animation instead of steps, slower duration
+    animation: noiseAnimation 8s linear infinite;
+}
+
+@keyframes noiseAnimation {
+    // Subtle drift with slight jitter, no drastic jumps
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-2%, 2%); }
+    50% { transform: translate(-4%, 0); }
+    75% { transform: translate(-2%, -2%); }
+    100% { transform: translate(0, 0); }
+}
+
+// Removing the SVG noise animation in favor of the static/texture overlay requested?
+// Or we can keep it as a subtle secondary layer if needed. For now, replacing strictly.
+
+.textOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    text-align: start;
     align-items: center;
-    text-align: center;
-    padding: 0 20px;
-    will-change: transform, opacity;
+    justify-content: center;
+    pointer-events: none;
+    padding: 2rem; // Add padding so text doesn't touch edges
 }
 
-.label {
-    font-family: var(--font-sans);
-    font-size: 0.85rem; // Increased from 0.7rem
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.25em;
-    color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 2rem;
+.canvasText {
+    width: 100%;
+    height: 100%;
 }
 
-.headline {
-    font-family: var(--font-serif);
-    font-size: clamp(3.5rem, 8vw, 6.5rem); // Increased from 2.5/5rem
-    font-weight: 400;
-    line-height: 1.0;
-    color: #ffffff;
-    margin: 0;
+.buttonPosition {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem; 
+    z-index: 20; // Above frame
+    pointer-events: none; // Container lets clicks through to frame/button
+    // (Actual button has pointer-events: auto)
     
     @include mobile {
-        font-size: clamp(2.5rem, 10vw, 4rem);
-    }
-}
-
-.accent {
-    background: linear-gradient(135deg, #1edcaa, #00d4ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.description {
-    font-family: var(--font-sans);
-    font-size: 1.1rem; // Increased from 0.85rem
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.8);
-    margin-top: 2.5rem;
-    letter-spacing: 0.05em;
-    
-    @include mobile {
-        font-size: 0.9rem;
-    }
-}
-
-.subText {
-    font-family: var(--font-sans);
-    font-size: 1.25rem; // Increased from 0.9rem
-    font-weight: 300;
-    line-height: 1.5;
-    color: rgba(255, 255, 255, 0.7); // More visible
-    margin-top: 2rem;
-    max-width: 600px;
-    
-    @include mobile {
-        font-size: 1rem;
-        max-width: 320px;
+        position: static; // Flow naturally below
+        margin-top: 1.5rem;
+        width: 100%;
+        display: flex;
+        justify-content: center;
     }
 }
 
 .ctaButton {
+    pointer-events: auto;
     display: inline-block;
-    margin-top: 3.5rem;
     padding: 1rem 2.5rem;
     font-family: var(--font-sans);
     font-size: 0.9rem;
@@ -112,11 +198,9 @@
     text-decoration: none;
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 999px;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.4); // slightly darker for contrast inside image
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     backdrop-filter: blur(8px);
-    position: relative; // Ensure z-index works
-    pointer-events: auto; // Ensure clickable inside non-pointer-events container if needed (though wrapper is fine)
 
     &:hover {
         background: white;
@@ -124,5 +208,145 @@
         border-color: white;
         box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
         transform: translateY(-2px);
+    }
+}
+
+// --- IDENTITY EFFECT STYLES ---
+// 1. HERO VARIANT (Home Page: Side-by-Side)
+.identityGrid {
+    position: relative;
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 2rem;
+    
+    // Fixed height to prevent jitter
+    height: clamp(5rem, 15cqw, 15rem); 
+    overflow: hidden; 
+    
+    @include mobile {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 0;
+        height: 60%; 
+    }
+}
+
+.heroStatic {
+    margin: 0;
+    text-align: right;
+    color: #fff;
+    font-family: var(--font-serif);
+    line-height: 1.0;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: clamp(3rem, 11cqw, 12rem); 
+    text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+
+    @include mobile {
+        text-align: center;
+        align-self: end;
+        padding-bottom: 0.5rem;
+        font-size: clamp(3rem, 16cqw, 6rem);
+        line-height: 0.9;
+    }
+}
+
+.heroDynamic {
+    margin: 0;
+    text-align: left;
+    white-space: nowrap;
+    font-size: calc(clamp(3rem, 11cqw, 12rem) * var(--lang-scale, 1));
+    text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+
+    @include mobile {
+        text-align: center;
+        align-self: start;
+        padding-top: 0.5rem;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        font-size: calc(clamp(3rem, 18cqw, 6rem) * var(--lang-scale, 1));
+    }
+}
+
+// 2. LABEL VARIANT (Create Page: Small Top Header)
+.identityHeader {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); // Match Landing Page strictness
+    align-items: center; 
+    gap: 1rem;
+    position: absolute;
+    top: 3rem; 
+    left: 0;
+    width: 100%;
+    z-index: 5;
+    
+    @include mobile {
+        top: 2rem;
+    }
+}
+
+.labelStatic {
+    font-family: var(--font-sans);
+    font-size: clamp(2rem, 5cqw, 6rem); 
+    line-height: 1.1;
+    text-transform: uppercase;
+    white-space: nowrap; // CRITICAL: Prevent layout instability
+    margin: 0;
+    text-align: right; 
+    color: rgba(255,255,255,0.7);
+    font-weight: 500;
+}
+
+.labelDynamic {
+    font-size: clamp(2rem, 5cqw, 6rem); 
+    line-height: 1.1; 
+    text-transform: uppercase;
+    white-space: nowrap; // CRITICAL: Prevent layout instability
+    margin: 0;
+    align-items: center;
+    text-align: left;
+    letter-spacing: 0.1em;
+    // Color/Font handled inline
+}
+
+// --- DESCRIPTION STYLES ---
+
+// 1. HERO VARIANT (Home Page: Minimal/Subtle)
+.heroDescription {
+    font-family: var(--font-sans);
+    font-size: clamp(1.2rem, 1.6cqw, 1.5rem);
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    max-width: 60%;
+    margin: 1rem auto 0; // Spacing from title
+    z-index: 10;
+    
+    @include mobile {
+        max-width: 80%;
+        font-size: 0.9rem;
+    }
+}
+
+// 2. LABEL VARIANT (Create Page: Big Center Value)
+.description {
+    // Centered in the frame
+    font-family: var(--font-serif); 
+    font-size: clamp(1.8rem, 4cqw, 3.5rem); 
+    line-height: 1.3;
+    color: #fff;
+    text-align: center;
+    max-width: 80%;
+    margin: auto; 
+    z-index: 10;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.8);
+    
+    @include mobile {
+        font-size: clamp(1.5rem, 6cqw, 2.5rem);
+        max-width: 90%;
+        line-height: 1.4;
     }
 }

@@ -7,7 +7,7 @@ import { AlternateTitle } from "./sloganConfig";
 
 interface Props {
   title: string;
-  alternateTitles: AlternateTitle[]; // Required for this component
+  alternateTitles: AlternateTitle[];
   desc: string;
   index: number;
   setActiveIndex: (i: number) => void;
@@ -15,10 +15,10 @@ interface Props {
   isLast?: boolean;
   listProgress?: MotionValue<number>;
   totalCount?: number;
+  itemRef?: (el: HTMLDivElement | null) => void;
 }
 
 export default function IdentitySloganItem({
-  // title prop ignored as "Your" is static
   alternateTitles,
   desc,
   index,
@@ -27,6 +27,7 @@ export default function IdentitySloganItem({
   isLast,
   listProgress,
   totalCount,
+  itemRef,
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -211,7 +212,13 @@ export default function IdentitySloganItem({
   // Render Wrapper if First
   if (isFirst) {
     return (
-      <div ref={wrapperRef} className={styles.identityTrack}>
+      <div
+        ref={(el) => {
+          wrapperRef.current = el;
+          if (itemRef) itemRef(el);
+        }}
+        className={styles.identityTrack}
+      >
         <div className={`${styles.sloganItem} ${styles.stickyFirst}`}>
           {content}
         </div>
@@ -220,7 +227,13 @@ export default function IdentitySloganItem({
   }
 
   return (
-    <div ref={ref} className={styles.sloganItem}>
+    <div
+      ref={(el) => {
+        ref.current = el;
+        if (itemRef) itemRef(el);
+      }}
+      className={styles.sloganItem}
+    >
       {content}
     </div>
   );

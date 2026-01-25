@@ -9,6 +9,7 @@ interface Props {
   desc: string;
   index: number;
   setActiveIndex: (i: number) => void;
+  itemRef?: (el: HTMLDivElement | null) => void;
 }
 
 export default function SloganItem({
@@ -19,6 +20,7 @@ export default function SloganItem({
   isLast,
   listProgress,
   totalCount,
+  itemRef,
 }: Props & {
   isLast?: boolean;
   listProgress?: MotionValue<number>;
@@ -87,7 +89,13 @@ export default function SloganItem({
   }, [itemProgress, index, setActiveIndex]);
 
   return (
-    <div ref={ref} className={styles.sloganItem}>
+    <div
+      ref={(el) => {
+        ref.current = el;
+        if (itemRef) itemRef(el);
+      }}
+      className={styles.sloganItem}
+    >
       <motion.div
         className={styles.sloganContent}
         style={{ opacity, rotateY, scale, filter, perspective: 1000 }}

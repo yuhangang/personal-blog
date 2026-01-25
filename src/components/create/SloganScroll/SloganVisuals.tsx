@@ -27,8 +27,8 @@ function NeuroStrand({
   // This avoids "accessing ref during render" linter errors.
   const pathRef = useRef(
     new THREE.CatmullRomCurve3(
-      Array.from({ length: 51 }, () => new THREE.Vector3(0, 0, 0))
-    )
+      Array.from({ length: 51 }, () => new THREE.Vector3(0, 0, 0)),
+    ),
   );
 
   useFrame((state, delta) => {
@@ -61,17 +61,17 @@ function NeuroStrand({
     currentParams.current.speed = THREE.MathUtils.lerp(
       currentParams.current.speed,
       target.speed,
-      lerpFactor
+      lerpFactor,
     );
     currentParams.current.noiseScale = THREE.MathUtils.lerp(
       currentParams.current.noiseScale,
       target.noiseScale,
-      lerpFactor
+      lerpFactor,
     );
     currentParams.current.amplitude = THREE.MathUtils.lerp(
       currentParams.current.amplitude,
       target.amplitude,
-      lerpFactor
+      lerpFactor,
     );
 
     // Thickness Adjustments for Density
@@ -83,12 +83,12 @@ function NeuroStrand({
     currentParams.current.thickness = THREE.MathUtils.lerp(
       currentParams.current.thickness,
       targetThickness,
-      lerpFactor
+      lerpFactor,
     );
     currentParams.current.distort = THREE.MathUtils.lerp(
       currentParams.current.distort,
       target.distort,
-      lerpFactor
+      lerpFactor,
     );
 
     // Color & Palette Logic
@@ -96,13 +96,17 @@ function NeuroStrand({
 
     if (type === "weave") {
       // Loom Palette: Orange, White, Gold alternating
-      if (strandIndex % 3 === 0) targetColor.set("#ff6b00"); // Orange
-      else if (strandIndex % 3 === 1) targetColor.set("#ffffff"); // White
+      if (strandIndex % 3 === 0)
+        targetColor.set("#ff6b00"); // Orange
+      else if (strandIndex % 3 === 1)
+        targetColor.set("#ffffff"); // White
       else targetColor.set("#fee140"); // Gold
     } else if (type === "structure") {
       // FOUNDATION PALETTE:
-      if (strandIndex % 3 === 0) targetColor.set("#00f2fe"); // Cyan
-      else if (strandIndex % 3 === 1) targetColor.set("#ffffff"); // White
+      if (strandIndex % 3 === 0)
+        targetColor.set("#00f2fe"); // Cyan
+      else if (strandIndex % 3 === 1)
+        targetColor.set("#ffffff"); // White
       else targetColor.set("#4facfe"); // Deep Blue/Teal
       // DNA PALETTE: Split Rungs (Red/Teal) + Blue Backbone
       if (strandIndex < 2) {
@@ -124,7 +128,7 @@ function NeuroStrand({
     materialRef.current.opacity = THREE.MathUtils.lerp(
       materialRef.current.opacity,
       targetOpacity,
-      lerpFactor
+      lerpFactor,
     );
     materialRef.current.transparent = true;
 
@@ -403,7 +407,7 @@ function NeuroStrand({
       segments,
       finalThickness,
       type === "structure" || type === "dna" ? 8 : 8, // Round profile for everything now
-      false
+      false,
     );
 
     // Rotate mesh
@@ -441,12 +445,16 @@ export default function SloganVisuals({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const frameloop = useThreeOptimization(
-    containerRef as React.RefObject<HTMLElement>
+    containerRef as React.RefObject<HTMLElement>,
   );
 
   return (
     <div className={styles.container} ref={containerRef}>
-      <Canvas camera={{ position: [0, 0, 15], fov: 45 }} frameloop={frameloop}>
+      <Canvas
+        camera={{ position: [0, 0, 15], fov: 45 }}
+        frameloop={frameloop}
+        style={{ touchAction: "pan-y" }}
+      >
         <Environment preset="city" />
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} />

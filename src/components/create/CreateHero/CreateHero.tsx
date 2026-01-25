@@ -592,11 +592,11 @@ export default function CreateHero() {
   }, []);
 
   // Opacity Effects (Visuals)
-  // Dim overlay: 70vh start -> 250vh end
+  // Dim overlay: Start MUCH sooner to dim the hero quickly
   const dimOpacity = useTransform(
     scrollY,
-    [windowHeight * 0.7, windowHeight * 2.5],
-    [0, 1],
+    [windowHeight * 0.1, windowHeight * 0.5], // 0.1 -> 0.5 (Fully black by half screen)
+    [0, 0.7],
   );
 
   // Text Fade: 0 -> 70vh
@@ -618,7 +618,11 @@ export default function CreateHero() {
           background: "#000000",
         }}
       >
-        <Canvas camera={{ position: [0, 0, 2], fov: 60 }} frameloop={frameloop}>
+        <Canvas
+          camera={{ position: [0, 0, 2], fov: 60 }}
+          frameloop={frameloop}
+          style={{ touchAction: "pan-y" }}
+        >
           {/* Camera Animation Rig */}
           <CameraRig scrollY={scrollY} windowHeight={windowHeight} />
 

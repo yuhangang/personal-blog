@@ -1,56 +1,90 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+// [Removed unused useScroll]
+import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import IdentityText from "./IdentityText";
+import FilmNoiseOverlay from "./FilmNoiseOverlay";
 import styles from "./ServiceIntro.module.scss";
+import { IDENTITY_CONFIG } from "../SloganScroll/sloganConfig";
 
-export default function ServiceIntro() {
+interface Props {
+  ctaText?: string;
+  ctaLink?: string;
+  variant?: "scroll" | "fullscreen";
+  description?: string;
+  title?: string;
+}
+
+export default function ServiceIntro({
+  ctaText = "See Selected Works",
+  ctaLink = "#projects",
+  variant = "scroll",
+  description = IDENTITY_CONFIG.desc,
+  title,
+}: Props) {
   const sectionRef = useRef<HTMLElement>(null!);
+  const router = useRouter();
 
-  // Track scroll progress of the entire section relative to viewport
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Calculate Opacity: Fade in near center, fade out near exits
-  // 0.2 -> 0.4 (Fade In) | 0.4 -> 0.6 (Hold) | 0.6 -> 0.8 (Fade Out)
-  const opacity = useTransform(
-    scrollYProgress,
-    [0.2, 0.4, 0.6, 0.8],
-    [0, 1, 1, 0],
-  );
-
-  // Parallax Y: Move content slightly slower than scroll (or counter-move)
-  // Mapping scroll progress to a vertical shift
-  // Reduced range to prevent content from shifting out of the viewport
-  const y = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
+  const handleSectionClick = () => {
+    if (variant === "fullscreen" && ctaLink) {
+      router.push(ctaLink);
+    }
+  };
 
   return (
-    <section ref={sectionRef} className={styles.section}>
-      <div className={styles.stickyWrapper}>
-        <motion.div style={{ opacity, y }} className={styles.content}>
-          <p className={styles.label}>Web Development Services</p>
-          <h2 className={styles.headline}>
-            Crafting Digital
-            <br />
-            <span className={styles.accent}>Experiences</span>
-          </h2>
-          <p className={styles.description}>
-            Custom websites • Mobile App Development • Web applications •
-            E-commerce solutions
-          </p>
-          <p className={styles.subText}>
-            From concept to code, I build immersive, high-performance web
-            solutions tailored to your unique identity. Let&apos;s turn your
-            vision into a digital reality.
-          </p>
+    <section
+      ref={sectionRef}
+      className={
+        variant === "fullscreen" ? styles.sectionFullscreen : styles.section
+      }
+    >
+      <div className={styles.stickyContent}>
+        {title && <h2 className={styles.header}>{title}</h2>}
+        <div
+          className={styles.visualContainer}
+          onClick={handleSectionClick}
+          style={variant === "fullscreen" ? { cursor: "pointer" } : undefined}
+        >
+          <div className={styles.frame}>
+            <Image
+              src="/images/service-intro.webp"
+              alt="Service Intro Background"
+              fill
+              className={styles.bgImage}
+              priority
+            />
+            <FilmNoiseOverlay />
 
-          <Link href="#projects" className={styles.ctaButton}>
-            See Selected Works
-          </Link>
-        </motion.div>
+            <div
+              className={styles.textOverlay}
+              style={{ flexDirection: "column" }}
+            >
+              <IdentityText
+                mode={variant === "fullscreen" ? "hero" : "label"}
+              />
+              {description && (
+                <p
+                  className={
+                    variant === "fullscreen"
+                      ? styles.heroDescription
+                      : styles.description
+                  }
+                >
+                  {description}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className={styles.buttonPosition}>
+            <Link href={ctaLink} className={styles.ctaButton}>
+              {ctaText}
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   );

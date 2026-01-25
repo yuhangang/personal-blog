@@ -24,6 +24,7 @@
     z-index: 1;
     will-change: transform; // Optimize for scroll animation
     backface-visibility: hidden; // Prevent flickering
+    pointer-events: none; // Ensure scroll passes through (No interaction in this hero)
 }
 
 .overlay {

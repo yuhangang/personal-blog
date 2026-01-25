@@ -30,59 +30,55 @@ Character
 Substance
 
 
+
 */
+export const IDENTITY_CONFIG: SloganItemData = {
+  title: "Your Identity",
+  alternateTitles: [
+    {
+      text: "Identiti",
+      lang: "ms",
+      color: "#FFD700",
+      fontFamily: "var(--font-serif)",
+      lineHeight: "1.0",
+    }, // Malay - Gold, Serif
+    {
+      text: "身份",
+      lang: "zh",
+      color: "#FF4D4D",
+      fontFamily: "'Noto Serif SC', serif",
+      lineHeight: "1.1",
+    }, // Chinese - Red
+    {
+      text: "ايدينتيتي",
+      lang: "jv",
+      color: "#4ADE80",
+      fontFamily: "Arial, sans-serif",
+      lineHeight: "1.3",
+    }, // Jawi - Green
+    {
+      text: "அடையாளம்",
+      lang: "ta",
+      color: "#A855F7",
+      fontFamily: "'Noto Sans Tamil', sans-serif",
+      lineHeight: "1.4",
+    }, // Tamil - Purple
+  ],
+  desc: "Bring your brand to life. Every detail reflects who you are and what you stand for.",
+  visual: {
+    color: "#00f2fe",
+    speed: 0.8,
+    noiseScale: 0.3,
+    amplitude: 2.5,
+    thickness: 0.25,
+    distort: 0.2,
+    type: "dna",
+  },
+};
 
 export const SLOGAN_ITEMS: SloganItemData[] = [
-  {
-    title: "Your Identity",
-    alternateTitles: [
-      {
-        text: "Identity", // Static "Your" handled by component
-        lang: "en",
-        color: "#ffffff",
-        fontFamily: "var(--font-serif)",
-        lineHeight: "1.0",
-      },
-      {
-        text: "Identiti",
-        lang: "ms",
-        color: "#FFD700",
-        fontFamily: "var(--font-serif)",
-        lineHeight: "1.0",
-      }, // Malay - Gold, Serif
-      {
-        text: "身份",
-        lang: "zh",
-        color: "#FF4D4D",
-        fontFamily: "'Noto Serif SC', serif",
-        lineHeight: "1.1",
-      }, // Chinese - Red
-      {
-        text: "ايدينتيتي",
-        lang: "jv",
-        color: "#4ADE80",
-        fontFamily: "Arial, sans-serif",
-        lineHeight: "1.3",
-      }, // Jawi - Green
-      {
-        text: "அடையாளம்",
-        lang: "ta",
-        color: "#A855F7",
-        fontFamily: "'Noto Sans Tamil', sans-serif",
-        lineHeight: "1.4",
-      }, // Tamil - Purple
-    ],
-    desc: "We don't just build websites—we bring your brand to life. Every detail reflects who you are and what you stand for.",
-    visual: {
-      color: "#00f2fe",
-      speed: 0.8,
-      noiseScale: 0.3,
-      amplitude: 2.5,
-      thickness: 0.25,
-      distort: 0.2,
-      type: "dna",
-    },
-  },
+  // IDENTITY_CONFIG is used separately in ServiceIntro
+
   {
     title: "Stories That Draw People In",
     desc: "Your story is your strength. We craft websites that invite visitors into your world and make them want to stay.",

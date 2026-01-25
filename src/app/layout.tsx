@@ -1,12 +1,14 @@
-import type { Metadata } from "next";
+// [Removed unused Metadata import]
 import {
   Plus_Jakarta_Sans,
   Inter,
   Playfair_Display,
   Outfit,
+  Caudex,
 } from "next/font/google";
 import SmoothScroll from "@/components/common/SmoothScroll/SmoothScroll";
 import Footer from "@/components/common/Footer/Footer";
+import ChatWidget from "@/components/chat/ChatWidget";
 import "./globals.scss";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { TransitionProvider } from "@/context/TransitionContext";
@@ -41,6 +43,14 @@ const outfit = Outfit({
   display: "swap",
 });
 
+const caudex = Caudex({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-serif-caudex",
+  display: "swap",
+});
+
 export const viewport = {
   themeColor: "#050505", // Matches black background
   width: "device-width",
@@ -62,7 +72,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${plusJakarta.variable} ${inter.variable} ${playfair.variable} ${outfit.variable}`}
+      className={`${plusJakarta.variable} ${inter.variable} ${playfair.variable} ${outfit.variable} ${caudex.variable}`}
       suppressHydrationWarning={true}
     >
       <body>
@@ -77,6 +87,7 @@ export default function RootLayout({
             </div>
           </SmoothScroll>
         </TransitionProvider>
+        <ChatWidget />
       </body>
       {process.env.NODE_ENV === "production" && (
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
