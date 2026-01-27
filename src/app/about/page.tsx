@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import FadeIn from "@/components/common/Animations/FadeIn";
 import { calculateAge } from "@/utils/date";
 import Image from "next/image";
@@ -7,6 +8,8 @@ import Link from "next/link";
 import styles from "./about.module.scss";
 
 export default function AboutPage() {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   // Calculate age directly to avoid "synchronous setState in useEffect" warning
   // This is safe for hydration as long as the server/client date consistency is maintained
   const age = calculateAge("1998-01-06");
@@ -22,10 +25,12 @@ export default function AboutPage() {
           priority
           quality={90}
           sizes="100vw"
+          onLoad={() => setImageLoaded(true)}
+          style={{
+            opacity: imageLoaded ? 1 : 0,
+            transition: "opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
+          }}
         />
-        <div className={styles.imageLabel}>
-          Manaslu Circuit, Nepal, October 2024
-        </div>
       </div>
       <div className={styles.innerContainer}>
         <div className={styles.headerGrid}>

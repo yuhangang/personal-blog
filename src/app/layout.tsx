@@ -16,7 +16,7 @@ import Navigation from "@/components/common/Navigation/Navigation";
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-serif", // Keeping existing variable name for backward compat
+  variable: "--font-serif", // Reverting to original mapping (confusing name, but consistent with rest of app)
   display: "swap",
 });
 
@@ -46,7 +46,7 @@ const caudex = Caudex({
   subsets: ["latin"],
   weight: ["400", "700"],
   style: ["normal", "italic"],
-  variable: "--font-serif-caudex",
+  variable: "--font-serif-caudex", // Reverting to specific variable
   display: "swap",
 });
 

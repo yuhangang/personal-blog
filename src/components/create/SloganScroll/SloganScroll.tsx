@@ -4,12 +4,10 @@ import { useRef, useState, useEffect } from "react";
 import { useLenis } from "@/components/common/SmoothScroll/SmoothScroll";
 import styles from "./SloganScroll.module.scss";
 
-import SloganVisuals from "./SloganVisuals";
-import SloganItem from "./SloganItem";
-import IdentitySloganItem from "./IdentitySloganItem";
-import SloganControls from "./SloganControls";
 import { SLOGAN_ITEMS } from "./sloganConfig";
-import { useScroll } from "framer-motion";
+// Remove useScroll import
+import SloganVisuals from "./SloganVisuals";
+import SloganTextDisplay from "./SloganTextDisplay";
 
 export default function SloganScroll() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -22,12 +20,37 @@ export default function SloganScroll() {
   const isInteracting = useRef(false); // Track if user is holding the screen
   const { lenis } = useLenis();
 
-  // Track global list progress to drive the "Sticky Fade" of the last item
-  const listRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: listProgress } = useScroll({
-    target: listRef,
-    offset: ["start start", "end end"],
-  });
+  // Track which item is in view
+  useEffect(() => {
+    const handleScroll = () => {
+      const trackItems = itemRefs.current;
+      const viewportCenter = window.innerHeight / 2;
+      let minDist = Infinity;
+      let closestIndex = 0;
+
+      trackItems.forEach((item, index) => {
+        if (!item) return;
+        const rect = item.getBoundingClientRect();
+        // Calculate distance from center of item to center of viewport
+        const itemCenter = rect.top + rect.height / 2;
+        const dist = Math.abs(itemCenter - viewportCenter);
+
+        if (dist < minDist) {
+          minDist = dist;
+          closestIndex = index;
+        }
+      });
+
+      setActiveIndex(closestIndex);
+    };
+
+    // Attach listener
+    window.addEventListener("scroll", handleScroll);
+    // Initial check
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     // If no Lenis instance, we can't snap elegantly
@@ -50,8 +73,8 @@ export default function SloganScroll() {
     };
 
     const snapToClosest = () => {
-      const items = document.querySelectorAll(`.${styles.sloganItem}`);
-      const listContainer = document.querySelector(`.${styles.sloganList}`);
+      const items = document.querySelectorAll(`.${styles.trackItem}`);
+      const listContainer = document.querySelector(`.${styles.scrollTrack}`);
 
       if (!items.length || !listContainer) return;
 
@@ -69,8 +92,29 @@ export default function SloganScroll() {
       if (viewportCenter < listTop || viewportCenter > listBottom) return;
 
       // EXIT CHECK:
-      // Leave more room at the end for natural scrolling
-      if (listBottom < viewportHeight * 1.1) return;
+      // If we are significantly past the last item, STOP snapping.
+      // This prevents the "trap" sensation when scrolling to the next section.
+      const lastItem = items[items.length - 1];
+      if (lastItem) {
+        const lastRect = lastItem.getBoundingClientRect();
+        const lastItemCenter = lastRect.top + lastRect.height / 2;
+
+        // EXIT CHECK 1: Velocity Escape
+        // If scrolling DOWN (positive velocity) and we've already passed the center of the last item,
+        // DO NOT snap back. Let the user pass freely.
+        if (lenis.velocity > 0 && lastItemCenter < viewportCenter) return;
+
+        // EXIT CHECK 2: Distance Threshold
+        // If the center of the last item is ABOVE the viewport center by more than the threshold, we are leaving.
+        if (
+          viewportCenter - lastItemCenter >
+          Math.min(viewportHeight * 0.1, 150)
+        )
+          return;
+      }
+
+      // Backstop: If list bottom is high up, definitely stop.
+      if (listBottom < viewportHeight * 0.8) return;
 
       let closestItem: HTMLElement | null = null;
       let minDistance = Infinity;
@@ -190,71 +234,47 @@ export default function SloganScroll() {
   return (
     <section className={styles.section} ref={sectionRef}>
       <div className={styles.layoutGrid}>
-        {/* LEFT: SLOGANS (SCROLLING) */}
-        <div className={styles.sloganList} ref={listRef}>
-          {SLOGAN_ITEMS.map(
-            (
-              feature: {
-                title: string;
-                desc: string;
-                alternateTitles?: { text: string; lang: string }[];
-              },
-              i: number,
-            ) => {
-              if (feature.alternateTitles) {
-                return (
-                  <IdentitySloganItem
-                    key={i}
-                    index={i}
-                    title={feature.title}
-                    alternateTitles={feature.alternateTitles}
-                    desc={feature.desc}
-                    setActiveIndex={setActiveIndex}
-                    isFirst={i === 0}
-                    isLast={i === SLOGAN_ITEMS.length - 1}
-                    listProgress={listProgress}
-                    totalCount={SLOGAN_ITEMS.length}
-                    itemRef={(el) => {
-                      itemRefs.current[i] = el;
-                    }}
-                  />
-                );
-              }
+        {/* LEFT: STICKY TEXT */}
+        <div className={styles.sloganList}>
+          <SloganTextDisplay activeIndex={activeIndex} />
 
-              return (
-                <SloganItem
-                  key={i}
-                  index={i}
-                  title={feature.title}
-                  desc={feature.desc}
-                  setActiveIndex={setActiveIndex}
-                  isLast={i === SLOGAN_ITEMS.length - 1}
-                  listProgress={listProgress}
-                  totalCount={SLOGAN_ITEMS.length}
-                  itemRef={(el) => {
-                    itemRefs.current[i] = el;
-                  }}
-                />
-              );
-            },
-          )}
-        </div>
-
-        {/* RIGHT: VISUALS (STICKY) */}
-        <div className={styles.stickyVisualWrapper}>
-          <div className={styles.visualContainer}>
-            <SloganVisuals activeIndex={activeIndex} />
+          {/* Scroll Indicator - Modern Retro Technical Style */}
+          <div className={styles.scrollIndicator}>
+            <div className={styles.indicatorTrack}>
+              <div
+                className={styles.progressBar}
+                style={{
+                  transform: `scaleX(${(activeIndex + 1) / SLOGAN_ITEMS.length})`,
+                }}
+              />
+            </div>
+            <span className={styles.indicatorNum}>
+              {activeIndex + 1}/{SLOGAN_ITEMS.length}
+            </span>
           </div>
         </div>
-      </div>
 
-      {/* CONTROLS (Fixed at bottom) */}
-      <SloganControls
-        activeIndex={activeIndex}
-        totalCount={SLOGAN_ITEMS.length}
-        itemRefs={itemRefs}
-        sectionRef={sectionRef}
-      />
+        {/* RIGHT: SCROLLABLE VISUALS TRACK */}
+        <div className={styles.scrollTrack}>
+          {/* STICKY CANVAS BEHIND TRACK ITEMS */}
+          <div className={styles.stickyVisualWrapper}>
+            <div className={styles.visualContainer}>
+              <SloganVisuals activeIndex={activeIndex} />
+            </div>
+          </div>
+
+          {/* INVISIBLE SCROLL TRIGGERS */}
+          {SLOGAN_ITEMS.map((_, i) => (
+            <div
+              key={i}
+              className={styles.trackItem}
+              ref={(el) => {
+                itemRefs.current[i] = el;
+              }}
+            />
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

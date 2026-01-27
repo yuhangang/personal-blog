@@ -10,6 +10,7 @@
     // Remove black background to let CreateHero show through
     background: transparent;
     margin-top: 50vh; 
+    pointer-events: none; // Allow clicks to pass through transparent areas
 }
 
 .sectionFullscreen {
@@ -45,6 +46,8 @@
     top: 0;
     height: 100vh;
     width: 100%;
+    z-index: 10; // Ensure it stays on top of subsequent sections until scrolled past
+    pointer-events: auto; // Re-enable clicks for content
     
     display: flex;
     flex-direction: column;

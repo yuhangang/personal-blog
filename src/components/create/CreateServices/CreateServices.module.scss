@@ -6,7 +6,9 @@
     width: 100%;
     background: #050505; // Deep dark background
     color: #ffffff;
-    padding: 160px 0;
+    padding: 100px 0;
+    z-index: 20; // Force stack above SloganScroll to ensure clean scroll exit
+    background: #050505; // Ensure opaque background covers the fixed/sticky elements below
 }
 
 .container {

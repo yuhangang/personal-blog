@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import MessyThreads from "../../common/MessyThreads/MessyThreads";
 import styles from "./CreateContact.module.scss";
 
@@ -23,6 +23,12 @@ export default function CreateContact() {
   const [captchaToken, setCaptchaToken] = useState<string | null>(
     process.env.NODE_ENV === "development" ? "dev_bypass" : null,
   );
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line
+    setIsMounted(true);
+  }, []);
 
   // Refs for navigation
   const emailRef = useRef<HTMLInputElement>(null);
@@ -185,6 +191,7 @@ export default function CreateContact() {
                   if (errors.name) setErrors({ ...errors, name: "" });
                 }}
                 onKeyDown={(e) => handleKeyDown(e, "name", emailRef)}
+                suppressHydrationWarning
               />
               {errors.name && (
                 <span className={styles.errorMessage}>{errors.name}</span>
@@ -203,6 +210,7 @@ export default function CreateContact() {
                   if (errors.email) setErrors({ ...errors, email: "" });
                 }}
                 onKeyDown={(e) => handleKeyDown(e, "email", websiteRef)}
+                suppressHydrationWarning
               />
               {errors.email && (
                 <span className={styles.errorMessage}>{errors.email}</span>
@@ -220,6 +228,7 @@ export default function CreateContact() {
                   setFormData({ ...formData, website: e.target.value })
                 }
                 onKeyDown={(e) => handleKeyDown(e, "website", businessRef)}
+                suppressHydrationWarning
               />
             </div>
 
@@ -233,6 +242,7 @@ export default function CreateContact() {
                   setFormData({ ...formData, business: e.target.value })
                 }
                 onKeyDown={(e) => handleKeyDown(e, "business", messageRef)}
+                suppressHydrationWarning
               />
             </div>
 
@@ -247,6 +257,7 @@ export default function CreateContact() {
                   setFormData({ ...formData, message: e.target.value });
                   if (errors.message) setErrors({ ...errors, message: "" });
                 }}
+                suppressHydrationWarning
               />
               {errors.message && (
                 <span className={styles.errorMessage}>{errors.message}</span>
@@ -254,7 +265,7 @@ export default function CreateContact() {
             </div>
 
             {/* --- SHARED TURNSTILE --- */}
-            {process.env.NODE_ENV !== "development" && (
+            {isMounted && process.env.NODE_ENV !== "development" && (
               <div className={styles.fullWidth} style={{ marginTop: "16px" }}>
                 <Turnstile
                   siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}

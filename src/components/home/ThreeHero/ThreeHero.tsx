@@ -207,6 +207,7 @@ export default function ThreeHero() {
           resize={{ scroll: false }}
           frameloop={frameloop}
           style={{ touchAction: "pan-y" }}
+          dpr={[1, 2]}
         >
           <GradientPlane />
         </Canvas>

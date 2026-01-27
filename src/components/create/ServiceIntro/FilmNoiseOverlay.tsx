@@ -189,6 +189,7 @@ export default function FilmNoiseOverlay({ className }: FilmNoiseOverlayProps) {
         camera={{ zoom: 1, position: [0, 0, 1], near: 0.1, far: 10 }}
         style={{ width: "100%", height: "100%" }}
         gl={{ alpha: true, antialias: false }}
+        dpr={0.5}
       >
         <NoiseQuad />
       </Canvas>

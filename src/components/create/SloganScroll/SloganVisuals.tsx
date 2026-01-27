@@ -25,14 +25,18 @@ function NeuroStrand({
   // Initial Curve
   // We create a new instance every render (overhead) but useRef ignores it after mount.
   // This avoids "accessing ref during render" linter errors.
-  const pathRef = useRef(
-    new THREE.CatmullRomCurve3(
-      Array.from({ length: 51 }, () => new THREE.Vector3(0, 0, 0)),
-    ),
-  );
+  // Lazy Init inside useFrame to avoid linter issues with render-time ref access
+  const pathRef = useRef<THREE.CatmullRomCurve3 | null>(null);
 
   useFrame((state, delta) => {
-    if (!meshRef.current || !materialRef.current || !pathRef.current) return;
+    if (!meshRef.current || !materialRef.current) return;
+
+    // Init path if needed
+    if (!pathRef.current) {
+      pathRef.current = new THREE.CatmullRomCurve3(
+        Array.from({ length: 51 }, () => new THREE.Vector3(0, 0, 0)),
+      );
+    }
 
     const targetItem =
       SLOGAN_ITEMS[activeIndex % SLOGAN_ITEMS.length] || SLOGAN_ITEMS[0];
@@ -454,6 +458,7 @@ export default function SloganVisuals({
         camera={{ position: [0, 0, 15], fov: 45 }}
         frameloop={frameloop}
         style={{ touchAction: "pan-y" }}
+        dpr={[1, 2]}
       >
         <Environment preset="city" />
         <ambientLight intensity={0.5} />

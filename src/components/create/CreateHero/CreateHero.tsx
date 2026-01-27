@@ -622,6 +622,7 @@ export default function CreateHero() {
           camera={{ position: [0, 0, 2], fov: 60 }}
           frameloop={frameloop}
           style={{ touchAction: "pan-y" }}
+          dpr={[1, 2]}
         >
           {/* Camera Animation Rig */}
           <CameraRig scrollY={scrollY} windowHeight={windowHeight} />
