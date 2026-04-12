@@ -539,10 +539,14 @@ function CameraRig({
   windowHeight: number;
 }) {
   const { camera } = useThree();
+  const lastScroll = useRef(-1);
 
   useFrame(() => {
     // 0 to 1 progress based on window height
     const currentScroll = scrollY.get();
+    if (currentScroll === lastScroll.current) return;
+    lastScroll.current = currentScroll;
+
     const progress = Math.min(1, Math.max(0, currentScroll / windowHeight));
 
     // Zoom: 2.0 -> 1.43 (Approx 1.4x scale)
@@ -622,7 +626,7 @@ export default function CreateHero() {
           camera={{ position: [0, 0, 2], fov: 60 }}
           frameloop={frameloop}
           style={{ touchAction: "pan-y" }}
-          dpr={[1, 2]}
+          dpr={[1, 1.5]}
         >
           {/* Camera Animation Rig */}
           <CameraRig scrollY={scrollY} windowHeight={windowHeight} />

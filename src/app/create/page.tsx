@@ -21,12 +21,8 @@ export default function PortfolioPage() {
     <main>
       {/* Dark theme hero section */}
       <div data-theme="dark">
-        <CreateHero />
-        {/* Service Intro: Transitional section with parallax */}
-        <ServiceIntro
-          ctaText="Why Build With Me"
-          ctaLink="#why-build-with-me"
-        />
+   
+       
         <SloganScroll />
       </div>
       {/* Light theme projects and services sections   <div data-theme="dark">

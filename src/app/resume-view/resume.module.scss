@@ -231,6 +231,46 @@
     }
 }
 
+.skillsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 8px;
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+
+    @media print {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.skillCard {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px 20px;
+    border: 1px solid #f1f3f5;
+    height: 100%;
+}
+
+.skillCategory {
+    color: $color-primary;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 8px 0;
+}
+
+.skillList {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #444;
+    margin: 0;
+}
+
+
 .summary {
     font-size: 1.05rem;
     line-height: 1.5;
@@ -262,23 +302,26 @@
         color: #000;
     }
 
-    .period {
-        font-size: 0.85rem;
-        color: #888;
-        font-style: italic;
+}
 
-        a {
-            color: inherit;
-            text-decoration: underline;
-            position: relative;
-            z-index: 10;
+.period {
+    font-size: 0.85rem;
+    color: #888;
+    font-style: italic;
 
-            &:hover {
-                color: $color-accent;
-            }
+    a {
+        color: $color-primary;
+        text-decoration: underline;
+        font-style: normal;
+        position: relative;
+        z-index: 10;
+
+        &:hover {
+            color: $color-accent;
         }
     }
 }
+
 
 .company {
     font-weight: 600;
@@ -294,7 +337,7 @@
     margin: 0;
 
     li {
-        margin-bottom: 5px;
+        margin-bottom: 10px;
         position: relative;
         padding-left: 20px;
         color: #444;

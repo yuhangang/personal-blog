@@ -22,26 +22,34 @@ export default function SloganScroll() {
 
   // Track which item is in view
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      const trackItems = itemRefs.current;
-      const viewportCenter = window.innerHeight / 2;
-      let minDist = Infinity;
-      let closestIndex = 0;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const trackItems = itemRefs.current;
+          const viewportCenter = window.innerHeight / 2;
+          let minDist = Infinity;
+          let closestIndex = 0;
 
-      trackItems.forEach((item, index) => {
-        if (!item) return;
-        const rect = item.getBoundingClientRect();
-        // Calculate distance from center of item to center of viewport
-        const itemCenter = rect.top + rect.height / 2;
-        const dist = Math.abs(itemCenter - viewportCenter);
+          trackItems.forEach((item, index) => {
+            if (!item) return;
+            const rect = item.getBoundingClientRect();
+            // Calculate distance from center of item to center of viewport
+            const itemCenter = rect.top + rect.height / 2;
+            const dist = Math.abs(itemCenter - viewportCenter);
 
-        if (dist < minDist) {
-          minDist = dist;
-          closestIndex = index;
-        }
-      });
+            if (dist < minDist) {
+              minDist = dist;
+              closestIndex = index;
+            }
+          });
 
-      setActiveIndex(closestIndex);
+          setActiveIndex(closestIndex);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     // Attach listener
