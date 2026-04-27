@@ -171,7 +171,7 @@ export default function Navigation() {
     }
   };
 
-  if (pathname === "/resume") return null;
+  if (pathname === "/resume" || pathname === "/pantai-timor") return null;
 
   return (
     <>

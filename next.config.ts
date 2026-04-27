@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
   },
   allowedDevOrigins: ['192.168.0.115', 'localhost:3000'],
   turbopack: {
-    root: '.',
+    root: __dirname,
   },
 };
 

@@ -46,4 +46,24 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Image Upload Pipeline (Cloudflare R2)
+
+This project includes an automated pipeline to sync images from `public/Terengganu/` to Cloudflare R2 under the `Terengganu/` prefix in the bucket.
+
+### 1. Automated Upload (GitHub Actions)
+The images are automatically synced to R2 whenever changes are pushed to the `main` branch and `public/Terengganu/` changes. Updates to the workflow or sync script also trigger the job so you can validate pipeline edits on push. To enable this, add the following secrets to your GitHub repository:
+
+- `R2_ACCESS_KEY_ID`
+- `R2_SECRET_ACCESS_KEY`
+- `R2_ACCOUNT_ID`
+- `R2_BUCKET_NAME`
+
+### 2. Manual Upload (Local Script)
+You can also sync images manually using the provided script:
+
+```bash
+chmod +x scripts/sync-images.sh
+./scripts/sync-images.sh
+```
+
+**Note:** The local script requires `aws-cli` and reads `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, and `R2_BUCKET_NAME` from your shell or `.env`.

@@ -1,9 +1,16 @@
 'use client';
 import { motion } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 import { useTransition } from '@/context/TransitionContext';
 
 export default function Template({ children }: { children: React.ReactNode }) {
     const { shouldAnimate } = useTransition();
+    const pathname = usePathname();
+    const disableRouteTransition = pathname === '/terengganu';
+
+    if (disableRouteTransition) {
+        return <>{children}</>;
+    }
 
     return (
         <motion.div

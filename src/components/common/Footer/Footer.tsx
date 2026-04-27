@@ -27,7 +27,7 @@ const SOCIAL_ICONS: Record<string, React.ReactNode> = {
 
 export default function Footer() {
   const pathname = usePathname();
-  if (pathname === "/resume") return null;
+  if (pathname === "/resume" || pathname === "/terengganu" || pathname === "/pantai-timor") return null;
 
   return (
     <footer className={styles.footer}>

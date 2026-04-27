@@ -9,6 +9,7 @@ import {
 import SmoothScroll from "@/components/common/SmoothScroll/SmoothScroll";
 import Footer from "@/components/common/Footer/Footer";
 import "./globals.scss";
+import "./globals.css";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { TransitionProvider } from "@/context/TransitionContext";
 import Navigation from "@/components/common/Navigation/Navigation";

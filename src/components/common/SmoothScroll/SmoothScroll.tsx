@@ -19,6 +19,7 @@ export default function SmoothScroll({
 }) {
   const [lenis, setLenis] = useState<Lenis | null>(null);
   const pathname = usePathname();
+  const disableLenis = pathname === "/terengganu" || pathname === "/pantai-timor";
 
   useEffect(() => {
     if (lenis) {
@@ -28,6 +29,11 @@ export default function SmoothScroll({
   }, [pathname, lenis]);
 
   useEffect(() => {
+    if (disableLenis) {
+      setLenis(null);
+      return;
+    }
+
     // Force scroll to top on reload/refresh
     if (typeof window !== "undefined") {
       window.history.scrollRestoration = "manual";
@@ -58,7 +64,7 @@ export default function SmoothScroll({
       lenisInstance.destroy();
       setLenis(null);
     };
-  }, []);
+  }, [disableLenis]);
 
   return (
     <LenisContext.Provider value={{ lenis }}>{children}</LenisContext.Provider>
