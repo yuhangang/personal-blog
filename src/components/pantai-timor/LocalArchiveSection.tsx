@@ -20,14 +20,14 @@ export function LocalArchiveSection({
   shouldReduceMotion,
 }: LocalArchiveSectionProps) {
   return (
-    <section ref={localSectionRef} className="relative w-full h-[420svh] md:h-[520svh] bg-[#10110F] z-10">
+    <section ref={localSectionRef} className="relative w-full h-[640svh] md:h-[760svh] bg-[#10110F] z-10">
       <motion.div style={{ opacity: hasExitedLocalSection ? 1 : sectionOpacity }} className="sticky top-0 h-[100svh] w-full flex items-center overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#10110F] to-transparent z-40 pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-[#10110F] via-[#10110F]/80 to-transparent z-40 pointer-events-none md:h-32" />
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#10110F] to-transparent z-40 pointer-events-none" />
         <div className="absolute inset-y-0 left-0 w-full md:w-[62%] bg-gradient-to-r from-[#10110F] via-[#10110F]/90 to-transparent z-20 pointer-events-none" />
 
-        <div className="relative w-full h-full max-w-[1700px] !mx-auto !px-4 md:!px-10 lg:!px-16 flex items-center">
-          <div className="relative z-30 flex w-[calc(100vw-3rem)] max-w-[28rem] flex-col justify-center shrink-0 pointer-events-none">
+        <div className="relative w-full h-full max-w-[1700px] !mx-auto !px-4 md:!px-10 lg:!px-16 flex items-start md:items-center">
+          <div className="relative z-30 flex w-[calc(100vw-3rem)] max-w-[28rem] flex-col justify-start pt-24 shrink-0 pointer-events-none md:justify-center md:pt-0">
             <div className="pointer-events-auto">
               <h2 className="font-sans !text-xs font-black uppercase !tracking-[0.34em] !text-[#e3e1da] !mb-10 md:!tracking-[0.4em] drop-shadow-2xl">
                 THE LOCAL
@@ -65,19 +65,20 @@ export function LocalArchiveSection({
           <div className="absolute inset-0 z-10 flex items-center">
             <motion.div
               ref={carouselRef}
+              id="pantai-timor-scroller"
               style={{ x: carouselX, opacity: hasExitedLocalSection ? 1 : carouselOpacity }}
-              className="flex h-[48svh] min-h-[300px] max-h-[520px] w-max items-center gap-6 will-change-transform !pl-[calc(100vw-3rem)] pr-[20vw] sm:!pl-[30rem] md:h-[74svh] md:max-h-none md:gap-28 md:!pl-[42rem]"
+              className="flex h-[38svh] min-h-[280px] max-h-[400px] w-max items-center gap-6 will-change-transform !pl-[calc(100vw-3rem)] pr-[20vw] sm:!pl-[30rem] md:h-[74svh] md:max-h-none md:gap-28 md:!pl-[42rem]"
             >
               {CAROUSEL_IMAGES.map((item, idx) => (
                 <div
                   key={item.src}
                   onClick={() => onImageClick(idx)}
-                  className="relative flex h-full max-w-[82vw] shrink-0 cursor-pointer overflow-hidden border border-[#e3e1da]/10 bg-[#161715] group md:max-w-none"
+                  className={`relative flex h-full max-w-[82vw] shrink-0 cursor-pointer overflow-hidden border border-[#e3e1da]/10 bg-[#161715] group md:max-w-none ${item.isPortrait ? "aspect-[2/3]" : "aspect-square md:aspect-auto"}`}
                 >
                   <img
                     src={item.src}
                     alt={item.alt}
-                    className="h-full w-auto max-w-[82vw] object-contain transition-transform duration-700 ease-out group-hover:scale-[1.03] md:max-w-none"
+                    className={`h-full max-w-[82vw] transition-transform duration-700 ease-out group-hover:scale-[1.03] md:max-w-none ${item.isPortrait ? "w-auto object-contain" : "w-full object-cover md:w-auto md:object-contain"}`}
                   />
 
                   {item.isSpecial && (

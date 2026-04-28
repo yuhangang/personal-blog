@@ -19,7 +19,7 @@ export default function SmoothScroll({
 }) {
   const [lenis, setLenis] = useState<Lenis | null>(null);
   const pathname = usePathname();
-  const disableLenis = pathname === "/terengganu" || pathname === "/pantai-timor";
+  const disableLenis = pathname === "/terengganu";
 
   useEffect(() => {
     if (lenis) {
@@ -52,6 +52,7 @@ export default function SmoothScroll({
     });
 
     setLenis(lenisInstance);
+    document.documentElement.classList.add("lenis");
 
     function raf(time: number) {
       lenisInstance.raf(time);
@@ -63,6 +64,7 @@ export default function SmoothScroll({
     return () => {
       lenisInstance.destroy();
       setLenis(null);
+      document.documentElement.classList.remove("lenis");
     };
   }, [disableLenis]);
 

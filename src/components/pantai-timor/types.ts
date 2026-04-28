@@ -4,12 +4,15 @@ import type { RefObject } from "react";
 export interface PantaiTimorFontClasses {
   serif: string;
   sans: string;
+  chinese?: string;
+  arabic?: string;
 }
 
 export interface PantaiTimorImage {
   src: string;
   alt: string;
   isSpecial?: boolean;
+  isPortrait?: boolean;
 }
 
 export interface LocalArchiveSectionProps {

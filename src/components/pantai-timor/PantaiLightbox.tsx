@@ -33,16 +33,17 @@ export function PantaiLightbox({
     <AnimatePresence>
       {activeImageIndex !== null && activeImage && (
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-[100] flex h-[100svh] w-full items-center justify-center overflow-hidden bg-[#10110F]/92 backdrop-blur-[26px]"
+          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+          className="fixed inset-0 z-[100] flex h-[100svh] w-full touch-none items-center justify-center overflow-hidden overscroll-none"
           onClick={onClose}
           onWheelCapture={onOverlayWheel}
         >
-          <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_30%,rgba(227,225,218,0.08),transparent_38%),linear-gradient(180deg,rgba(16,17,15,0.45),rgba(16,17,15,0.95))]" />
-          <div className="absolute inset-x-0 top-0 z-50 flex items-center justify-between gap-4 border-b border-[#e3e1da]/10 bg-[#10110F]/68 !px-4 !py-4 backdrop-blur-xl md:!px-8" onClick={(event) => event.stopPropagation()}>
+          <div className="absolute inset-0 pointer-events-none bg-[#151612]/38 backdrop-blur-[56px] backdrop-saturate-[180%]" />
+          <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_30%,rgba(227,225,218,0.1),transparent_56%),linear-gradient(180deg,rgba(16,17,15,0.08),rgba(16,17,15,0.18))]" />
+          <div className="absolute inset-x-0 top-0 z-50 flex items-center justify-between gap-4 border-b border-[#e3e1da]/12 bg-[#151612]/42 !px-4 !py-4 shadow-[0_18px_48px_rgba(0,0,0,0.22)] backdrop-blur-[32px] backdrop-saturate-[180%] md:!px-8" onClick={(event) => event.stopPropagation()}>
             <div className="min-w-0">
               <p className="!mb-0 font-sans !text-[0.56rem] font-black uppercase !leading-none !tracking-[0.26em] !text-[#e3e1da]/42 md:!tracking-[0.34em]">
                 Pantai Timor Archive
@@ -55,7 +56,7 @@ export function PantaiLightbox({
               type="button"
               aria-label="Close photo viewer"
               onClick={onClose}
-              className="flex h-11 w-11 shrink-0 items-center justify-center border border-[#e3e1da]/16 bg-[#e3e1da]/5 text-[#e3e1da] transition-colors duration-300 hover:bg-[#e3e1da] hover:text-[#10110F] focus:outline-none focus:ring-2 focus:ring-[#e3e1da]/50"
+              className="flex h-11 w-11 shrink-0 items-center justify-center border border-[#e3e1da]/16 bg-[#e3e1da]/8 text-[#e3e1da] backdrop-blur-xl transition-colors duration-200 hover:border-[#e3e1da]/32 hover:bg-[#e3e1da]/14 hover:text-[#e3e1da] focus:outline-none focus:ring-2 focus:ring-[#e3e1da]/50"
             >
               <X className="h-4 w-4" />
             </button>
@@ -89,11 +90,11 @@ export function PantaiLightbox({
 
           <motion.div
             key={activeImageIndex}
-            initial={{ scale: 0.98, opacity: 0, y: 10 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.98, opacity: 0, y: 10 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 flex h-full w-full items-center justify-center pointer-events-none !px-4 !pb-28 !pt-24 md:!px-28 md:!pb-14 md:!pt-28"
+            initial={{ scale: 0.985, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.985, opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-10 flex h-full w-full transform-gpu items-center justify-center pointer-events-none !px-4 !pb-28 !pt-24 will-change-transform md:!px-28 md:!pb-14 md:!pt-28"
           >
             <div className="grid w-full max-w-[92rem] grid-cols-1 items-end gap-7 pointer-events-auto lg:grid-cols-[minmax(0,1fr)_20rem]" onClick={(event) => event.stopPropagation()}>
               <div className="relative flex min-h-0 w-full items-center justify-center border border-[#e3e1da]/10 bg-[#151612]/60 !p-2 shadow-[0_34px_110px_rgba(0,0,0,0.62)]">

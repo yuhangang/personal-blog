@@ -7,7 +7,7 @@
     left: 0;
     right: 0;
     z-index: 1101; // Ensure it sits ABOVE the mobile menu overlay (z=1000)
-    padding: 24px 40px;
+    padding: 16px 40px;
     background: transparent;
     pointer-events: none; // Allow clicking through the empty space
     transition: all $transition-base;
@@ -19,7 +19,7 @@
     }
 
     @media (min-width: 1440px) {
-        padding: 40px 60px;
+        padding: 24px 60px;
     }
 }
 
@@ -27,10 +27,10 @@
     width: 100%;
    
     display: flex;
-    align-items: center;
+    align-items: flex-start; // Not vertically centered
     justify-content: space-between;
     position: relative;
-    height: 56px; // LOCKED height to prevent any layout shift from children
+    height: 48px; // SLIMMER height
 }
 
 // Reusable mixin for the glass islands/pills
@@ -273,8 +273,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 56px;  // Fixed width!
-    height: 56px; // Fixed height!
+    width: 48px;  // Reduced size
+    height: 48px; // Reduced size
     cursor: pointer;
     z-index: 1102;
     background: transparent;
@@ -551,7 +551,7 @@
     box-shadow: 
         0 25px 80px rgba(0, 0, 0, 0.5),
         inset 0 0 0 0.5px rgba(255, 255, 255, 0.05); // Inner glow
-    padding-top: 80px; // Space for nav button to sit on top (56px + ~24px gap)
+    padding-top: 64px; // Reduced space for smaller button (48px + 16px gap)
 
     @include mobile {
         position: fixed; // On mobile, behave like a full/floating modal relative to screen

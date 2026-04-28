@@ -1,0 +1,67 @@
+.pantai-coastal-map .maplibregl-ctrl-top-right {
+  top: 1.4rem;
+  right: 1.4rem;
+}
+
+.pantai-coastal-map .maplibregl-ctrl-group {
+  overflow: hidden;
+  border-radius: 999px;
+  border: 1px solid rgba(227, 225, 218, 0.16);
+  background: rgba(16, 17, 15, 0.78);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(18px);
+}
+
+.pantai-coastal-map .maplibregl-ctrl button {
+  width: 2.6rem;
+  height: 2.6rem;
+  background-color: transparent;
+  color: #e3e1da;
+}
+
+.pantai-coastal-map .maplibregl-ctrl button:hover {
+  background-color: rgba(227, 225, 218, 0.12);
+}
+
+.pantai-coastal-map .maplibregl-ctrl button + button {
+  border-top: 1px solid rgba(227, 225, 218, 0.12);
+}
+
+.pantai-coastal-map .maplibregl-ctrl-icon {
+  filter: invert(92%) sepia(9%) saturate(188%) hue-rotate(4deg) brightness(96%);
+}
+
+.pantai-coastal-map .maplibregl-ctrl-attrib {
+  display: none;
+}
+
+.pantai-coastal-map .maplibregl-cooperative-gestures-screen {
+  background: rgba(16, 17, 15, 0.7) !important;
+  backdrop-filter: blur(8px);
+  color: #e3e1da !important;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  line-height: 1.8;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.pantai-coastal-map:hover .maplibregl-cooperative-gestures-screen {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.pantai-coastal-map .maplibregl-canvas {
+  outline: none;
+}

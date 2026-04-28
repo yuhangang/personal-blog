@@ -13,7 +13,7 @@ interface GeographySectionProps {
 
 export function GeographySection({ fonts, onImageClick }: GeographySectionProps) {
   return (
-    <section className="relative w-full !py-32 md:!py-48 !px-4 md:!px-8 flex flex-col items-center z-10 bg-[#10110F]">
+    <section className="relative w-full flex flex-col items-center z-10 bg-[#10110F]">
       <div className="max-w-[1700px] w-full flex flex-col items-center">
         <div className="flex flex-col items-center text-center max-w-[32rem] mb-20 md:mb-32">
           <h3 className="font-sans !mb-0 !text-[0.65rem] font-black uppercase !tracking-[0.34em] !text-[#e3e1da] md:!tracking-[0.4em]">
@@ -27,7 +27,7 @@ export function GeographySection({ fonts, onImageClick }: GeographySectionProps)
           </p>
         </div>
 
-        <div className="relative w-full aspect-[16/9] md:aspect-[21/9] min-h-[400px] overflow-hidden border border-[#e3e1da]/10 bg-[#161715]">
+        <div className="relative w-full aspect-[16/9] md:aspect-[21/9] min-h-[400px] overflow-hidden">
           <CoastalMap
             onImageClick={(src) => {
               const index = CAROUSEL_IMAGES.findIndex((image) => image.src === src);

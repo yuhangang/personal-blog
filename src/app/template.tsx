@@ -6,7 +6,7 @@ import { useTransition } from '@/context/TransitionContext';
 export default function Template({ children }: { children: React.ReactNode }) {
     const { shouldAnimate } = useTransition();
     const pathname = usePathname();
-    const disableRouteTransition = pathname === '/terengganu';
+    const disableRouteTransition = pathname === '/terengganu' || pathname === '/pantai-timor';
 
     if (disableRouteTransition) {
         return <>{children}</>;
