@@ -3,7 +3,7 @@
 import { Inter, Libre_Caslon_Text, Noto_Serif_TC, Amiri } from "next/font/google";
 import dynamic from "next/dynamic";
 import { useAnimationFrame, useMotionValue, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useLayoutEffect, useRef, useState, type WheelEvent } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { COASTAL_LOCATIONS } from "@/app/pantai-timor/data";
 import { useLenis } from "@/components/common/SmoothScroll/SmoothScroll";
 import { AlmanacSection, VillageRhythmsSection } from "./FeatureSections";
@@ -71,7 +71,6 @@ export default function PantaiTimorPage() {
   const carouselRef = useRef<HTMLDivElement>(null);
   const hasExitedLocalSectionRef = useRef(false);
   const isRecenteringRef = useRef(false);
-  const lastOverlayWheelAt = useRef(0);
   const localSectionRef = useRef<HTMLElement>(null);
   const localAutoplayProgress = useMotionValue(0);
   const recenterTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -379,25 +378,6 @@ export default function PantaiTimorPage() {
   const activeImage = activeImageIndex === null ? null : CAROUSEL_IMAGES[activeImageIndex];
   const activeLocation = activeImage ? COASTAL_LOCATIONS.find((location) => location.image === activeImage.src) ?? null : null;
 
-  const handleOverlayWheel = (event: WheelEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const wheelDelta = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
-    if (Math.abs(wheelDelta) < 24) return;
-
-    const now = window.performance.now();
-    if (now - lastOverlayWheelAt.current < 520) return;
-    lastOverlayWheelAt.current = now;
-
-    setActiveImageIndex((currentIndex) => {
-      if (currentIndex === null) return currentIndex;
-
-      const nextIndex = wheelDelta > 0 ? currentIndex + 1 : currentIndex - 1;
-      return Math.max(0, Math.min(CAROUSEL_IMAGES.length - 1, nextIndex));
-    });
-  };
-
   const handleToggleLocalAutoplay = () => {
     if (shouldReduceMotion) return;
 
@@ -458,7 +438,6 @@ export default function PantaiTimorPage() {
         fonts={fonts}
         onClose={() => setActiveImageIndex(null)}
         onNavigate={setActiveImageIndex}
-        onOverlayWheel={handleOverlayWheel}
       />
     </main>
   );

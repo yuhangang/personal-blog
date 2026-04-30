@@ -2,6 +2,7 @@
 
 
 import { useLenis } from "@/components/common/SmoothScroll/SmoothScroll";
+import Link from "next/link";
 
 export const Footer = () => {
   const { lenis } = useLenis();
@@ -40,6 +41,21 @@ export const Footer = () => {
                 {item.label}
               </a>
             ))}
+            
+            <div className="w-px h-3 bg-[#e3e1da]/20 self-center mx-2" />
+            
+            <Link 
+              href="/" 
+              className="font-sans text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] md:tracking-[0.25em] text-[#e3e1da]/80 hover:text-[#e3e1da] transition-colors"
+            >
+              HOME
+            </Link>
+            <Link 
+              href="/gallery" 
+              className="font-sans text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] md:tracking-[0.25em] text-[#e3e1da]/80 hover:text-[#e3e1da] transition-colors"
+            >
+              GALLERY
+            </Link>
           </div>
         </div>
         

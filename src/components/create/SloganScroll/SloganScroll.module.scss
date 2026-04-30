@@ -10,7 +10,7 @@
     width: 100%;
     z-index: 20; // Higher than ServiceIntro to overlay it cleanly
     font-family: var(--font-serif-caudex); // Apply ONLY to this section
-    margin-top: -100vh; // Pull it up to seamless overlap if needed, or adjust based on flow. 
+    margin-top: -100dvh; // Pull it up to seamless overlap if needed, or adjust based on flow. 
     // Actually, if we want normal flow, remove negative margin. 
     // But Parallax often needs overlap.
     // Let's ensure it has a background so it covers the previous one.
@@ -93,7 +93,7 @@
     pointer-events: auto;
     width: 100%;
     padding: 0 40px;
-    margin-top: -10vh; // Optical center correction
+    margin-top: -10svh; // Optical center correction
 }
 
 .scrollTrack {
@@ -152,9 +152,9 @@
     // Center logic: Padding + (100 - Padding)/2 = Goal%
     // Goal: 60% from top (40% from bottom) -> Padding = 20vh
     // Applied consistently across mobile/desktop as requested.
-    padding-top: 20vh;
+    padding-top: 20svh;
 
-    padding-top: 20vh;
+    padding-top: 20svh;
 }
 
 // Explicit Sticky Class for Last Item
@@ -173,7 +173,7 @@
 }
 
 .identityTrack {
-    height: 150vh; // 100vh visible + 50vh scroll buffer
+    height: 150dvh; // 100dvh visible + 50dvh scroll buffer
     width: 100%;
     position: relative;
     // Ensure the track takes up space in the flow
@@ -243,7 +243,7 @@
         // Vertical Grid for Mobile stability
         grid-template-columns: 1fr;
         grid-template-rows: 1fr 1fr; 
-        height: 35vh; // Fixed compact height to prevent jitter
+        height: 35svh; // Fixed compact height to prevent jitter
         gap: 0; 
         margin-bottom: 0;
         padding: 0;
@@ -311,7 +311,7 @@
 .scrollIndicator {
     position: absolute;
     left: 40px; 
-    bottom: 8vh; 
+    bottom: 8svh; 
     z-index: 100;
     
     display: flex;
@@ -328,7 +328,7 @@
     
     @include mobile {
         left: 20px;
-        bottom: 15vh;
+        bottom: 15svh;
     }
 }
 

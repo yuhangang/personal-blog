@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, MotionValue, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Cormorant_Garamond } from "next/font/google";
 import Image from "next/image";
 import React from "react";
@@ -14,148 +14,336 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
-const LOCAL_TRAVEL_START = 0.01;
-const LOCAL_TRAVEL_DISTANCE = 0.98; // LOCAL_TRAVEL_END - LOCAL_TRAVEL_START
-
 interface CarouselItemProps {
-  item: typeof CAROUSEL_IMAGES[0];
+  item: (typeof CAROUSEL_IMAGES)[0] & { originalIdx: number };
   index: number;
-  totalItems: number;
-  localScrollProgress: MotionValue<number>;
+  isActive: boolean;
   onClick: () => void;
 }
 
-const CarouselItem = ({ item, index, totalItems, localScrollProgress, onClick }: CarouselItemProps) => {
-  const centerProgress = totalItems > 1 
-    ? LOCAL_TRAVEL_START + (index / (totalItems - 1)) * LOCAL_TRAVEL_DISTANCE 
-    : 0.5;
-  const itemProgressRange = [
-    Math.max(0, centerProgress - 0.12),
-    centerProgress,
-    Math.min(1, centerProgress + 0.12),
-  ];
-  
-  const scale = useTransform(localScrollProgress, 
-    itemProgressRange, 
-    [0.92, 1.05, 0.92]
-  );
-  const opacity = useTransform(localScrollProgress, 
-    itemProgressRange, 
-    [0.5, 1, 0.5]
-  );
-
-  return (
-    <motion.div 
-      onClick={() => {
-        ptTrack.carouselClickImage(index, item.src);
-        onClick();
-      }}
-      style={{ scale, opacity }}
-      className={`relative h-full ${item.isPortrait ? "aspect-[2/3]" : "aspect-square md:aspect-[3/2]"} flex shrink-0 bg-[#161715] overflow-hidden border border-[#e3e1da]/10 group cursor-pointer`}
-    >
-      <Image
-        src={item.src}
-        alt={item.alt}
-        fill
-        sizes="(min-width: 768px) 60vw, 80vw"
-        className="object-cover md:object-contain transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-      />
-    </motion.div>
-  );
-};
+const CarouselItem = React.forwardRef<HTMLDivElement, CarouselItemProps>(
+  ({ item, index, isActive, onClick }, ref) => {
+    return (
+      <motion.div
+        ref={ref}
+        data-index={index}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.6, delay: Math.min(index * 0.08, 0.4) }}
+        onClick={() => {
+          ptTrack.carouselClickImage(index, item.src);
+          onClick();
+        }}
+        className={`carousel-item relative w-[80vw] md:w-auto max-w-[380px] md:max-w-none h-auto md:h-full aspect-square ${
+          item.isPortrait ? "md:aspect-[2/3]" : "md:aspect-[3/2]"
+        } flex shrink-0 bg-[#161715] overflow-hidden border transition-all duration-500 group cursor-pointer ${
+          isActive 
+            ? "border-[#e3e1da]/40 opacity-100" 
+            : "border-[#e3e1da]/10 opacity-30 grayscale-[0.1]"
+        }`}
+      >
+        <Image
+          src={item.src}
+          alt={item.alt}
+          fill
+          sizes="(min-width: 768px) 50vw, 75vw"
+          className="object-cover md:object-contain transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+        />
+      </motion.div>
+    );
+  }
+);
+CarouselItem.displayName = "CarouselItem";
 
 interface TheLocalSectionProps {
   localSectionRef: React.RefObject<HTMLElement | null>;
-  sectionOpacity: MotionValue<number>;
-  carouselRef: React.RefObject<HTMLDivElement | null>;
-  carouselX: MotionValue<number>;
-  carouselOpacity: MotionValue<number>;
-  carouselPaddings: { left: number; right: number };
-  localScrollProgress: MotionValue<number>;
   setActiveImageIndex: (index: number) => void;
   setIsGridView: (isGrid: boolean) => void;
 }
 
 export const TheLocalSection = ({
   localSectionRef,
-  sectionOpacity,
-  carouselRef,
-  carouselX,
-  carouselOpacity,
-  carouselPaddings,
-  localScrollProgress,
   setActiveImageIndex,
-  setIsGridView
+  setIsGridView,
 }: TheLocalSectionProps) => {
-  const featuredImages = CAROUSEL_IMAGES.map((img, originalIdx) => ({
-    ...img,
-    originalIdx
-  })).filter(img => {
-    const loc = COASTAL_LOCATIONS.find(l => l.image === img.src);
-    return loc?.featured;
-  });
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const itemRefs = React.useRef<(HTMLDivElement | null)[]>([]);
+  const [activeIdx, setActiveIdx] = React.useState(0);
+  const [scrollProgress, setScrollProgress] = React.useState(0);
+
+  const featuredImages = React.useMemo(
+    () =>
+      CAROUSEL_IMAGES.map((img, originalIdx) => ({
+        ...img,
+        originalIdx,
+      })).filter((img) => {
+        const loc = COASTAL_LOCATIONS.find((l) => l.image === img.src);
+        return loc?.featured;
+      }),
+    []
+  );
+
+  const total = featuredImages.length;
+  const desktopLeadImage = featuredImages[0];
+  const desktopGalleryImages = featuredImages.slice(1, 3);
+
+  // ── Scroll to a specific item, centering it ──
+  const scrollToItem = React.useCallback(
+    (idx: number) => {
+      const clamped = Math.max(0, Math.min(idx, total - 1));
+      const el = itemRefs.current[clamped];
+      const container = scrollRef.current;
+      if (!el || !container) return;
+
+      const elRect = el.getBoundingClientRect();
+      const offset =
+        el.offsetLeft -
+        container.offsetWidth / 2 +
+        elRect.width / 2;
+
+      container.scrollTo({ left: offset, behavior: "smooth" });
+    },
+    [total]
+  );
+
+  // ── Detect which item is closest to center on scroll ──
+  const onScroll = React.useCallback(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    const { scrollLeft, scrollWidth, clientWidth } = container;
+    const progress = scrollLeft / Math.max(1, scrollWidth - clientWidth);
+    setScrollProgress(isNaN(progress) ? 0 : Math.min(1, progress));
+
+    // Find item closest to the center of the viewport
+    const center = scrollLeft + clientWidth / 2;
+    let closestIdx = 0;
+    let closestDist = Infinity;
+
+    itemRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const itemCenter = el.offsetLeft + el.offsetWidth / 2;
+      const dist = Math.abs(itemCenter - center);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closestIdx = i;
+      }
+    });
+
+    setActiveIdx(closestIdx);
+  }, []);
+
+  React.useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    // Prevent vertical page scroll when scrolling horizontally on the carousel
+    const handleWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        e.preventDefault();
+      }
+    };
+
+    container.addEventListener("scroll", onScroll, { passive: true });
+    container.addEventListener("wheel", handleWheel, { passive: false });
+    onScroll();
+    window.addEventListener("resize", onScroll);
+    return () => {
+      container.removeEventListener("scroll", onScroll);
+      container.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [onScroll]);
+
+  const goPrev = () => {
+    if (activeIdx === 0) {
+      scrollToItem(total - 1);
+    } else {
+      scrollToItem(activeIdx - 1);
+    }
+  };
+
+  const goNext = () => {
+    if (activeIdx === total - 1) {
+      scrollToItem(0);
+    } else {
+      scrollToItem(activeIdx + 1);
+    }
+  };
 
   return (
-    <section id="archive" ref={localSectionRef} className="relative w-full h-[400svh] md:h-[500svh] bg-[#10110F] z-10">
-      <motion.div style={{ opacity: sectionOpacity }} className="sticky top-0 h-[100svh] w-full flex items-start overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-[#10110F] via-[#10110F]/80 to-transparent z-20 pointer-events-none md:h-32" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#10110F] to-transparent z-40 pointer-events-none" />
-        <div className="hidden md:block absolute inset-y-0 left-0 w-[28%] bg-gradient-to-r from-[#10110F] via-[#10110F]/90 to-transparent z-20 pointer-events-none" />
-
-        <div className="relative w-full h-full max-w-[1700px] !mx-auto !px-4 !pt-32 md:!pt-0 md:!px-10 lg:!px-16 flex flex-col items-start md:flex-row md:items-center">
-          
-          <div className="relative z-30 flex w-[calc(100vw-3rem)] max-w-[28rem] flex-col justify-start pt-44 pb-10 shrink-0 pointer-events-none md:justify-center md:pt-0">
-            <div className="pointer-events-auto">
-              <h2 className="font-sans !text-xs font-black uppercase !tracking-[0.34em] !text-[#e3e1da] !mb-10 md:!tracking-[0.4em] drop-shadow-2xl">
-                THE LOCAL
-              </h2>
-              <h3 className={`${cormorant.className} !text-[clamp(3.8rem,14vw,4.5rem)] md:!text-[4.5rem] !leading-[1.05] !tracking-normal !text-[#e3e1da] !mb-10 text-balance drop-shadow-2xl font-semibold`}>
-                The Living<br />Artifact
+    <section
+      id="archive"
+      ref={localSectionRef}
+      className="relative w-full overflow-x-hidden bg-[#10110F] z-10 !pt-16 !pb-20 md:!pt-44 md:!pb-96 flex flex-col items-center"
+    >
+      <div className="w-full !px-6 md:!px-12">
+        <div className="w-full max-w-[1700px] mx-auto">
+          {/* ─── Header ─── */}
+          <div className="relative z-20 flex flex-col md:flex-row md:items-end justify-between gap-8 md:gap-16 !mb-8 md:!mb-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="max-w-[42rem]"
+            >
+              <h3
+                className={`${cormorant.className} !text-[clamp(3rem,10vw,5.5rem)] md:!text-[5.5rem] !leading-[0.95] !tracking-tight !text-[#e3e1da] !mb-10 text-balance font-semibold`}
+              >
+                The Living
+                Artifact
               </h3>
-              <p className="max-w-full md:max-w-[26rem] !text-sm md:!text-base !leading-[2] !text-[#e3e1da] !mb-10 text-pretty drop-shadow-lg">
-                Our collection spans decades of coastal memories. We preserve not just the images, but the atmosphere of the Timor coast, treating each photographic practice with a sense of urgency.
+              <p className="max-w-[60rem] !text-[0.9rem] md:!text-[1.05rem] !leading-[1.9] !text-[#e3e1da]/50 !mb-0 text-pretty">
+                Our collection spans decades of coastal memories — preserving not
+                just the images, but the atmosphere of the Timor coast.
               </p>
-              <button 
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="flex items-end"
+            >
+              <button
                 onClick={() => {
                   ptTrack.carouselViewArchive();
                   setActiveImageIndex(0);
                   setIsGridView(true);
                 }}
-                className="group relative flex items-center gap-4 border border-[#e3e1da]/14 bg-[#e3e1da]/8 !px-6 !py-3 font-sans !text-[0.65rem] font-black uppercase !tracking-[0.24em] !text-[#e3e1da] backdrop-blur-xl transition-all duration-300 hover:border-[#e3e1da]/40 hover:bg-[#e3e1da] hover:text-[#10110F] md:!px-8 md:!py-4"
+                className="group flex items-center gap-3 font-sans text-[0.75rem] md:text-[0.8rem] uppercase tracking-[0.15em] text-[#e3e1da]/50 transition-colors duration-300 hover:text-[#e3e1da]"
               >
-                View All Archive
-                <div className="h-px w-6 bg-current transition-all duration-300 group-hover:w-10" />
+                <span className="border-b border-[#e3e1da]/20 pb-1 group-hover:border-[#e3e1da]/50 transition-colors duration-300">
+                  View Full Archive
+                </span>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                >
+                  <path
+                    d="M5 12h14M12 5l7 7-7 7"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </button>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      {/* ─── Carousel (Full Bleed) ─── */}
+      <div className="relative w-full overflow-visible">
+        <div
+          ref={scrollRef}
+          id="pantai-timor-scroller"
+          className="flex gap-5 md:gap-8 h-[380px] md:h-[640px] items-center overflow-x-auto overflow-y-hidden no-scrollbar px-6 md:px-[calc((100vw-min(1700px,100vw-3rem))/2)]"
+        >
+          {featuredImages.map((item, idx) => (
+            <CarouselItem
+              key={idx}
+              ref={(el) => { itemRefs.current[idx] = el; }}
+              item={item}
+              index={idx}
+              isActive={idx === activeIdx}
+              onClick={() => setActiveImageIndex(item.originalIdx)}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="w-full !px-6 md:!px-12">
+        <div className="w-full max-w-[1700px] mx-auto">
+          {/* ─── Progress Bar (Desktop) ─── */}
+          <div className="hidden md:block w-full mt-14">
+            <div className="h-[2px] w-full bg-[#e3e1da]/10 relative overflow-hidden">
+              <motion.div
+                className="absolute top-0 left-0 h-full bg-[#e3e1da]/60"
+                style={{ scaleX: scrollProgress, transformOrigin: "left" }}
+              />
             </div>
           </div>
 
-          <div className="relative z-10 flex-1 w-full h-full flex items-center">
-            <motion.div
-              ref={carouselRef}
-              id="pantai-timor-scroller"
-              style={{ 
-                x: carouselX, 
-                opacity: carouselOpacity,
-                paddingLeft: carouselPaddings.left,
-                paddingRight: carouselPaddings.right
-              }}
-              className="flex gap-10 md:gap-28 h-[38svh] min-h-[280px] max-h-[400px] md:h-[74svh] md:max-h-none items-center will-change-transform w-max"
+          {/* ─── Navigation Controls ─── */}
+          <div className="flex items-center justify-center gap-5 mt-8 md:mt-14">
+            <button
+              onClick={goPrev}
+              aria-label="Previous"
+              className="grid place-items-center w-12 h-12 md:w-14 md:h-14 border border-[#e3e1da]/25 bg-[#e3e1da]/5 text-[#e3e1da] hover:bg-[#e3e1da]/15 hover:border-[#e3e1da]/40 active:scale-90 rounded-full transition-all duration-300"
             >
-              {featuredImages.map((item, idx) => (
-                <CarouselItem 
-                  key={idx}
-                  item={item}
-                  index={idx}
-                  totalItems={featuredImages.length}
-                  localScrollProgress={localScrollProgress}
-                  onClick={() => setActiveImageIndex(item.originalIdx)}
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
+                <path
+                  d="M15 19l-7-7 7-7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
-              ))}
-            </motion.div>
-          </div>
+              </svg>
+            </button>
 
+            {/* Numeric Page Indicator */}
+            <div className="flex items-center gap-6 min-w-[6rem] justify-center">
+              <span className="font-sans text-[0.85rem] md:text-[0.95rem] font-bold tracking-[0.3em] text-[#e3e1da]">
+                {String(activeIdx + 1).padStart(2, "0")}
+              </span>
+              <div className="w-10 h-px bg-[#e3e1da]/30" />
+              <span className="font-sans text-[0.85rem] md:text-[0.95rem] font-bold tracking-[0.3em] text-[#e3e1da]/50">
+                {String(total).padStart(2, "0")}
+              </span>
+            </div>
+
+            <button
+              onClick={goNext}
+              aria-label="Next"
+              className="grid place-items-center w-12 h-12 md:w-14 md:h-14 border border-[#e3e1da]/25 bg-[#e3e1da]/5 text-[#e3e1da] hover:bg-[#e3e1da]/15 hover:border-[#e3e1da]/40 active:scale-90 rounded-full transition-all duration-300"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
+                <path
+                  d="M9 5l7 7-7 7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
-      </motion.div>
+      </div>
+
+      <style jsx global>{`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        #pantai-timor-scroller {
+          overscroll-behavior: none;
+          touch-action: pan-x;
+          -webkit-overflow-scrolling: touch;
+        }
+      `}</style>
     </section>
   );
 };

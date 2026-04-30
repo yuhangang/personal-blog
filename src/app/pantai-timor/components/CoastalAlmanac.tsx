@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, MotionValue } from "framer-motion";
+import { motion } from "framer-motion";
 import { Libre_Caslon_Text } from "next/font/google";
 import Image from "next/image";
 import { Mail, Phone } from "lucide-react";
@@ -15,16 +15,14 @@ const libreCaslon = Libre_Caslon_Text({
 
 interface CoastalAlmanacProps {
   almanacRef: React.RefObject<HTMLElement | null>;
-  almanacRadius: MotionValue<number>;
 }
 
-export const CoastalAlmanac = ({ almanacRef, almanacRadius }: CoastalAlmanacProps) => {
+export const CoastalAlmanac = ({ almanacRef }: CoastalAlmanacProps) => {
   return (
     <section id="almanac" ref={almanacRef} className="relative w-full !pb-32 md:!py-48 !px-4 md:!px-8 flex flex-col items-center z-10 bg-transparent">
       <div className="max-w-screen-2xl w-full flex flex-col items-center">
-        <motion.div 
-          style={{ borderRadius: almanacRadius }}
-          className="relative w-full aspect-[3/4] md:aspect-[18/9] overflow-hidden border border-[#e3e1da]/10 group md:rounded-2xl"
+        <div 
+          className="relative w-full aspect-[3/4] md:aspect-[18/9] overflow-hidden border border-[#e3e1da]/10 group rounded-2xl md:rounded-[2.5rem]"
         >
           <div className="absolute inset-0 w-full">
             <Image 
@@ -72,7 +70,7 @@ export const CoastalAlmanac = ({ almanacRef, almanacRadius }: CoastalAlmanacProp
               </motion.div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

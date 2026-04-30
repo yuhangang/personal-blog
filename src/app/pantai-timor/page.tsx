@@ -1,10 +1,9 @@
 "use client";
 
-import { useMotionTemplate, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
+import { useMotionTemplate, useScroll, useSpring, useTransform } from "framer-motion";
 import { Inter } from "next/font/google";
-import { useEffect, useLayoutEffect, useRef, useState, type WheelEvent as ReactWheelEvent } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { CAROUSEL_IMAGES } from "./data";
-import { useLenis } from "@/components/common/SmoothScroll/SmoothScroll";
 
 // Import extracted components
 import { Navbar } from "./components/Navbar";
@@ -18,23 +17,12 @@ import { QuoteSection } from "./components/QuoteSection";
 import { Footer } from "./components/Footer";
 import { Lightbox } from "./components/Lightbox";
 import { TheLocalSection } from "./components/TheLocalSection";
+import { CoastalAlmanac } from "./components/CoastalAlmanac";
 
 type ResettableMotionValue = {
   set: (value: number) => void;
   jump?: (value: number) => void;
 };
-
-const LOCAL_TRAVEL_START = 0.01;
-const LOCAL_TRAVEL_END = 0.99;
-const LOCAL_BACK_SKIP_OFFSET = 2;
-
-function clampProgress(value: number) {
-  return Math.max(0, Math.min(1, value));
-}
-
-function getLocalArchiveTargetX() {
-  return window.innerWidth / 2;
-}
 
 const inter = Inter({
   subsets: ["latin"],
@@ -42,20 +30,15 @@ const inter = Inter({
 });
 
 export default function PantaiTimorRedesign() {
-  const shouldReduceMotion = useReducedMotion();
-  const { lenis } = useLenis();
-  const localSectionRef = useRef<HTMLElement>(null);
-  const localScrollProgress = useMotionValue(0);
+  const [vh, setVh] = useState(0);
   const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
   const [isGridView, setIsGridView] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const hasScrolledPastLocalRef = useRef(false);
-  const isSkippingLocalBackRef = useRef(false);
-  const lastLocalScrollYRef = useRef(0);
+  const localSectionRef = useRef<HTMLElement>(null);
 
   const heroRef = useRef<HTMLElement>(null);
-  const lastOverlayWheelAt = useRef(0);
+  const almanacRef = useRef<HTMLElement>(null);
   const spacerRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
   const [anchors, setAnchors] = useState({
@@ -66,7 +49,8 @@ export default function PantaiTimorRedesign() {
 
   useLayoutEffect(() => {
     const updatePos = () => {
-      const vh = window.innerHeight;
+      const currentVh = window.innerHeight;
+      setVh(currentVh);
       const vw = window.innerWidth;
       const isMob = vw < 768;
       setIsMobile(isMob);
@@ -88,7 +72,7 @@ export default function PantaiTimorRedesign() {
       } else {
         setAnchors(prev => ({
           ...prev,
-          start: { top: vh * 0.48 + 50, left: vw / 2 },
+          start: { top: currentVh * 0.48 + 50, left: vw / 2 },
           end: { top: isMob ? 36 : 40, left: vw / 2 }
         }));
       }
@@ -128,170 +112,7 @@ export default function PantaiTimorRedesign() {
     };
   }, []);
 
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const [carouselWidth, setCarouselWidth] = useState(0);
-  const [carouselPaddings, setCarouselPaddings] = useState({ left: 0, right: 0 });
 
-  useEffect(() => {
-    let frame = 0;
-
-    const getLocalScrollMetrics = () => {
-      const section = localSectionRef.current;
-      if (!section) return null;
-
-      const top = section.getBoundingClientRect().top + window.scrollY;
-      const distance = Math.max(1, section.offsetHeight - window.innerHeight);
-      return { top, distance, bottom: top + distance };
-    };
-
-    interface LenisScrollEvent {
-      scroll: number;
-      velocity: number;
-      progress: number;
-      direction: number;
-      type?: string;
-    }
-
-    const handleLenisScroll = (e: LenisScrollEvent) => {
-      frame = 0;
-      const metrics = getLocalScrollMetrics();
-      if (!metrics) return;
-
-      const currentScrollY = e.scroll;
-      const scrollDelta = currentScrollY - lastLocalScrollYRef.current;
-      lastLocalScrollYRef.current = currentScrollY;
-
-      const isManual = e.type === 'wheel' || e.type === 'touch' || e.type === 'key';
-      const progress = clampProgress((currentScrollY - metrics.top) / metrics.distance);
-
-      // 1. Always update horizontal progress to ensure smooth transforms
-      localScrollProgress.set(progress);
-
-      // 2. Track boundary states
-      if (currentScrollY < metrics.top - 100) {
-        hasScrolledPastLocalRef.current = false;
-      } else if (currentScrollY > metrics.bottom + 100) {
-        hasScrolledPastLocalRef.current = true;
-      }
-
-      // 3. Manual "Skip Back" Jump Logic
-      // Only trigger if:
-      // - Manual scroll
-      // - We are moving UP (scrollDelta < 0)
-      // - We just entered the section from the bottom
-      if (isManual && scrollDelta < 0 && 
-          currentScrollY < metrics.bottom && 
-          currentScrollY > metrics.bottom - 100 && 
-          hasScrolledPastLocalRef.current) {
-        
-        if (!isSkippingLocalBackRef.current) {
-          const targetScrollY = Math.max(0, metrics.top - LOCAL_BACK_SKIP_OFFSET);
-
-          isSkippingLocalBackRef.current = true;
-          hasScrolledPastLocalRef.current = false;
-          lastLocalScrollYRef.current = targetScrollY;
-
-          if (lenis) {
-            lenis.scrollTo(targetScrollY, { immediate: true, force: true });
-          }
-
-          window.requestAnimationFrame(() => {
-            isSkippingLocalBackRef.current = false;
-          });
-          localScrollProgress.set(0);
-        }
-      }
-      
-    };
-
-    if (lenis) {
-      lastLocalScrollYRef.current = lenis.scroll;
-      lenis.on('scroll', handleLenisScroll);
-    } else {
-      window.addEventListener("scroll", () => {
-        const metrics = getLocalScrollMetrics();
-        if (metrics) localScrollProgress.set(clampProgress((window.scrollY - metrics.top) / metrics.distance));
-      }, { passive: true });
-    }
-
-    const handleResize = () => {
-      const metrics = getLocalScrollMetrics();
-      if (metrics) localScrollProgress.set(clampProgress((window.scrollY - metrics.top) / metrics.distance));
-    };
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      if (frame) window.cancelAnimationFrame(frame);
-      if (lenis) lenis.off('scroll', handleLenisScroll);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [lenis, localScrollProgress]);
-
-  useLayoutEffect(() => {
-    const updatePaddings = () => {
-      if (!carouselRef.current) return;
-      const targetX = getLocalArchiveTargetX();
-      
-      const carousel = carouselRef.current;
-      const parent = carousel.parentElement;
-      if (!parent) return;
-
-      const prevL = carousel.style.paddingLeft;
-      const prevR = carousel.style.paddingRight;
-      carousel.style.paddingLeft = "0px";
-      carousel.style.paddingRight = "0px";
-
-      const rect = carousel.getBoundingClientRect();
-      const parentRect = parent.getBoundingClientRect();
-      const firstItem = carousel.children[0] as HTMLElement;
-      const lastItem = carousel.children[carousel.children.length - 1] as HTMLElement;
-      
-      const firstItemWidth = firstItem ? firstItem.offsetWidth : 0;
-      const lastItemWidth = lastItem ? lastItem.offsetWidth : 0;
-      
-      const neededLeft = targetX - rect.left - firstItemWidth / 2;
-      const neededRight = parentRect.width - (targetX - rect.left) - lastItemWidth / 2;
-      
-      setCarouselPaddings({
-        left: Math.max(0, neededLeft),
-        right: Math.max(0, neededRight)
-      });
-
-      carousel.style.paddingLeft = prevL;
-      carousel.style.paddingRight = prevR;
-    };
-
-    updatePaddings();
-    window.addEventListener("resize", updatePaddings);
-    const timer = setTimeout(updatePaddings, 150);
-    
-    return () => {
-      window.removeEventListener("resize", updatePaddings);
-      clearTimeout(timer);
-    };
-  }, []);
-
-  useEffect(() => {
-    const updateWidth = () => {
-      if (carouselRef.current && carouselRef.current.parentElement) {
-        const parentW = carouselRef.current.parentElement.clientWidth;
-        const childW = carouselRef.current.scrollWidth;
-        setCarouselWidth(Math.max(0, childW - parentW));
-      }
-    };
-    updateWidth();
-
-    const ro = new ResizeObserver(updateWidth);
-    if (carouselRef.current) {
-      ro.observe(carouselRef.current);
-    }
-
-    window.addEventListener("resize", updateWidth);
-    return () => {
-      ro.disconnect();
-      window.removeEventListener("resize", updateWidth);
-    };
-  }, []);
 
 
 
@@ -345,28 +166,10 @@ export default function PantaiTimorRedesign() {
   const heroImageY = useTransform(scrollY, [0, 1000], [0, 160]);
   const heroImageOpacity = useTransform(scrollY, [650, 1050], [1, 0]);
 
-  const carouselTravelProgress = useTransform(
-    localScrollProgress,
-    [0, LOCAL_TRAVEL_START, LOCAL_TRAVEL_END, 1],
-    shouldReduceMotion ? [0, 0, 0, 0] : [0, 0, 1, 1]
-  );
-  const carouselX = useTransform([carouselTravelProgress, localScrollProgress], ([p, progress]) => {
-    const travel = Number(p);
-    const rawProgress = Number(progress);
 
-    if (rawProgress <= LOCAL_TRAVEL_START) return 0;
-    return -travel * carouselWidth;
-  });
-  const sectionOpacity = useTransform(localScrollProgress, () => 1);
-  const carouselOpacity = useTransform(
-    localScrollProgress,
-    [0, 0.05, 1],
-    [0.6, 1, 1]
-  );
-
-  const navBgOpacity = useTransform(scrollY, [0, 100], [0, 1]);
-  const navBlur = useTransform(scrollY, [0, 100], [0, 24]);
-  const navBorderOpacity = useTransform(scrollY, [0, 100], [0, 0.1]);
+  const navBgOpacity = useTransform(scrollY, [vh, vh + 1], [0, 1]);
+  const navBlur = useTransform(scrollY, [vh, vh + 1], [0, 24]);
+  const navBorderOpacity = useTransform(scrollY, [vh, vh + 1], [0, 0.1]);
 
   const titleScale = useTransform(scrollY, [0, stickyScroll], [1, isMobile ? 0.58 : 0.18]);
   const titleLetterSpacing = useTransform(scrollY, [0, stickyScroll], ["-0.02em", "0.35em"]);
@@ -393,24 +196,6 @@ export default function PantaiTimorRedesign() {
   const secondaryTitleOpacity = useTransform([secondaryHeroOpacity, entryOpacity], ([so, eo]: number[]) => so * eo);
   const finalTitleY = useMotionTemplate`calc(${titleY} + ${entryY}px)`;
   const finalTitleBlur = useTransform(entryBlur, (b: number) => `blur(${b}px)`);
-
-  const handleOverlayWheel = (event: ReactWheelEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const wheelDelta = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
-    if (Math.abs(wheelDelta) < 24) return;
-
-    const now = window.performance.now();
-    if (now - lastOverlayWheelAt.current < 520) return;
-    lastOverlayWheelAt.current = now;
-
-    setActiveImageIndex((currentIndex: number | null) => {
-      if (currentIndex === null) return currentIndex;
-      const nextIndex = wheelDelta > 0 ? currentIndex + 1 : currentIndex - 1;
-      return Math.max(0, Math.min(CAROUSEL_IMAGES.length - 1, nextIndex));
-    });
-  };
 
   return (
     <main 
@@ -471,23 +256,17 @@ export default function PantaiTimorRedesign() {
       />
 
 
-
+      <CoastalAlmanac almanacRef={almanacRef} />
      
 
       <HistoryCulture />
        <VillageRhythms />
 
         <TheLocalSection 
-        localSectionRef={localSectionRef}
-        sectionOpacity={sectionOpacity}
-        carouselRef={carouselRef}
-        carouselX={carouselX}
-        carouselOpacity={carouselOpacity}
-        carouselPaddings={carouselPaddings}
-        localScrollProgress={localScrollProgress}
-        setActiveImageIndex={setActiveImageIndex}
-        setIsGridView={setIsGridView}
-      />
+          localSectionRef={localSectionRef}
+          setActiveImageIndex={setActiveImageIndex}
+          setIsGridView={setIsGridView}
+        />
 
 
       <CoastalGeography onImageClick={(index) => setActiveImageIndex(index)} />
@@ -500,7 +279,6 @@ export default function PantaiTimorRedesign() {
       <Lightbox 
         activeImageIndex={activeImageIndex}
         setActiveImageIndex={setActiveImageIndex}
-        handleOverlayWheel={handleOverlayWheel}
         isGridView={isGridView}
         setIsGridView={setIsGridView}
       />

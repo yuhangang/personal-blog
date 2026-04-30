@@ -40,10 +40,16 @@ export const Hero = ({
       className="sticky top-0 w-full h-[100svh] min-h-[680px] overflow-hidden z-0"
     >
       <motion.div 
-        style={{ opacity: heroOpacity }}
-        className="absolute inset-0 flex flex-col items-center justify-center !px-4 !pt-28"
+        style={{ 
+          opacity: heroOpacity,
+          paddingTop: 'calc(140px + env(safe-area-inset-top, 0px))'
+        }}
+        className="absolute inset-0 flex flex-col items-center justify-center !px-4"
       >
-        <div className="absolute top-[42%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[1500px] h-[700px] opacity-40 mix-blend-screen select-none pointer-events-none flex items-center justify-center">
+        <div 
+          style={{ top: 'calc(50% + env(safe-area-inset-top, 0px) / 2)' }}
+          className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[1500px] h-[700px] opacity-40 mix-blend-screen select-none pointer-events-none flex items-center justify-center"
+        >
            <motion.div 
              style={{ 
                y: heroImageY, 

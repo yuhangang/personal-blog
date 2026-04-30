@@ -20,10 +20,10 @@ interface CoastalGeographyProps {
 
 export const CoastalGeography = ({ onImageClick }: CoastalGeographyProps) => {
   return (
-    <section id="geography" className="relative w-full !py-28 md:!py-44 !px-4 md:!px-8 flex flex-col items-center z-10 overflow-hidden bg-[#10110F]">
+    <section id="geography" className="relative w-full !pt-24 !pb-10 md:!py-44 !px-4 md:!px-8 flex flex-col items-center z-10 overflow-hidden bg-[#10110F]">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#0b0c0a] to-transparent" />
       <div className="max-w-[1700px] w-full">
-        <div className="grid gap-10 !mb-14 md:!mb-20 lg:grid-cols-[minmax(0,0.92fr)_minmax(21rem,0.52fr)] lg:items-end">
+        <div className="grid gap-10 !mb-10 md:!mb-20 lg:grid-cols-[minmax(0,0.92fr)_minmax(21rem,0.52fr)] lg:items-end">
           <div>
             <h3 className="font-sans !mb-0 !text-[0.65rem] font-black uppercase !tracking-[0.34em] !text-[#e3e1da] md:!tracking-[0.4em]">
               COASTAL GEOGRAPHY
@@ -38,7 +38,7 @@ export const CoastalGeography = ({ onImageClick }: CoastalGeographyProps) => {
         </div>
         
         <div className="relative bg-[#171813] shadow-[0_40px_120px_rgba(0,0,0,0.46)]">
-          <div className="relative w-full aspect-[4/5] min-h-[520px] overflow-hidden bg-[#161715] sm:aspect-[16/11] md:aspect-[21/9] md:min-h-[560px]">
+          <div className="relative w-full aspect-[3/4] min-h-[480px] overflow-hidden bg-[#161715] sm:aspect-[16/11] md:aspect-[21/9] md:min-h-[560px]">
             <CoastalMap onImageClick={(src) => {
               const index = CAROUSEL_IMAGES.findIndex(img => img.src === src);
               if (index !== -1) onImageClick(index);

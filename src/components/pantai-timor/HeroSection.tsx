@@ -68,7 +68,7 @@ export function HeroSection({
         </motion.div>
       </motion.div>
 
-      <div className="absolute bottom-[-1vh] md:bottom-[-3vh] w-full !px-4 text-center pointer-events-none select-none z-0">
+      <div className="absolute bottom-[-1dvh] md:bottom-[-3dvh] w-full !px-4 text-center pointer-events-none select-none z-0">
         <motion.h2 style={{ y: heroY }} className="font-sans !mb-0 !text-[clamp(3.4rem,14vw,13rem)] uppercase !tracking-normal !text-[#e3e1da]/[0.02] !leading-none whitespace-nowrap">
           PANTAI TIMOR
         </motion.h2>

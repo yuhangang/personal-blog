@@ -5,7 +5,7 @@
     position: relative;
     background: #000;
     color: #fff;
-    height: 300vh; // Longer scroll to drive activeIndex
+    height: 300dvh; // Longer scroll to drive activeIndex
     overflow: visible; // Allow stickiness
 }
 
@@ -50,7 +50,7 @@
         // Vertical Grid for Mobile stability
         grid-template-columns: 1fr;
         grid-template-rows: 1fr 1fr; 
-        height: 35vh; // Fixed compact height to prevent jitter
+        height: 35svh; // Fixed compact height to prevent jitter
         gap: 0; 
         margin-bottom: 0;
         padding: 0;

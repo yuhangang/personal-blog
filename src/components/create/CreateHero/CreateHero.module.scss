@@ -43,7 +43,7 @@
     pointer-events: none;
 
     @include mobile {
-        padding: 100px 20px 24px; // Mobile nav space
+        padding: calc(120px + env(safe-area-inset-top, 0px)) 20px 24px; // Increased for safe area
     }
 
     // Match Navigation Alignment for Large Screens
@@ -90,7 +90,7 @@
     align-items: flex-end;
     width: 100%;
     position: relative;
-    padding-bottom: 4vh; // More breathing room at bottom
+    padding-bottom: 4svh; // More breathing room at bottom
     
     @include mobile {
         // Keep row to prevent overlap, just scale down

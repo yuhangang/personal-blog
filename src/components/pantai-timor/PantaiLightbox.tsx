@@ -3,10 +3,28 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { createPortal } from "react-dom";
-import type { WheelEvent } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { CAROUSEL_IMAGES } from "./constants";
 import type { CoastalLocation } from "@/app/pantai-timor/data";
 import type { PantaiTimorFontClasses, PantaiTimorImage } from "./types";
+
+const lightboxFrameVariants = {
+  enter: (direction: number) => ({
+    scale: 0.985,
+    opacity: 0,
+    x: direction === 0 ? 0 : direction > 0 ? 72 : -72,
+  }),
+  center: {
+    scale: 1,
+    opacity: 1,
+    x: 0,
+  },
+  exit: (direction: number) => ({
+    scale: 0.985,
+    opacity: 0,
+    x: direction === 0 ? 0 : direction > 0 ? -72 : 72,
+  }),
+};
 
 interface PantaiLightboxProps {
   activeImage: PantaiTimorImage | null;
@@ -15,7 +33,6 @@ interface PantaiLightboxProps {
   fonts: PantaiTimorFontClasses;
   onClose: () => void;
   onNavigate: (index: number) => void;
-  onOverlayWheel: (event: WheelEvent<HTMLDivElement>) => void;
 }
 
 export function PantaiLightbox({
@@ -25,8 +42,52 @@ export function PantaiLightbox({
   fonts,
   onClose,
   onNavigate,
-  onOverlayWheel,
 }: PantaiLightboxProps) {
+  const scrollLockYRef = useRef(0);
+  const previousIndexRef = useRef<number | null>(null);
+  const [transitionDirection, setTransitionDirection] = useState(0);
+
+  useEffect(() => {
+    if (activeImageIndex === null) return;
+
+    const body = document.body;
+    const originalOverflow = body.style.overflow;
+    const originalPosition = body.style.position;
+    const originalTop = body.style.top;
+    const originalLeft = body.style.left;
+    const originalRight = body.style.right;
+    const originalWidth = body.style.width;
+
+    scrollLockYRef.current = window.scrollY;
+
+    body.style.overflow = "hidden";
+    body.style.position = "fixed";
+    body.style.top = `-${scrollLockYRef.current}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.width = "100%";
+
+    return () => {
+      body.style.overflow = originalOverflow;
+      body.style.position = originalPosition;
+      body.style.top = originalTop;
+      body.style.left = originalLeft;
+      body.style.right = originalRight;
+      body.style.width = originalWidth;
+      window.scrollTo(0, scrollLockYRef.current);
+    };
+  }, [activeImageIndex]);
+
+  useLayoutEffect(() => {
+    const previousIndex = previousIndexRef.current;
+    if (previousIndex === null || activeImageIndex === null) {
+      setTransitionDirection(0);
+    } else {
+      setTransitionDirection(activeImageIndex > previousIndex ? 1 : -1);
+    }
+    previousIndexRef.current = activeImageIndex;
+  }, [activeImageIndex]);
+
   if (typeof document === "undefined") return null;
 
   return createPortal(
@@ -39,7 +100,6 @@ export function PantaiLightbox({
           transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
           className="fixed inset-0 z-[100] flex h-[100svh] w-full touch-none items-center justify-center overflow-hidden overscroll-none"
           onClick={onClose}
-          onWheelCapture={onOverlayWheel}
         >
           <div className="absolute inset-0 pointer-events-none bg-[#151612]/38 backdrop-blur-[56px] backdrop-saturate-[180%]" />
           <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_30%,rgba(227,225,218,0.1),transparent_56%),linear-gradient(180deg,rgba(16,17,15,0.08),rgba(16,17,15,0.18))]" />
@@ -88,37 +148,62 @@ export function PantaiLightbox({
             <ChevronRight className="h-5 w-5" />
           </button>
 
-          <motion.div
-            key={activeImageIndex}
-            initial={{ scale: 0.985, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.985, opacity: 0 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 flex h-full w-full transform-gpu items-center justify-center pointer-events-none !px-4 !pb-28 !pt-24 will-change-transform md:!px-28 md:!pb-14 md:!pt-28"
-          >
-            <div className="grid w-full max-w-[92rem] grid-cols-1 items-end gap-7 pointer-events-auto lg:grid-cols-[minmax(0,1fr)_20rem]" onClick={(event) => event.stopPropagation()}>
-              <div className="relative flex min-h-0 w-full items-center justify-center border border-[#e3e1da]/10 bg-[#151612]/60 !p-2 shadow-[0_34px_110px_rgba(0,0,0,0.62)]">
-                <img src={activeImage.src} alt={activeImage.alt} className="max-h-[58svh] w-auto max-w-full object-contain md:max-h-[74svh]" />
-              </div>
+          <AnimatePresence mode="wait" custom={transitionDirection}>
+            <motion.div
+              key={activeImageIndex}
+              custom={transitionDirection}
+              variants={lightboxFrameVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+              className="relative z-10 flex h-full w-full transform-gpu items-center justify-center pointer-events-none !px-4 !pb-28 !pt-24 will-change-transform md:!px-28 md:!pb-14 md:!pt-28"
+            >
+              <div className="grid w-full max-w-[92rem] grid-cols-1 items-end gap-7 pointer-events-auto lg:grid-cols-[minmax(0,1fr)_20rem]" onClick={(event) => event.stopPropagation()}>
+                <motion.div
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.08}
+                  dragMomentum={false}
+                  onDragEnd={(_, info) => {
+                    const threshold = 110;
+                    const velocityThreshold = 550;
 
-              <motion.aside
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.16, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                className="border-l border-[#e3e1da]/12 !pl-5 text-left md:!pl-7"
-              >
-                <p className="!mb-5 font-sans !text-[0.58rem] font-black uppercase !tracking-[0.28em] !text-[#e3e1da]/38">
-                  {String(activeImageIndex + 1).padStart(2, "0")} / {String(CAROUSEL_IMAGES.length).padStart(2, "0")}
-                </p>
-                <h4 className={`${fonts.serif} !mb-0 !text-[2rem] !leading-[1.05] !tracking-normal !text-[#e3e1da] text-balance md:!text-[2.6rem]`}>
-                  {activeLocation?.name || activeImage.alt}
-                </h4>
-                <p className="!mb-0 !mt-6 font-sans !text-[0.84rem] !leading-[2] !text-[#e3e1da]/52 text-pretty">
-                  {activeLocation?.description || "A frame from the eastern coast archive."}
-                </p>
-              </motion.aside>
-            </div>
-          </motion.div>
+                    if (activeImageIndex === null) return;
+
+                    if (info.offset.x < -threshold || info.velocity.x < -velocityThreshold) {
+                      onNavigate(Math.min(CAROUSEL_IMAGES.length - 1, activeImageIndex + 1));
+                      return;
+                    }
+
+                    if (info.offset.x > threshold || info.velocity.x > velocityThreshold) {
+                      onNavigate(Math.max(0, activeImageIndex - 1));
+                    }
+                  }}
+                  className="relative flex min-h-0 w-full cursor-grab items-center justify-center border border-[#e3e1da]/10 bg-[#151612]/60 !p-2 shadow-[0_34px_110px_rgba(0,0,0,0.62)] active:cursor-grabbing"
+                >
+                  <img src={activeImage.src} alt={activeImage.alt} className="max-h-[58svh] w-auto max-w-full object-contain md:max-h-[74svh] pointer-events-none" />
+                </motion.div>
+
+                <motion.aside
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.16, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                  className="border-l border-[#e3e1da]/12 !pl-5 text-left md:!pl-7"
+                >
+                  <p className="!mb-5 font-sans !text-[0.58rem] font-black uppercase !tracking-[0.28em] !text-[#e3e1da]/38">
+                    {String(activeImageIndex + 1).padStart(2, "0")} / {String(CAROUSEL_IMAGES.length).padStart(2, "0")}
+                  </p>
+                  <h4 className={`${fonts.serif} !mb-0 !text-[2rem] !leading-[1.05] !tracking-normal !text-[#e3e1da] text-balance md:!text-[2.6rem]`}>
+                    {activeLocation?.name || activeImage.alt}
+                  </h4>
+                  <p className="!mb-0 !mt-6 font-sans !text-[0.84rem] !leading-[2] !text-[#e3e1da]/52 text-pretty">
+                    {activeLocation?.description || "A frame from the eastern coast archive."}
+                  </p>
+                </motion.aside>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>,

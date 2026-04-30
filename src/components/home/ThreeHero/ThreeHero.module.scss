@@ -50,6 +50,11 @@
     align-items: center;
     pointer-events: none;
     background-color: rgba(0, 0, 0, 0.5);
+    padding-top: 80px; // Clear fixed navbar on desktop
+
+    @include mobile {
+        padding-top: calc(120px + env(safe-area-inset-top, 0px)); // Increased for safe area
+    }
 }
 
 

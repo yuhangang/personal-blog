@@ -35,6 +35,7 @@ body {
     min-height: 100dvh; // Full dynamic height for mobile
     width: 100%;
     position: relative;
+    padding-bottom: env(safe-area-inset-bottom); // Handle home indicator area
 }
 
 html.pantai-timor-scroll,

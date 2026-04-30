@@ -623,6 +623,7 @@ export default function CoastalMap({ onImageClick }: CoastalMapProps) {
       {/* ── Vignette overlay ─────────────────────────────────────────────── */}
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_66%_38%,transparent_0,rgba(16,17,15,0.04)_36%,rgba(16,17,15,0.42)_100%)]" />
       <div className="absolute inset-x-0 top-0 h-28 pointer-events-none bg-gradient-to-b from-[#10110F]/55 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-32 pointer-events-none bg-gradient-to-t from-[#10110F]/65 to-transparent" />
 
       {/* ── Top editorial rail ───────────────────────────────────────────── */}
       <div className="absolute left-4 right-4 top-4 z-20 pointer-events-none flex items-start justify-between gap-4 md:left-6 md:right-6 md:top-6">

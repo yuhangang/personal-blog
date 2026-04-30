@@ -33,7 +33,7 @@ export function LocalArchiveSection({
                 THE LOCAL
               </h2>
               <h3 className={`${fonts.serif} !text-[clamp(3.25rem,10vw,4.5rem)] md:!text-[4.5rem] !leading-[1.05] !tracking-normal !text-[#e3e1da] !mb-10 text-balance drop-shadow-2xl`}>
-                The Living<br />Artifact
+                The Living Artifact
               </h3>
               <p className="max-w-full md:max-w-[26rem] !text-sm md:!text-base !leading-[2] !text-[#e3e1da] !mb-14 text-pretty drop-shadow-lg">
                 Our collection spans decades of coastal memories. We preserve not just the images, but the atmosphere of the Timor coast, treating each photographic practice with a sense of urgency.
