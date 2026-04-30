@@ -19,10 +19,9 @@
 }
 
 .container {
-    width: 100%;
-    max-width: 1100px;
+    width: 90%;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1.25rem;
     position: relative;
     display: block; // No more grid, so content and background can overlap
     align-items: center;

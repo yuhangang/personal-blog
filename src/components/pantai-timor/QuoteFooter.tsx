@@ -57,8 +57,7 @@ export function PantaiFooter({ fonts }: { fonts: PantaiTimorFontClasses }) {
 
         <div className="text-left lg:text-right max-w-sm">
           <p className="!mb-0 font-sans !text-[10px] md:!text-xs font-medium uppercase !tracking-[0.18em] md:!tracking-widest !text-[#e3e1da]/30 !leading-relaxed lg:text-right">
-            All rights reserved. Random studio and other entities.<br className="hidden md:block" />
-            <span className="md:mt-1 block">&copy; 2024 Random Studio.</span>
+            <span className="md:mt-1 block">&copy; 2026 Yu Hang Ang.</span>
           </p>
         </div>
       </div>

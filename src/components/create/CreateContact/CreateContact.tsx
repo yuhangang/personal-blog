@@ -21,7 +21,7 @@ export default function CreateContact() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const [captchaToken, setCaptchaToken] = useState<string | null>(
-    process.env.NODE_ENV === "development" ? "dev_bypass" : null,
+    process.env.NEXT_PUBLIC_NODE_ENV === "development" ? "dev_bypass" : null,
   );
   const [isMounted, setIsMounted] = useState(false);
 
@@ -113,7 +113,7 @@ export default function CreateContact() {
         });
         // Reset token
         setCaptchaToken(
-          process.env.NODE_ENV === "development" ? "dev_bypass" : null,
+          process.env.NEXT_PUBLIC_NODE_ENV === "development" ? "dev_bypass" : null,
         );
       } else {
         setStatus("error");
@@ -265,7 +265,7 @@ export default function CreateContact() {
             </div>
 
             {/* --- SHARED TURNSTILE --- */}
-            {isMounted && process.env.NODE_ENV !== "development" && (
+            {isMounted && process.env.NEXT_PUBLIC_NODE_ENV !== "development" && (
               <div className={styles.fullWidth} style={{ marginTop: "16px" }}>
                 <Turnstile
                   siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}

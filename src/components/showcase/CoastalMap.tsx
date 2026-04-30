@@ -1,20 +1,22 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import Map, { Marker, NavigationControl, type MapRef } from "react-map-gl/maplibre";
+import { AnimatePresence, motion } from "framer-motion";
+import { Camera, Maximize2 } from "lucide-react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import "./CoastalMap.css";
-import { Maximize2 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Cormorant_Garamond } from "next/font/google";
+import Image from "next/image";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Map, { Marker, NavigationControl, type MapRef } from "react-map-gl/maplibre";
 import {
-  COASTAL_LOCATIONS,
-  ATTRACTIONS,
-  CoastalLocation,
   Attraction,
   AttractionCategory,
+  ATTRACTIONS,
+  COASTAL_LOCATIONS,
+  CoastalLocation,
+  getThumbnailUrl,
 } from "../../app/pantai-timor/data";
+import "./CoastalMap.css";
 
 export interface CoastalMapProps {
   onImageClick?: (src: string) => void;
@@ -24,6 +26,13 @@ const EAST_COAST_BOUNDS: [[number, number], [number, number]] = [
   [101.22, 3.92],
   [104.48, 6.72],
 ];
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  style: ["normal"],
+  display: "swap",
+});
 
 // ── Palette ─────────────────────────────────────────────────────────────────
 const CATEGORY_META: Record<
@@ -37,9 +46,9 @@ const CATEGORY_META: Record<
   museum: { label: "Museum", color: "#ead8bd", glow: "rgba(234,216,189,0.36)" },
   heritage: { label: "Heritage", color: "#efd7c9", glow: "rgba(239,215,201,0.36)" },
   nature: { label: "Nature", color: "#d5dfc3", glow: "rgba(213,223,195,0.34)" },
+  city: { label: "City", color: "#ffffff", glow: "rgba(255,255,255,0.22)" },
 };
 
-const ICON_STROKE = "#10110F";
 const iconLine = {
   stroke: "currentColor",
   strokeLinecap: "round" as const,
@@ -165,6 +174,16 @@ function NatureIcon({ size }: { size?: number }) {
   );
 }
 
+function CityIcon({ size }: { size?: number }) {
+  return (
+    <IconSvg size={size}>
+      <circle cx="21" cy="21" r="4.2" fill="currentColor" />
+      <circle cx="21" cy="21" r="8.5" stroke="currentColor" strokeWidth="1.15" opacity="0.38" />
+      <circle cx="21" cy="21" r="14" stroke="currentColor" strokeWidth="0.85" opacity="0.18" strokeDasharray="2 3" />
+    </IconSvg>
+  );
+}
+
 function AttractionIcon({ category, size }: { category: AttractionCategory; size?: number }) {
   switch (category) {
     case "island":    return <IslandIcon size={size} />;
@@ -174,6 +193,7 @@ function AttractionIcon({ category, size }: { category: AttractionCategory; size
     case "museum":    return <MuseumIcon size={size} />;
     case "heritage":  return <HeritageIcon size={size} />;
     case "nature":    return <NatureIcon size={size} />;
+    case "city":      return <CityIcon size={size} />;
   }
 }
 
@@ -238,8 +258,66 @@ export default function CoastalMap({ onImageClick }: CoastalMapProps) {
   const [activeCategories, setActiveCategories] = useState<AttractionCategory[]>(
     categoryEntries.map(([category]) => category),
   );
-  const activeCategorySet = new Set(activeCategories);
-  const visibleAttractions = ATTRACTIONS.filter((attr) => activeCategorySet.has(attr.category));
+  const [viewState, setViewState] = useState({
+    longitude: 102.86,
+    latitude: 5.42,
+    zoom: 7.45,
+  });
+
+  const visibleAttractions = useMemo(() => {
+    const activeSet = new Set(activeCategories);
+    return ATTRACTIONS.filter((attr) => 
+      activeSet.has(attr.category) && 
+      (attr.minZoom === undefined || viewState.zoom >= attr.minZoom)
+    );
+  }, [activeCategories, viewState.zoom]);
+
+  // Group coastal locations by coordinate to handle multiple photos at same point
+  const groupedLocations = useMemo(() => {
+    const groups: Record<string, CoastalLocation[]> = {};
+    COASTAL_LOCATIONS.forEach((loc) => {
+      const key = `${loc.lat.toFixed(6)},${loc.lng.toFixed(6)}`;
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(loc);
+    });
+    return Object.values(groups).map(items => ({
+      ...items[0],
+      allImages: items,
+      isMultiple: items.length > 1
+    }));
+  }, []);
+
+  const [displayedAttractions, setDisplayedAttractions] = useState<Attraction[]>([]);
+
+  const recalculateClutter = useCallback(() => {
+    const map = mapRef.current;
+    if (!map) {
+      setDisplayedAttractions(visibleAttractions);
+      return;
+    }
+    
+    // Sort by priority (1 is highest)
+    const sorted = [...visibleAttractions].sort((a, b) => (a.priority || 10) - (b.priority || 10));
+    const result: Attraction[] = [];
+    const minDistance = 130; // Minimum pixel distance between markers
+
+    for (const attr of sorted) {
+      const pos = map.project([attr.lng, attr.lat]);
+      
+      const isOverlapping = result.some(other => {
+        const otherPos = map.project([other.lng, other.lat]);
+        const dx = pos.x - otherPos.x;
+        const dy = pos.y - otherPos.y;
+        return Math.sqrt(dx * dx + dy * dy) < minDistance;
+      });
+
+      if (!isOverlapping) {
+        result.push(attr);
+      }
+    }
+    setDisplayedAttractions(result);
+  }, [visibleAttractions]);
+
   const allCategoriesActive = activeCategories.length === categoryEntries.length;
   const [visibleSiteCount, setVisibleSiteCount] = useState(visibleAttractions.length);
 
@@ -262,11 +340,12 @@ export default function CoastalMap({ onImageClick }: CoastalMapProps) {
   };
 
   useEffect(() => {
+    recalculateClutter();
     const bounds = mapRef.current?.getBounds();
     setVisibleSiteCount(
       bounds ? countAttractionsInBounds(visibleAttractions, bounds) : visibleAttractions.length,
     );
-  }, [visibleAttractions]);
+  }, [recalculateClutter, visibleAttractions]);
 
   return (
     <div className="pantai-coastal-map w-full h-full relative group overflow-hidden bg-[#12130f]">
@@ -287,44 +366,74 @@ export default function CoastalMap({ onImageClick }: CoastalMapProps) {
         maxZoom={13}
         attributionControl={false}
         cooperativeGestures={true}
-        onLoad={updateVisibleSiteCount}
-        onMove={updateVisibleSiteCount}
+        onLoad={() => {
+          updateVisibleSiteCount();
+          recalculateClutter();
+          
+          const mapRefObj = mapRef.current;
+          if (mapRefObj) {
+            const map = mapRefObj.getMap();
+            const layers = map.getStyle().layers;
+            if (layers) {
+              layers.forEach((layer) => {
+                if (layer.type === "symbol") {
+                  map.setLayoutProperty(layer.id, "visibility", "none");
+                }
+              });
+            }
+          }
+        }}
+        onMove={(evt) => {
+          setViewState(evt.viewState);
+          updateVisibleSiteCount();
+          recalculateClutter();
+        }}
       >
         <NavigationControl position="top-right" showCompass={false} />
 
         {/* ── Photo archive markers ─────────────────────────────────────── */}
-        {COASTAL_LOCATIONS.map((loc: CoastalLocation) => (
+        {/* ── Photo archive markers ─────────────────────────────────────── */}
+        {groupedLocations.map((loc) => (
           <Marker
-            key={loc.name}
+            key={`${loc.lat}-${loc.lng}`}
             longitude={loc.lng}
             latitude={loc.lat}
             anchor="bottom"
           >
             <div
-              role={loc.image ? "button" : undefined}
-              tabIndex={loc.image ? 0 : undefined}
-              aria-label={loc.image ? `Open photo from ${loc.name}` : loc.name}
+              role="button"
+              tabIndex={0}
+              aria-label={`Open photos from ${loc.name}`}
               className="relative cursor-pointer outline-none"
               onMouseEnter={() => setHoveredLocation(loc.name)}
               onMouseLeave={() => setHoveredLocation(null)}
               onFocus={() => setHoveredLocation(loc.name)}
               onBlur={() => setHoveredLocation(null)}
-              onClick={() => loc.image && onImageClick?.(loc.image)}
-              onKeyDown={(event) => {
-                if (!loc.image || (event.key !== "Enter" && event.key !== " ")) return;
-                event.preventDefault();
-                onImageClick?.(loc.image);
-              }}
+              onClick={() => onImageClick?.(loc.image!)}
             >
               <motion.div
                 initial={false}
                 animate={{
-                  scale: hoveredLocation === loc.name ? 1.28 : 1,
+                  scale: hoveredLocation === loc.name ? 1.2 : 1,
+                  y: hoveredLocation === loc.name ? -2 : 0,
                 }}
-                className="flex items-center justify-center"
+                className="flex items-center justify-center relative"
               >
-                <div className="w-4 h-4 bg-[#e3e1da] border border-[#10110F] shadow-[0_0_0_5px_rgba(227,225,218,0.07),0_8px_18px_rgba(0,0,0,0.5)] flex items-center justify-center">
-                  <div className="w-1 h-1 bg-[#10110F]" />
+                {/* Stack effect for multiple photos */}
+                {loc.isMultiple && (
+                  <>
+                    <div className="absolute -right-1 -top-1 w-6 h-6 bg-[#e3e1da]/10 border border-[#e3e1da]/20 rotate-6 rounded-full" />
+                    <div className="absolute -right-0.5 -top-0.5 w-6 h-6 bg-[#e3e1da]/20 border border-[#e3e1da]/30 rotate-3 rounded-full" />
+                  </>
+                )}
+                
+                <div className="w-6 h-6 bg-[#e3e1da] text-[#10110F] shadow-[0_8px_18px_rgba(0,0,0,0.5)] flex items-center justify-center relative z-10 rounded-full">
+                  <Camera className="w-3 h-3" />
+                  {loc.isMultiple && (
+                    <div className="absolute -bottom-1 -right-1 bg-[#10110F] text-[#e3e1da] text-[0.45rem] font-black px-1 py-0.5 min-w-[0.8rem] text-center border border-[#e3e1da]/30 rounded-sm">
+                      {loc.allImages.length}
+                    </div>
+                  )}
                 </div>
               </motion.div>
 
@@ -334,36 +443,71 @@ export default function CoastalMap({ onImageClick }: CoastalMapProps) {
                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    className="absolute bottom-full left-1/2 z-50 mb-6 w-[17rem] -translate-x-1/2 overflow-hidden border border-[#e3e1da]/15 bg-[#151612]/95 shadow-[0_24px_70px_rgba(0,0,0,0.55)] backdrop-blur-xl pointer-events-auto"
+                    className="absolute bottom-full left-1/2 z-50 mb-6 w-[18rem] -translate-x-1/2 overflow-hidden border border-[#e3e1da]/15 bg-[#151612]/95 shadow-[0_24px_70px_rgba(0,0,0,0.55)] backdrop-blur-xl pointer-events-auto"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    {loc.image && (
+                    <div className="flex flex-col">
+                      {/* Image Preview Container */}
                       <div className="relative w-full aspect-[3/2] group/img overflow-hidden">
-                        <Image
-                          src={loc.image}
-                          alt={loc.imageAlt || loc.name}
-                          fill
-                          className="object-cover transition-transform duration-700 group-hover/img:scale-110"
-                        />
-                        <button
-                          type="button"
-                          aria-label={`Expand ${loc.name} photo`}
-                          className="absolute inset-0 flex cursor-pointer items-center justify-center bg-[#10110F]/50 opacity-0 transition-opacity duration-300 group-hover/img:opacity-100 focus:opacity-100"
-                          onClick={() => onImageClick?.(loc.image!)}
-                        >
-                          <span className="flex h-11 w-11 items-center justify-center border border-[#e3e1da]/30 bg-[#10110F]/70 text-[#e3e1da] backdrop-blur-sm">
-                            <Maximize2 className="h-4 w-4" />
-                          </span>
-                        </button>
+                        {loc.isMultiple ? (
+                          <div className="flex w-full h-full overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+                            {loc.allImages.map((img, idx) => (
+                              <div key={idx} className="relative flex-none w-full h-full snap-start">
+                                <Image
+                                  src={getThumbnailUrl(img.image!)}
+                                  alt={img.imageAlt || loc.name}
+                                  fill
+                                  className="object-cover"
+                                />
+                                <button
+                                  type="button"
+                                  className="absolute inset-0 flex cursor-pointer items-center justify-center bg-[#10110F]/40 opacity-0 transition-opacity duration-300 hover:opacity-100"
+                                  onClick={() => onImageClick?.(img.image!)}
+                                >
+                                  <span className="flex h-10 w-10 items-center justify-center border border-[#e3e1da]/30 bg-[#10110F]/70 text-[#e3e1da] backdrop-blur-sm">
+                                    <Maximize2 className="h-4 w-4" />
+                                  </span>
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <>
+                            <Image
+                              src={getThumbnailUrl(loc.image!)}
+                              alt={loc.imageAlt || loc.name}
+                              fill
+                              className="object-cover transition-transform duration-700 group-hover/img:scale-110"
+                            />
+                            <button
+                              type="button"
+                              className="absolute inset-0 flex cursor-pointer items-center justify-center bg-[#10110F]/50 opacity-0 transition-opacity duration-300 group-hover/img:opacity-100"
+                              onClick={() => onImageClick?.(loc.image!)}
+                            >
+                              <span className="flex h-11 w-11 items-center justify-center border border-[#e3e1da]/30 bg-[#10110F]/70 text-[#e3e1da] backdrop-blur-sm">
+                                <Maximize2 className="h-4 w-4" />
+                              </span>
+                            </button>
+                          </>
+                        )}
+
+                        {loc.isMultiple && (
+                          <div className="absolute bottom-3 right-3 z-10 bg-[#10110F]/80 px-2 py-1 text-[0.55rem] font-black text-[#e3e1da]/80 border border-[#e3e1da]/10 backdrop-blur-md uppercase tracking-widest">
+                            {loc.allImages.length} Photos
+                          </div>
+                        )}
                       </div>
-                    )}
-                    <div className="!p-5">
-                      <h4 className="font-sans !mb-2 !text-[0.68rem] font-black uppercase !tracking-[0.25em] !text-[#e3e1da]">
-                        {loc.name}
-                      </h4>
-                      <p className="font-sans !mb-0 !text-[0.68rem] !leading-[1.85] !text-[#e3e1da]/58">
-                        {loc.description}
-                      </p>
+
+                      <div className="!p-5">
+                        <div className="flex items-center justify-between !mb-2">
+                          <h4 className="font-sans !mb-0 !text-[0.68rem] font-black uppercase !tracking-[0.25em] !text-[#e3e1da]">
+                            {loc.name}
+                          </h4>
+                        </div>
+                        <p className="font-sans !mb-0 !text-[0.68rem] !leading-[1.85] !text-[#e3e1da]/58">
+                          {loc.description}
+                        </p>
+                      </div>
                     </div>
                     <div className="absolute left-1/2 top-full -mt-px h-3 w-3 -translate-x-1/2 rotate-45 border-b border-r border-[#e3e1da]/15 bg-[#151612]" />
                   </motion.div>
@@ -374,7 +518,7 @@ export default function CoastalMap({ onImageClick }: CoastalMapProps) {
         ))}
 
         {/* ── Attraction markers ────────────────────────────────────────── */}
-        {visibleAttractions.map((attr: Attraction) => {
+        {displayedAttractions.map((attr: Attraction) => {
           const meta = CATEGORY_META[attr.category];
           const isHovered = hoveredAttraction === attr.name;
           return (
@@ -399,20 +543,22 @@ export default function CoastalMap({ onImageClick }: CoastalMapProps) {
                   animate={{
                     scale: isHovered ? 1.08 : 1,
                     y: isHovered ? -2 : 0,
+                    opacity: isHovered ? 1 : 0.85,
                   }}
                   transition={{ type: "spring", stiffness: 360, damping: 28 }}
                   style={{
-                    backgroundColor: "rgba(227,225,218,0.92)",
-                    borderColor: isHovered ? "rgba(227,225,218,0.92)" : "rgba(227,225,218,0.58)",
-                    boxShadow: isHovered
-                      ? "0 10px 24px rgba(0,0,0,0.36), 0 0 0 1px rgba(16,17,15,0.28)"
-                      : "0 6px 14px rgba(0,0,0,0.24), 0 0 0 1px rgba(16,17,15,0.16)",
+                    backgroundColor: "transparent",
+                    borderColor: "transparent",
+                    boxShadow: "none",
                   }}
-                  className="relative z-10 flex h-12 w-12 items-center justify-center overflow-hidden rounded-[0.45rem] border text-[#10110F]"
+                  className={`relative z-10 flex items-center gap-3 text-[#e3e1da] whitespace-nowrap ${cormorant.className}`}
                 >
-                  <div className="relative z-10">
-                    <AttractionIcon category={attr.category} />
+                  <div className="flex h-6 w-6 shrink-0 items-center justify-center opacity-90 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                    <AttractionIcon category={attr.category} size={attr.category === 'city' ? 24 : 28} />
                   </div>
+                  <span className={`${attr.category === 'city' ? 'text-[1.1rem] tracking-[0.12em] font-black text-[#fdfcf8] !opacity-100' : 'text-[0.92rem] font-semibold tracking-tight text-[#e3e1da]'} drop-shadow-[0_2px_8px_rgba(0,0,0,1)] uppercase`}>
+                    {attr.name}
+                  </span>
                 </motion.div>
 
                 {/* Tooltip */}
@@ -488,6 +634,7 @@ export default function CoastalMap({ onImageClick }: CoastalMapProps) {
       </div>
 
       {/* ── Interactive legend ───────────────────────────────────────────── */}
+      {/* 
       <div className="absolute inset-x-0 bottom-0 z-20 pointer-events-none !p-4 md:!p-6">
         <div className="pointer-events-auto ml-auto flex max-w-[44rem] flex-col gap-3 rounded-[1rem] border border-[#e3e1da]/12 bg-[#10110F]/86 !p-3 shadow-[0_26px_70px_rgba(0,0,0,0.42)] backdrop-blur-2xl md:!p-3.5">
           <div className="flex items-center justify-between gap-4 !px-1">
@@ -516,7 +663,7 @@ export default function CoastalMap({ onImageClick }: CoastalMapProps) {
 
           <div className="flex gap-2 overflow-x-auto pb-1 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0 lg:grid-cols-7">
             {categoryEntries.map(([cat, meta]) => {
-              const isActive = activeCategorySet.has(cat);
+              const isActive = activeCategories.includes(cat);
               return (
                 <button
                   key={cat}
@@ -549,7 +696,9 @@ export default function CoastalMap({ onImageClick }: CoastalMapProps) {
           </div>
         </div>
       </div>
+      */}
 
+      {/*
       <AnimatePresence>
         {visibleAttractions.length === 0 && (
           <motion.div
@@ -571,6 +720,7 @@ export default function CoastalMap({ onImageClick }: CoastalMapProps) {
           </motion.div>
         )}
       </AnimatePresence>
+      */}
     </div>
   );
 }

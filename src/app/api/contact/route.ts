@@ -25,7 +25,7 @@ export async function POST(request: Request) {
 
     // --- VERIFY TURNSTILE ---
     // Skip in development
-    if (process.env.NODE_ENV !== "development") {
+    if (process.env.NEXT_PUBLIC_NODE_ENV !== "development") {
       if (!token) {
         return NextResponse.json(
           { error: "Verification failed. Please refresh." },

@@ -206,6 +206,7 @@ export default function Navigation() {
                       about: "About",
                       identity: "Create", // Homepage section alias
                       create: "Create", // Actual page
+                      gallery: "Gallery",
                     };
 
                     const displayText = SECTION_LABELS[activeSection] || null;

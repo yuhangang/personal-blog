@@ -16,6 +16,8 @@ interface Props {
   variant?: "scroll" | "fullscreen";
   description?: string;
   title?: string;
+  image?: string;
+  showIdentity?: boolean;
 }
 
 export default function ServiceIntro({
@@ -24,6 +26,8 @@ export default function ServiceIntro({
   variant = "scroll",
   description = IDENTITY_CONFIG.desc,
   title,
+  image = "/images/service-intro.webp",
+  showIdentity = true,
 }: Props) {
   const sectionRef = useRef<HTMLElement>(null!);
   const router = useRouter();
@@ -50,8 +54,8 @@ export default function ServiceIntro({
         >
           <div className={styles.frame}>
             <Image
-              src="/images/service-intro.webp"
-              alt="Service Intro Background"
+              src={image}
+              alt={title || "Service Intro Background"}
               fill
               className={styles.bgImage}
               priority
@@ -62,9 +66,14 @@ export default function ServiceIntro({
               className={styles.textOverlay}
               style={{ flexDirection: "column" }}
             >
-              <IdentityText
-                mode={variant === "fullscreen" ? "hero" : "label"}
-              />
+              {showIdentity && (
+                <IdentityText
+                  mode={variant === "fullscreen" ? "hero" : "label"}
+                />
+              )}
+              {!showIdentity && title && (
+                <h3 className={styles.featuredTitle}>{title}</h3>
+              )}
               {description && (
                 <p
                   className={

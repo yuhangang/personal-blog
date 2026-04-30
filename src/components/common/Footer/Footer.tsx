@@ -69,7 +69,7 @@ export default function Footer() {
         </p>
 
         <p className={styles.copyright}>
-          © 2024 Yu Hang Ang. All rights reserved.
+          © 2026 Yu Hang Ang. All rights reserved.
         </p>
       </div>
     </footer>

@@ -88,7 +88,7 @@ export default function RootLayout({
           </SmoothScroll>
         </TransitionProvider>
       </body>
-      {process.env.NODE_ENV === "production" && (
+      {process.env.NEXT_PUBLIC_NODE_ENV === "production" && (
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       )}
     </html>

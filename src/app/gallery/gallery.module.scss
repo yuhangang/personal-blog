@@ -1,0 +1,67 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.page {
+    min-height: 100vh;
+    background: #050505;
+    color: #f4f0e8;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.backgroundLayer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url('https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC08235.jpg');
+        background-size: cover;
+        background-position: center;
+        filter: blur(80px) saturate(1.5);
+        opacity: 0.15;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% 0%, rgba(255, 77, 0, 0.05), transparent 70%);
+        opacity: 0.8;
+    }
+}
+
+.galleryGrid {
+    padding: 0 0 clamp(8rem, 15vw, 15rem);
+    position: relative;
+    z-index: 1;
+}
+
+.gridContainer {
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(2rem, 5vw, 6rem);
+
+    @include tablet {
+        gap: 3rem;
+    }
+
+    @include mobile {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+    }
+}
+
+@include mobile {
+    .gridContainer {
+        width: 100%;
+        padding: 0 1.5rem;
+    }
+}

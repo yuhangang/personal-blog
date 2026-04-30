@@ -1,0 +1,103 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.section {
+    padding: clamp(8rem, 15vw, 12rem) 0;
+    background: #050505;
+    position: relative;
+    z-index: 2;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1px;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent);
+        z-index: -1;
+    }
+}
+
+.container {
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: clamp(4rem, 8vw, 6rem);
+    text-align: center;
+}
+
+.subtitle {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: #ff4d00;
+    display: block;
+    margin-bottom: 1.5rem;
+}
+
+.title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 5rem);
+    color: #f4f0e8;
+    margin: 0;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(2rem, 5vw, 6rem);
+
+    @include mobile {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+    }
+}
+
+.viewArchive {
+    grid-column: span 2;
+    display: flex;
+    justify-content: center;
+    margin-top: 4rem;
+
+    @include mobile {
+        grid-column: span 1;
+    }
+}
+
+.archiveLink {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 2.5rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #f4f0e8;
+    text-decoration: none;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 2px;
+
+    svg {
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.3);
+        
+        svg {
+            transform: translateX(5px);
+        }
+    }
+}

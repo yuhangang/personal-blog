@@ -58,10 +58,9 @@
 // Visual Container: Logical Wrapper & Layout
 .visualContainer {
     position: relative;
-    
-    // Desktop Size: 70%
-    width: 70%;
-    max-width: 1600px;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
     
     // Enable Container Queries (Parent)
     container: service-frame / inline-size;
@@ -351,5 +350,20 @@
         font-size: clamp(1.5rem, 6cqw, 2.5rem);
         max-width: 90%;
         line-height: 1.4;
+    }
+}
+
+.featuredTitle {
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 8cqw, 8rem);
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0;
+    text-align: center;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.8);
+    
+    @include mobile {
+        font-size: clamp(2rem, 10cqw, 4rem);
     }
 }
