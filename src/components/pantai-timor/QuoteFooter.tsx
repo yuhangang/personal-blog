@@ -40,13 +40,13 @@ export function QuoteSection({ fonts }: { fonts: PantaiTimorFontClasses }) {
 
 export function PantaiFooter({ fonts }: { fonts: PantaiTimorFontClasses }) {
   return (
-    <footer className="relative z-20 w-full border-t border-[#e3e1da]/10 !px-4 !py-20 md:!px-10 bg-[#10110F]">
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] items-start lg:items-end gap-16 max-w-[1700px] !mx-auto">
-        <div className="flex flex-col gap-12 md:gap-16">
+    <footer className="relative z-20 flex w-full flex-col items-center border-t border-[#e3e1da]/10 bg-[#10110F] !px-6 !py-20 sm:!px-8 md:!py-24 lg:!px-10">
+      <div className="flex w-full max-w-6xl flex-col items-center gap-14 text-center md:gap-16">
+        <div className="flex flex-col items-center gap-10 md:gap-12">
           <h2 className={`${fonts.serif} !mb-0 !text-[clamp(3.25rem,12vw,5rem)] !leading-none !tracking-normal !text-[#e3e1da]`}>
             Pantai Timor
           </h2>
-          <div className="flex max-w-[44rem] flex-wrap gap-x-8 gap-y-5 md:gap-x-16">
+          <div className="flex max-w-[44rem] flex-wrap justify-center gap-x-8 gap-y-5 md:gap-x-16">
             {FOOTER_LINKS.map((link) => (
               <a key={link} href={`#${link.replace(/\s+/g, "-")}`} className="font-sans text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] md:tracking-[0.25em] text-[#e3e1da]/40 hover:text-[#e3e1da] transition-colors">
                 {link}
@@ -55,8 +55,8 @@ export function PantaiFooter({ fonts }: { fonts: PantaiTimorFontClasses }) {
           </div>
         </div>
 
-        <div className="text-left lg:text-right max-w-sm">
-          <p className="!mb-0 font-sans !text-[10px] md:!text-xs font-medium uppercase !tracking-[0.18em] md:!tracking-widest !text-[#e3e1da]/30 !leading-relaxed lg:text-right">
+        <div className="max-w-sm text-center">
+          <p className="!mb-0 font-sans !text-[10px] md:!text-xs font-medium uppercase !tracking-[0.18em] md:!tracking-widest !text-[#e3e1da]/30 !leading-relaxed">
             <span className="md:mt-1 block">&copy; 2026 Yu Hang Ang.</span>
           </p>
         </div>

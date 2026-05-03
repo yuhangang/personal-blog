@@ -8,6 +8,7 @@ import Image from "next/image";
 import { ptTrack } from "@/utils/ga-events";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { PANTAI_TIMOR_COPY } from "../config";
 
 
 const cormorant = Cormorant_Garamond({
@@ -21,12 +22,21 @@ interface NavbarProps {
   navBgOpacity: MotionValue<number>;
   navBlur: MotionValue<number>;
   navBorderOpacity: MotionValue<number>;
+  navTitleOpacity: MotionValue<number>;
   navRef: React.RefObject<HTMLDivElement | null>;
   menuOpen: boolean;
   setMenuOpen: (open: boolean) => void;
 }
 
-export const Navbar = ({ navBgOpacity, navBlur, navBorderOpacity, navRef, menuOpen, setMenuOpen }: NavbarProps) => {
+export const Navbar = ({
+  navBgOpacity,
+  navBlur,
+  navBorderOpacity,
+  navTitleOpacity,
+  navRef,
+  menuOpen,
+  setMenuOpen,
+}: NavbarProps) => {
   const { lenis } = useLenis();
   const router = useRouter();
 
@@ -104,58 +114,64 @@ export const Navbar = ({ navBgOpacity, navBlur, navBorderOpacity, navRef, menuOp
         </div>
         
         <div ref={navRef} className="flex items-center justify-center pointer-events-none min-w-0 md:min-w-[20rem]">
-           <span className={`${cormorant.className} text-[1.85rem] md:text-[2rem] leading-none invisible font-normal tracking-tight`}>PANTAI TIMOR</span>
-        </div>
-
-        <div className="flex justify-end items-center">
-          <button 
-            onClick={() => {
-              ptTrack.navMenuOpen();
-              setMenuOpen(true);
-            }}
-            className="flex items-center justify-center text-[#e3e1da] group"
-            aria-label="Open menu"
+          <motion.span
+            aria-hidden="true"
+            style={{ opacity: navTitleOpacity }}
+            className={`${cormorant.className} text-[1.85rem] md:text-[2rem] leading-none font-normal tracking-tight text-[#f2f0ea] whitespace-nowrap`}
           >
-            <div className="flex flex-col gap-2 items-end">
-              <div className="w-7 h-[1px] bg-[#e3e1da]/90 transition-all group-hover:w-8" />
-              <div className="w-5 h-[1px] bg-[#e3e1da]/90 transition-all group-hover:w-8" />
-            </div>
-          </button>
+            {PANTAI_TIMOR_COPY.navbar.title}
+          </motion.span>
         </div>
-      </motion.nav>
-
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ y: "-100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "-100%" }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            style={{ backdropFilter: "blur(32px) saturate(180%)" }}
-            className="fixed inset-0 z-[100] flex flex-col bg-[#10110F]/42 overflow-hidden"
-          >
-            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-              <AnimatePresence mode="wait">
-                {hoveredImage && (
-                  <motion.div
-                    key={hoveredImage}
-                    initial={{ opacity: 0, scale: 1.1 }}
-                    animate={{ opacity: 0.4, scale: 1 }}
-                    exit={{ opacity: 0, scale: 1.05 }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="absolute inset-0"
-                  >
-                    <Image
-                      src={hoveredImage}
-                      alt="Menu Background"
-                      fill
-                      className="object-cover blur-[10px] scale-110"
-                      priority
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+ 
+         <div className="flex justify-end items-center">
+           <button 
+             onClick={() => {
+               ptTrack.navMenuOpen();
+               setMenuOpen(true);
+             }}
+             className="flex items-center justify-center text-[#e3e1da] group"
+             aria-label={PANTAI_TIMOR_COPY.navbar.openMenu}
+           >
+             <div className="flex flex-col gap-2 items-end">
+               <div className="w-7 h-[1px] bg-[#e3e1da]/90 transition-all group-hover:w-8" />
+               <div className="w-5 h-[1px] bg-[#e3e1da]/90 transition-all group-hover:w-8" />
+             </div>
+           </button>
+         </div>
+       </motion.nav>
+ 
+       <AnimatePresence>
+         {menuOpen && (
+           <motion.div
+             initial={{ y: "-100%" }}
+             animate={{ y: 0 }}
+             exit={{ y: "-100%" }}
+             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+             style={{ backdropFilter: "blur(32px) saturate(180%)" }}
+             className="fixed inset-0 z-[100] flex flex-col bg-[#10110F]/42 overflow-hidden"
+           >
+             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+               <AnimatePresence mode="wait">
+                 {hoveredImage && (
+                   <motion.div
+                     key={hoveredImage}
+                     initial={{ opacity: 0, scale: 1.1 }}
+                     animate={{ opacity: 0.4, scale: 1 }}
+                     exit={{ opacity: 0, scale: 1.05 }}
+                     transition={{ duration: 0.8, ease: "easeOut" }}
+                     className="absolute inset-0"
+                   >
+                     <Image
+                       src={hoveredImage!}
+                       alt="Menu Background"
+                       fill
+                       className="object-cover blur-[10px] scale-110"
+                       priority
+                     />
+                   </motion.div>
+                 )}
+               </AnimatePresence>
+             </div>
 
             <div className="absolute -bottom-10 -right-20 pointer-events-none opacity-[0.03] select-none z-10">
                <h2 className={`${cormorant.className} text-[25rem] leading-none whitespace-nowrap`}>PANTAI</h2>
@@ -166,21 +182,21 @@ export const Navbar = ({ navBgOpacity, navBlur, navBorderOpacity, navRef, menuOp
             <div className="flex items-center justify-between relative z-10 grid grid-cols-3 w-full !px-4 h-[72px] md:h-20 md:!px-10 border-b border-[#e3e1da]/10">
               <div />
               <div className="flex justify-center">
-                <button 
+                 <button 
                   onClick={handleTitleClick}
                   className={`${cormorant.className} text-[1.85rem] md:text-[2rem] leading-none text-[#f2f0ea] whitespace-nowrap tracking-tight hover:opacity-70 transition-opacity cursor-pointer`}
                 >
-                  PANTAI TIMOR
+                  {PANTAI_TIMOR_COPY.navbar.title}
                 </button>
               </div>
               <div className="flex justify-end">
                 <button 
-                  onClick={() => {
+                   onClick={() => {
                     ptTrack.navMenuClose();
                     setMenuOpen(false);
                   }}
                   className="flex items-center justify-center text-[#e3e1da] group"
-                  aria-label="Close menu"
+                  aria-label={PANTAI_TIMOR_COPY.navbar.closeMenu}
                 >
                   <div className="relative w-7 h-7 flex items-center justify-center">
                      <div className="absolute w-7 h-[1px] bg-[#e3e1da] rotate-45 transition-transform duration-500 group-hover:rotate-[225deg]" />
@@ -190,7 +206,7 @@ export const Navbar = ({ navBgOpacity, navBlur, navBorderOpacity, navRef, menuOp
               </div>
             </div>
 
-            <div className="flex-1 flex flex-col items-center justify-center !p-6 md:!p-20">
+            <div className="flex-1 flex flex-col items-center justify-center !p-6 md:!p-20 overflow-y-auto" data-lenis-prevent>
             
             <nav className="flex flex-col gap-8 !pl-4 md:!pl-0 md:items-center relative z-10 md:!mt-0">
               {menuItems.map((item, idx) => (
@@ -213,12 +229,12 @@ export const Navbar = ({ navBgOpacity, navBlur, navBorderOpacity, navRef, menuOp
             </nav>
             
             <div className="absolute bottom-12 left-0 w-full flex flex-row items-center justify-center gap-6 md:gap-12 z-10">
-              <Link 
+               <Link 
                 href="/gallery" 
                 className="font-sans text-[10px] md:text-[11px] font-bold uppercase tracking-[0.25em] text-[#e3e1da]/40 hover:text-[#e3e1da] transition-colors"
                 onClick={() => setMenuOpen(false)}
               >
-                Back to Gallery
+                {PANTAI_TIMOR_COPY.navbar.backToGallery}
               </Link>
               <div className="w-[1px] h-3 bg-[#e3e1da]/10" />
               <Link 
@@ -226,7 +242,7 @@ export const Navbar = ({ navBgOpacity, navBlur, navBorderOpacity, navRef, menuOp
                 className="font-sans text-[10px] md:text-[11px] font-bold uppercase tracking-[0.25em] text-[#e3e1da]/40 hover:text-[#e3e1da] transition-colors"
                 onClick={() => setMenuOpen(false)}
               >
-                Home
+                {PANTAI_TIMOR_COPY.navbar.home}
               </Link>
             </div>
 

@@ -4,6 +4,7 @@ export interface GalleryProject {
   category: string;
   description: string;
   image: string;
+  video?: string;
   href: string;
   cta: string;
   location: string;
@@ -18,7 +19,8 @@ export const GALLERY_PROJECTS: GalleryProject[] = [
     description:
       "Documenting the soul of the East Coast through maritime heritage, village rhythms, and coastal light.",
     image:
-      "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC08235.jpg",
+      "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00552.JPG",
+    video: "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/cover.mp4",
     href: "/pantai-timor",
     cta: "Open Gallery",
     location: "East Coast, Malaysia",

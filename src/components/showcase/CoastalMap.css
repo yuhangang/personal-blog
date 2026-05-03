@@ -1,6 +1,6 @@
 .pantai-coastal-map .maplibregl-ctrl-top-right {
-  top: 1.4rem;
-  right: 1.4rem;
+  top: 1rem;
+  right: 1rem;
 }
 
 .pantai-coastal-map .maplibregl-ctrl-group {
@@ -23,7 +23,7 @@
   background-color: rgba(227, 225, 218, 0.12);
 }
 
-.pantai-coastal-map .maplibregl-ctrl button + button {
+.pantai-coastal-map .maplibregl-ctrl button+button {
   border-top: 1px solid rgba(227, 225, 218, 0.12);
 }
 
@@ -47,7 +47,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 1rem;
   text-align: center;
   line-height: 1.8;
   opacity: 0;
@@ -73,6 +73,8 @@
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }

@@ -4,9 +4,9 @@ import { Inter, Libre_Caslon_Text, Noto_Serif_TC, Amiri } from "next/font/google
 import dynamic from "next/dynamic";
 import { useAnimationFrame, useMotionValue, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { COASTAL_LOCATIONS } from "@/app/pantai-timor/data";
+import { COASTAL_LOCATIONS } from "@/app/pantai-timor/config";
 import { useLenis } from "@/components/common/SmoothScroll/SmoothScroll";
-import { AlmanacSection, VillageRhythmsSection } from "./FeatureSections";
+import { AlmanacSection, MemorySection, VillageRhythmsSection } from "./FeatureSections";
 import { CAROUSEL_IMAGES, LOCAL_AUTOPLAY_DURATION_MS } from "./constants";
 import { GeographySection } from "./GeographySection";
 import { HeroSection } from "./HeroSection";
@@ -414,7 +414,8 @@ export default function PantaiTimorPage() {
       />
       <AlmanacSection almanacImageY={almanacImageY} almanacRef={almanacRef} fonts={fonts} />
       <VillageRhythmsSection fonts={fonts} />
-      <GeographySection fonts={fonts} onImageClick={setActiveImageIndex} />
+      <MemorySection fonts={fonts} />
+     
       <LocalArchiveSection
         carouselRef={carouselRef}
         carouselX={carouselX}
@@ -429,6 +430,7 @@ export default function PantaiTimorPage() {
         sectionOpacity={sectionOpacity}
         shouldReduceMotion={Boolean(shouldReduceMotion)}
       />
+      
       <QuoteSection fonts={fonts} />
       <PantaiFooter fonts={fonts} />
       <PantaiLightbox

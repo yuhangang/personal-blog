@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { Cormorant_Garamond } from "next/font/google";
 import Image from "next/image";
+import { PANTAI_TIMOR_COPY } from "../config";
+import { PantaiFrame, PantaiSection, pantaiLayout } from "./LayoutPrimitives";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -13,8 +15,8 @@ const cormorant = Cormorant_Garamond({
 
 export const VillageRhythms = () => {
   return (
-    <section id="village" className="relative w-full !py-32 md:!py-48 !px-4 md:!px-8 flex flex-col items-center z-10 bg-[#10110F]">
-      <div className="max-w-screen-2xl w-full">
+    <PantaiSection id="village" className={`${pantaiLayout.sectionY} ${pantaiLayout.gutters} bg-[#10110F]`}>
+      <PantaiFrame>
         <div className="relative w-full aspect-[4/5] md:aspect-[16/8] overflow-hidden border border-[#e3e1da]/10 group">
           {/* Split Image Background */}
           <div className="grid grid-cols-1 md:grid-cols-2 h-full w-full">
@@ -48,7 +50,7 @@ export const VillageRhythms = () => {
                 viewport={{ once: true }}
                 className="font-sans !mb-0 !text-[0.7rem] md:!text-[0.85rem] font-black uppercase !tracking-[0.5em] !text-[#e3e1da]"
               >
-                VILLAGE RHYTHMS
+                {PANTAI_TIMOR_COPY.villageRhythms.label}
               </motion.h3>
               
               <motion.h4 
@@ -58,7 +60,7 @@ export const VillageRhythms = () => {
                 viewport={{ once: true }}
                 className={`${cormorant.className} !mt-8 md:!mt-12 !mb-0 !text-[clamp(2.5rem,8vw,4rem)] !leading-[1.1] !text-[#e3e1da] text-balance font-semibold`}
               >
-                Portraits of the Tide
+                {PANTAI_TIMOR_COPY.villageRhythms.title}
               </motion.h4>
               
               <motion.p 
@@ -68,7 +70,7 @@ export const VillageRhythms = () => {
                 viewport={{ once: true }}
                 className="!mb-0 !mt-8 md:!mt-10 !text-[0.95rem] md:!text-[1.1rem] !leading-[1.8] !text-[#e3e1da]/80 text-pretty font-medium"
               >
-                The pulse of the coast is best felt through its people and the spaces they inhabit. Vibrant colors stand in defiance of the salty winds, creating a vivid tapestry of daily life.
+                {PANTAI_TIMOR_COPY.villageRhythms.content}
               </motion.p>
               
               <motion.div 
@@ -85,7 +87,7 @@ export const VillageRhythms = () => {
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </PantaiFrame>
+    </PantaiSection>
   );
 };

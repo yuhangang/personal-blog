@@ -15,11 +15,13 @@ import {
   COASTAL_LOCATIONS,
   CoastalLocation,
   getThumbnailUrl,
-} from "../../app/pantai-timor/data";
+} from "../../app/pantai-timor/config";
 import "./CoastalMap.css";
 
 export interface CoastalMapProps {
   onImageClick?: (src: string) => void;
+  overlayLabel?: string;
+  overlayTitle?: string;
 }
 
 const EAST_COAST_BOUNDS: [[number, number], [number, number]] = [
@@ -247,7 +249,7 @@ function countAttractionsInBounds(
 }
 
 // ── Component ────────────────────────────────────────────────────────────────
-export default function CoastalMap({ onImageClick }: CoastalMapProps) {
+export default function CoastalMap({ onImageClick, overlayLabel, overlayTitle }: CoastalMapProps) {
   const mapRef = useRef<MapRef | null>(null);
   const [hoveredLocation, setHoveredLocation]   = useState<string | null>(null);
   const [hoveredAttraction, setHoveredAttraction] = useState<string | null>(null);
@@ -349,7 +351,23 @@ export default function CoastalMap({ onImageClick }: CoastalMapProps) {
 
   return (
     <div className="pantai-coastal-map w-full h-full relative group overflow-hidden bg-[#12130f]">
-
+      {(overlayLabel || overlayTitle) && (
+        <div className="pointer-events-none absolute inset-0 z-20">
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#0f100d]/94 via-[#0f100d]/46 to-transparent" />
+          <div className="absolute bottom-0 left-0 max-w-[26rem] p-4 sm:p-5 md:p-7">
+              {overlayLabel ? (
+                <p className="font-sans !mb-3 !text-[0.58rem] font-black uppercase !tracking-[0.3em] !text-[#e3e1da]/72">
+                  {overlayLabel}
+                </p>
+              ) : null}
+              {overlayTitle ? (
+                <h3 className={`${cormorant.className} !mb-0 !text-[1.8rem] !leading-[0.95] !text-[#f1eee6] sm:!text-[2.3rem] md:!text-[2.9rem]`}>
+                  {overlayTitle}
+                </h3>
+              ) : null}
+          </div>
+        </div>
+      )}
 
       <Map
         ref={mapRef}
@@ -626,7 +644,7 @@ export default function CoastalMap({ onImageClick }: CoastalMapProps) {
       <div className="absolute inset-x-0 bottom-0 h-32 pointer-events-none bg-gradient-to-t from-[#10110F]/65 to-transparent" />
 
       {/* ── Top editorial rail ───────────────────────────────────────────── */}
-      <div className="absolute left-4 right-4 top-4 z-20 pointer-events-none flex items-start justify-between gap-4 md:left-6 md:right-6 md:top-6">
+      <div className="absolute left-3 right-3 top-3 z-20 pointer-events-none flex items-start justify-between gap-4 md:left-6 md:right-6 md:top-6">
         <div className="rounded-full border border-[#e3e1da]/12 bg-[#10110F]/72 !px-4 !py-2.5 backdrop-blur-xl shadow-[0_18px_42px_rgba(0,0,0,0.28)]">
           <p className="!mb-0 font-sans !text-[0.5rem] font-black uppercase !tracking-[0.24em] !text-[#e3e1da]/52">
             Kelantan / Terengganu

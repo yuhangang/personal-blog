@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { createPortal } from "react-dom";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { CAROUSEL_IMAGES } from "./constants";
-import type { CoastalLocation } from "@/app/pantai-timor/data";
+import type { CoastalLocation } from "@/app/pantai-timor/config";
 import type { PantaiTimorFontClasses, PantaiTimorImage } from "./types";
 
 const lightboxFrameVariants = {
@@ -98,7 +98,7 @@ export function PantaiLightbox({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-[100] flex h-[100svh] w-full touch-none items-center justify-center overflow-hidden overscroll-none"
+          className="fixed inset-0 z-[100] flex h-[100svh] w-full touch-auto items-center justify-center overflow-hidden overscroll-none"
           onClick={onClose}
         >
           <div className="absolute inset-0 pointer-events-none bg-[#151612]/38 backdrop-blur-[56px] backdrop-saturate-[180%]" />
@@ -157,7 +157,8 @@ export function PantaiLightbox({
               animate="center"
               exit="exit"
               transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-              className="relative z-10 flex h-full w-full transform-gpu items-center justify-center pointer-events-none !px-4 !pb-28 !pt-24 will-change-transform md:!px-28 md:!pb-14 md:!pt-28"
+              className="relative z-10 flex h-full w-full transform-gpu items-center justify-center overflow-y-auto pointer-events-auto touch-pan-y !px-4 !pb-28 !pt-24 will-change-transform md:!px-28 md:!pb-14 md:!pt-28"
+              data-lenis-prevent
             >
               <div className="grid w-full max-w-[92rem] grid-cols-1 items-end gap-7 pointer-events-auto lg:grid-cols-[minmax(0,1fr)_20rem]" onClick={(event) => event.stopPropagation()}>
                 <motion.div
@@ -182,7 +183,7 @@ export function PantaiLightbox({
                   }}
                   className="relative flex min-h-0 w-full cursor-grab items-center justify-center border border-[#e3e1da]/10 bg-[#151612]/60 !p-2 shadow-[0_34px_110px_rgba(0,0,0,0.62)] active:cursor-grabbing"
                 >
-                  <img src={activeImage.src} alt={activeImage.alt} className="max-h-[58svh] w-auto max-w-full object-contain md:max-h-[74svh] pointer-events-none" />
+                  <img src={activeImage.src} alt={activeImage.alt} className="max-h-[58svh] w-auto max-w-full object-contain md:max-h-[74svh]" draggable={false} />
                 </motion.div>
 
                 <motion.aside

@@ -1,14 +1,16 @@
 "use client";
 
-import { useMotionTemplate, useScroll, useSpring, useTransform } from "framer-motion";
+import { AnimatePresence, useMotionTemplate, useScroll, useSpring, useTransform } from "framer-motion";
 import { Inter } from "next/font/google";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { CAROUSEL_IMAGES } from "./data";
+import { FEATURED_IMAGES } from "./config";
 
 // Import extracted components
 import { Navbar } from "./components/Navbar";
 import { Hero } from "./components/Hero";
 import { AnimatedTitle } from "./components/AnimatedTitle";
+import { LoadingScreen } from "./components/LoadingScreen";
+import { RouteStyles } from "./components/RouteStyles";
 
 import { VillageRhythms } from "./components/VillageRhythms";
 import { CoastalGeography } from "./components/CoastalGeography";
@@ -18,6 +20,7 @@ import { Footer } from "./components/Footer";
 import { Lightbox } from "./components/Lightbox";
 import { TheLocalSection } from "./components/TheLocalSection";
 import { CoastalAlmanac } from "./components/CoastalAlmanac";
+import { Memory } from "./components/Memory";
 
 type ResettableMotionValue = {
   set: (value: number) => void;
@@ -35,12 +38,14 @@ export default function PantaiTimorRedesign() {
   const [isGridView, setIsGridView] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const localSectionRef = useRef<HTMLElement>(null);
 
   const heroRef = useRef<HTMLElement>(null);
   const almanacRef = useRef<HTMLElement>(null);
   const spacerRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
+  const didMeasureInitialHeroAnchorRef = useRef(false);
   const [anchors, setAnchors] = useState({
     start: { top: 0, left: 0 },
     end: { top: 0, left: 0 },
@@ -50,32 +55,37 @@ export default function PantaiTimorRedesign() {
   useLayoutEffect(() => {
     const updatePos = () => {
       const currentVh = window.innerHeight;
-      setVh(currentVh);
       const vw = window.innerWidth;
       const isMob = vw < 768;
+      const shouldMeasureHeroAnchor = window.scrollY <= 4 || !didMeasureInitialHeroAnchorRef.current;
+      setVh(currentVh);
       setIsMobile(isMob);
-      const startRect = spacerRef.current?.getBoundingClientRect();
+      const startRect = shouldMeasureHeroAnchor ? spacerRef.current?.getBoundingClientRect() : null;
       const endRect = navRef.current?.getBoundingClientRect();
 
-      if (startRect && endRect) {
-        setAnchors({
-          start: { 
-            top: startRect.top + startRect.height / 2, 
-            left: startRect.left + startRect.width / 2 
-          },
-          end: { 
-            top: endRect.top + endRect.height / 2, 
-            left: endRect.left + endRect.width / 2 
-          },
-          isSet: true
-        });
-      } else {
-        setAnchors(prev => ({
-          ...prev,
-          start: { top: currentVh * 0.48 + 50, left: vw / 2 },
-          end: { top: isMob ? 36 : 40, left: vw / 2 }
-        }));
+      if (startRect) {
+        didMeasureInitialHeroAnchorRef.current = true;
       }
+
+      setAnchors((prev) => ({
+        start: startRect
+          ? {
+              top: startRect.top + startRect.height / 2,
+              left: startRect.left + startRect.width / 2,
+            }
+          : prev.isSet
+            ? prev.start
+            : { top: currentVh * 0.48 + 50, left: vw / 2 },
+        end: endRect
+          ? {
+              top: endRect.top + endRect.height / 2,
+              left: endRect.left + endRect.width / 2,
+            }
+          : prev.isSet
+            ? prev.end
+            : { top: isMob ? 36 : 40, left: vw / 2 },
+        isSet: true,
+      }));
     };
     updatePos();
     window.addEventListener("resize", updatePos);
@@ -91,7 +101,7 @@ export default function PantaiTimorRedesign() {
       if (activeImageIndex === null) return;
       if (e.key === "Escape") setActiveImageIndex(null);
       if (e.key === "ArrowLeft") setActiveImageIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : prev));
-      if (e.key === "ArrowRight") setActiveImageIndex((prev) => (prev !== null && prev < CAROUSEL_IMAGES.length - 1 ? prev + 1 : prev));
+      if (e.key === "ArrowRight") setActiveImageIndex((prev) => (prev !== null && prev < FEATURED_IMAGES.length - 1 ? prev + 1 : prev));
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -178,54 +188,51 @@ export default function PantaiTimorRedesign() {
   const titleLeft = useTransform(scrollY, [0, stickyScroll], [anchors.start.left, anchors.end.left]);
   const titleTop = useTransform(scrollY, [0, stickyScroll], [anchors.start.top, anchors.end.top]);
   
-  const titleOpacityBase = useTransform(scrollY, [0, 10], [1, 1]); 
   const entryProgress = useSpring(0, { stiffness: 45, damping: 20 });
   
   useEffect(() => {
-    if (anchors.isSet) {
+    if (anchors.isSet && isLoaded) {
       const timer = setTimeout(() => entryProgress.set(1), 200);
       return () => clearTimeout(timer);
     }
-  }, [anchors.isSet, entryProgress]);
+  }, [anchors.isSet, isLoaded, entryProgress]);
 
   const entryY = useTransform(entryProgress, [0, 1], [50, 0]);
   const entryOpacity = useTransform(entryProgress, [0, 1], [0, 1]);
   const entryBlur = useTransform(entryProgress, [0, 1], [12, 0]);
+  const navTitleOpacity = useTransform(
+    scrollY,
+    [stickyScroll * 0.58, stickyScroll * 0.92],
+    [0, 1]
+  );
 
-  const titleOpacity = useTransform([titleOpacityBase, entryOpacity], ([o, eo]: number[]) => o * eo);
-  const secondaryTitleOpacity = useTransform([secondaryHeroOpacity, entryOpacity], ([so, eo]: number[]) => so * eo);
+  const titleOpacity = useTransform([entryOpacity, navTitleOpacity], ([entry, nav]: number[]) => entry * (1 - nav));
+  const secondaryTitleOpacity = useTransform([secondaryHeroOpacity, titleOpacity], ([secondary, title]: number[]) => secondary * title);
   const finalTitleY = useMotionTemplate`calc(${titleY} + ${entryY}px)`;
-  const finalTitleBlur = useTransform(entryBlur, (b: number) => `blur(${b}px)`);
+  const finalTitleBlur = useTransform(entryBlur, (b: number) => b <= 0.1 ? "none" : `blur(${b}px)`);
 
   return (
-    <main 
-      className={`${inter.className} relative min-h-screen bg-[#10110F] text-[#e3e1da] selection:bg-[#e3e1da] selection:text-[#10110F]`}
-      style={{ 
-        "--nav-px": "1rem", 
-        "--nav-py": "0.75rem" 
-      } as React.CSSProperties}
-    >
-      <style>{`
-        :root {
-          --hero-width: 92vw;
-          --hero-height: 120vw;
-        }
-        @media (min-width: 768px) {
-          :root {
-            --hero-width: 60vw;
-            --hero-height: 40vw;
-          }
-          main { 
-            --nav-px: 2.5rem !important; 
-            --nav-py: 1.25rem !important; 
-          }
-        }
-      `}</style>
+    <>
+      <AnimatePresence>
+        {!isLoaded && <LoadingScreen key="loading" />}
+      </AnimatePresence>
+
+      <main 
+        className={`${inter.className} relative min-h-screen bg-[#10110F] text-[#e3e1da] selection:bg-[#e3e1da] selection:text-[#10110F]`}
+        style={{ 
+          "--nav-px": "1rem", 
+          "--nav-py": "0.75rem",
+          opacity: isLoaded ? 1 : 0,
+          transition: "opacity 1s ease-in-out"
+        } as React.CSSProperties}
+      >
+      <RouteStyles />
 
       <Navbar 
         navBgOpacity={navBgOpacity}
         navBlur={navBlur}
         navBorderOpacity={navBorderOpacity}
+        navTitleOpacity={navTitleOpacity}
         navRef={navRef}
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
@@ -241,39 +248,22 @@ export default function PantaiTimorRedesign() {
         heroContainerHeight={heroContainerHeight}
         heroContainerRadius={heroContainerRadius}
         spacerRef={spacerRef}
+        onVideoReady={() => setIsLoaded(true)}
       />
-
-      <AnimatedTitle 
-        titleScale={titleScale}
-        titleX={titleX}
-        finalTitleY={finalTitleY}
-        titleLeft={titleLeft}
-        titleTop={titleTop}
-        titleOpacity={titleOpacity}
-        finalTitleBlur={finalTitleBlur}
-        titleLetterSpacing={titleLetterSpacing}
-        secondaryHeroOpacity={secondaryTitleOpacity}
-      />
-
 
       <CoastalAlmanac almanacRef={almanacRef} />
-     
-
       <HistoryCulture />
-       <VillageRhythms />
+      <VillageRhythms />
+      <Memory />
 
-        <TheLocalSection 
-          localSectionRef={localSectionRef}
-          setActiveImageIndex={setActiveImageIndex}
-          setIsGridView={setIsGridView}
-        />
-
+      <TheLocalSection 
+        localSectionRef={localSectionRef}
+        setActiveImageIndex={setActiveImageIndex}
+        setIsGridView={setIsGridView}
+      />
 
       <CoastalGeography onImageClick={(index) => setActiveImageIndex(index)} />
-
-    
       <QuoteSection />
-
       <Footer />
 
       <Lightbox 
@@ -282,6 +272,21 @@ export default function PantaiTimorRedesign() {
         isGridView={isGridView}
         setIsGridView={setIsGridView}
       />
-    </main>
-  );
+      </main>
+      
+      {isLoaded && (
+        <AnimatedTitle 
+          titleScale={titleScale}
+          titleX={titleX}
+          finalTitleY={finalTitleY}
+          titleLeft={titleLeft}
+          titleTop={titleTop}
+          titleOpacity={titleOpacity}
+          finalTitleBlur={finalTitleBlur}
+          titleLetterSpacing={titleLetterSpacing}
+          secondaryHeroOpacity={secondaryTitleOpacity}
+        />
+      )}
+    </>
+);
 }

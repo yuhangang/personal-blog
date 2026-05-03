@@ -4,6 +4,7 @@ import { motion, MotionValue, useTransform } from "framer-motion";
 import { Cormorant_Garamond, Noto_Serif_TC, Amiri } from "next/font/google";
 import { useLenis } from "@/components/common/SmoothScroll/SmoothScroll";
 import React from "react";
+import { PANTAI_TIMOR_COPY } from "../config";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -72,12 +73,12 @@ export const AnimatedTitle = ({
           opacity: titleOpacity,
           filter: finalTitleBlur,
           letterSpacing: titleLetterSpacing,
-          position: "fixed",
-          transformOrigin: "center center"
+          position: "absolute",
+         transformOrigin: "center center"
         }}
-        className={`${cormorant.className} !mb-0 !text-[clamp(2.1rem,13vw,11rem)] !leading-none !tracking-tight text-center !text-[#f2f0ea] whitespace-nowrap font-normal pointer-events-auto cursor-pointer opacity-0`}
+        className={`${cormorant.className} !mb-0 !text-[clamp(2.1rem,13vw,11rem)] !leading-none !tracking-tight text-center !text-[#f2f0ea] whitespace-nowrap font-normal pointer-events-auto cursor-pointer`}
       >
-        PANTAI TIMOR
+        {PANTAI_TIMOR_COPY.animatedTitle.title}
       </motion.h1>
 
       <motion.div 
@@ -90,14 +91,14 @@ export const AnimatedTitle = ({
           scale: titleScale,
           opacity: secondaryHeroOpacity,
           filter: finalTitleBlur,
-          position: "fixed",
+          position: "absolute",
           transformOrigin: "center center"
         }}
-        className="flex items-center gap-8 md:gap-14 text-[#e3e1da]/40 pointer-events-none whitespace-nowrap w-full justify-center opacity-0"
+        className="flex items-center gap-8 md:gap-14 text-[#e3e1da]/40 pointer-events-none whitespace-nowrap w-full justify-center"
       >
-         <span className={`${notoSerifTC.className} text-3xl md:text-6xl tracking-[0.2em] md:tracking-[0.4em] ml-[0.2em] md:ml-[0.4em]`}>東海岸</span>
+         <span className={`${notoSerifTC.className} text-3xl md:text-6xl tracking-[0.2em] md:tracking-[0.4em] ml-[0.2em] md:ml-[0.4em]`}>{PANTAI_TIMOR_COPY.animatedTitle.chinese}</span>
          <span className="w-1.5 h-1.5 rounded-full bg-[#e3e1da]/20"></span>
-         <span className={`${amiri.className} text-3xl md:text-6xl`} dir="rtl">ڤنتاي تيمور</span>
+         <span className={`${amiri.className} text-3xl md:text-6xl`} dir="rtl">{PANTAI_TIMOR_COPY.animatedTitle.jawi}</span>
       </motion.div>
 
       <motion.p 
@@ -110,12 +111,12 @@ export const AnimatedTitle = ({
           scale: titleScale,
           opacity: secondaryHeroOpacity,
           filter: finalTitleBlur,
-          position: "fixed",
-          transformOrigin: "center center"
+          position: "absolute",
+         transformOrigin: "center center"
         }}
-        className="!mb-0 max-w-[18rem] text-center font-sans !text-[0.92rem] font-bold uppercase !leading-[1.5] !tracking-[0.1em] !text-[#e3e1da]/50 pointer-events-none md:max-w-none md:!text-[1.5rem] md:!tracking-[0.25em] text-balance w-full opacity-0"
+        className="!mb-0 max-w-[18rem] text-center font-sans !text-[0.92rem] font-bold uppercase !leading-[1.5] !tracking-[0.1em] !text-[#e3e1da]/50 pointer-events-none md:max-w-none md:!text-[1.5rem] md:!tracking-[0.25em] text-balance w-full"
       >
-        A PHOTOGRAPHIC JOURNEY<br />TO THE EASTERN ENCLAVE
+        {PANTAI_TIMOR_COPY.animatedTitle.subtitle}
       </motion.p>
     </div>
   );
