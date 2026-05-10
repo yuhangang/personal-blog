@@ -18,16 +18,14 @@ export default function Home() {
 
       <HomeGallery />
 
-      {/* New Compact Slogans */}
-      <div id="identity" data-theme="dark">
+      {/* New Compact Slogans   <div id="identity" data-theme="dark">
         <ServiceIntro
-          ctaText="Explore Creation"
-          ctaLink="/create"
           variant="fullscreen"
           title="Software  Development"
           description="I built website and applications, every detail reflects who you are and what you stand for. Opening for new projects and collaborations"
         />
-      </div>
+      </div> */}
+     
     </main>
   );
 }

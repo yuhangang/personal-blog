@@ -8,6 +8,7 @@ import { Libre_Caslon_Text } from "next/font/google";
 import { FEATURED_IMAGES, COASTAL_LOCATIONS, getThumbnailUrl, PANTAI_TIMOR_COPY } from "../config";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ptTrack } from "@/utils/ga-events";
+import styles from "../pantai-timor.module.scss";
 
 const libreCaslon = Libre_Caslon_Text({
   subsets: ["latin"],
@@ -117,6 +118,21 @@ export const Lightbox = ({
     };
   }, [activeImageIndex]);
   
+  const gridContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isGridView && activeImageIndex !== null && gridContainerRef.current) {
+      // Small delay to ensure the grid is rendered and measured after the AnimatePresence transition
+      const timer = setTimeout(() => {
+        const activeItem = gridContainerRef.current?.querySelector(`.${styles.active}`);
+        if (activeItem) {
+          activeItem.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isGridView, activeImageIndex]);
+
   if (!portalRoot) return null;
 
   const activeImage = activeImageIndex === null ? null : FEATURED_IMAGES[activeImageIndex];
@@ -130,13 +146,13 @@ export const Lightbox = ({
           animate={{ opacity: 1 }} 
           exit={{ opacity: 0 }} 
           transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-          className={`fixed inset-0 z-[100] flex h-[100dvh] w-full flex-col items-center justify-center overflow-hidden overscroll-none ${isGridView ? "touch-auto" : "touch-none"}`}
+          className={`${styles["lightbox-container"]} ${isGridView ? styles["grid-mode"] : styles["image-mode"]}`}
           onClick={() => setActiveImageIndex(null)}
         >
-          <div className="absolute inset-0 pointer-events-none bg-[#151612]/38 backdrop-blur-[56px] backdrop-saturate-[180%]" />
-          <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_30%,rgba(227,225,218,0.12),transparent_60%)]" />
+          <div className={styles["lightbox-backdrop"]} />
+          <div className={styles["lightbox-glow"]} />
           
-          <div className="absolute top-6 right-4 z-[120] flex gap-3 md:right-8 md:top-8">
+          <div className={styles["lightbox-controls"]}>
             <button 
               type="button"
                aria-label={isGridView ? PANTAI_TIMOR_COPY.lightbox.aria.closeGrid : PANTAI_TIMOR_COPY.lightbox.aria.openGrid}
@@ -144,13 +160,13 @@ export const Lightbox = ({
                 e.stopPropagation();
                 setIsGridView(!isGridView);
               }}
-              className="group relative flex h-12 w-12 items-center justify-center text-[#e3e1da] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#e3e1da]/50 md:h-14 md:w-14"
+              className={styles["lightbox-btn"]}
             >
-              <div className="relative z-10 transition-opacity duration-300 group-hover:opacity-50">
+              <div className={styles["lightbox-btn-icon"]}>
                 {isGridView ? (
-                  <Maximize className="h-5 w-5" />
+                  <Maximize className={styles["lightbox-control-icon"]} />
                 ) : (
-                  <LayoutGrid className="h-5 w-5" />
+                  <LayoutGrid className={styles["lightbox-control-icon"]} />
                 )}
               </div>
             </button>
@@ -158,9 +174,9 @@ export const Lightbox = ({
               type="button"
                aria-label={PANTAI_TIMOR_COPY.lightbox.aria.closeLightbox}
               onClick={() => setActiveImageIndex(null)}
-              className="group relative flex h-12 w-12 items-center justify-center text-[#e3e1da] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#e3e1da]/50 md:h-14 md:w-14"
+              className={styles["lightbox-btn"]}
             >
-              <X className="relative z-10 h-5 w-5 transition-opacity duration-300 group-hover:opacity-50" />
+              <X className={styles["lightbox-btn-icon"]} />
             </button>
           </div>
 
@@ -172,9 +188,9 @@ export const Lightbox = ({
               e.stopPropagation();
               if (activeImageIndex > 0) setActiveImageIndex(activeImageIndex - 1);
             }}
-            className={`fixed inset-y-0 left-0 z-[110] flex w-[20%] items-center justify-start pl-2 text-[#e3e1da] outline-none transition-all duration-300 md:w-[15%] md:pl-6 ${(activeImageIndex === 0 || isGridView) ? 'opacity-0 pointer-events-none' : 'opacity-40 hover:opacity-100'}`}
+            className={`${styles["lightbox-nav-btn"]} ${styles.prev} ${(activeImageIndex === 0 || isGridView) ? styles.disabled : ''}`}
           >
-            <ChevronLeft className="h-8 w-8 md:h-10 md:w-10" />
+            <ChevronLeft className={styles["lightbox-nav-icon"]} />
           </button>
 
           <button 
@@ -185,25 +201,26 @@ export const Lightbox = ({
               e.stopPropagation();
               if (activeImageIndex < FEATURED_IMAGES.length - 1) setActiveImageIndex(activeImageIndex + 1);
             }}
-            className={`fixed inset-y-0 right-0 z-[110] flex w-[20%] items-center justify-end pr-2 text-[#e3e1da] outline-none transition-all duration-300 md:w-[15%] md:pr-6 ${(activeImageIndex === FEATURED_IMAGES.length - 1 || isGridView) ? 'opacity-0 pointer-events-none' : 'opacity-40 hover:opacity-100'}`}
+            className={`${styles["lightbox-nav-btn"]} ${styles.next} ${(activeImageIndex === FEATURED_IMAGES.length - 1 || isGridView) ? styles.disabled : ''}`}
           >
-            <ChevronRight className="h-8 w-8 md:h-10 md:w-10" />
+            <ChevronRight className={styles["lightbox-nav-icon"]} />
           </button>
 
           <AnimatePresence mode="wait">
             {isGridView ? (
               <motion.div
                 key="grid"
+                ref={gridContainerRef}
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="relative z-10 flex h-full w-full justify-center overflow-y-auto !px-4 !pb-20 !pt-28 md:!px-10 md:!pt-32 xl:!px-14 scrollbar-hide touch-pan-y"
+                className={`${styles["lightbox-grid-view"]} ${styles["no-scrollbar"]}`}
                 data-lenis-prevent
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="w-full max-w-[92rem]">
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 md:gap-5 xl:gap-6">
+                <div className={styles["grid-content"]}>
+                  <div className={styles["grid-layout"]}>
                     {FEATURED_IMAGES.map((img, idx) => (
                       <motion.div
                         key={idx}
@@ -213,21 +230,17 @@ export const Lightbox = ({
                           setActiveImageIndex(idx);
                           setIsGridView(false);
                         }}
-                        className={`group relative aspect-square w-full cursor-pointer overflow-hidden border transition-all duration-500 bg-[#161715] ${
-                          idx === activeImageIndex 
-                            ? 'z-10 scale-[1.02] border-[#e3e1da]' 
-                            : 'border-[#e3e1da]/10 opacity-70 hover:opacity-100'
-                        }`}
+                        className={`${styles["grid-item"]} ${idx === activeImageIndex ? styles.active : ''}`}
                       >
                         <Image
                           src={getThumbnailUrl(img.src)}
                           alt={img.alt}
                           fill
                           sizes="(min-width: 1536px) 18rem, (min-width: 1280px) 21vw, (min-width: 1024px) 24vw, (min-width: 640px) 33vw, 50vw"
-                          className="object-cover transition-transform duration-700 group-hover:scale-105"
+                          className={styles["grid-image"]}
                         />
-                        <div className="absolute inset-0 bg-[#10110F]/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-center justify-center">
-                          <span className="font-sans text-[0.55rem] font-black text-[#e3e1da] uppercase tracking-[0.2em]">{PANTAI_TIMOR_COPY.lightbox.viewPhoto}</span>
+                        <div className={styles["grid-item-overlay"]}>
+                          <span className={styles["view-label"]}>{PANTAI_TIMOR_COPY.lightbox.viewPhoto}</span>
                         </div>
                       </motion.div>
                     ))}
@@ -235,7 +248,7 @@ export const Lightbox = ({
                 </div>
               </motion.div>
             ) : (
-              <div className="relative h-full w-full overflow-hidden">
+              <div className={styles["image-viewer-container"]}>
                 <AnimatePresence mode="wait" custom={transitionDirection}>
                   <motion.div
                     key={activeImageIndex}
@@ -245,7 +258,7 @@ export const Lightbox = ({
                     animate="center"
                     exit="exit"
                     transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-                    className="relative z-10 flex h-full w-full items-center justify-center !p-4 will-change-transform md:!p-16 lg:!p-24"
+                    className={styles["image-frame"]}
                     onClick={(e) => e.stopPropagation()}
                   >
                     <motion.div
@@ -267,13 +280,13 @@ export const Lightbox = ({
                           );
                         }
                       }}
-                      className="relative flex h-[55vh] w-full max-w-[88rem] cursor-grab items-center justify-center active:cursor-grabbing sm:h-[70vh] lg:h-[80vh]"
+                      className={styles["draggable-image-wrapper"]}
                     >
                       <Image
                         src={activeImage.src}
                         alt={activeImage.alt}
                         fill
-                        className="object-contain"
+                        className={styles["lightbox-image"]}
                         priority
                         sizes="95vw"
                         draggable={false}
@@ -283,8 +296,8 @@ export const Lightbox = ({
                 </AnimatePresence>
 
                 {/* Fixed UI elements - stay consistent while images scroll */}
-                <div className="absolute inset-x-0 bottom-0 pointer-events-none z-20">
-                  <div className="h-[45vh] bg-gradient-to-t from-[#10110F] via-[#10110F]/60 to-transparent" />
+                <div className={styles["lightbox-info"]}>
+                  <div className={styles["info-gradient"]} />
                   
                   <AnimatePresence mode="wait">
                     <motion.aside
@@ -293,15 +306,15 @@ export const Lightbox = ({
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
                       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                      className="absolute bottom-0 left-0 right-0 !p-6 md:!p-16 text-left pb-12 md:pb-20 pointer-events-auto"
+                      className={styles["info-content"]}
                     >
-                      <p className="!mb-4 font-sans !text-[0.58rem] font-black uppercase !tracking-[0.28em] !text-[#e3e1da]/42">
+                      <p className={styles["info-counter"]}>
                         {String(activeImageIndex + 1).padStart(2, "0")} / {String(FEATURED_IMAGES.length).padStart(2, "0")}
                       </p>
-                      <h4 className={`${libreCaslon.className} !mb-0 !text-[1.8rem] !leading-[1.1] !tracking-tight !text-[#e3e1da] text-balance md:!text-[2.8rem]`}>
+                      <h4 className={`${libreCaslon.className} ${styles["info-title"]}`}>
                         {activeLocation?.name || activeImage.alt}
                       </h4>
-                       <p className="!mb-0 !mt-4 max-w-[42rem] font-sans !text-[0.84rem] !leading-[1.8] !text-[#e3e1da]/60 text-pretty md:!text-[0.92rem]">
+                       <p className={styles["info-description"]}>
                         {activeLocation?.description || PANTAI_TIMOR_COPY.lightbox.defaultDescription}
                       </p>
                     </motion.aside>

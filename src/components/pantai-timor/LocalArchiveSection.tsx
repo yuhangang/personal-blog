@@ -2,6 +2,8 @@
 
 import { Pause, Play } from "lucide-react";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
+import Image from "next/image";
 import { CAROUSEL_IMAGES } from "./constants";
 import type { LocalArchiveSectionProps } from "./types";
 
@@ -19,6 +21,23 @@ export function LocalArchiveSection({
   sectionOpacity,
   shouldReduceMotion,
 }: LocalArchiveSectionProps) {
+  // Preload images for the living artifact section
+  useEffect(() => {
+    const preloadImages = () => {
+      CAROUSEL_IMAGES.forEach((item) => {
+        const img = new window.Image();
+        img.src = item.src;
+      });
+    };
+
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(() => preloadImages());
+    } else {
+      const timer = setTimeout(preloadImages, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   return (
     <section ref={localSectionRef} className="relative w-full h-[640svh] md:h-[760svh] bg-[#10110F] z-10">
       <motion.div style={{ opacity: hasExitedLocalSection ? 1 : sectionOpacity }} className="sticky top-0 h-[100svh] w-full flex items-center overflow-hidden">
@@ -27,7 +46,7 @@ export function LocalArchiveSection({
         <div className="absolute inset-y-0 left-0 w-full md:w-[62%] bg-gradient-to-r from-[#10110F] via-[#10110F]/90 to-transparent z-20 pointer-events-none" />
 
         <div className="relative w-full h-full max-w-[1700px] !mx-auto !px-4 md:!px-10 lg:!px-16 flex items-start md:items-center">
-          <div className="relative z-30 flex w-[calc(100vw-3rem)] max-w-[28rem] flex-col justify-start pt-24 shrink-0 pointer-events-none md:justify-center md:pt-0">
+          <div className="relative z-30 flex w-[calc(100vw-3rem)] max-w-[28rem] flex-col justify-start pt-0 shrink-0 pointer-events-none md:justify-center md:pt-0">
             <div className="pointer-events-auto">
               <h2 className="font-sans !text-xs font-black uppercase !tracking-[0.34em] !text-[#e3e1da] !mb-10 md:!tracking-[0.4em] drop-shadow-2xl">
                 THE LOCAL
@@ -75,10 +94,14 @@ export function LocalArchiveSection({
                   onClick={() => onImageClick(idx)}
                   className={`relative flex h-full max-w-[82vw] shrink-0 cursor-pointer overflow-hidden border border-[#e3e1da]/10 bg-[#161715] group md:max-w-none ${item.isPortrait ? "aspect-[2/3]" : "aspect-square md:aspect-auto"}`}
                 >
-                  <img
+                  <Image
                     src={item.src}
                     alt={item.alt}
-                    className={`h-full max-w-[82vw] transition-transform duration-700 ease-out group-hover:scale-[1.03] md:max-w-none ${item.isPortrait ? "w-auto object-contain" : "w-full object-cover md:w-auto md:object-contain"}`}
+                    fill
+                    sizes="(min-width: 768px) 40vw, 85vw"
+                    priority={idx < 3}
+                    unoptimized={true}
+                    className={`transition-transform duration-700 ease-out group-hover:scale-[1.03] ${item.isPortrait ? "object-contain" : "object-cover"}`}
                   />
 
                   {item.isSpecial && (

@@ -71,10 +71,6 @@ export default function HomeSlogan() {
 
           {/* Service Brief */}
           <p className={styles.identityDesc}>{identityItem.desc}</p>
-
-          <Link href="/create" className={styles.exploreButton}>
-            Explore Creation
-          </Link>
         </div>
       </div>
     </section>

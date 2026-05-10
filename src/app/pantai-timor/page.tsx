@@ -10,7 +10,6 @@ import { Navbar } from "./components/Navbar";
 import { Hero } from "./components/Hero";
 import { AnimatedTitle } from "./components/AnimatedTitle";
 import { LoadingScreen } from "./components/LoadingScreen";
-import { RouteStyles } from "./components/RouteStyles";
 
 import { VillageRhythms } from "./components/VillageRhythms";
 import { CoastalGeography } from "./components/CoastalGeography";
@@ -21,6 +20,7 @@ import { Lightbox } from "./components/Lightbox";
 import { TheLocalSection } from "./components/TheLocalSection";
 import { CoastalAlmanac } from "./components/CoastalAlmanac";
 import { Memory } from "./components/Memory";
+import styles from "./pantai-timor.module.scss";
 
 type ResettableMotionValue = {
   set: (value: number) => void;
@@ -107,9 +107,6 @@ export default function PantaiTimorRedesign() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [activeImageIndex]);
 
-
-
-
   useEffect(() => {
     document.body.style.backgroundColor = "#10110F";
     const originalOverflow = document.body.style.overflow;
@@ -121,10 +118,6 @@ export default function PantaiTimorRedesign() {
       document.documentElement.classList.remove("pantai-timor-scroll");
     };
   }, []);
-
-
-
-
 
   const stickyScroll = Math.max(1, anchors.start.top - anchors.end.top);
   const { scrollY } = useScroll();
@@ -176,10 +169,10 @@ export default function PantaiTimorRedesign() {
   const heroImageY = useTransform(scrollY, [0, 1000], [0, 160]);
   const heroImageOpacity = useTransform(scrollY, [650, 1050], [1, 0]);
 
-
-  const navBgOpacity = useTransform(scrollY, [vh, vh + 1], [0, 1]);
-  const navBlur = useTransform(scrollY, [vh, vh + 1], [0, 24]);
-  const navBorderOpacity = useTransform(scrollY, [vh, vh + 1], [0, 0.1]);
+  const navRevealY = Math.max(1, vh);
+  const navBgOpacity = useTransform(scrollY, [navRevealY, navRevealY + 1], [0, 1]);
+  const navBlur = useTransform(scrollY, [navRevealY, navRevealY + 1], [0, 24]);
+  const navBorderOpacity = useTransform(scrollY, [navRevealY, navRevealY + 1], [0, 0.1]);
 
   const titleScale = useTransform(scrollY, [0, stickyScroll], [1, isMobile ? 0.58 : 0.18]);
   const titleLetterSpacing = useTransform(scrollY, [0, stickyScroll], ["-0.02em", "0.35em"]);
@@ -218,16 +211,12 @@ export default function PantaiTimorRedesign() {
       </AnimatePresence>
 
       <main 
-        className={`${inter.className} relative min-h-screen bg-[#10110F] text-[#e3e1da] selection:bg-[#e3e1da] selection:text-[#10110F]`}
+        className={`${inter.className} ${styles.main}`}
         style={{ 
-          "--nav-px": "1rem", 
-          "--nav-py": "0.75rem",
           opacity: isLoaded ? 1 : 0,
           transition: "opacity 1s ease-in-out"
         } as React.CSSProperties}
       >
-      <RouteStyles />
-
       <Navbar 
         navBgOpacity={navBgOpacity}
         navBlur={navBlur}
@@ -288,5 +277,5 @@ export default function PantaiTimorRedesign() {
         />
       )}
     </>
-);
+  );
 }

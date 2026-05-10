@@ -16,7 +16,7 @@ export function AlmanacSection({ almanacImageY, almanacRef, fonts }: AlmanacSect
   return (
     <section ref={almanacRef} className="relative w-full !py-32 md:!py-48 !px-4 md:!px-8 flex flex-col items-center z-10 bg-transparent">
       <div className="max-w-screen-2xl w-full flex flex-col items-center">
-        <div className="relative w-full aspect-[16/9] md:aspect-[18/9] overflow-hidden border border-[#e3e1da]/10 group rounded-sm md:rounded-2xl">
+        <div className="relative w-full aspect-[3/2] overflow-hidden border border-[#e3e1da]/10 group rounded-sm md:rounded-2xl">
           <motion.div style={{ y: almanacImageY }} className="absolute inset-x-0 -top-[30%] -bottom-[30%] w-full">
             <Image
               src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07763_1.jpg"

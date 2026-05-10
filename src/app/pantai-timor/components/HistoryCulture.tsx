@@ -1,11 +1,12 @@
 "use client";
 
-import { motion, Variants } from "framer-motion";
+import { motion, Variants, MotionValue, useScroll, useTransform } from "framer-motion";
 import { Libre_Caslon_Text } from "next/font/google";
 import Image from "next/image";
-import React from "react";
+import React, { useRef } from "react";
 import { PANTAI_TIMOR_COPY } from "../config";
 import { PantaiFrame, PantaiSection } from "./LayoutPrimitives";
+import styles from "../pantai-timor.module.scss";
 
 const libreCaslon = Libre_Caslon_Text({
   subsets: ["latin"],
@@ -13,6 +14,48 @@ const libreCaslon = Libre_Caslon_Text({
   style: ["normal"],
   display: "swap",
 });
+
+const Word = ({ children, progress, range, index, yOffset = 24 }: { children: React.ReactNode, progress: MotionValue<number>, range: [number, number], index: number, yOffset?: number }) => {
+  const opacity = useTransform(progress, range, [0.15, 1]);
+  const y = useTransform(progress, range, [yOffset + Math.sin(index * 0.4) * (yOffset / 2), 0]);
+  const blur = useTransform(progress, range, ["blur(8px)", "blur(0px)"]);
+  
+  return (
+    <motion.span 
+      suppressHydrationWarning
+      style={{ opacity, y, filter: blur }} 
+      className={styles["history-word"]}
+    >
+      {children}
+    </motion.span>
+  );
+};
+
+const FadingText = ({ text, className, yOffset = 24, as: Component = "div" }: { text: string, className?: string, yOffset?: number, as?: React.ElementType }) => {
+  const containerRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 0.9", "start 0.4"]
+  });
+
+  const words = text.split(/\s+/);
+  const Tag = Component as "div";
+
+  return (
+    <Tag ref={containerRef as React.Ref<HTMLDivElement>} className={`${styles["fading-text-container"]} ${className || ""}`}>
+      {words.map((word, i) => {
+        const wordCount = words.length;
+        const start = i / wordCount;
+        const end = start + 0.15;
+        return (
+          <Word key={i} progress={scrollYProgress} range={[start, Math.min(end, 1)]} index={i} yOffset={yOffset}>
+            {word}
+          </Word>
+        );
+      })}
+    </Tag>
+  );
+};
 
 export const HistoryCulture = () => {
   const containerVariants: Variants = {
@@ -31,64 +74,76 @@ export const HistoryCulture = () => {
   };
 
   return (
-    <PantaiSection id="history-section" className="!pt-24 !pb-12 md:!py-32 overflow-hidden bg-transparent">
+    <PantaiSection id="history-section" className={styles["history-section"]}>
       {/* Background Image */}
-      <div className="absolute inset-0 z-0">
+      <div className={styles["history-bg-container"]}>
         <Image
           src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC01218.jpg"
           alt="History Background"
           fill
-          className="object-cover blur-[1px] opacity-60 scale-100"
+          className={styles["history-bg-image"]}
         />
         {/* Dim Overlay */}
-        <div className="absolute inset-0 bg-[#10110F]/50" />
+        <div className={styles["history-dim-overlay"]} />
       </div>
 
-      <PantaiFrame variant="narrow" withGutters className="flex flex-col relative z-10">
+      <PantaiFrame variant="narrow" withGutters className={styles["history-content-frame"]}>
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={containerVariants}
-          className="flex flex-col md:flex-row gap-12 md:gap-24"
+          className={styles["history-grid-container"]}
         >
           {/* Header */}
-          <motion.div variants={itemVariants} className="md:w-1/3 flex flex-col">
-             <h3 className="font-sans !mb-6 !text-[0.8rem] md:!text-[0.9rem] font-bold uppercase !tracking-[0.4em] !text-[#fff]/60">
+          <motion.div variants={itemVariants} className={styles["history-header"]}>
+             <h3 className={styles["history-label"]}>
               {PANTAI_TIMOR_COPY.historyCulture.label}
             </h3>
-             <h2 className={`${libreCaslon.className} !mb-0 !text-[2rem] md:!text-[3rem] !leading-[1.1] !text-[#fff]`}>
-              {PANTAI_TIMOR_COPY.historyCulture.title}
-            </h2>
+            <FadingText 
+              as="h2"
+              className={`${libreCaslon.className} ${styles["history-title"]}`}
+              text={PANTAI_TIMOR_COPY.historyCulture.title}
+              yOffset={24}
+            />
           </motion.div>
 
           {/* Content Grid */}
-          <div className="md:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 md:pt-4">
-            <motion.div variants={itemVariants} className="flex flex-col">
-              <h4 className="font-sans !mb-4 !text-[0.8rem] font-bold uppercase !tracking-[0.2em] !text-[#fff]/80 border-b border-[#fff]/20 pb-4">
+          <div className={styles["history-content-grid"]}>
+            <motion.div variants={itemVariants} className={styles["history-sub-section"]}>
+              <h4 className={styles["history-sub-title"]}>
                 {PANTAI_TIMOR_COPY.historyCulture.sections[0].title}
               </h4>
-              <p className="font-sans text-[0.95rem] md:text-[1rem] leading-[1.8] text-[#fff]/90">
-                {PANTAI_TIMOR_COPY.historyCulture.sections[0].content}
-              </p>
+              <FadingText 
+                as="p"
+                className={styles["history-description"]}
+                text={PANTAI_TIMOR_COPY.historyCulture.sections[0].content}
+                yOffset={12}
+              />
             </motion.div>
 
-            <motion.div variants={itemVariants} className="flex flex-col">
-              <h4 className="font-sans !mb-4 !text-[0.8rem] font-bold uppercase !tracking-[0.2em] !text-[#fff]/80 border-b border-[#fff]/20 pb-4">
+            <motion.div variants={itemVariants} className={styles["history-sub-section"]}>
+              <h4 className={styles["history-sub-title"]}>
                 {PANTAI_TIMOR_COPY.historyCulture.sections[1].title}
               </h4>
-              <p className="font-sans text-[0.95rem] md:text-[1rem] leading-[1.8] text-[#fff]/90">
-                {PANTAI_TIMOR_COPY.historyCulture.sections[1].content}
-              </p>
+              <FadingText 
+                as="p"
+                className={styles["history-description"]}
+                text={PANTAI_TIMOR_COPY.historyCulture.sections[1].content}
+                yOffset={12}
+              />
             </motion.div>
 
-            <motion.div variants={itemVariants} className="flex flex-col md:col-span-2">
-              <h4 className="font-sans !mb-4 !text-[0.8rem] font-bold uppercase !tracking-[0.2em] !text-[#fff]/80 border-b border-[#fff]/20 pb-4">
+            <motion.div variants={itemVariants} className={`${styles["history-sub-section"]} ${styles["full-width"]}`}>
+              <h4 className={styles["history-sub-title"]}>
                 {PANTAI_TIMOR_COPY.historyCulture.sections[2].title}
               </h4>
-              <p className="font-sans text-[0.95rem] md:text-[1rem] leading-[1.8] text-[#fff]/90">
-                {PANTAI_TIMOR_COPY.historyCulture.sections[2].content}
-              </p>
+              <FadingText 
+                as="p"
+                className={styles["history-description"]}
+                text={PANTAI_TIMOR_COPY.historyCulture.sections[2].content}
+                yOffset={12}
+              />
             </motion.div>
           </div>
         </motion.div>

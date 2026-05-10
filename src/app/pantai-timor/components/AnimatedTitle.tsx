@@ -5,6 +5,7 @@ import { Cormorant_Garamond, Noto_Serif_TC, Amiri } from "next/font/google";
 import { useLenis } from "@/components/common/SmoothScroll/SmoothScroll";
 import React from "react";
 import { PANTAI_TIMOR_COPY } from "../config";
+import styles from "../pantai-timor.module.scss";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -59,7 +60,7 @@ export const AnimatedTitle = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[70] pointer-events-none overflow-hidden h-[100svh]">
+    <div className={styles["title-viewport"]}>
       <motion.h1 
         onClick={handleTitleClick}
         initial={{ opacity: 0 }}
@@ -74,9 +75,9 @@ export const AnimatedTitle = ({
           filter: finalTitleBlur,
           letterSpacing: titleLetterSpacing,
           position: "absolute",
-         transformOrigin: "center center"
+          transformOrigin: "center center"
         }}
-        className={`${cormorant.className} !mb-0 !text-[clamp(2.1rem,13vw,11rem)] !leading-none !tracking-tight text-center !text-[#f2f0ea] whitespace-nowrap font-normal pointer-events-auto cursor-pointer`}
+        className={`${cormorant.className} ${styles["main-hero-title"]}`}
       >
         {PANTAI_TIMOR_COPY.animatedTitle.title}
       </motion.h1>
@@ -94,11 +95,11 @@ export const AnimatedTitle = ({
           position: "absolute",
           transformOrigin: "center center"
         }}
-        className="flex items-center gap-8 md:gap-14 text-[#e3e1da]/40 pointer-events-none whitespace-nowrap w-full justify-center"
+        className={styles["secondary-title-wrapper"]}
       >
-         <span className={`${notoSerifTC.className} text-3xl md:text-6xl tracking-[0.2em] md:tracking-[0.4em] ml-[0.2em] md:ml-[0.4em]`}>{PANTAI_TIMOR_COPY.animatedTitle.chinese}</span>
-         <span className="w-1.5 h-1.5 rounded-full bg-[#e3e1da]/20"></span>
-         <span className={`${amiri.className} text-3xl md:text-6xl`} dir="rtl">{PANTAI_TIMOR_COPY.animatedTitle.jawi}</span>
+         <span className={`${notoSerifTC.className} ${styles["chinese-title"]}`}>{PANTAI_TIMOR_COPY.animatedTitle.chinese}</span>
+         <span className={styles["title-dot"]}></span>
+         <span className={`${amiri.className} ${styles["jawi-title"]}`} dir="rtl">{PANTAI_TIMOR_COPY.animatedTitle.jawi}</span>
       </motion.div>
 
       <motion.p 
@@ -112,9 +113,9 @@ export const AnimatedTitle = ({
           opacity: secondaryHeroOpacity,
           filter: finalTitleBlur,
           position: "absolute",
-         transformOrigin: "center center"
+          transformOrigin: "center center"
         }}
-        className="!mb-0 max-w-[18rem] text-center font-sans !text-[0.92rem] font-bold uppercase !leading-[1.5] !tracking-[0.1em] !text-[#e3e1da]/50 pointer-events-none md:max-w-none md:!text-[1.5rem] md:!tracking-[0.25em] text-balance w-full"
+        className={styles["subtitle-text"]}
       >
         {PANTAI_TIMOR_COPY.animatedTitle.subtitle}
       </motion.p>

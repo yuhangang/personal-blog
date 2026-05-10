@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { createPortal } from "react-dom";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { CAROUSEL_IMAGES } from "./constants";
+import Image from "next/image";
 import type { CoastalLocation } from "@/app/pantai-timor/config";
 import type { PantaiTimorFontClasses, PantaiTimorImage } from "./types";
 
@@ -86,6 +87,22 @@ export function PantaiLightbox({
       setTransitionDirection(activeImageIndex > previousIndex ? 1 : -1);
     }
     previousIndexRef.current = activeImageIndex;
+  }, [activeImageIndex]);
+
+  // Preload next and previous images for the lightbox
+  useEffect(() => {
+    if (activeImageIndex === null) return;
+
+    const indicesToPreload = [
+      activeImageIndex + 1,
+      activeImageIndex - 1,
+      activeImageIndex + 2 // Extra buffer
+    ].filter(idx => idx >= 0 && idx < CAROUSEL_IMAGES.length);
+
+    indicesToPreload.forEach(idx => {
+      const img = new window.Image();
+      img.src = CAROUSEL_IMAGES[idx].src;
+    });
   }, [activeImageIndex]);
 
   if (typeof document === "undefined") return null;
@@ -181,9 +198,17 @@ export function PantaiLightbox({
                       onNavigate(Math.max(0, activeImageIndex - 1));
                     }
                   }}
-                  className="relative flex min-h-0 w-full cursor-grab items-center justify-center border border-[#e3e1da]/10 bg-[#151612]/60 !p-2 shadow-[0_34px_110px_rgba(0,0,0,0.62)] active:cursor-grabbing"
+                  className="relative flex h-[58svh] w-full cursor-grab items-center justify-center border border-[#e3e1da]/10 bg-[#151612]/60 !p-2 shadow-[0_34px_110px_rgba(0,0,0,0.62)] active:cursor-grabbing md:h-[74svh]"
                 >
-                  <img src={activeImage.src} alt={activeImage.alt} className="max-h-[58svh] w-auto max-w-full object-contain md:max-h-[74svh]" draggable={false} />
+                  <Image 
+                    src={activeImage.src} 
+                    alt={activeImage.alt} 
+                    fill
+                    unoptimized={true}
+                    priority={true}
+                    className="object-contain" 
+                    draggable={false} 
+                  />
                 </motion.div>
 
                 <motion.aside

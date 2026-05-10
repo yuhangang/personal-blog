@@ -3,15 +3,16 @@
 import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils/cn";
+import styles from "../pantai-timor.module.scss";
 
 export const pantaiLayout = {
-  section: "relative w-full flex flex-col items-center z-10",
-  gutters: "!px-4 md:!px-8",
-  contentGutters: "!px-6 md:px-[calc((100vw-min(1700px,100vw-3rem))/2)]",
-  frame: "w-full max-w-[1700px] mx-auto",
-  narrowFrame: "w-full max-w-[1280px] mx-auto",
-  textMeasure: "max-w-[44rem]",
-  sectionY: "!py-32 md:!py-48",
+  section: styles["pantai-section-base"],
+  gutters: styles["pantai-gutters"],
+  contentGutters: styles["pantai-content-gutters"],
+  frame: styles["pantai-frame"],
+  narrowFrame: styles["pantai-narrow-frame"],
+  textMeasure: styles["pantai-text-measure"],
+  sectionY: styles["pantai-section-y"],
 } as const;
 
 type PantaiSectionProps = {

@@ -21,8 +21,8 @@ interface Props {
 }
 
 export default function ServiceIntro({
-  ctaText = "See Selected Works",
-  ctaLink = "#projects",
+  ctaText,
+  ctaLink,
   variant = "scroll",
   description = IDENTITY_CONFIG.desc,
   title,
@@ -50,7 +50,7 @@ export default function ServiceIntro({
         <div
           className={styles.visualContainer}
           onClick={handleSectionClick}
-          style={variant === "fullscreen" ? { cursor: "pointer" } : undefined}
+          style={variant === "fullscreen" && ctaLink ? { cursor: "pointer" } : undefined}
         >
           <div className={styles.frame}>
             <Image
@@ -88,11 +88,13 @@ export default function ServiceIntro({
             </div>
           </div>
 
-          <div className={styles.buttonPosition}>
-            <Link href={ctaLink} className={styles.ctaButton}>
-              {ctaText}
-            </Link>
-          </div>
+          {ctaLink && ctaText && (
+            <div className={styles.buttonPosition}>
+              <Link href={ctaLink} className={styles.ctaButton}>
+                {ctaText}
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </section>

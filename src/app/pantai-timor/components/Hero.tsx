@@ -4,6 +4,7 @@ import { motion, MotionValue } from "framer-motion";
 import { Cormorant_Garamond } from "next/font/google";
 import React from "react";
 import { PANTAI_TIMOR_COPY } from "../config";
+import styles from "../pantai-timor.module.scss";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -57,18 +58,18 @@ export const Hero = ({
   return (
     <section 
       ref={heroRef}
-      className="sticky top-0 w-full h-[100svh] min-h-[680px] overflow-hidden z-0"
+      className={styles.hero}
     >
       <motion.div 
         style={{ 
           opacity: heroOpacity,
           paddingTop: 'calc(140px + env(safe-area-inset-top, 0px))'
         }}
-        className="absolute inset-0 flex flex-col items-center justify-center !px-4"
+        className={styles["hero-content"]}
       >
         <div 
           style={{ top: 'calc(50% + env(safe-area-inset-top, 0px) / 2)' }}
-          className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[1500px] h-[700px] opacity-40 mix-blend-screen select-none pointer-events-none flex items-center justify-center"
+          className={styles["hero-video-wrapper"]}
         >
            <motion.div 
              style={{ 
@@ -79,7 +80,7 @@ export const Hero = ({
                height: heroContainerHeight,
                borderRadius: heroContainerRadius
              }} 
-             className="relative overflow-hidden"
+             className={styles["hero-video-container"]}
            >
               <video 
                 ref={videoRef}
@@ -89,24 +90,24 @@ export const Hero = ({
                 loop 
                 playsInline 
                 onCanPlay={onVideoReady}
-                className="w-full h-full object-cover"
+                className={styles["hero-video"]}
               />
            </motion.div>
         </div>
 
-        <div className="relative z-10 flex flex-col items-center text-center">
-          <div ref={spacerRef} className="invisible pointer-events-none">
-            <h1 className={`${cormorant.className} !text-[clamp(2.1rem,13vw,11rem)] !leading-none !tracking-tight font-normal`}>{PANTAI_TIMOR_COPY.hero.title}</h1>
+        <div className={styles["hero-title-wrapper"]}>
+          <div ref={spacerRef} className={styles["hero-spacer"]}>
+            <h1 className={`${cormorant.className} ${styles["hero-title"]}`}>{PANTAI_TIMOR_COPY.hero.title}</h1>
           </div>
         </div>
 
         {/* Scroll Indicator */}
-         <motion.div style={{ opacity: heroOpacity }} className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-6">
-          <span className="font-sans text-[0.55rem] font-bold uppercase tracking-[0.35em] text-[#e3e1da]/30">
+         <motion.div style={{ opacity: heroOpacity }} className={styles["scroll-indicator"]}>
+          <span className={styles["scroll-text"]}>
             {PANTAI_TIMOR_COPY.hero.scroll}
           </span>
-          <div className="h-12 w-[1px] bg-[#e3e1da]/10 relative overflow-hidden">
-             <div className="absolute top-0 left-0 w-full h-1/2 bg-[#e3e1da]/60 animate-[pantaiScrollDown_2.5s_ease-in-out_infinite]" />
+          <div className={styles["scroll-line"]}>
+             <div className={styles["scroll-line-animated"]} />
           </div>
         </motion.div>
       </motion.div>
