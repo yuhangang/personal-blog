@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion, MotionValue, useTransform } from "framer-motion";
+import { AnimatePresence, motion, MotionValue, useMotionTemplate, useTransform } from "framer-motion";
 import { Cormorant_Garamond } from "next/font/google";
 import React, { useEffect, useState } from "react";
 import { useLenis } from "@/components/common/SmoothScroll/SmoothScroll";
@@ -20,8 +20,6 @@ const cormorant = Cormorant_Garamond({
 
 interface NavbarProps {
   navBgOpacity: MotionValue<number>;
-  navBlur: MotionValue<number>;
-  navBorderOpacity: MotionValue<number>;
   navTitleOpacity: MotionValue<number>;
   navRef: React.RefObject<HTMLDivElement | null>;
   menuOpen: boolean;
@@ -30,8 +28,6 @@ interface NavbarProps {
 
 export const Navbar = ({
   navBgOpacity,
-  navBlur,
-  navBorderOpacity,
   navTitleOpacity,
   navRef,
   menuOpen,
@@ -102,9 +98,7 @@ export const Navbar = ({
       <motion.nav 
         initial={false}
         style={{ 
-          backgroundColor: useTransform(navBgOpacity, [0, 1], ["rgba(16, 17, 15, 0)", "rgba(16, 17, 15, 0.42)"]),
-          backdropFilter: useTransform(navBlur, (v) => (v <= 0.01 ? "none" : `blur(${v}px) saturate(180%)`)),
-          borderBottom: useTransform(navBorderOpacity, (v) => (v <= 0.001 ? "0 solid rgba(227, 225, 218, 0)" : `1px solid rgba(227, 225, 218, ${v})`)),
+          background: useMotionTemplate`linear-gradient(to bottom, rgba(16, 17, 15, ${useTransform(navBgOpacity, [0, 1], [0, 0.8])}) 0%, rgba(16, 17, 15, 0) 100%)`,
           paddingTop: 'env(safe-area-inset-top, 0px)',
         }}
         className={styles.navbar}

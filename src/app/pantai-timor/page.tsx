@@ -20,6 +20,7 @@ import { Lightbox } from "./components/Lightbox";
 import { TheLocalSection } from "./components/TheLocalSection";
 import { CoastalAlmanac } from "./components/CoastalAlmanac";
 import { Memory } from "./components/Memory";
+import { ParallaxZoom } from "./components/ParallaxZoom";
 import styles from "./pantai-timor.module.scss";
 
 type ResettableMotionValue = {
@@ -219,8 +220,6 @@ export default function PantaiTimorRedesign() {
       >
       <Navbar 
         navBgOpacity={navBgOpacity}
-        navBlur={navBlur}
-        navBorderOpacity={navBorderOpacity}
         navTitleOpacity={navTitleOpacity}
         navRef={navRef}
         menuOpen={menuOpen}
@@ -240,11 +239,14 @@ export default function PantaiTimorRedesign() {
         onVideoReady={() => setIsLoaded(true)}
       />
 
-      <CoastalAlmanac almanacRef={almanacRef} />
-      <HistoryCulture />
-      <VillageRhythms />
-      <Memory />
+      <CoastalAlmanac ref={almanacRef} />
+          <Memory />
 
+      <HistoryCulture />
+
+      <ParallaxZoom />
+      <VillageRhythms />
+  
       <TheLocalSection 
         localSectionRef={localSectionRef}
         setActiveImageIndex={setActiveImageIndex}

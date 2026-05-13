@@ -46,15 +46,15 @@ export const PANTAI_TIMOR_COPY = {
     sections: [
       {
         title: "The Siamese Imprint",
-        content: "For centuries, the powerful kingdoms of Ayutthaya and Sukhothai to the north cast their long, protective shadows over these shores. This historical proximity didn't just alter borders; it seeped into the soil. It wove Siamese grace into the intricate architecture, spiced the local dialects with foreign syllables, and shaped the daily customs of Kelantan and Terengganu, birthing a mesmerizing Malay-Siamese cultural synthesis that still breathes in the streets today."
+        content: "Centuries of northern proximity wove Siamese grace into the soil. This historical shadow didn't just alter borders; it infused architecture and dialect, birthing a unique cultural synthesis that still breathes in the streets of Kelantan and Terengganu today."
       },
       {
         title: "The Islamic Dawn",
-        content: "Carried on the relentless northeast monsoon winds by weary yet hopeful merchants, Islam did not arrive by the sword, but through whispered prayers and the bustling exchange of the marketplace. It gently embedded itself into the region's soul. The famed Terengganu Inscription Stone, pulled from the muddy banks of a local river, stands as silent witness—the earliest known testament to the Quranic-based Jawi script in the Malay world, marking a profound awakening of faith and law."
+        content: "Carried by monsoon winds and merchant prayers, Islam gently embedded itself into the region's soul. The Terengganu Inscription Stone remains a silent witness—the earliest testament to Jawi script, marking a profound awakening of faith that reshaped the Malay world."
       },
       {
         title: "The Maritime Crossroads",
-        content: "Long before modern ports arose, this eastern shoreline was a pulsating artery in a vast, ancient global network. It was the crucial bridge between the silk markets of China, the spice routes of India, and the faraway ports of the Middle East. These coastal villages were not sleepy hamlets, but dynamic, polyglot hubs where empires traded, ideas clashed, and a remarkable seafaring resilience was forged against the crashing waves of the South China Sea."
+        content: "Once a pulsating artery in a global network, these shores bridged Chinese silk with Indian spice. These were not sleepy hamlets, but dynamic hubs where empires traded and a remarkable seafaring resilience was forged against the South China Sea."
       }
     ]
   },
@@ -80,7 +80,7 @@ export const PANTAI_TIMOR_COPY = {
   },
   almanac: {
     label: "THE COASTAL ALMANAC",
-    content: "An ongoing documentation of a horizon that refuses to stand still. Every captured frame, every note, is a silent witness to the eternal, sometimes violent, often tender dialogue between the shifting sands and the relentless sea."
+    content: "An ongoing archive of the eastern coast, documenting the dialogue between shifting sands and the relentless sea."
   },
   quote: {
     text: "Visual manifestations transcend the mere act of telling a story. They are the salt in the wind, the lifeblood of our culture still being written in the sand.",

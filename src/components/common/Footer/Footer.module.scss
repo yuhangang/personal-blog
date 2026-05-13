@@ -34,7 +34,7 @@
 .logo {
     font-family: var(--font-geom);
     font-weight: 600;
-    font-size: 2rem;
+    font-size: 2.25rem;
     margin-bottom: $spacing-md;
     color: white;
 }
@@ -53,7 +53,7 @@
 }
 
 .link {
-    font-size: 0.875rem;
+    font-size: 1rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.7);
@@ -91,7 +91,7 @@
 }
 
 .copyright {
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
     color: rgba(255, 255, 255, 0.5);
     padding-top: $spacing-md;
 }

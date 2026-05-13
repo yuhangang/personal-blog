@@ -21,6 +21,16 @@
     @media (min-width: 1440px) {
         padding: 24px 60px;
     }
+
+    &.scrolled {
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 0%, transparent 100%);
+        box-shadow: none;
+        pointer-events: auto;
+
+        &[data-nav-theme='dark'] {
+            background: linear-gradient(to bottom, rgba(16, 17, 15, 0.8) 0%, transparent 100%);
+        }
+    }
 }
 
 .container {

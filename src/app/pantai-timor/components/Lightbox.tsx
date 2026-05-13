@@ -5,9 +5,10 @@ import { ChevronLeft, ChevronRight, X, LayoutGrid, Maximize } from "lucide-react
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import { Libre_Caslon_Text } from "next/font/google";
-import { FEATURED_IMAGES, COASTAL_LOCATIONS, getThumbnailUrl, PANTAI_TIMOR_COPY } from "../config";
+import { FEATURED_IMAGES, COASTAL_LOCATIONS, PANTAI_TIMOR_COPY } from "../config";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ptTrack } from "@/utils/ga-events";
+import { InfiniteGrid } from "./InfinityGrid";
 import styles from "../pantai-timor.module.scss";
 
 const libreCaslon = Libre_Caslon_Text({
@@ -118,21 +119,6 @@ export const Lightbox = ({
     };
   }, [activeImageIndex]);
   
-  const gridContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (isGridView && activeImageIndex !== null && gridContainerRef.current) {
-      // Small delay to ensure the grid is rendered and measured after the AnimatePresence transition
-      const timer = setTimeout(() => {
-        const activeItem = gridContainerRef.current?.querySelector(`.${styles.active}`);
-        if (activeItem) {
-          activeItem.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [isGridView, activeImageIndex]);
-
   if (!portalRoot) return null;
 
   const activeImage = activeImageIndex === null ? null : FEATURED_IMAGES[activeImageIndex];
@@ -210,7 +196,6 @@ export const Lightbox = ({
             {isGridView ? (
               <motion.div
                 key="grid"
-                ref={gridContainerRef}
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
@@ -219,33 +204,11 @@ export const Lightbox = ({
                 data-lenis-prevent
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className={styles["grid-content"]}>
-                  <div className={styles["grid-layout"]}>
-                    {FEATURED_IMAGES.map((img, idx) => (
-                      <motion.div
-                        key={idx}
-                        whileHover={{ scale: 1.015 }}
-                        whileTap={{ scale: 0.985 }}
-                        onClick={() => {
-                          setActiveImageIndex(idx);
-                          setIsGridView(false);
-                        }}
-                        className={`${styles["grid-item"]} ${idx === activeImageIndex ? styles.active : ''}`}
-                      >
-                        <Image
-                          src={getThumbnailUrl(img.src)}
-                          alt={img.alt}
-                          fill
-                          sizes="(min-width: 1536px) 18rem, (min-width: 1280px) 21vw, (min-width: 1024px) 24vw, (min-width: 640px) 33vw, 50vw"
-                          className={styles["grid-image"]}
-                        />
-                        <div className={styles["grid-item-overlay"]}>
-                          <span className={styles["view-label"]}>{PANTAI_TIMOR_COPY.lightbox.viewPhoto}</span>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
+                <InfiniteGrid
+                  setActiveImageIndex={setActiveImageIndex}
+                  setIsGridView={setIsGridView}
+                  activeImageIndex={activeImageIndex}
+                />
               </motion.div>
             ) : (
               <div className={styles["image-viewer-container"]}>

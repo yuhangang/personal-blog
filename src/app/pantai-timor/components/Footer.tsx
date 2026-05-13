@@ -2,6 +2,7 @@
 
 import { useLenis } from "@/components/common/SmoothScroll/SmoothScroll";
 import Link from "next/link";
+import Image from "next/image";
 import { Cormorant_Garamond } from "next/font/google";
 import { PANTAI_TIMOR_COPY } from "../config";
 import { PantaiFrame } from "./LayoutPrimitives";
@@ -48,6 +49,16 @@ export const Footer = () => {
 
   return (
     <footer id="footer" className={styles.footer}>
+      <div className={styles["footer-background"]}>
+        <Image
+          src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/1000081496.jpg"
+          alt="Pantai Timor Footer Background"
+          fill
+          className={styles["footer-bg-image"]}
+          sizes="100vw"
+        />
+        <div className={styles["footer-bg-overlay"]} />
+      </div>
       <PantaiFrame className={styles["footer-frame"]}>
         {/* Branding Header */}
         <div className={styles["footer-branding"]}>
@@ -63,13 +74,7 @@ export const Footer = () => {
 
         {/* Content Grid */}
         <div className={styles["footer-grid"]}>
-          {/* Column 1: About */}
-          <div className={styles["footer-column"]}>
-            <h3 className={styles["footer-column-title"]}>The Enclave</h3>
-            <p className={styles["footer-column-text"]}>
-              {PANTAI_TIMOR_COPY.almanac.content}
-            </p>
-          </div>
+       
 
           {/* Column 2: Sections */}
           <div className={styles["footer-column"]}>
