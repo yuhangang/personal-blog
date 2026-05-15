@@ -54,7 +54,7 @@ export const QuoteSection = () => {
       {/* Background Image */}
       <div className={styles["quote-bg-container"]}>
         <Image
-          src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC01024.jpg"
+          src="https://cdn.yuhangang.com/pantai-timor/DSC01024.jpg"
           alt="Coastal sunset background"
           fill
           className={styles["quote-bg-image"]}

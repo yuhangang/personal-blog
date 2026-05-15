@@ -23,7 +23,7 @@ export const VillageRhythms = () => {
           <div className={styles["village-split-bg"]}>
             <div className={styles["village-image-wrapper"]}>
               <Image 
-                src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00645.JPG" 
+                src="https://cdn.yuhangang.com/pantai-timor/DSC00645.JPG" 
                 alt="Village Life" 
                 fill 
                 className={styles["village-image"]} 
@@ -32,7 +32,7 @@ export const VillageRhythms = () => {
             </div>
             <div className={`${styles["village-image-wrapper"]} ${styles["border-top"]}`}>
               <Image 
-                src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00788.JPG" 
+                src="https://cdn.yuhangang.com/pantai-timor/DSC00788.JPG" 
                 alt="Coastal House" 
                 fill 
                 className={styles["village-image"]} 

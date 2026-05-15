@@ -32,7 +32,7 @@ export const ParallaxZoom = () => {
       <div className={styles["parallax-zoom-sticky"]}>
         {/* Image 2: Background layer — revealed as Image 1 fades */}
         <motion.div
-          className={styles["parallax-zoom-image-wrapper"]}
+          className={`${styles["parallax-zoom-image-wrapper"]} ${styles["secondary"]}`}
           style={{
             opacity: image2Opacity,
             scale: image2Scale,
@@ -41,7 +41,7 @@ export const ParallaxZoom = () => {
           }}
         >
           <Image
-            src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00590.JPG"
+            src="https://cdn.yuhangang.com/pantai-timor/DSC00590.JPG"
             alt="Coastal Landscape - Detail"
             fill
             className={styles["parallax-zoom-image"]}
@@ -61,7 +61,7 @@ export const ParallaxZoom = () => {
           }}
         >
           <Image
-            src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00465.JPG"
+            src="https://cdn.yuhangang.com/pantai-timor/DSC00465.JPG"
             alt="Coastal Landscape - Wide"
             fill
             className={styles["parallax-zoom-image"]}

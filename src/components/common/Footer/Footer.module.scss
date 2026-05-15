@@ -8,6 +8,10 @@
     padding: $spacing-xl $spacing-md $spacing-md;
     text-align: center;
     overflow: hidden;
+
+    @include mobile {
+        padding: $spacing-lg $spacing-sm $spacing-sm;
+    }
 }
 
 .background {

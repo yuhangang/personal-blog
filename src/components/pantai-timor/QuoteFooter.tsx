@@ -3,7 +3,7 @@ import type { PantaiTimorFontClasses } from "./types";
 
 export function QuoteSection({ fonts }: { fonts: PantaiTimorFontClasses }) {
   return (
-    <section className="relative z-20 w-full !py-48 md:!py-64 overflow-hidden flex items-center justify-center !px-4 bg-[#10110F]">
+    <section className="relative z-20 w-full !py-24 md:!py-64 overflow-hidden flex items-center justify-center !px-4 bg-[#10110F]">
       <div className="absolute inset-0 opacity-30 pointer-events-none overflow-hidden">
         <div className="absolute top-1/2 left-1/2 w-[150%] h-[150%] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_0%,transparent_60%)] blur-3xl animate-[pulse_10s_ease-in-out_infinite]" />
         <div className="absolute top-1/2 left-0 w-full h-full -translate-y-1/2 opacity-20">
@@ -40,7 +40,7 @@ export function QuoteSection({ fonts }: { fonts: PantaiTimorFontClasses }) {
 
 export function PantaiFooter({ fonts }: { fonts: PantaiTimorFontClasses }) {
   return (
-    <footer className="relative z-20 flex w-full flex-col items-center border-t border-[#e3e1da]/10 bg-[#10110F] !px-6 !py-20 sm:!px-8 md:!py-24 lg:!px-10">
+    <footer className="relative z-20 flex w-full flex-col items-center border-t border-[#e3e1da]/10 bg-[#10110F] !px-6 !py-12 sm:!px-8 md:!py-24 lg:!px-10">
       <div className="flex w-full max-w-6xl flex-col items-center gap-14 text-center md:gap-16">
         <div className="flex flex-col items-center gap-10 md:gap-12">
           <h2 className={`${fonts.serif} !mb-0 !text-[clamp(3.25rem,12vw,5rem)] !leading-none !tracking-normal !text-[#e3e1da]`}>

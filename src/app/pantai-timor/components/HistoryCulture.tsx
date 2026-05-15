@@ -78,7 +78,7 @@ export const HistoryCulture = () => {
       {/* Background Image */}
       <div className={styles["history-bg-container"]}>
         <Image
-          src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC01218.jpg"
+          src="https://cdn.yuhangang.com/pantai-timor/DSC01218.jpg"
           alt="History Background"
           fill
           className={styles["history-bg-image"]}

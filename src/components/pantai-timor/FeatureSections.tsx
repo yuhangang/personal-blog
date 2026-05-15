@@ -19,7 +19,7 @@ export function AlmanacSection({ almanacImageY, almanacRef, fonts }: AlmanacSect
         <div className="relative w-full aspect-[3/2] overflow-hidden border border-[#e3e1da]/10 group rounded-sm md:rounded-2xl">
           <motion.div style={{ y: almanacImageY }} className="absolute inset-x-0 -top-[30%] -bottom-[30%] w-full">
             <Image
-              src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07763_1.jpg"
+              src="https://cdn.yuhangang.com/pantai-timor/DSC07763_1.jpg"
               alt="Fishing Boat"
               fill
               className="object-cover transition-transform duration-[2s] ease-out"
@@ -75,10 +75,10 @@ export function VillageRhythmsSection({ fonts }: { fonts: PantaiTimorFontClasses
         <div className="relative w-full aspect-[4/5] md:aspect-[16/8] overflow-hidden border border-[#e3e1da]/10 group">
           <div className="grid grid-cols-1 md:grid-cols-2 h-full w-full">
             <div className="relative h-full w-full overflow-hidden">
-              <Image src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00645.JPG" alt="Village Life" fill className="object-cover transition-transform duration-[3s] group-hover:scale-110 ease-out" sizes="(min-width: 768px) 50vw, 100vw" />
+              <Image src="https://cdn.yuhangang.com/pantai-timor/DSC00645.JPG" alt="Village Life" fill className="object-cover transition-transform duration-[3s] group-hover:scale-110 ease-out" sizes="(min-width: 768px) 50vw, 100vw" />
             </div>
             <div className="relative h-full w-full overflow-hidden border-t md:border-t-0 md:border-l border-[#e3e1da]/10">
-              <Image src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00788.JPG" alt="Coastal House" fill className="object-cover transition-transform duration-[3s] group-hover:scale-110 ease-out" sizes="(min-width: 768px) 50vw, 100vw" />
+              <Image src="https://cdn.yuhangang.com/pantai-timor/DSC00788.JPG" alt="Coastal House" fill className="object-cover transition-transform duration-[3s] group-hover:scale-110 ease-out" sizes="(min-width: 768px) 50vw, 100vw" />
             </div>
           </div>
 
@@ -122,7 +122,7 @@ export function MemorySection({ fonts }: { fonts: PantaiTimorFontClasses }) {
             className="relative aspect-[4/5] md:aspect-square overflow-hidden border border-[#e3e1da]/10 group rounded-sm md:rounded-2xl"
           >
             <Image
-              src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00679.JPG"
+              src="https://cdn.yuhangang.com/pantai-timor/DSC00679.JPG"
               alt="A Fragmented Memory"
               fill
               className="object-cover grayscale hover:grayscale-0 transition-all duration-[2s] ease-out group-hover:scale-105"

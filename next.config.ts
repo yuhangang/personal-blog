@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev',
+        hostname: 'cdn.yuhangang.com',
         port: '',
         pathname: '/**',
       },

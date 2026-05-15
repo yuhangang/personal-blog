@@ -14,12 +14,12 @@
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    
+
     &::before {
         content: '';
         position: absolute;
         inset: 0;
-        background-image: url('https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC08235.jpg');
+        background-image: url('https://cdn.yuhangang.com/pantai-timor/DSC08235.jpg');
         background-size: cover;
         background-position: center;
         filter: blur(80px) saturate(1.5);

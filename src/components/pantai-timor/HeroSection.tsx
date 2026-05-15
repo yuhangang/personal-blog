@@ -30,7 +30,7 @@ export function HeroSection({
           className="relative w-[400px] h-[500px] md:w-[800px] md:h-[600px] lg:w-[1000px] lg:h-[550px] rounded-[100px] overflow-hidden"
         >
           <Image
-            src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00552.JPG"
+            src="https://cdn.yuhangang.com/pantai-timor/DSC00552.JPG"
             alt="Tree Hero"
             fill
             className="object-cover"

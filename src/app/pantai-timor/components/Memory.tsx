@@ -24,7 +24,7 @@ export const Memory = () => {
 
   const filterValue = useTransform(
     scrollYProgress,
-    [0, 0.15, 0.3, 0.7, 0.85, 1],
+    [0, 0.1, 0.2, 0.8, 0.9, 1],
     [
       "blur(8px) brightness(0.1) saturate(0%)",
       "blur(4px) brightness(0.3) saturate(30%)",
@@ -35,15 +35,22 @@ export const Memory = () => {
     ]
   );
 
+  // Scale up slightly when blurred to prevent "blur offset" edge-bleed
+  const scaleValue = useTransform(
+    scrollYProgress,
+    [0, 0.2, 0.8, 1],
+    [1.1, 1, 1, 1.1]
+  );
+
   const titleColor = useTransform(
     scrollYProgress,
-    [0, 0.15, 0.3, 0.7, 0.85, 1],
+    [0, 0.1, 0.2, 0.8, 0.9, 1],
     ["#e3e1da", "#e3e1da", "#ff4d00", "#ff4d00", "#e3e1da", "#e3e1da"]
   );
 
   const titleFilter = useTransform(
     scrollYProgress,
-    [0, 0.15, 0.3, 0.7, 0.85, 1],
+    [0, 0.1, 0.2, 0.8, 0.9, 1],
     [
       "blur(6px) brightness(0.1) saturate(0%)",
       "blur(3px) brightness(0.3) saturate(20%)",
@@ -56,7 +63,7 @@ export const Memory = () => {
 
   const titleGlow = useTransform(
     scrollYProgress,
-    [0, 0.15, 0.3, 0.7, 0.85, 1],
+    [0, 0.1, 0.2, 0.8, 0.9, 1],
     [
       "0px 0px 0px rgba(255, 77, 0, 0)",
       "0px 0px 0px rgba(255, 77, 0, 0)",
@@ -69,7 +76,7 @@ export const Memory = () => {
 
   const textContentFilter = useTransform(
     scrollYProgress,
-    [0, 0.15, 0.3, 0.7, 0.85, 1],
+    [0, 0.1, 0.2, 0.8, 0.9, 1],
     [
       "blur(6px) brightness(0.1) saturate(0%)",
       "blur(3px) brightness(0.3) saturate(20%)",
@@ -98,10 +105,14 @@ export const Memory = () => {
             >
               <motion.div 
                 className={styles["memory-image-wrapper"]}
-                style={{ filter: filterValue, willChange: "filter" }}
+                style={{ 
+                  filter: filterValue, 
+                  scale: scaleValue,
+                  willChange: "filter, transform" 
+                }}
               >
                 <Image
-                  src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00679.JPG"
+                  src="https://cdn.yuhangang.com/pantai-timor/DSC00679.JPG"
                   alt="A Fragmented Memory"
                   fill
                   className={styles["memory-image"]}

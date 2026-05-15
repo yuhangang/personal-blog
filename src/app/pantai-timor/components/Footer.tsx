@@ -51,7 +51,7 @@ export const Footer = () => {
     <footer id="footer" className={styles.footer}>
       <div className={styles["footer-background"]}>
         <Image
-          src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/1000081496.jpg"
+          src="https://cdn.yuhangang.com/pantai-timor/1000081496.jpg"
           alt="Pantai Timor Footer Background"
           fill
           className={styles["footer-bg-image"]}
@@ -138,11 +138,6 @@ export const Footer = () => {
             <p className={styles["copyright-text"]}>
               {PANTAI_TIMOR_COPY.footer.copyright}
             </p>
-          </div>
-          <div className={styles["footer-bottom-row"]}>
-             <span className={styles["rights-reserved"]}>
-               All rights reserved.
-             </span>
           </div>
         </div>
       </PantaiFrame>

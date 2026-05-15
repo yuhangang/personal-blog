@@ -102,7 +102,7 @@ export const CoastalAlmanac = forwardRef<HTMLElement, object>((_, ref) => {
       <div className={styles["almanac-sticky-container"]}>
         <div className={styles["almanac-background-container"]}>
           <Image 
-            src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07670_1.jpg" 
+            src="https://cdn.yuhangang.com/pantai-timor/DSC07670_1.jpg" 
             alt="Background" 
             fill 
             className={styles["almanac-background-image"]} 
@@ -118,7 +118,7 @@ export const CoastalAlmanac = forwardRef<HTMLElement, object>((_, ref) => {
               style={{ x, opacity: opacity1 }}
             >
               <Image 
-                src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07763_1.jpg" 
+                src="https://cdn.yuhangang.com/pantai-timor/DSC07763_1.jpg" 
                 alt="Fishing Boat" 
                 fill 
                 className={styles["almanac-image"]} 
@@ -132,7 +132,7 @@ export const CoastalAlmanac = forwardRef<HTMLElement, object>((_, ref) => {
               style={{ x, opacity: opacity2 }}
             >
               <Image 
-                src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00590.JPG" 
+                src="https://cdn.yuhangang.com/pantai-timor/DSC00590.JPG" 
                 alt="Coastal Horizon" 
                 fill 
                 className={styles["almanac-image"]} 

@@ -37,10 +37,10 @@ export const Navbar = ({
   const router = useRouter();
 
   const menuItems = [
-    { label: "HISTORY", id: "history-section", image: "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC01218.jpg" },
-    { label: "VILLAGE", id: "village", image: "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00756_2.JPG" },
-    { label: "GEOGRAPHY", id: "geography", image: "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00631.JPG" },
-    { label: "ARCHIVE", id: "archive", image: "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00587.JPG" },
+    { label: "HISTORY", id: "history-section", image: "https://cdn.yuhangang.com/pantai-timor/DSC01218.jpg" },
+    { label: "VILLAGE", id: "village", image: "https://cdn.yuhangang.com/pantai-timor/DSC00756_2.JPG" },
+    { label: "GEOGRAPHY", id: "geography", image: "https://cdn.yuhangang.com/pantai-timor/DSC00631.JPG" },
+    { label: "ARCHIVE", id: "archive", image: "https://cdn.yuhangang.com/pantai-timor/DSC00587.JPG" },
   ];
 
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);

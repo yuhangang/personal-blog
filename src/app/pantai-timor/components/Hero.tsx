@@ -84,7 +84,7 @@ export const Hero = ({
            >
               <video 
                 ref={videoRef}
-                src="https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/cover.mp4" 
+                src="https://cdn.yuhangang.com/pantai-timor/cover.mp4" 
                 autoPlay 
                 muted 
                 loop 

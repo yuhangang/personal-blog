@@ -410,7 +410,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.973952,
     "lng": 102.440377,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/78E961C5-31C7-418E-9811-635ADA3EBAB9.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/78E961C5-31C7-418E-9811-635ADA3EBAB9.JPG",
     "imageAlt": "Coastal photography 78E961C5-31C7-418E-9811-635ADA3EBAB9.JPG",
   },
   {
@@ -418,7 +418,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.829322,
     "lng": 102.558491,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00032.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00032.jpg",
     "imageAlt": "Coastal photography DSC00032.jpg",
     featured:true,
   },
@@ -427,7 +427,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.430578,
     "lng": 103.068323,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00052.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00052.jpg",
     "imageAlt": "Coastal photography DSC00052.jpg",
     featured:true,
   },
@@ -436,7 +436,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.620211,
     "lng": 102.802515,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00068.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00068.jpg",
     "imageAlt": "Coastal photography DSC00068.jpg"
   },
   {
@@ -444,7 +444,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.732381,
     "lng": 102.665718,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00234.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00234.jpg",
     "imageAlt": "Coastal photography DSC00234.jpg"
   },
   {
@@ -452,7 +452,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 6.023100,
     "lng": 102.418742,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00465.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00465.JPG",
     "imageAlt": "Coastal photography DSC00465.JPG"
   },
   {
@@ -460,7 +460,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat":6.023368,
     "lng": 102.416231,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00516.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00516.JPG",
     "imageAlt": "Coastal photography DSC00516.JPG"
   },
   {
@@ -468,7 +468,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 6.028801,
     "lng": 102.416447,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00552.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00552.JPG",
     "imageAlt": "Coastal photography DSC00552.JPG",
   },
   {
@@ -476,7 +476,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
    "lat": 6.028801,
     "lng": 102.416447,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00587.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00587.JPG",
     "imageAlt": "Coastal photography DSC00587.JPG"
   },
   {
@@ -484,7 +484,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 6.028801,
     "lng": 102.416447,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00590.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00590.JPG",
     "imageAlt": "Coastal photography DSC00590.JPG",
     "featured": true,
   },
@@ -493,7 +493,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
      "lat": 6.028801,
     "lng": 102.416447,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00608.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00608.JPG",
     "imageAlt": "Coastal photography DSC00608.JPG"
   },
   {
@@ -501,7 +501,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 6.031716,
     "lng": 102.414712,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00631.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00631.JPG",
     "imageAlt": "Coastal photography DSC00631.JPG"
   },
   {
@@ -509,7 +509,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 6.031716,
     "lng": 102.414712,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00638.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00638.JPG",
     "imageAlt": "Coastal photography DSC00638.JPG"
   },
   {
@@ -517,7 +517,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 6.030274,
     "lng": 102.415008,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00645.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00645.JPG",
     "imageAlt": "Coastal photography DSC00645.JPG"
   },
   {
@@ -525,7 +525,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.983638,
     "lng": 102.434814,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00649.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00649.JPG",
     "imageAlt": "Coastal photography DSC00649.JPG",
     featured:true,
   },
@@ -534,7 +534,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.974645,
     "lng": 102.440973,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00679.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00679.JPG",
     "imageAlt": "Coastal photography DSC00679.JPG",
     featured:true,
   },
@@ -543,7 +543,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.974645,
     "lng": 102.440973,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00710.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00710.JPG",
     "imageAlt": "Coastal photography DSC00710.JPG",
     featured:true,
   },
@@ -552,7 +552,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.996194,
     "lng": 102.430233,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00743.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00743.JPG",
     "imageAlt": "Coastal photography DSC00743.JPG"
   },
   {
@@ -560,7 +560,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 6.027410,
     "lng": 102.416115,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00756_2.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00756_2.JPG",
     "imageAlt": "Coastal photography DSC00756_2.JPG",
     "featured": true,
   },
@@ -569,7 +569,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 6.027410,
     "lng": 102.416115,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00788.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00788.JPG",
     "imageAlt": "Coastal photography DSC00788.JPG"
   },
   {
@@ -577,7 +577,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 6.028945,
     "lng": 102.416101,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00799.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00799.JPG",
     "imageAlt": "Coastal photography DSC00799.JPG"
   },
   {
@@ -585,7 +585,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 6.030996,
     "lng": 102.414735,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00809.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00809.JPG",
     "imageAlt": "Coastal photography DSC00809.JPG"
   },
   {
@@ -593,7 +593,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 6.024857,
     "lng": 102.417335,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00845.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00845.JPG",
     "imageAlt": "Coastal photography DSC00845.JPG"
   },
   {
@@ -601,7 +601,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 6.024857,
     "lng": 102.417335,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00854.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00854.JPG",
     "imageAlt": "Coastal photography DSC00854.JPG",
     "featured": true,
   },
@@ -610,7 +610,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 6.000308,
     "lng": 102.428760,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00932.JPG",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC00932.JPG",
     "imageAlt": "Coastal photography DSC00932.JPG"
   },
   {
@@ -618,7 +618,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 4.827953,
     "lng": 103.416472,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07654.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC07654.jpg",
     "imageAlt": "Coastal photography DSC07654.jpg"
   },
   {
@@ -626,7 +626,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 4.827565,
     "lng": 103.416930,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07665_1.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC07665_1.jpg",
     "imageAlt": "Coastal photography DSC07665_1.jpg",
     "featured": true,
   },
@@ -635,7 +635,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 4.937331,
     "lng": 103.352965,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07670_1.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC07670_1.jpg",
     "imageAlt": "Coastal photography DSC07670_1.jpg",
     featured:true,
   },
@@ -644,7 +644,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.240394,
     "lng": 103.189754,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07705.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC07705.jpg",
     "imageAlt": "Coastal photography DSC07705.jpg"
   },
   {
@@ -652,7 +652,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 4.944580,
     "lng": 103.348057,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07763_1.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC07763_1.jpg",
     "imageAlt": "Coastal photography DSC07763_1.jpg"
   },
   {
@@ -660,7 +660,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 4.937331,
     "lng": 103.352965,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07799_1.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC07799_1.jpg",
     "imageAlt": "Coastal photography DSC07799_1.jpg"
   },
   {
@@ -668,7 +668,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 4.937331,
     "lng": 103.352965,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07802.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC07802.jpg",
     "imageAlt": "Coastal photography DSC07802.jpg"
   },
   {
@@ -676,7 +676,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.731662,
     "lng": 102.664681,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07995.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC07995.jpg",
     "imageAlt": "Coastal photography DSC07995.jpg"
   },
   {
@@ -684,7 +684,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.629070,
     "lng": 102.790681,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC01024.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC01024.jpg",
     "imageAlt": "Coastal photography DSC01024.jpg"
   },
   {
@@ -692,7 +692,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.625414,
     "lng": 102.791894,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC08014.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC08014.jpg",
     "imageAlt": "Coastal photography DSC08014.jpg",
     "featured": true,
   },
@@ -701,7 +701,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.210408,
     "lng": 103.214161,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC08133_1.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC08133_1.jpg",
     "imageAlt": "Coastal photography DSC08133_1.jpg",
     "featured": true,
   },
@@ -710,7 +710,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.210408,
     "lng": 103.214161,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC08162.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC08162.jpg",
     "imageAlt": "Coastal photography DSC08162.jpg"
   },
   {
@@ -718,7 +718,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 4.937077,
     "lng": 103.353147,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC08235.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC08235.jpg",
     "imageAlt": "Coastal photography DSC08235.jpg",
     "featured": true,
   },
@@ -727,7 +727,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.625859,
     "lng": 102.794364,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC01061.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC01061.jpg",
     "imageAlt": "Coastal photography DSC01061.jpg"
   },
   {
@@ -735,7 +735,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.447360,
     "lng": 103.051640,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC01096.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC01096.jpg",
     "imageAlt": "Coastal photography DSC01096.jpg"
   },
   {
@@ -743,7 +743,7 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.430578,
     "lng": 103.068323,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC01109.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC01109.jpg",
     "imageAlt": "Coastal photography DSC01109.jpg",
     "featured": true,
   },
@@ -752,187 +752,187 @@ export const COASTAL_LOCATIONS: CoastalLocation[] = [
     "lat": 5.285161,
     "lng": 103.171736,
     "description": "A frozen whisper of the monsoon. Documenting the eternal, shifting dialogue between the unforgiving sea and the resilient eastern shore.",
-    "image": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC01218.jpg",
+    "image": "https://cdn.yuhangang.com/pantai-timor/DSC01218.jpg",
     "imageAlt": "Coastal photography DSC01218.jpg"
   }
 ];
 
 export const CAROUSEL_IMAGES = [
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/78E961C5-31C7-418E-9811-635ADA3EBAB9.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/78E961C5-31C7-418E-9811-635ADA3EBAB9.JPG",
     "alt": "Coastal photography 78E961C5-31C7-418E-9811-635ADA3EBAB9.JPG",
     "isPortrait": true
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00032.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00032.jpg",
     "alt": "Coastal photography DSC00032.jpg"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00052.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00052.jpg",
     "alt": "Coastal photography DSC00052.jpg"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00068.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00068.jpg",
     "alt": "Coastal photography DSC00068.jpg",
     "isPortrait": true
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00234.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00234.jpg",
     "alt": "Coastal photography DSC00234.jpg",
     "isPortrait": true
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00465.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00465.JPG",
     "alt": "Coastal photography DSC00465.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00516.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00516.JPG",
     "alt": "Coastal photography DSC00516.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00552.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00552.JPG",
     "alt": "Coastal photography DSC00552.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00587.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00587.JPG",
     "alt": "Coastal photography DSC00587.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00590.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00590.JPG",
     "alt": "Coastal photography DSC00590.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00608.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00608.JPG",
     "alt": "Coastal photography DSC00608.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00631.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00631.JPG",
     "alt": "Coastal photography DSC00631.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00638.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00638.JPG",
     "alt": "Coastal photography DSC00638.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00645.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00645.JPG",
     "alt": "Coastal photography DSC00645.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00649.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00649.JPG",
     "alt": "Coastal photography DSC00649.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00679.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00679.JPG",
     "alt": "Coastal photography DSC00679.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00710.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00710.JPG",
     "alt": "Coastal photography DSC00710.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00743.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00743.JPG",
     "alt": "Coastal photography DSC00743.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00756_2.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00756_2.JPG",
     "alt": "Coastal photography DSC00756_2.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00788.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00788.JPG",
     "alt": "Coastal photography DSC00788.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00799.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00799.JPG",
     "alt": "Coastal photography DSC00799.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00809.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00809.JPG",
     "alt": "Coastal photography DSC00809.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00845.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00845.JPG",
     "alt": "Coastal photography DSC00845.JPG",
     "isPortrait": true
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00854.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00854.JPG",
     "alt": "Coastal photography DSC00854.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC00932.JPG",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC00932.JPG",
     "alt": "Coastal photography DSC00932.JPG"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07654.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC07654.jpg",
     "alt": "Coastal photography DSC07654.jpg",
     "isPortrait": true
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07665_1.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC07665_1.jpg",
     "alt": "Coastal photography DSC07665_1.jpg"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07670_1.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC07670_1.jpg",
     "alt": "Coastal photography DSC07670_1.jpg"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07705.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC07705.jpg",
     "alt": "Coastal photography DSC07705.jpg"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07763_1.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC07763_1.jpg",
     "alt": "Coastal photography DSC07763_1.jpg"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07799_1.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC07799_1.jpg",
     "alt": "Coastal photography DSC07799_1.jpg"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07802.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC07802.jpg",
     "alt": "Coastal photography DSC07802.jpg",
     "isPortrait": true
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC07995.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC07995.jpg",
     "alt": "Coastal photography DSC07995.jpg",
     "isPortrait": true
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC01024.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC01024.jpg",
     "alt": "Coastal photography DSC01024.jpg"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC08014.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC08014.jpg",
     "alt": "Coastal photography DSC08014.jpg",
     "isPortrait": true
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC08133_1.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC08133_1.jpg",
     "alt": "Coastal photography DSC08133_1.jpg"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC08162.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC08162.jpg",
     "alt": "Coastal photography DSC08162.jpg",
     "isPortrait": true
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC08235.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC08235.jpg",
     "alt": "Coastal photography DSC08235.jpg"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC01061.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC01061.jpg",
     "alt": "Coastal photography DSC01061.jpg"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC01096.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC01096.jpg",
     "alt": "Coastal photography DSC01096.jpg"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC01109.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC01109.jpg",
     "alt": "Coastal photography DSC01109.jpg"
   },
   {
-    "src": "https://pub-b9f89abd4d2c41cea208e711fca4cc0c.r2.dev/pantai-timor/DSC01218.jpg",
+    "src": "https://cdn.yuhangang.com/pantai-timor/DSC01218.jpg",
     "alt": "Coastal photography DSC01218.jpg"
   }
 ];

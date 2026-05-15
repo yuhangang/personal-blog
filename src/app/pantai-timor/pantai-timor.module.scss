@@ -208,6 +208,11 @@
   display: flex;
   align-items: center;
   overflow: hidden;
+
+  @include pantai-md-up {
+    top: calc(80px + env(safe-area-inset-top, 0px));
+    height: calc(100dvh - 80px - env(safe-area-inset-top, 0px));
+  }
 }
 
 .memory-grid {
@@ -371,12 +376,22 @@
   width: 100%;
   height: 100%;
   will-change: transform, opacity;
+
+  &.secondary {
+    z-index: 1;
+  }
 }
 
 .parallax-zoom-image {
   object-fit: cover;
   width: 100%;
   height: 100%;
+
+  .secondary & {
+    @media (max-width: $breakpoint-mobile) {
+      object-position: 35% center;
+    }
+  }
 }
 
 .parallax-zoom-overlay {
@@ -787,7 +802,7 @@
   align-items: center;
   border-top: 1px solid rgba(227, 225, 218, 0.1);
   background-color: #10110F;
-  padding: 8rem 1.5rem 5rem !important;
+  padding: 4rem 1rem 4rem !important;
   overflow: hidden;
   min-height: 100vh;
 
@@ -828,7 +843,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5rem;
+  gap: 3rem;
 
   @include pantai-md-up {
     gap: 7rem;
@@ -1693,7 +1708,7 @@
   z-index: 10;
   width: 100%;
   min-height: 80vh;
-  padding: 8rem 1rem !important;
+  padding: 4rem 1rem !important;
   overflow: hidden;
   display: flex;
   align-items: center;
