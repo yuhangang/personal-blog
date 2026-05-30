@@ -40,13 +40,27 @@ export default function Footer() {
         </Link>
 
         <ul className={styles.links}>
-          {FOOTER_LINKS.map((link) => (
-            <li key={link.href}>
-              <Link href={link.href} className={styles.link}>
-                {link.label}
-              </Link>
-            </li>
-          ))}
+          {FOOTER_LINKS.map((link) => {
+            const isExternal = link.href.startsWith("http") || link.href.startsWith("mailto:");
+            return (
+              <li key={link.href}>
+                {isExternal ? (
+                  <a
+                    href={link.href}
+                    className={styles.link}
+                    target={link.href.startsWith("http") ? "_blank" : undefined}
+                    rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link href={link.href} className={styles.link}>
+                    {link.label}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
         </ul>
 
         <div className={styles.social}>

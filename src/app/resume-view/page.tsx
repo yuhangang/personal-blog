@@ -59,20 +59,24 @@ const experiences = [
 const skillGroups = [
   {
     category: "FRONTEND & MOBILE",
-    skills: "Flutter/Dart (MVVM), Next.js, React Native, Swift (SwiftUI, WidgetKit), Kotlin (Compose, Glance), Ionic/Cordova, GraphQL"
+    skills:
+      "Flutter/Dart (MVVM), Next.js, React Native, Swift (SwiftUI, WidgetKit), Kotlin (Compose, Glance), Ionic/Cordova, GraphQL",
   },
   {
     category: "BACKEND & DATA",
-    skills: "Node.js, Golang, PostgreSQL, SQLite, Store Procedures, REST API, gRPC, BigQuery, Firebase"
+    skills:
+      "Node.js, Golang, PostgreSQL, SQLite, Store Procedures, REST API, gRPC, BigQuery, Firebase",
   },
   {
     category: "DEVOPS & INFRASTRUCTURE",
-    skills: "Docker, CI/CD, Git Workflow, App Release (AppStore/PlayStore), Monitoring (Crashlytics, New Relic, Sentry), Gitlab/Github, Jira (Agile), Database Management"
+    skills:
+      "Docker, CI/CD, Git Workflow, App Release (AppStore/PlayStore), Monitoring (Crashlytics, New Relic, Sentry), Gitlab/Github, Jira (Agile), Database Management",
   },
   {
     category: "AI, SECURITY & QUALITY",
-    skills: "OWASP Penetration Testing, Unit/Integration Testing, Agentic AI (LangChain, LangGraph, MCP, Skills), Agentic Coding (Codex, Antigravity, Gemini Cli)"
-  }
+    skills:
+      "OWASP Penetration Testing, Unit/Integration Testing, Agentic AI (LangChain, LangGraph, MCP, Skills), Agentic Coding (Codex, Antigravity, Gemini Cli)",
+  },
 ];
 
 export default function ResumePage() {
@@ -168,18 +172,46 @@ export default function ResumePage() {
           <h2>PROJECTS</h2>
           <div className={styles.divider} />
           <div className={styles.experiences}>
-             <div className={styles.experienceItem}>
+            <div className={styles.experienceItem}>
               <div className={styles.expHeader}>
                 <h3>Flutter Oembed</h3>
                 <span className={styles.period}>
-                  <a href="https://github.com/yuhangang/flutter_oembed"
-                  >github.com/yuhangang/flutter_oembed</a>
+                  <a href="https://github.com/yuhangang/flutter_oembed">
+                    github.com/yuhangang/flutter_oembed
+                  </a>
                 </span>
               </div>
               <ul className={styles.description}>
                 <li>
-                  A flutter package that provides oembed functionality, supporting most major platforms and customisations.
-                  Allow developers to easily embed content from various platforms into their flutter applications. Published on <span className={styles.period}>   <a href="https://pub.dev/packages/flutter_oembed">pub.dev</a></span>.
+                  A flutter package that provides oembed functionality,
+                  supporting most major platforms and customisations. Allow
+                  developers to easily embed content from various platforms into
+                  their flutter applications. Published on{" "}
+                  <span className={styles.period}>
+                    {" "}
+                    <a href="https://pub.dev/packages/flutter_oembed">
+                      pub.dev
+                    </a>
+                  </span>
+                  .
+                </li>
+              </ul>
+            </div>
+            <div className={styles.experienceItem}>
+              <div className={styles.expHeader}>
+                <h3>PELBAG.AI</h3>
+                <span className={styles.period}>
+                  <a href="https://pelbag.ai">pelbag.ai</a>
+                </span>
+              </div>
+              <ul className={styles.description}>
+                <li>
+                  Designed and developed website for my own web development
+                  agency.
+                </li>
+                <li>
+                  Built using Next.js and Three.js for 3D interactions,
+                  delivering a highly interactive and engaging user experience.
                 </li>
               </ul>
             </div>
@@ -194,9 +226,6 @@ export default function ResumePage() {
                 <li>
                   Designed and developed a digital agency platform focused on
                   immersive web experiences and brand identity.
-                </li>
-                <li>
-                  Built using Next.js and Three.js for 3D interactions, delivering a highly interactive and engaging user experience.
                 </li>
               </ul>
             </div>

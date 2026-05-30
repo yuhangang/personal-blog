@@ -284,24 +284,39 @@ export default function Navigation() {
                 >
                   <div className={styles.menuContent}>
                     <nav className={styles.menuNav}>
-                      {NAV_LINKS.map((link, i) => (
-                        <motion.div
-                          key={link.href}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.05 + i * 0.03, duration: 0.3 }}
-                        >
-                          <Link
-                            href={link.href}
-                            className={`${styles.menuLink} ${
-                              pathname === link.href ? styles.active : ""
-                            }`}
-                            onClick={(e) => handleClick(e, link.href)}
+                      {NAV_LINKS.map((link, i) => {
+                        const isExternal = link.href.startsWith("http") || link.href.startsWith("mailto:");
+                        return (
+                          <motion.div
+                            key={link.href}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.05 + i * 0.03, duration: 0.3 }}
                           >
-                            {link.label}
-                          </Link>
-                        </motion.div>
-                      ))}
+                            {isExternal ? (
+                              <a
+                                href={link.href}
+                                className={styles.menuLink}
+                                onClick={() => setMobileMenuOpen(false)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {link.label}
+                              </a>
+                            ) : (
+                              <Link
+                                href={link.href}
+                                className={`${styles.menuLink} ${
+                                  pathname === link.href ? styles.active : ""
+                                }`}
+                                onClick={(e) => handleClick(e, link.href)}
+                              >
+                                {link.label}
+                              </Link>
+                            )}
+                          </motion.div>
+                        );
+                      })}
                     </nav>
 
                     <motion.div
