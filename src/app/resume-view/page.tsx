@@ -9,10 +9,10 @@ const experiences = [
     company: "POS Malaysia",
     period: "May 2025 - Present",
     description: [
+      "Development of logistic operation app and it's backend services tailored for client, collecting requirements from clients, defining and documenting user stories, developing and showcasing working demos to stakeholders and client.",
+      "Maintain and improve legacy Ionic based POS Mini application used by agents countrywide, monitoring server performance and user feedback, currently leading the migration to flutter.",
       "Integration of payment gateways, data analytics and messaging pipelines for the flagship Pos Mobile App.",
-      "Prototyping end-to-end process flows and full stacks rchitectures for logistic solutions for potential clients",
       "Deployment and monitoring the mobile applications on production, working closely with business, data and infrastructure teams.",
-      "Maintain and improve legacy application used by agents countrywide, monitoring server performance and user feedback.",
     ],
   },
   {
@@ -31,7 +31,7 @@ const experiences = [
     company: "Snappymob",
     period: "Feb 2022 - Feb 2023",
     description: [
-      "Contributed to the MyAstro App, focusing on scalable reward systems, inbox and deep-linking infrastructure.",
+      "Development and feature grooming of MyAstro App, focusing on scalable reward systems, inbox and deep-linking infrastructure.",
       "Improved codebase maintainability by troubleshooting and refactoring legacy modules, implementing robust unit testing patterns and comprehensive documentation.",
       "Collaborated in a high-velocity agile environment to deliver feature-parity across complex enterprise mobile systems.",
     ],
@@ -65,17 +65,17 @@ const skillGroups = [
   {
     category: "BACKEND & DATA",
     skills:
-      "Node.js, Golang, PostgreSQL, SQLite, Store Procedures, REST API, gRPC, BigQuery, Firebase",
+      "Node.js, Golang, PostgreSQL, Supabase, SQLite, Store Procedures, REST API, gRPC, BigQuery, Firebase",
   },
   {
     category: "DEVOPS & INFRASTRUCTURE",
     skills:
-      "Docker, CI/CD, Git Workflow, App Release (AppStore/PlayStore), Monitoring (Crashlytics, New Relic, Sentry), Gitlab/Github, Jira (Agile), Database Management",
+      "Docker, CI/CD, Git Workflow, App Release (AppStore/PlayStore), Monitoring (Crashlytics, New Relic, Sentry), Cloudflare (R2/Worker), Gitlab/Github, Jira (Agile), Database Management",
   },
   {
     category: "AI, SECURITY & QUALITY",
     skills:
-      "OWASP Penetration Testing, Unit/Integration Testing, Agentic AI (LangChain, LangGraph, MCP, Skills), Agentic Coding (Codex, Antigravity, Gemini Cli)",
+      "OWASP Penetration Testing, Unit/Integration Testing, Agentic Coding (Codex, Antigravity, Gemini Cli)",
   },
 ];
 
@@ -127,10 +127,11 @@ export default function ResumePage() {
           <h2>PROFESSIONAL SUMMARY</h2>
           <div className={styles.divider} />
           <div className={styles.summary}>
-            Software Engineer with 5 years architecting resilient mobile and web
-            systems. Specializes in bridging business requirements with
-            technical implementation across logistics, media, and enterprise
-            domains.
+            Senior software engineer with 5 years architecting resilient mobile
+            and web systems. Capable of owning the full product lifecycle from
+            requirement gathering, documenting, architecting, development
+            through to testing, deployment, and maintenance across logistics,
+            media, and enterprise domains.
           </div>
         </section>
 
@@ -174,6 +175,24 @@ export default function ResumePage() {
           <div className={styles.experiences}>
             <div className={styles.experienceItem}>
               <div className={styles.expHeader}>
+                <h3>PELBAG.AI</h3>
+                <span className={styles.period}>
+                  <a href="https://pelbag.ai">pelbag.ai</a>
+                </span>
+              </div>
+              <ul className={styles.description}>
+                <li>
+                  Designed and developed website for my own web development
+                  agency.
+                </li>
+                <li>
+                  Built using Next.js and Three.js for 3D interactions,
+                  delivering a highly interactive and engaging user experience.
+                </li>
+              </ul>
+            </div>
+            <div className={styles.experienceItem}>
+              <div className={styles.expHeader}>
                 <h3>Flutter Oembed</h3>
                 <span className={styles.period}>
                   <a href="https://github.com/yuhangang/flutter_oembed">
@@ -194,24 +213,6 @@ export default function ResumePage() {
                     </a>
                   </span>
                   .
-                </li>
-              </ul>
-            </div>
-            <div className={styles.experienceItem}>
-              <div className={styles.expHeader}>
-                <h3>PELBAG.AI</h3>
-                <span className={styles.period}>
-                  <a href="https://pelbag.ai">pelbag.ai</a>
-                </span>
-              </div>
-              <ul className={styles.description}>
-                <li>
-                  Designed and developed website for my own web development
-                  agency.
-                </li>
-                <li>
-                  Built using Next.js and Three.js for 3D interactions,
-                  delivering a highly interactive and engaging user experience.
                 </li>
               </ul>
             </div>
