@@ -91,9 +91,9 @@ export const PANTAI_TIMOR_COPY = {
   },
   footer: {
     menu: {
-      history: "HISTORY",
+      almanac: "ALMANAC",
+      memory: "MEMORY",
       village: "VILLAGE",
-      geography: "GEOGRAPHY",
       archive: "ARCHIVE",
       home: "HOME",
       gallery: "GALLERY"

@@ -2,94 +2,101 @@
 @use '../../styles/mixins' as *;
 
 .hero {
-    position: relative;
-    padding: clamp(10rem, 15vw, 15rem) 0 clamp(4rem, 8vw, 8rem);
-    background: transparent;
-    overflow: hidden;
-    z-index: 1;
+  scroll-margin-top: 88px;
+  width: 100%;
+  padding: calc(clamp(104px, 13vh, 136px) + env(safe-area-inset-top))
+    clamp(16px, 4vw, 32px) clamp(2rem, 4vw, 3.25rem);
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(26, 51, 77, 0.14),
+      transparent 68%
+    ),
+    #05070c;
+  color: #f4f0e8;
 }
 
-.container {
-    width: 90%;
-    max-width: 1400px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+.inner {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
 }
 
-.label {
-    font-family: var(--font-sans);
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.3em;
-    color: #ff4d00;
-    padding: 0.4rem 0.8rem;
-    border: 1px solid rgba(255, 77, 0, 0.3);
-    border-radius: 2px;
-}
-
-.year {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.4);
-    letter-spacing: 0.1em;
+.kicker {
+  margin: 0 0 0.65rem;
+  font-family: var(--font-kertas-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: rgba(244, 240, 232, 0.52);
 }
 
 .title {
-    font-family: var(--font-display);
-    font-size: clamp(4rem, 12vw, 10rem);
+  margin: 0;
+  font-family: var(--font-kertas-serif);
+  font-size: clamp(2.5rem, 5.5vw, 4.25rem);
+  font-weight: 700;
+  line-height: 1.03;
+  letter-spacing: -0.02em;
+  color: #f4f0e8;
+  text-wrap: balance;
+
+  em {
+    font-style: italic;
     font-weight: 400;
-    line-height: 0.85;
-    color: #f4f0e8;
-    margin: 0;
-    letter-spacing: -0.02em;
-
-    .italic {
-        font-style: italic;
-        opacity: 0.8;
-    }
+    letter-spacing: -0.015em;
+    color: rgba(244, 240, 232, 0.86);
+  }
 }
 
-.description {
-    font-family: var(--font-sans);
-    font-size: clamp(1rem, 1.2vw, 1.2rem);
-    line-height: 1.6;
-    color: rgba(244, 240, 232, 0.6);
-    max-width: 32rem;
-    margin-top: 3rem;
+.subtitle {
+  margin: 0.85rem 0 0;
+  max-width: 44rem;
+  font-family: var(--font-kertas-sans);
+  font-size: clamp(0.95rem, 1.3vw, 1.0625rem);
+  line-height: 1.55;
+  color: rgba(244, 240, 232, 0.68);
+  text-wrap: pretty;
 }
 
-.decorLines {
-    position: absolute;
-    top: 0;
-    right: 5%;
-    height: 100%;
-    display: flex;
-    gap: 1rem;
-    pointer-events: none;
-    z-index: -1;
-
-    .line {
-        width: 1px;
-        height: 100%;
-        background: linear-gradient(180deg,
-                rgba(255, 255, 255, 0.05) 0%,
-                rgba(255, 255, 255, 0.02) 100%);
-    }
+.locationsRow {
+  width: 100%;
+  margin-top: clamp(1.35rem, 2.8vw, 2rem);
+  padding-top: clamp(0.875rem, 1.8vw, 1.15rem);
+  border-top: 1px solid rgba(244, 240, 232, 0.08);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 24px;
 }
 
+.locationsLabel {
+  font-family: var(--font-kertas-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(244, 240, 232, 0.44);
+  flex-shrink: 0;
+}
 
-@include mobile {
-    .hero {
-        padding-top: 8rem;
-    }
+.locationsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px clamp(14px, 2.6vw, 26px);
+}
 
-    .eyebrowWrapper {
-        margin-bottom: 1.5rem;
-    }
-
-    .scrollIndicator {
-        display: none;
-    }
+.locationItem {
+  font-family: var(--font-kertas-sans);
+  font-size: clamp(0.84375rem, 1.2vw, 0.9375rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: rgba(244, 240, 232, 0.68);
 }

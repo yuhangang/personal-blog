@@ -1,10 +1,11 @@
-// [Removed unused Metadata import]
+import type { Viewport } from "next";
 import {
   Plus_Jakarta_Sans,
   Inter,
   Playfair_Display,
   Outfit,
   Caudex,
+  Jost,
 } from "next/font/google";
 import SmoothScroll from "@/components/common/SmoothScroll/SmoothScroll";
 import Footer from "@/components/common/Footer/Footer";
@@ -17,7 +18,7 @@ import Navigation from "@/components/common/Navigation/Navigation";
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-serif", // Reverting to original mapping (confusing name, but consistent with rest of app)
+  variable: "--font-serif",
   display: "swap",
 });
 
@@ -47,21 +48,28 @@ const caudex = Caudex({
   subsets: ["latin"],
   weight: ["400", "700"],
   style: ["normal", "italic"],
-  variable: "--font-serif-caudex", // Reverting to specific variable
+  variable: "--font-serif-caudex",
   display: "swap",
 });
 
-export const viewport = {
-  themeColor: "#050505", // Matches black background
+const jost = Jost({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-jost",
+  display: "swap",
+});
+
+export const viewport: Viewport = {
+  themeColor: "#faf8f5",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1, // Prevent zoom on mobile inputs
-  viewportFit: "cover", // Ensures background extends to edges (notch area)
+  viewportFit: "cover",
 };
 
 export const metadata = {
-  title: "Yu Hang Ang | Developer & Creator",
-  description: "Personal portfolio and blog of Yu Hang Ang.",
+  title: "Yu Hang Ang | Software Engineer",
+  description:
+    "Personal portfolio of Yu Hang Ang, a software engineer based in Kuala Lumpur, Malaysia.",
 };
 
 export default function RootLayout({
@@ -72,16 +80,19 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${plusJakarta.variable} ${inter.variable} ${playfair.variable} ${outfit.variable} ${caudex.variable}`}
+      className={`${plusJakarta.variable} ${inter.variable} ${playfair.variable} ${outfit.variable} ${caudex.variable} ${jost.variable}`}
       suppressHydrationWarning={true}
     >
       <body>
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <TransitionProvider>
           <SmoothScroll>
             <Navigation />
-            <main style={{ backgroundColor: "#1d1d1f", minHeight: "100dvh" }}>
+            <div id="main-content" tabIndex={-1} className="app-shell">
               {children}
-            </main>
+            </div>
             <div id="contact" style={{ scrollMarginTop: "100px" }}>
               <Footer />
             </div>

@@ -1,0 +1,32 @@
+@use '../../styles/variables' as *;
+
+.exportBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: var(--tap);
+  padding: 0 16px;
+  border-radius: var(--radius-pill);
+  background: var(--dakwat);
+  color: var(--kertas);
+  box-shadow: var(--pad-lifted);
+  font-family: var(--font-kertas-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-settle),
+    transform var(--dur-fast) var(--ease-settle);
+
+  &:hover {
+    background: var(--dakwat-2);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}

@@ -37,9 +37,9 @@ export const Navbar = ({
   const router = useRouter();
 
   const menuItems = [
-    { label: "HISTORY", id: "history-section", image: "https://cdn.yuhangang.com/pantai-timor/DSC01218.jpg" },
+    { label: "ALMANAC", id: "almanac", image: "https://cdn.yuhangang.com/pantai-timor/DSC07763_1.jpg" },
+    { label: "MEMORY", id: "memory", image: "https://cdn.yuhangang.com/pantai-timor/DSC00679.JPG" },
     { label: "VILLAGE", id: "village", image: "https://cdn.yuhangang.com/pantai-timor/DSC00756_2.JPG" },
-    { label: "GEOGRAPHY", id: "geography", image: "https://cdn.yuhangang.com/pantai-timor/DSC00631.JPG" },
     { label: "ARCHIVE", id: "archive", image: "https://cdn.yuhangang.com/pantai-timor/DSC00587.JPG" },
   ];
 

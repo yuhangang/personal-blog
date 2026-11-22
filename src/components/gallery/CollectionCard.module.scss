@@ -17,7 +17,6 @@
     display: block;
     text-decoration: none;
     color: inherit;
-    group: hover;
 
     &:hover {
         .image {
@@ -32,6 +31,206 @@
             transform: translateX(5px);
         }
     }
+}
+
+.bandWrapper {
+    width: 100%;
+    min-width: 0;
+}
+
+.bandLink {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border-radius: var(--radius-glass);
+
+    @include mobile {
+        border-radius: 20px;
+    }
+
+    &:hover {
+        .bandCard::after {
+            border-color: rgba(244, 240, 232, 0.42);
+        }
+
+        .image {
+            transform: scale(1.03);
+        }
+
+        .bandCta {
+            background: #f4f0e8;
+            color: #10110f;
+            border-color: #f4f0e8;
+        }
+    }
+}
+
+.bandCard {
+    position: relative;
+    width: 100%;
+    min-height: clamp(320px, 38vw, 480px);
+    display: flex;
+    border-radius: inherit;
+    overflow: clip;
+    background: #080b12;
+    box-shadow: 0 26px 68px -24px rgba(0, 0, 0, 0.82);
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        z-index: 6;
+        border: 1px solid rgba(244, 240, 232, 0.2);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+        transition: border-color var(--dur-fast) var(--ease-settle);
+    }
+
+    @include mobile {
+        min-height: 300px;
+    }
+}
+
+.bandMedia {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+
+    .image {
+        opacity: 1;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.bandScrim {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(5, 7, 12, 0.86) 0%,
+            rgba(5, 7, 12, 0.48) 54%,
+            rgba(5, 7, 12, 0.28) 100%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(5, 7, 12, 0.52) 0%,
+            rgba(5, 7, 12, 0.18) 50%,
+            rgba(5, 7, 12, 0.72) 100%
+        );
+}
+
+.bandContent {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    min-width: 0;
+    padding: clamp(24px, 4vw, 44px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.bandTop {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    min-width: 0;
+
+    @include mobile {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+.bandTitleGroup {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bandTitle {
+    margin: 0;
+    font-family: var(--font-kertas-serif);
+    font-size: clamp(1.85rem, 4vw, 3.25rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.04;
+    color: #f4f0e8;
+}
+
+.bandSubline {
+    margin: 0;
+    font-family: var(--font-kertas-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    color: rgba(244, 240, 232, 0.68);
+}
+
+.bandBadge {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 12px;
+    border-radius: var(--radius-pill);
+    background: rgba(12, 14, 18, 0.68);
+    border: 1px solid rgba(244, 240, 232, 0.16);
+    backdrop-filter: blur(14px);
+    font-family: var(--font-kertas-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(244, 240, 232, 0.8);
+}
+
+.bandBottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+.bandDescription {
+    margin: 0;
+    max-width: 42ch;
+    font-family: var(--font-kertas-sans);
+    font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
+    line-height: 1.55;
+    color: rgba(244, 240, 232, 0.78);
+    text-wrap: pretty;
+}
+
+.bandCta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: var(--radius-pill);
+    background: var(--pad-glass-dark);
+    border: 1px solid rgba(244, 240, 232, 0.24);
+    backdrop-filter: blur(16px);
+    font-family: var(--font-kertas-sans);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #f4f0e8;
+    white-space: nowrap;
+    transition:
+        background-color var(--dur-fast) var(--ease-settle),
+        border-color var(--dur-fast) var(--ease-settle),
+        color var(--dur-fast) var(--ease-settle);
 }
 
 .imageContainer {
@@ -120,11 +319,13 @@
 }
 
 .title {
-    font-family: var(--font-display);
+    font-family: var(--font-kertas-serif);
     font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
     color: #fff;
     margin: 0;
-    line-height: 1;
+    line-height: 1.04;
 }
 
 .footer {
@@ -148,7 +349,7 @@
     text-transform: uppercase;
     letter-spacing: 0.15em;
     color: #fff;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, color 0.3s ease;
     display: flex;
     align-items: center;
 
@@ -178,5 +379,16 @@
 
     .descriptionWrapper {
         margin-top: 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .image {
+        transition: none;
+    }
+
+    .card:hover .image,
+    .bandLink:hover .image {
+        transform: none;
     }
 }

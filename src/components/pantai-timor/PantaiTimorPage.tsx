@@ -4,14 +4,11 @@ import { Inter, Libre_Caslon_Text, Noto_Serif_TC, Amiri } from "next/font/google
 import dynamic from "next/dynamic";
 import { useAnimationFrame, useMotionValue, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { COASTAL_LOCATIONS } from "@/app/pantai-timor/config";
 import { useLenis } from "@/components/common/SmoothScroll/SmoothScroll";
 import { AlmanacSection, MemorySection, VillageRhythmsSection } from "./FeatureSections";
 import { CAROUSEL_IMAGES, LOCAL_AUTOPLAY_DURATION_MS } from "./constants";
-import { GeographySection } from "./GeographySection";
 import { HeroSection } from "./HeroSection";
 import { LocalArchiveSection } from "./LocalArchiveSection";
-import { PantaiFooter, QuoteSection } from "./QuoteFooter";
 import { PantaiLightbox } from "./PantaiLightbox";
 import { PantaiNav } from "./PantaiNav";
 
@@ -376,7 +373,6 @@ export default function PantaiTimorPage() {
   const sectionOpacity = useTransform(localScrollProgress, [0, 0.05, 0.84, 0.94, 1], [0.88, 1, 1, 0.18, 0]);
   const carouselOpacity = useTransform(localScrollProgress, [0, 0.06, 0.82, 0.9, 1], [0.15, 1, 1, 0, 0]);
   const activeImage = activeImageIndex === null ? null : CAROUSEL_IMAGES[activeImageIndex];
-  const activeLocation = activeImage ? COASTAL_LOCATIONS.find((location) => location.image === activeImage.src) ?? null : null;
 
   const handleToggleLocalAutoplay = () => {
     if (shouldReduceMotion) return;
@@ -412,9 +408,9 @@ export default function PantaiTimorPage() {
         heroOpacity={heroOpacity}
         heroY={heroY}
       />
-      <AlmanacSection almanacImageY={almanacImageY} almanacRef={almanacRef} fonts={fonts} />
-      <VillageRhythmsSection fonts={fonts} />
-      <MemorySection fonts={fonts} />
+      <AlmanacSection almanacImageY={almanacImageY} almanacRef={almanacRef} />
+      <VillageRhythmsSection />
+      <MemorySection />
      
       <LocalArchiveSection
         carouselRef={carouselRef}
@@ -431,13 +427,9 @@ export default function PantaiTimorPage() {
         shouldReduceMotion={Boolean(shouldReduceMotion)}
       />
       
-      <QuoteSection fonts={fonts} />
-      <PantaiFooter fonts={fonts} />
       <PantaiLightbox
         activeImage={activeImage}
         activeImageIndex={activeImageIndex}
-        activeLocation={activeLocation}
-        fonts={fonts}
         onClose={() => setActiveImageIndex(null)}
         onNavigate={setActiveImageIndex}
       />

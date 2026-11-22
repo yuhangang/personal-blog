@@ -1,0 +1,100 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.section {
+  padding: clamp(32px, 5vw, 56px) clamp(20px, 5vw, 32px) 0;
+}
+
+.spine {
+  @include kertas-spine;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.kicker {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dakwat-3);
+  margin: 0;
+}
+
+.heading {
+  @include kertas-heading;
+  font-size: clamp(1.75rem, 1.25rem + 1.8vw, 2.5rem);
+  margin: 0;
+}
+
+.prose {
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.58;
+  letter-spacing: -0.01em;
+  color: var(--dakwat-2);
+  max-width: 56ch;
+  text-wrap: pretty;
+  margin: 0;
+}
+
+.galleryGrid {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+
+  @include mobile {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+.frameCard {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  @include mobile {
+    flex: 0 0 74%;
+    scroll-snap-align: start;
+  }
+}
+
+.frameMedia {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--kertas-parchment);
+  box-shadow: var(--pad-hairline);
+}
+
+.deckImage {
+  object-fit: cover;
+}
+
+.frameCaption {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--dakwat-3);
+  padding-inline: 2px;
+}
+
+.listTop {
+  margin-top: 4px;
+}

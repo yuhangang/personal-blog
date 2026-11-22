@@ -6,8 +6,7 @@ import { createPortal } from "react-dom";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { CAROUSEL_IMAGES } from "./constants";
 import Image from "next/image";
-import type { CoastalLocation } from "@/app/pantai-timor/config";
-import type { PantaiTimorFontClasses, PantaiTimorImage } from "./types";
+import type { PantaiTimorImage } from "./types";
 
 const lightboxFrameVariants = {
   enter: (direction: number) => ({
@@ -30,8 +29,6 @@ const lightboxFrameVariants = {
 interface PantaiLightboxProps {
   activeImage: PantaiTimorImage | null;
   activeImageIndex: number | null;
-  activeLocation: CoastalLocation | null;
-  fonts: PantaiTimorFontClasses;
   onClose: () => void;
   onNavigate: (index: number) => void;
 }
@@ -39,8 +36,6 @@ interface PantaiLightboxProps {
 export function PantaiLightbox({
   activeImage,
   activeImageIndex,
-  activeLocation,
-  fonts,
   onClose,
   onNavigate,
 }: PantaiLightboxProps) {
@@ -120,15 +115,7 @@ export function PantaiLightbox({
         >
           <div className="absolute inset-0 pointer-events-none bg-[#151612]/38 backdrop-blur-[56px] backdrop-saturate-[180%]" />
           <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_30%,rgba(227,225,218,0.1),transparent_56%),linear-gradient(180deg,rgba(16,17,15,0.08),rgba(16,17,15,0.18))]" />
-          <div className="absolute inset-x-0 top-0 z-50 flex items-center justify-between gap-4 border-b border-[#e3e1da]/12 bg-[#151612]/42 !px-4 !py-4 shadow-[0_18px_48px_rgba(0,0,0,0.22)] backdrop-blur-[32px] backdrop-saturate-[180%] md:!px-8" onClick={(event) => event.stopPropagation()}>
-            <div className="min-w-0">
-              <p className="!mb-0 font-sans !text-[0.56rem] font-black uppercase !leading-none !tracking-[0.26em] !text-[#e3e1da]/42 md:!tracking-[0.34em]">
-                Pantai Timor Archive
-              </p>
-              <p className="!mb-0 !mt-2 truncate font-sans !text-[0.7rem] font-bold uppercase !leading-none !tracking-[0.2em] !text-[#e3e1da] md:!text-[0.78rem]">
-                {activeLocation?.name || activeImage.alt}
-              </p>
-            </div>
+          <div className="absolute right-4 top-4 z-50 flex items-center md:right-8 md:top-6" onClick={(event) => event.stopPropagation()}>
             <button
               type="button"
               aria-label="Close photo viewer"
@@ -177,7 +164,7 @@ export function PantaiLightbox({
               className="relative z-10 flex h-full w-full transform-gpu items-center justify-center overflow-y-auto pointer-events-auto touch-pan-y !px-4 !pb-28 !pt-24 will-change-transform md:!px-28 md:!pb-14 md:!pt-28"
               data-lenis-prevent
             >
-              <div className="grid w-full max-w-[92rem] grid-cols-1 items-end gap-7 pointer-events-auto lg:grid-cols-[minmax(0,1fr)_20rem]" onClick={(event) => event.stopPropagation()}>
+              <div className="flex w-full max-w-[92rem] items-center justify-center pointer-events-auto" onClick={(event) => event.stopPropagation()}>
                 <motion.div
                   drag="x"
                   dragConstraints={{ left: 0, right: 0 }}
@@ -198,7 +185,7 @@ export function PantaiLightbox({
                       onNavigate(Math.max(0, activeImageIndex - 1));
                     }
                   }}
-                  className="relative flex h-[58svh] w-full cursor-grab items-center justify-center border border-[#e3e1da]/10 bg-[#151612]/60 !p-2 shadow-[0_34px_110px_rgba(0,0,0,0.62)] active:cursor-grabbing md:h-[74svh]"
+                  className="relative flex h-[76svh] w-full cursor-grab items-center justify-center border border-[#e3e1da]/10 bg-[#151612]/60 !p-2 shadow-[0_34px_110px_rgba(0,0,0,0.62)] active:cursor-grabbing md:h-[82svh]"
                 >
                   <Image 
                     src={activeImage.src} 
@@ -210,23 +197,6 @@ export function PantaiLightbox({
                     draggable={false} 
                   />
                 </motion.div>
-
-                <motion.aside
-                  initial={{ opacity: 0, y: 18 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.16, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                  className="border-l border-[#e3e1da]/12 !pl-5 text-left md:!pl-7"
-                >
-                  <p className="!mb-5 font-sans !text-[0.58rem] font-black uppercase !tracking-[0.28em] !text-[#e3e1da]/38">
-                    {String(activeImageIndex + 1).padStart(2, "0")} / {String(CAROUSEL_IMAGES.length).padStart(2, "0")}
-                  </p>
-                  <h4 className={`${fonts.serif} !mb-0 !text-[2rem] !leading-[1.05] !tracking-normal !text-[#e3e1da] text-balance md:!text-[2.6rem]`}>
-                    {activeLocation?.name || activeImage.alt}
-                  </h4>
-                  <p className="!mb-0 !mt-6 font-sans !text-[0.84rem] !leading-[2] !text-[#e3e1da]/52 text-pretty">
-                    {activeLocation?.description || "A frame from the eastern coast archive."}
-                  </p>
-                </motion.aside>
               </div>
             </motion.div>
           </AnimatePresence>

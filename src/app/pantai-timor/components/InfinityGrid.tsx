@@ -4,7 +4,7 @@ import { motion, useMotionValue, useSpring, useTransform, type MotionValue } fro
 import { useEffect, useState, useRef } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import Image from "next/image";
-import { FEATURED_IMAGES, getThumbnailUrl, PANTAI_TIMOR_COPY } from "../config";
+import { FEATURED_IMAGES, getThumbnailUrl } from "../config";
 import styles from "../pantai-timor.module.scss";
 
 interface InfiniteGridProps {
@@ -226,9 +226,6 @@ const GridCell = ({
         className={styles["grid-image"]}
         draggable={false}
       />
-      <div className={styles["grid-item-overlay"]}>
-        <span className={styles["view-label"]}>{PANTAI_TIMOR_COPY.lightbox.viewPhoto}</span>
-      </div>
     </motion.div>
   );
 };

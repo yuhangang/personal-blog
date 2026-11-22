@@ -19,10 +19,10 @@ const cormorant = Cormorant_Garamond({
 export const Footer = () => {
   const { lenis } = useLenis();
 
-   const menuItems = [
-    { label: PANTAI_TIMOR_COPY.footer.menu.history, id: "history-section" },
+  const menuItems = [
+    { label: PANTAI_TIMOR_COPY.footer.menu.almanac, id: "almanac" },
+    { label: PANTAI_TIMOR_COPY.footer.menu.memory, id: "memory" },
     { label: PANTAI_TIMOR_COPY.footer.menu.village, id: "village" },
-    { label: PANTAI_TIMOR_COPY.footer.menu.geography, id: "geography" },
     { label: PANTAI_TIMOR_COPY.footer.menu.archive, id: "archive" },
   ];
 

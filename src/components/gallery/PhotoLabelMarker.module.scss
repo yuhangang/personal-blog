@@ -1,0 +1,321 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+@use '../../styles/kertas' as *;
+
+.markerRoot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #f4f0e8;
+  transform-origin: bottom center;
+  transition: transform var(--dur-med) var(--ease-settle);
+  will-change: transform;
+
+  @media (hover: hover) {
+    &:hover {
+      transform: translateY(-4px) scale(1.07);
+
+      .frame {
+        border-color: rgba(250, 248, 244, 0.94);
+        box-shadow:
+          0 18px 40px -8px rgba(0, 0, 0, 0.78),
+          0 0 0 2px rgba(250, 248, 244, 0.36);
+      }
+
+      .stackLayerOne {
+        transform: rotate(-6deg) translate(-3px, -2px);
+      }
+
+      .stackLayerTwo {
+        transform: rotate(5deg) translate(3px, -1px);
+      }
+
+      .anchorDot {
+        transform: scale(1.32);
+        background: #ffffff;
+        box-shadow:
+          0 0 0 5px rgba(244, 240, 232, 0.24),
+          0 0 16px rgba(244, 240, 232, 0.72);
+      }
+
+      .hoverCard {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+  }
+
+  &:focus-visible,
+  &.isActive {
+    transform: translateY(-4px) scale(1.07);
+    outline: none;
+
+    .frame {
+      border-color: rgba(250, 248, 244, 0.96);
+      box-shadow:
+        0 18px 40px -8px rgba(0, 0, 0, 0.78),
+        0 0 0 2px rgba(250, 248, 244, 0.44);
+    }
+
+    .stackLayerOne {
+      transform: rotate(-6deg) translate(-3px, -2px);
+    }
+
+    .stackLayerTwo {
+      transform: rotate(5deg) translate(3px, -1px);
+    }
+
+    .anchorDot {
+      transform: scale(1.32);
+      background: #ffffff;
+      box-shadow:
+        0 0 0 5px rgba(244, 240, 232, 0.24),
+        0 0 16px rgba(244, 240, 232, 0.72);
+    }
+  }
+
+  &:focus-visible .hoverCard {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+
+    .stackLayerOne,
+    .stackLayerTwo,
+    .anchorDot,
+    .hoverCard,
+    .frame {
+      transition: none;
+    }
+
+    &:active {
+      transform: none;
+    }
+  }
+}
+
+.frameStack {
+  position: relative;
+  width: 88px;
+  height: 60px;
+
+  @include mobile {
+    width: 72px;
+    height: 50px;
+  }
+}
+
+.isPortrait .frameStack {
+  width: 64px;
+  height: 78px;
+
+  @include mobile {
+    width: 54px;
+    height: 66px;
+  }
+}
+
+.stackLayerOne,
+.stackLayerTwo {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform var(--dur-med) var(--ease-settle);
+  pointer-events: none;
+
+  @include mobile {
+    border-radius: 10px;
+  }
+}
+
+.stackLayerOne {
+  transform: rotate(-4deg) translate(-2px, -1px);
+  z-index: 1;
+}
+
+.stackLayerTwo {
+  transform: rotate(3.5deg) translate(2px, 0);
+  z-index: 2;
+}
+
+.frame {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  padding: 2.5px;
+  border-radius: 12px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    0 12px 30px -6px rgba(0, 0, 0, 0.68);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  overflow: hidden;
+  transition:
+    border-color var(--dur-fast) ease,
+    box-shadow var(--dur-fast) ease;
+
+  @include mobile {
+    padding: 2px;
+    border-radius: 10px;
+  }
+}
+
+.thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 9.5px;
+  user-select: none;
+  background: #14171f;
+
+  @include mobile {
+    border-radius: 8px;
+  }
+}
+
+.countBadge {
+  @include kertas-liquid-pill-dark;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 4;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 5px;
+  color: #f8f6f2;
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 16px;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+.captionPill {
+  @include kertas-liquid-pill-dark;
+  position: relative;
+  z-index: 4;
+  margin-top: -8px;
+  max-width: 152px;
+  padding: 3px 9px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  @include mobile {
+    max-width: 124px;
+    padding: 2px 7px;
+  }
+}
+
+.placeLabel {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: rgba(248, 246, 242, 0.94);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stem {
+  width: 1.5px;
+  height: 8px;
+  background: linear-gradient(
+    to bottom,
+    rgba(244, 240, 232, 0.72),
+    rgba(244, 240, 232, 0.2)
+  );
+  pointer-events: none;
+}
+
+.anchorDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: #f4f0e8;
+  box-shadow:
+    0 0 0 3px rgba(244, 240, 232, 0.2),
+    0 0 10px rgba(244, 240, 232, 0.55);
+  transition:
+    transform var(--dur-fast) var(--ease-settle),
+    box-shadow var(--dur-fast) ease,
+    background-color var(--dur-fast) ease;
+  pointer-events: none;
+}
+
+.hoverCard {
+  @include kertas-liquid-glass-dark-elevated;
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translate(-50%, 6px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 40;
+  min-width: 184px;
+  max-width: 224px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  text-align: left;
+  transition:
+    opacity var(--dur-fast) ease,
+    transform var(--dur-fast) var(--ease-settle);
+
+  @media (hover: none), (pointer: coarse), (max-width: 767px) {
+    display: none;
+  }
+}
+
+.hoverMeta {
+  margin: 0 0 3px;
+  font-family: var(--font-kertas-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.05em;
+  color: rgba(244, 240, 232, 0.6);
+  white-space: nowrap;
+}
+
+.hoverTitle {
+  margin: 0 0 3px;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: #f8f6f2;
+}
+
+.hoverHint {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  letter-spacing: 0;
+  color: rgba(244, 240, 232, 0.72);
+}

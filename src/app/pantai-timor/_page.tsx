@@ -12,10 +12,6 @@ import { AnimatedTitle } from "./components/AnimatedTitle";
 import { LoadingScreen } from "./components/LoadingScreen";
 
 import { VillageRhythms } from "./components/VillageRhythms";
-import { CoastalGeography } from "./components/CoastalGeography";
-import { HistoryCulture } from "./components/HistoryCulture";
-import { QuoteSection } from "./components/QuoteSection";
-import { Footer } from "./components/Footer";
 import { Lightbox } from "./components/Lightbox";
 import { TheLocalSection } from "./components/TheLocalSection";
 import { CoastalAlmanac } from "./components/CoastalAlmanac";
@@ -240,22 +236,13 @@ export default function PantaiTimorRedesign() {
       />
 
       <CoastalAlmanac ref={almanacRef} />
-          <Memory />
-
-      <HistoryCulture />
-
+      <Memory />
       <ParallaxZoom />
       <VillageRhythms />
-  
       <TheLocalSection 
         localSectionRef={localSectionRef}
         setActiveImageIndex={setActiveImageIndex}
-        setIsGridView={setIsGridView}
       />
-
-      <CoastalGeography onImageClick={(index) => setActiveImageIndex(index)} />
-      <QuoteSection />
-      <Footer />
 
       <Lightbox 
         activeImageIndex={activeImageIndex}

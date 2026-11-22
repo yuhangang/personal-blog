@@ -1,62 +1,90 @@
-"use client";
-
-import { useState } from "react";
-import FadeIn from "@/components/common/Animations/FadeIn";
-import { calculateAge } from "@/utils/date";
-import Image from "next/image";
+import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import PageCover from "@/components/common/PageCover/PageCover";
+import { RESUME_CONTACT } from "@/data/experience";
+import { SOCIAL_LINKS } from "@/config/social";
+import { calculateAge } from "@/utils/date";
 import styles from "./about.module.scss";
 
-export default function AboutPage() {
-  const [imageLoaded, setImageLoaded] = useState(false);
+export const metadata: Metadata = {
+  title: "About | Yu Hang Ang",
+  description:
+    "About Yu Hang Ang, software engineer based in Kuala Lumpur, Malaysia.",
+};
 
-  // Calculate age directly to avoid "synchronous setState in useEffect" warning
-  // This is safe for hydration as long as the server/client date consistency is maintained
+export default function AboutPage() {
   const age = calculateAge("1998-01-06");
 
   return (
-    <main className={styles.container} data-theme="dark">
-      <div className={styles.coverWrapper}>
-        <Image
-          src="/images/about-cover.webp"
-          alt="Yuhang at Manaslu Circuit, Nepal"
-          fill
-          className={styles.coverImage}
-          priority
-          quality={90}
-          sizes="100vw"
-          onLoad={() => setImageLoaded(true)}
-          style={{
-            opacity: imageLoaded ? 1 : 0,
-            transition: "opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
-          }}
-        />
-      </div>
-      <div className={styles.innerContainer}>
-        <div className={styles.headerGrid}>
-          <div className={styles.headerContent}>
-            <FadeIn direction="up" delay={0.1}>
-              <h1 className={styles.title}>Yu Hang Ang</h1>
-            </FadeIn>
-          </div>
-        </div>
+    <main className={styles.page} data-theme="light">
+      <PageCover
+        src="/images/about-cover.webp"
+        alt="Yu Hang Ang standing with trekking poles and a backpack on a stone trail beside a waterfall at the Manaslu Circuit, Nepal"
+        credit="Manaslu Circuit, Nepal · Oct 2024"
+        ariaLabel="Profile cover"
+        scrollTargetId="about-bio"
+        focal="manaslu"
+        headline={
+          <>
+            About <em>Me</em>
+          </>
+        }
+        subtitle={`${age}, software engineer in Kuala Lumpur — leading mobile at BookDoc.`}
+      />
 
-        <div className={styles.content}>
-          <FadeIn direction="up" delay={0.2}>
-            <div className={styles.bio}>
-              <p className={styles.text}>
-                {age || "..."}, software engineer based in Kuala Lumpur,
-                Malaysia. Open for new opportunities for collaboration and
-                learning.
-              </p>
-              <div className={styles.actions}>
-                <Link href="/resume" className={styles.resumeLink}>
-                  View Professional Resume &rarr;
-                </Link>
-              </div>
+      <div id="about-bio" className={styles.spine}>
+        <article className={styles.bio}>
+          <h1 className={styles.title}>Yu Hang Ang</h1>
+
+          <div className={styles.proseGroup}>
+            <p className={styles.prose}>
+              {age}, software engineer based in Kuala Lumpur, Malaysia. I
+              currently lead the mobile team at BookDoc, working across iOS,
+              Android, and Flutter.
+            </p>
+            <p className={styles.prose}>
+              Before that, I built apps and backend systems at POS Malaysia,
+              Lumi News, and Snappymob. Outside of work, I spend time on
+              mountain trails and quiet coastal roads with a camera.
+            </p>
+            <p className={styles.prose}>
+              Open to new opportunities for collaboration and learning.
+            </p>
+          </div>
+
+          <nav className={styles.linksRow} aria-label="Resume and contact">
+            <Link href="/resume" className={styles.primaryLink}>
+              <span>View Resume</span>
+              <ArrowRight size={15} strokeWidth={1.75} aria-hidden="true" />
+            </Link>
+
+            <div className={styles.secondaryLinks}>
+              <a
+                href={`mailto:${RESUME_CONTACT.portfolioEmail}`}
+                className={styles.textLink}
+              >
+                {RESUME_CONTACT.portfolioEmail}
+              </a>
+              {SOCIAL_LINKS.map((item) => (
+                <a
+                  key={item.platform}
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.textLink}
+                >
+                  <span>{item.platform}</span>
+                  <ArrowUpRight
+                    size={13}
+                    strokeWidth={1.75}
+                    aria-hidden="true"
+                  />
+                </a>
+              ))}
             </div>
-          </FadeIn>
-        </div>
+          </nav>
+        </article>
       </div>
     </main>
   );

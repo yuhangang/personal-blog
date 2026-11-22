@@ -1,40 +1,42 @@
-"use client";
-import React from 'react';
-import styles from './GalleryHero.module.scss';
-import { motion } from 'framer-motion';
+import type { GalleryChapter } from "@/config/gallery";
+import styles from "./GalleryHero.module.scss";
 
-export default function GalleryHero() {
+interface GalleryHeroProps {
+  locations: GalleryChapter[];
+}
+
+export default function GalleryHero({ locations }: GalleryHeroProps) {
   return (
-    <section className={styles.hero}>
-      <div className={styles.container}>
-      
-        
-        <motion.h1 
-          className={styles.title}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-        >
-          Visual <br /> 
-          <span className={styles.italic}>Index.</span>
-        </motion.h1>
+    <header
+      id="editorial-lead"
+      className={styles.hero}
+      aria-labelledby="gallery-hero-heading"
+    >
+      <div className={styles.inner}>
+        <p className={styles.kicker}>Photography · Archive</p>
 
-        <motion.p 
-          className={styles.description}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.4 }}
-        >
-          A curated collection of photographic essays and field notes. 
-          Documenting rhythms of life and heritage across borders.
-        </motion.p>
-      </div>
+        <h1 id="gallery-hero-heading" className={styles.title}>
+          Visual <em>Index.</em>
+        </h1>
 
-  
-      <div className={styles.decorLines}>
-        <div className={styles.line} />
-        <div className={styles.line} />
+        <p className={styles.subtitle}>
+          Selected photographs and visual essays anchored to where they were
+          taken.
+        </p>
+
+        {locations.length > 0 && (
+          <div className={styles.locationsRow}>
+            <span className={styles.locationsLabel}>Locations</span>
+            <ul className={styles.locationsList}>
+              {locations.map((chapter) => (
+                <li key={chapter.id} className={styles.locationItem}>
+                  {chapter.label}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
-    </section>
+    </header>
   );
 }

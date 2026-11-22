@@ -1,0 +1,370 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.page {
+  min-height: 100dvh;
+  width: 100%;
+  background: var(--kertas-ground);
+  color: var(--dakwat);
+  padding: clamp(112px, 15vh, 148px) clamp(20px, 5vw, 32px)
+    clamp(96px, 13vw, 144px);
+}
+
+.folio {
+  @include kertas-spine;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(36px, 6vw, 52px);
+}
+
+.masthead {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.kicker {
+  @include kertas-kicker;
+  margin: 0;
+}
+
+.name {
+  @include kertas-heading;
+  font-size: clamp(2.25rem, 5vw, 3.35rem);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  span {
+    font-family: var(--font-kertas-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.1875rem, 2.4vw, 1.5rem);
+    line-height: 1.25;
+    color: var(--dakwat-2);
+  }
+}
+
+.contactStrip {
+  margin-top: 6px;
+  padding: 10px 0 12px;
+  border-top: 1px solid var(--kertas-3);
+  border-bottom: 1px solid var(--kertas-3);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+}
+
+.contactLinks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+}
+
+.contactActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.contactLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: var(--tap);
+  font-family: var(--font-kertas-sans);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--dakwat-2);
+  transition: color var(--dur-fast) var(--ease-settle);
+
+  &:hover {
+    color: var(--dakwat);
+  }
+}
+
+.summarySection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.prose {
+  @include kertas-body;
+  margin: 0;
+}
+
+.cardGroup {
+  @include kertas-group;
+  @include kertas-ledger-list;
+}
+
+.roleEntry,
+.projectEntry {
+  padding: 22px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--kertas-3);
+  }
+
+  @include mobile {
+    padding: 18px 18px;
+  }
+}
+
+.roleHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 14px;
+}
+
+.company {
+  font-family: var(--font-kertas-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--dakwat);
+  margin: 0;
+}
+
+.period {
+  font-family: var(--font-kertas-sans);
+  font-size: 0.84375rem;
+  font-weight: 500;
+  color: var(--dakwat-3);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.roleLine {
+  font-family: var(--font-kertas-sans);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--dakwat-2);
+  margin: 0;
+
+  span {
+    font-weight: 400;
+    color: var(--dakwat-3);
+  }
+}
+
+.bulletList {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bulletItem {
+  position: relative;
+  padding-left: 16px;
+  font-family: var(--font-kertas-sans);
+  font-size: 0.96875rem;
+  line-height: 1.56;
+  color: var(--dakwat-2);
+  max-width: 68ch;
+  text-wrap: pretty;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 5px;
+    height: 1px;
+    background: var(--dakwat-3);
+  }
+}
+
+.skillEntry {
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--kertas-3);
+  }
+
+  @include mobile {
+    padding: 16px 18px;
+  }
+}
+
+.skillCategory {
+  font-family: var(--font-kertas-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dakwat-3);
+  margin: 0;
+}
+
+.skillList {
+  font-family: var(--font-kertas-sans);
+  font-size: 0.9375rem;
+  line-height: 1.58;
+  color: var(--dakwat);
+  margin: 0;
+}
+
+.projectLinks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+}
+
+.projectUrl {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 36px;
+  font-family: var(--font-kertas-sans);
+  font-size: 0.84375rem;
+  color: var(--dakwat-2);
+  transition: color var(--dur-fast) var(--ease-settle);
+
+  &:hover {
+    color: var(--dakwat);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+@page {
+  size: A4 portrait;
+  margin: 11mm 13mm;
+  background: #faf8f5;
+}
+
+@media print {
+  .page {
+    min-height: auto;
+    padding: 0;
+    background: var(--kertas-ground);
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .folio {
+    width: 100%;
+    max-width: 100%;
+    gap: 14px;
+  }
+
+  .masthead {
+    gap: 6px;
+  }
+
+  .name {
+    font-size: 2rem;
+    gap: 4px;
+
+    span {
+      font-size: 0.95rem;
+    }
+  }
+
+  .contactStrip {
+    margin-top: 2px;
+    padding: 5px 0;
+    gap: 4px 12px;
+  }
+
+  .contactLink {
+    min-height: auto;
+    font-size: 0.72rem;
+  }
+
+  .summarySection {
+    gap: 7px;
+  }
+
+  .section {
+    gap: 8px;
+  }
+
+  .cardGroup {
+    background: var(--kertas);
+    box-shadow: none;
+    border: 1px solid #e9e6e0;
+    border-radius: 10px;
+    overflow: visible;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .kicker {
+    font-size: 0.65rem;
+    break-after: avoid;
+  }
+
+  .company {
+    font-size: 1rem;
+  }
+
+  .period,
+  .projectUrl {
+    font-size: 0.72rem;
+    min-height: auto;
+  }
+
+  .roleLine {
+    font-size: 0.78rem;
+  }
+
+  .roleEntry,
+  .projectEntry {
+    padding: 9px 14px;
+    gap: 4px;
+    break-inside: avoid;
+  }
+
+  .skillEntry {
+    padding: 8px 14px;
+    gap: 3px;
+    break-inside: avoid;
+  }
+
+  .skillCategory {
+    font-size: 0.625rem;
+  }
+
+  .bulletList {
+    margin-top: 2px;
+    gap: 3px;
+  }
+
+  .prose,
+  .bulletItem,
+  .skillList {
+    font-size: 0.76rem;
+    line-height: 1.4;
+    max-width: none;
+  }
+
+  .noPrint {
+    display: none !important;
+  }
+}

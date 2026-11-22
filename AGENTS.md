@@ -14,29 +14,31 @@ When making UI changes:
 ## Repo Shape
 
 - `src/app/` contains App Router entrypoints and route wrappers
-- `src/components/` contains shared and route-level React components
-- `src/styles/_variables.scss` is the primary SCSS design-token source
+- `src/components/` contains shared (`Navigation`, `Footer`, `KertasActionList`) and route-level React components
+- `src/data/experience.ts` is the shared source of truth for career history, skills, and selected projects across `/`, `/about`, and `/resume`
+- `src/styles/_kertas.scss` defines the **Kertas & Dakwat** warm paper (`#faf8f5`, `#ffffff`, `#eeece7`) and bistre ink (`#1d1a16`, `#45423d`, `#6b6760`) design tokens, frosted pill mixins, and `840px` editorial spine helpers
+- `src/styles/_variables.scss` holds core breakpoints/spacing tokens imported by preserved routes (`/gallery`, `/pantai-timor`) and `@forward`s `_kertas.scss`
 - `src/styles/_mixins.scss` contains the shared container and breakpoint mixins
-- `src/app/globals.scss` defines base typography, spacing, and utility classes
-- `src/app/globals.css` contains global CSS and Tailwind utility-layer additions
+- `src/app/globals.scss` emits `:root` Kertas tokens, base typography (`:where()` low-specificity rules), focus rings, native modal `dialog` containment, `.skip-link`, Lenis rules, and reduced-motion fallbacks
+- `src/app/globals.css` contains Tailwind utility-layer additions and `@layer base` resets (no OS dark-mode color-scheme inversion)
 
 ## Styling Rules
 
-- Reuse the existing tokens in `src/styles/_variables.scss` before introducing new colors, spacing values, shadows, radii, or transition timings.
+- Reuse the existing tokens in `src/styles/_kertas.scss` (for the main Kertas & Dakwat portfolio `/`, `/about`, `/resume`, `Navigation`, `Footer`) and `src/styles/_variables.scss` (for preserved routes) before introducing new colors, spacing values, shadows, radii, or transition timings.
+- Keep frosted glass (`--pad-glass-fill` / `--pad-glass-dark` for pinned top nav pills, `--pad-glass-card-fill` via `kertas-glass-card` for `KertasActionList` grouped action cards) scoped to those shared primitives.
 - Reuse the shared breakpoint and container mixins from `src/styles/_mixins.scss` instead of inventing route-local breakpoint logic.
-- Use the font variables already wired in `src/app/layout.tsx`. Do not introduce ad hoc font stacks in component code unless the route already requires a deliberate exception.
+- Use the font variables already wired in `src/app/layout.tsx` (`Caudex` via `--font-kertas-serif` / `@include kertas-heading` for large display and section headers across `/`, `/about`, `/resume`, and `/gallery` — `700` bold with `400` italic `em` emphasis — plus `Navigation` menu heading and `Footer` tagline; `Jost` via `--font-kertas-sans` across `/about`, `/resume`, `Navigation`, `Footer`, and `Kertas` controls/metadata; `Inter` via `--font-sans` for `/` home body copy/actions, `KertasActionList`, and `/gallery` UI/body text; route-local typography preserved on `/pantai-timor`). Do not introduce ad hoc font stacks in component code unless the route already requires a deliberate exception.
 - Prefer SCSS modules or route-local component styling for reusable sections. Use global CSS only when the behavior truly needs global reach.
 - Avoid mixing several styling systems inside a single component without a clear reason. This repo already uses SCSS, CSS modules, Tailwind utilities, and some inline motion-driven styles; add new styling in the smallest consistent layer possible.
 - Do not add arbitrary visual values when an existing token is close enough. If a new token is necessary, add it centrally.
 
 ## Layout Constraints
 
-- Keep horizontal overflow clipped unless the route explicitly owns a horizontal storytelling pattern.
-- Use the shared container rhythm. Default to the `container` mixin or existing route framing before widening sections to full bleed.
-- Preserve readable line lengths for text-heavy sections. Use `$content-width`-style constraints for editorial copy rather than stretching prose across the viewport.
-- Treat mobile as a first-class layout, not a later shrink pass. Check spacing, sticky behavior, and safe-area handling on narrow screens.
-- Use `100dvh`/safe-area-aware patterns where the surrounding shell already relies on them.
-- When building immersive routes such as `/pantai-timor` or `/terengganu`, maintain that route’s established editorial/photobook composition instead of falling back to generic app layouts.
+- Keep horizontal overflow clipped (`overflow-x: clip`) unless the route explicitly owns a horizontal storytelling pattern.
+- Preserve the centered `--column: 840px` editorial spine (`68ch` prose measure) across `/`, `/about`, and `/resume`; use the `container` mixin or `--footer-width: 1120px` for wide navigation/footer framing.
+- Treat mobile as a first-class layout, not a later shrink pass. Check spacing, `44px` tap targets, sticky behavior, and safe-area handling on narrow screens.
+- Use `100svh`/`100dvh`/safe-area-aware patterns where the surrounding shell already relies on them.
+- Preserve the Kertas & Dakwat light editorial system on `/` and `/about`, while maintaining the dark cinematic/photobook systems on `/gallery` (`data-theme="dark"` triggering dark chrome in `Navigation` and `Footer`) and `/pantai-timor` (bespoke route shell).
 
 ## Route-Specific Guidance
 
@@ -82,3 +84,13 @@ Do not treat a successful build as proof for visual or interaction fixes. For ro
 ## Documentation Maintenance
 
 Keep this file current when the repo’s styling architecture, layout primitives, route structure, or validation expectations change. `AGENTS.md` is an operating guide, not static prose.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

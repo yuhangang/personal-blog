@@ -1,28 +1,33 @@
-'use client';
-import { motion } from 'framer-motion';
-import { usePathname } from 'next/navigation';
-import { useTransition } from '@/context/TransitionContext';
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
+import { usePathname } from "next/navigation";
+import { useTransition } from "@/context/TransitionContext";
 
 export default function Template({ children }: { children: React.ReactNode }) {
-    const { shouldAnimate } = useTransition();
-    const pathname = usePathname();
-    const disableRouteTransition = pathname === '/terengganu' || pathname === '/pantai-timor';
+  const { shouldAnimate } = useTransition();
+  const prefersReducedMotion = useReducedMotion();
+  const pathname = usePathname();
+  const disableRouteTransition =
+    pathname === "/terengganu" ||
+    pathname === "/pantai-timor" ||
+    Boolean(prefersReducedMotion);
 
-    if (disableRouteTransition) {
-        return <>{children}</>;
-    }
+  if (disableRouteTransition) {
+    return <>{children}</>;
+  }
 
-    return (
-        <motion.div
-            initial={shouldAnimate ? { opacity: 0, y: 40, filter: 'blur(10px)' } : false}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, y: -40, filter: 'blur(10px)' }}
-            transition={{ 
-                ease: [0.76, 0, 0.24, 1], // Cinematic easeInOutQuart feel
-                duration: 1.2
-            }}
-        >
-            {children}
-        </motion.div>
-    );
+  return (
+    <motion.div
+      initial={shouldAnimate ? { opacity: 0, y: 12 } : false}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{
+        ease: [0.16, 1, 0.3, 1],
+        duration: 0.28,
+      }}
+    >
+      {children}
+    </motion.div>
+  );
 }

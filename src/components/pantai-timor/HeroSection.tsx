@@ -50,9 +50,6 @@ export function HeroSection({
         <h1 className={`${fonts.serif} !mb-0 !text-[clamp(4.25rem,18vw,11rem)] !leading-[0.9] !tracking-normal text-center !text-[#f2f0ea] text-balance`}>
           PANTAI TIMOR
         </h1>
-        <p className="!mb-0 !mt-10 max-w-[22rem] text-center font-sans !text-[0.55rem] font-bold uppercase !leading-[2.35] !tracking-[0.3em] !text-[#e3e1da]/50 md:!mt-16 md:max-w-none md:!text-[0.65rem] md:!tracking-[0.5em]">
-          A PHOTOGRAPHIC JOURNEY TO THE EASTERN ENCLAVE
-        </p>
       </motion.div>
 
       <motion.div style={{ opacity: heroOpacity }} className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">

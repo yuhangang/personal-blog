@@ -2,19 +2,11 @@
 
 import { ptTrack } from "@/utils/ga-events";
 import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
-import { Cormorant_Garamond } from "next/font/google";
 import Image from "next/image";
 import React from "react";
-import { FEATURED_IMAGES, PANTAI_TIMOR_COPY, getThumbnailUrl } from "../config";
+import { FEATURED_IMAGES, getThumbnailUrl } from "../config";
 import styles from "../pantai-timor.module.scss";
-import { PantaiFrame, pantaiLayout } from "./LayoutPrimitives";
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["600"],
-  style: ["normal"],
-  display: "swap",
-});
+import { pantaiLayout } from "./LayoutPrimitives";
 
 interface CarouselItemProps {
   item: (typeof FEATURED_IMAGES)[0];
@@ -57,19 +49,6 @@ const CarouselItem = React.forwardRef<HTMLDivElement, CarouselItemProps>(
         
         {/* Archival Overlay */}
         <div className={styles["carousel-border"]} />
-        
-        {/* Caption (Hyogen style) */}
-        <div className={styles["carousel-caption"]}>
-          <motion.div
-            initial={{ y: "100%" }}
-            animate={{ y: isActive ? "0%" : "100%" }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <span className={styles["carousel-caption-text"]}>
-              {String(index + 1).padStart(2, "0")} — Archive
-            </span>
-          </motion.div>
-        </div>
       </motion.div>
     );
   }
@@ -79,13 +58,11 @@ CarouselItem.displayName = "CarouselItem";
 interface TheLocalSectionProps {
   localSectionRef: React.RefObject<HTMLElement | null>;
   setActiveImageIndex: (index: number) => void;
-  setIsGridView: (isGrid: boolean) => void;
 }
 
 export const TheLocalSection = ({
   localSectionRef,
   setActiveImageIndex,
-  setIsGridView,
 }: TheLocalSectionProps) => {
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = React.useState(0);
@@ -180,65 +157,7 @@ export const TheLocalSection = ({
             ))}
           </motion.div>
         </div>
-
-        <div className={styles["local-overlay-container"]}>
-          <div className={styles["local-gradient-overlay"]} />
-          <PantaiFrame variant="narrow" withGutters>
-            <div className={styles["local-content-wrapper"]}>
-            <div className={styles["local-content-grid"]}>
-              <div className={styles["local-text-column"]}>
-                <h3 className={`${cormorant.className} ${styles["local-title"]}`}>
-                  <motion.span
-                    initial={{ opacity: 0, y: 40, rotate: -1 }}
-                    whileInView={{ opacity: 1, y: 0, rotate: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    {PANTAI_TIMOR_COPY.localSection.title}
-                  </motion.span>
-                </h3>
-
-                <motion.p
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1, delay: 0.5 }}
-                  className={styles["local-description"]}
-                >
-                  {PANTAI_TIMOR_COPY.localSection.content}
-                </motion.p>
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.9, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className={styles["local-cta-column"]}
-              >
-                <motion.button
-                  onClick={() => {
-                    ptTrack.carouselViewArchive();
-                    setActiveImageIndex(0);
-                    setIsGridView(true);
-                  }}
-                  whileHover={{ x: 4 }}
-                  whileTap={{ x: 1 }}
-                  className={styles["archive-btn"]}
-                >
-                  <span className={styles["btn-icon-circle"]}>
-                    <span className={styles["btn-arrow"]}>
-                      ↗
-                    </span>
-                  </span>
-                  <span>{PANTAI_TIMOR_COPY.localSection.cta}</span>
-                </motion.button>
-              </motion.div>
-            </div>
-          </div>
-          </PantaiFrame>
-        </div>
-        </div>
+      </div>
     </section>
   );
 };

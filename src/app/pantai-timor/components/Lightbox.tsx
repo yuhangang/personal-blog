@@ -4,19 +4,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X, LayoutGrid, Maximize } from "lucide-react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
-import { Libre_Caslon_Text } from "next/font/google";
-import { FEATURED_IMAGES, COASTAL_LOCATIONS, PANTAI_TIMOR_COPY } from "../config";
+import { FEATURED_IMAGES, PANTAI_TIMOR_COPY } from "../config";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ptTrack } from "@/utils/ga-events";
 import { InfiniteGrid } from "./InfinityGrid";
 import styles from "../pantai-timor.module.scss";
-
-const libreCaslon = Libre_Caslon_Text({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  style: ["normal"],
-  display: "swap",
-});
 
 const lightboxFrameVariants = {
   enter: (direction: number) => ({
@@ -122,7 +114,6 @@ export const Lightbox = ({
   if (!portalRoot) return null;
 
   const activeImage = activeImageIndex === null ? null : FEATURED_IMAGES[activeImageIndex];
-  const activeLocation = activeImage ? COASTAL_LOCATIONS.find((loc) => loc.image === activeImage.src) : null;
 
   return createPortal(
     <AnimatePresence>
@@ -257,32 +248,6 @@ export const Lightbox = ({
                     </motion.div>
                   </motion.div>
                 </AnimatePresence>
-
-                {/* Fixed UI elements - stay consistent while images scroll */}
-                <div className={styles["lightbox-info"]}>
-                  <div className={styles["info-gradient"]} />
-                  
-                  <AnimatePresence mode="wait">
-                    <motion.aside
-                      key={activeImageIndex}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                      className={styles["info-content"]}
-                    >
-                      <p className={styles["info-counter"]}>
-                        {String(activeImageIndex + 1).padStart(2, "0")} / {String(FEATURED_IMAGES.length).padStart(2, "0")}
-                      </p>
-                      <h4 className={`${libreCaslon.className} ${styles["info-title"]}`}>
-                        {activeLocation?.name || activeImage.alt}
-                      </h4>
-                       <p className={styles["info-description"]}>
-                        {activeLocation?.description || PANTAI_TIMOR_COPY.lightbox.defaultDescription}
-                      </p>
-                    </motion.aside>
-                  </AnimatePresence>
-                </div>
               </div>
             )}
           </AnimatePresence>

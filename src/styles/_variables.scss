@@ -47,3 +47,6 @@ $breakpoint-small-mobile: 480px;
 $breakpoint-mobile: 768px;
 $breakpoint-tablet: 1024px;
 $breakpoint-desktop: 1440px;
+
+// Re-export Kertas & Dakwat tokens for callers importing variables directly
+@forward './kertas';

@@ -1,0 +1,87 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.section {
+  min-height: 100dvh;
+  padding: clamp(72px, 10vw, 112px) clamp(20px, 5vw, 32px) clamp(44px, 6vw, 72px);
+}
+
+.spine {
+  @include kertas-spine;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.kicker {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dakwat-3);
+  margin: 0;
+}
+
+.heading {
+  @include kertas-heading;
+  font-size: clamp(1.875rem, 1.25rem + 1.9vw, 2.625rem);
+  max-width: 34ch;
+  margin: 0;
+}
+
+.prose {
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.58;
+  letter-spacing: -0.01em;
+  color: var(--dakwat-2);
+  max-width: 58ch;
+  text-wrap: pretty;
+  margin: 0;
+}
+
+.focusBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px 24px;
+  padding: 16px 0;
+  margin-top: 6px;
+  border-top: 1px solid var(--kertas-3);
+  border-bottom: 1px solid var(--kertas-3);
+}
+
+.focusLabel {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dakwat-3);
+  flex-shrink: 0;
+}
+
+.focusList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+}
+
+.focusItem {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+  color: var(--dakwat-2);
+}
+
+.listTop {
+  margin-top: 6px;
+}

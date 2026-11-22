@@ -1,692 +1,701 @@
 @use '../../../styles/variables' as *;
 @use '../../../styles/mixins' as *;
 
-.nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1101; // Ensure it sits ABOVE the mobile menu overlay (z=1000)
-    padding: 16px 40px;
-    background: transparent;
-    pointer-events: none; // Allow clicking through the empty space
-    transition: all $transition-base;
-    display: flex;
-    justify-content: center;
+.header {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 950;
+  padding-block-start: calc(14px + env(safe-area-inset-top));
+  padding-block-end: 14px;
+  padding-inline: clamp(20px, 5vw, 40px);
+  border-block-end: 1px solid transparent;
+  transition:
+    background-color 0.42s var(--ease-settle),
+    border-color 0.42s var(--ease-settle),
+    padding-block 0.42s var(--ease-settle),
+    backdrop-filter 0.42s var(--ease-settle);
 
-    @include mobile {
-        padding: 24px 24px; // Adjusted lateral padding for alignment
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 -24px 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(12, 12, 11, 0.34) 0%,
+      rgba(12, 12, 11, 0.12) 56%,
+      rgba(12, 12, 11, 0) 100%
+    );
+    transition: opacity 0.42s var(--ease-settle);
+  }
+
+  &.scrolled {
+    padding-block-start: calc(10px + env(safe-area-inset-top));
+    padding-block-end: 10px;
+  }
+
+  // Light paper theme (Home, Resume, scrolled About)
+  &[data-nav-theme='light'] {
+    color: var(--dakwat);
+
+    &.scrolled {
+      background-color: rgba(250, 248, 245, 0.9);
+      border-block-end-color: rgba(29, 26, 22, 0.08);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+
+      @media (prefers-reduced-transparency: reduce) {
+        background-color: var(--kertas-ground);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
     }
 
-    @media (min-width: 1440px) {
-        padding: 24px 60px;
+    .brand {
+      color: var(--dakwat);
+    }
+
+    .contextDivider {
+      color: rgba(29, 26, 22, 0.25);
+    }
+
+    .contextLabel {
+      color: var(--dakwat-3);
+    }
+
+    .navLink {
+      color: var(--dakwat-2);
+
+      &::after {
+        background-color: var(--dakwat);
+      }
+
+      &:hover,
+      &:focus-visible,
+      &[aria-current='page'] {
+        color: var(--dakwat);
+      }
+    }
+
+    .menuTrigger {
+      color: var(--dakwat);
+    }
+
+    .menuBarTop,
+    .menuBarBottom {
+      background-color: var(--dakwat);
+    }
+  }
+
+  // Dark / editorial photo cover theme (About cover, Gallery)
+  &[data-nav-theme='dark'] {
+    color: #f8f6f2;
+
+    &[data-over-cover='true']::before {
+      opacity: 1;
     }
 
     &.scrolled {
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 0%, transparent 100%);
-        box-shadow: none;
-        pointer-events: auto;
+      background-color: rgba(14, 13, 12, 0.78);
+      border-block-end-color: rgba(255, 255, 255, 0.09);
+      backdrop-filter: blur(20px) saturate(150%);
+      -webkit-backdrop-filter: blur(20px) saturate(150%);
 
-        &[data-nav-theme='dark'] {
-            background: linear-gradient(to bottom, rgba(16, 17, 15, 0.8) 0%, transparent 100%);
-        }
-    }
-}
-
-.container {
-    width: 100%;
-   
-    display: flex;
-    align-items: flex-start; // Not vertically centered
-    justify-content: space-between;
-    position: relative;
-    height: 48px; // SLIMMER height
-}
-
-// Reusable mixin for the glass islands/pills
-@mixin glass-pill {
-    background: rgba(255, 255, 255, 0.85); // Lighter, more solid "panel" look
-    backdrop-filter: blur(12px) saturate(120%); // Sharper blur
-    -webkit-backdrop-filter: blur(12px) saturate(120%);
-    border: 1px solid rgba(0, 0, 0, 0.04);
-    border-radius: 0px; // Square
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-    pointer-events: auto;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); // Apple-style ease
-
-    &:hover {
-        background: rgba(255, 255, 255, 0.95);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-        transform: translateY(-1px);
-    }
-}
-
-// Identity Anchor Layout - prevents layout shift
-.identityAnchor {
-    display: flex;
-    align-items: center; // Vertically center the WHOLE group in the navbar
-    gap: 0;
-    z-index: 1102;
-    pointer-events: auto;
-    font-family: inherit;
-    position: relative;
-    height: 100%; // Match container height
-}
-
-.identityInner {
-    display: flex;
-    align-items: baseline; // Align text baselines
-    gap: 12px;
-    height: 1.8rem; // FIXED HEIGHT to strictly prevent centering jumps (matches largest element)
-    margin-top: -3px; // Optical adjustment to center the Name (since Separator is taller)
-    margin-left: -4px;
-
-    @media (min-width: 1440px) {
-        height: 2.4rem;
-        margin-top: -4px;
+      @media (prefers-reduced-transparency: reduce) {
+        background-color: rgba(14, 13, 12, 0.96);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
     }
 
-    // STABLE BASELINE STRUT:
-    // Forces the baseline to remain calculated based on the largest element (Separator)
-    // even when it is not present in the DOM. Prevents "jumping" layout.
-    &::before {
-        content: '|'; // Use actual separator character for exact metrics
-        visibility: hidden; // Hide it, but keep it in the layout computation
-        font-family: var(--font-geom); // Match font metrics of separator
-        font-size: 1.8rem;
-        line-height: 1;
-        
-        @media (min-width: 1440px) {
-            font-size: 2.4rem;
-        }
-    }
-}
-
-// Anchor container - use absolute positioning to prevent layout shift
-.anchorContainer {
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-}
-
-.name {
-    font-family: var(--font-geom); // Consistent with logo
-    font-size: 1.5rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: currentColor;
-    text-decoration: none;
-    transition: opacity 0.3s ease;
-    white-space: nowrap; // Prevent wrapping
-    line-height: 1;
-
-    // Large Screen Scaling
-    @media (min-width: 1440px) {
-        font-size: 2rem;
+    .brand {
+      color: #f8f6f2;
+      text-shadow: 0 1px 12px rgba(0, 0, 0, 0.28);
     }
 
-    &:hover {
-        opacity: 0.7;
+    .contextDivider {
+      color: rgba(248, 246, 242, 0.34);
     }
 
-    // Theme Overrides
-    .nav[data-nav-theme='dark'] & {
+    .contextLabel {
+      color: rgba(248, 246, 242, 0.72);
+    }
+
+    .navLink {
+      color: rgba(248, 246, 242, 0.76);
+      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.24);
+
+      &::after {
+        background-color: #f8f6f2;
+      }
+
+      &:hover,
+      &:focus-visible,
+      &[aria-current='page'] {
         color: #ffffff;
+      }
     }
 
-    .nav[data-nav-theme='light'] & {
-        color: #000000;
+    .menuTrigger {
+      color: #f8f6f2;
+      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.24);
     }
 
-    .navOpen & {
-        color: #000000;
+    .menuBarTop,
+    .menuBarBottom {
+      background-color: #f8f6f2;
     }
+
+    :where(a, button):focus-visible {
+      outline-color: #f8f6f2;
+    }
+  }
 }
 
-.separator {
-    font-family: var(--font-geom);
-    font-size: 1.8rem; // Match name size
-    font-weight: 300;
-    color: currentColor;
-    opacity: 0.3;
-    margin-right: 4px;
-    line-height: 1;
-
-    @media (min-width: 1440px) {
-        font-size: 2.4rem;
-    }
-
-    .nav[data-nav-theme='dark'] & {
-        color: #ffffff;
-    }
-
-    .nav[data-nav-theme='light'] & {
-        color: #000000;
-    }
-
-    .navOpen & {
-        color: #000000;
-    }
+.inner {
+  max-width: var(--footer-width);
+  min-block-size: var(--tap);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
 }
 
-.anchorWrapper {
-    position: relative;
-    display: flex; // To hold the inner items
-    align-items: center;
-    height: 1.8rem; // Fixed height for crop container
-    overflow: hidden; // ESSENTIAL for the crop effect
-
-    @media (min-width: 1440px) {
-        height: 2.4rem;
-    }
+.brandGroup {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  min-inline-size: 0;
 }
 
-.anchorText {
-    font-family: var(--font-sans);
-    font-size: 1.15rem;
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    color: currentColor;
-    white-space: nowrap;
-    align-self: baseline;
-    line-height: 1;
-    // position: absolute; removed to allow width calculation
-    // left: 0;
+.brand {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--tap);
+  font-family: var(--font-kertas-serif);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  transition:
+    color 0.34s var(--ease-settle),
+    opacity var(--dur-fast) var(--ease-settle);
 
-    @media (min-width: 1440px) {
-        font-size: 1.8rem;
-    }
-
-    .nav[data-nav-theme='dark'] & {
-        color: #ffffff;
-    }
-
-    .nav[data-nav-theme='light'] & {
-        color: #000000;
-    }
-
-    .navOpen & {
-        color: #000000;
-    }
+  &:hover {
+    opacity: 0.76;
+  }
 }
 
-// Film Light Animation
-.filmLight {
+.contextGroup {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  min-inline-size: 0;
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.contextDivider {
+  font-family: var(--font-kertas-mono);
+  font-size: 0.75rem;
+  line-height: 1;
+  transition: color 0.34s var(--ease-settle);
+}
+
+.contextLabel {
+  font-family: var(--font-kertas-sans);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.34s var(--ease-settle);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.navList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 2.8vw, 34px);
+
+  @include mobile {
+    display: none;
+  }
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+}
+
+.navLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--tap);
+  padding-inline: 2px;
+  font-family: var(--font-kertas-sans);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+  transition: color 0.28s var(--ease-settle);
+
+  &::after {
+    content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 60px; // Width of the beam
-    background: linear-gradient(90deg,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 0.8) 50%,
-            rgba(255, 255, 255, 0) 100%);
-    transform: skewX(-20deg);
-    pointer-events: none;
-    mix-blend-mode: overlay; // Make it shine
-    z-index: 2;
+    inset-inline: 2px;
+    inset-block-end: 10px;
+    block-size: 1px;
+    transform: scaleX(0);
+    transform-origin: left center;
+    opacity: 0.85;
+    transition:
+      transform 0.32s var(--ease-settle),
+      opacity 0.28s var(--ease-settle),
+      background-color 0.34s var(--ease-settle);
+  }
 
-    .nav[data-nav-theme='light'] & {
-        background: linear-gradient(90deg,
-                rgba(0, 0, 0, 0) 0%,
-                rgba(0, 0, 0, 0.4) 50%,
-                rgba(0, 0, 0, 0) 100%);
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  &[aria-current='page'] {
+    font-weight: 500;
+
+    &::after {
+      transform: scaleX(1);
+      opacity: 1;
     }
-}
+  }
 
-// Navigation Links
-.links {
-    display: flex;
-    align-items: center;
-    list-style: none;
-    z-index: 1102; // Ensure clickable
-}
-
-.desktopOnly {
-    @include mobile {
-        display: none;
+  @media (forced-colors: active) {
+    &[aria-current='page'] {
+      text-decoration: underline;
+      text-underline-offset: 5px;
     }
+  }
 }
 
 .menuTrigger {
-    background: transparent;
-    border: none;
-    font-family: var(--font-sans);
-    font-size: 0.9rem;
-    color: currentColor;
-    cursor: pointer;
-    text-transform: lowercase;
+  display: none;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-block-size: var(--tap);
+  min-inline-size: var(--tap);
+  padding-inline: 4px 0;
+  font-family: var(--font-kertas-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition:
+    color 0.34s var(--ease-settle),
+    opacity var(--dur-fast) var(--ease-settle);
+
+  &:hover {
+    opacity: 0.78;
+
+    .menuBarBottom {
+      inline-size: 18px;
+    }
+  }
+
+  &:active {
     opacity: 0.6;
-    transition: opacity 0.3s;
-    padding: 8px 16px;
+  }
 
-    &:hover {
-        opacity: 1;
+  @include mobile {
+    display: inline-flex;
+  }
+}
+
+.menuTriggerLabel {
+  line-height: 1;
+}
+
+.menuBars {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 5px;
+  inline-size: 18px;
+  block-size: 14px;
+}
+
+.menuBarTop,
+.menuBarBottom {
+  display: block;
+  block-size: 1.25px;
+  border-radius: 1px;
+  transition:
+    inline-size 0.28s var(--ease-settle),
+    background-color 0.34s var(--ease-settle);
+}
+
+.menuBarTop {
+  inline-size: 18px;
+}
+
+.menuBarBottom {
+  inline-size: 12px;
+}
+
+// Native top-layer modal sheet (<dialog showModal()>)
+.menuDialog {
+  margin: auto;
+  inline-size: min(calc(100dvw - 24px), 440px);
+  max-block-size: min(86dvh, 660px);
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-card);
+  background: var(--kertas);
+  color: var(--dakwat);
+  box-shadow: var(--pad-lifted), var(--pad-hairline);
+  overflow-y: auto;
+
+  // Base (closed/exit) state for top-layer discrete transition
+  opacity: 0;
+  transition-property: opacity, transform, display, overlay;
+  transition-duration: 0.28s;
+  transition-timing-function: var(--ease-settle);
+  transition-behavior: allow-discrete;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translateY(10px) scale(0.985);
+  }
+
+  &::backdrop {
+    background-color: rgba(29, 26, 22, 0);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    transition-property: background-color, backdrop-filter, display, overlay;
+    transition-duration: 0.28s;
+    transition-timing-function: var(--ease-settle);
+    transition-behavior: allow-discrete;
+  }
+
+  &[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &[open]:where(:not([data-closing])) {
+    opacity: 1;
+
+    @starting-style {
+      opacity: 0;
     }
 
-    .nav[data-nav-theme='dark'] & {
+    @media (prefers-reduced-motion: no-preference) {
+      transform: translateY(0) scale(1);
+
+      @starting-style {
+        transform: translateY(10px) scale(0.985);
+      }
+    }
+
+    &::backdrop {
+      background-color: rgba(29, 26, 22, 0.38);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+
+      @starting-style {
+        background-color: rgba(29, 26, 22, 0);
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+      }
+    }
+  }
+
+  &[data-dialog-theme='dark'] {
+    background: #141311;
+    color: #f4f0e8;
+    box-shadow:
+      0 24px 64px -16px rgba(0, 0, 0, 0.75),
+      0 0 0 1px rgba(255, 255, 255, 0.12);
+
+    &[open]:where(:not([data-closing]))::backdrop {
+      background-color: rgba(5, 5, 5, 0.72);
+
+      @starting-style {
+        background-color: rgba(5, 5, 5, 0);
+      }
+    }
+
+    .dialogHeader {
+      border-block-end-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .dialogKicker,
+    .rowIndex,
+    .rowMeta,
+    .dialogCaption {
+      color: rgba(244, 240, 232, 0.52);
+    }
+
+    .dialogTitle,
+    .rowLabel,
+    .closeBtn {
+      color: #f4f0e8;
+    }
+
+    .closeBtn {
+      background: rgba(255, 255, 255, 0.06);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.13);
+      }
+    }
+
+    .dialogItem:not(:last-child) .dialogRow {
+      border-block-end-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .dialogRow:hover {
+      background-color: rgba(255, 255, 255, 0.045);
+    }
+
+    .rowIcon {
+      color: rgba(244, 240, 232, 0.52);
+    }
+
+    .dialogRow:hover .rowIcon,
+    .activeRow .rowIcon {
+      color: #f4f0e8;
+    }
+
+    .activeRow .rowIndex {
+      color: #f4f0e8;
+    }
+
+    .dialogFooter {
+      background: rgba(255, 255, 255, 0.025);
+      border-block-start-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .socialLink {
+      color: rgba(244, 240, 232, 0.78);
+
+      &:hover {
         color: #ffffff;
+      }
     }
+  }
 
-    .nav[data-nav-theme='light'] & {
-        color: #000000;
-    }
+  @media (prefers-reduced-motion: reduce) {
+    transition-duration: 0.1s;
 
-    // Hide when menu open if you want, or keep visible
-    .navOpen & {
-        display: none;
+    &::backdrop {
+      transition-duration: 0.1s;
     }
+  }
 }
 
-// Menu Button (Hamburger) - Fixed size to prevent position shift
-.menuButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;  // Reduced size
-    height: 48px; // Reduced size
-    cursor: pointer;
-    z-index: 1102;
-    background: transparent;
-    border: none;
-    border-radius: 12px;
-    box-shadow: none;
-    pointer-events: auto;
-    transition: background 0.2s ease;
-
-    @include mobile {
-        width: 48px;
-        height: 48px;
-    }
-
-    // Dark background when menu is open
-    .navOpen & {
-        background: #1a1a1c;
-    }
+.dialogHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px 16px;
+  border-block-end: 1px solid var(--kertas-3);
 }
 
-.hamburger {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    width: 32px;  // Bigger
-
-    @include mobile {
-        width: 28px;
-        gap: 8px;
-    }
-
-    span {
-        display: block;
-        width: 100%;
-        height: 3px;  // Thicker lines
-        background: currentColor;
-        transition: all 0.3s ease;
-        border-radius: 2px;
-    }
-
-    // Theme Overrides
-    .nav[data-nav-theme='dark'] & span {
-        background: #ffffff;
-    }
-
-    .nav[data-nav-theme='light'] & span {
-        background: #1d1d1f;
-    }
-
-    // Open State Overrides (Always White)
-    .navOpen & span {
-        background: #ffffff !important;
-    }
-
-    // Hover/Active (Touch) State - Creative "Split Slide" Effect
-    .menuButton:hover {
-        &:not(.open):not(.noHover) {
-            span:nth-child(1) {
-                transform: translateX(12.5%); // Slide top right (12.5% of 80% width = 10% of container)
-                width: 80%; // Shrink slightly for dynamic sizing
-            }
-
-            span:nth-child(2) {
-                transform: translateX(-12.5%); // Slide bottom left
-                width: 80%;
-            }
-        }
-    }
-
-    &.open {
-        span:nth-child(1) {
-            transform: translateY(6.5px) rotate(45deg);
-
-            @include mobile {
-                transform: translateY(5.5px) rotate(45deg); // (3px height + 8px gap) / 2 = 5.5px
-            }
-        }
-
-        span:nth-child(2) {
-            transform: translateY(-6.5px) rotate(-45deg);
-
-            @include mobile {
-                transform: translateY(-5.5px) rotate(-45deg);
-            }
-        }
-    }
+.dialogHeadingGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
-// Mobile Menu Overlay
-.mobileMenu {
-    position: fixed;
-    top: 0; // Cover entire screen including behind transparent header
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1000; // Behind the buttons (1102) but above the page content
-    visibility: hidden;
-    opacity: 0;
-    transition: all $transition-base;
-    pointer-events: none;
-
-    &.open {
-        visibility: visible;
-        opacity: 1;
-        pointer-events: auto;
-    }
+.dialogKicker {
+  font-family: var(--font-kertas-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dakwat-3);
 }
 
-// Transparent state when menu is open
-.navOpen {
-
-    .logo,
-    .menuButton {
-        background: transparent;
-        box-shadow: none;
-        border-color: transparent;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-    }
+.dialogTitle {
+  font-family: var(--font-kertas-serif);
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--dakwat);
+  margin: 0;
 }
 
-.mobileMenuOverlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    // background: rgba(255, 255, 255, 0.98); // REMOVED standard bg
-    // backdrop-filter: blur(20px); // REMOVED blur for preview clarity
-    z-index: 1;
-}
+.closeBtn {
+  inline-size: var(--tap);
+  block-size: var(--tap);
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--kertas-2);
+  color: var(--dakwat);
+  transition:
+    background-color var(--dur-fast) var(--ease-settle),
+    transform var(--dur-fast) var(--ease-settle);
 
-// Preview Background Layer
-.previewContainer {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background: #fff; // Fallback base
-    overflow: hidden;
-}
+  &:hover {
+    background: var(--kertas-3);
+  }
 
-.previewImage {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity 0.4s ease-in-out;
-    transform: scale(1.05);
-
-    &.active {
-        opacity: 1;
-        transform: scale(1);
-        transition: opacity 0.4s ease-in-out, transform 8s linear; // Slow zoom
-    }
-}
-
-.dimmer {
-    position: absolute;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.85); // Heavy frosted glass effect over image
-    backdrop-filter: blur(10px);
-}
-
-.mobileMenuContent {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: $spacing-md;
-    opacity: 0; // Fixed: was overflow-y: auto which might conflict flex center
+  &:active {
     transform: scale(0.95);
-    transition: all $transition-base;
-    z-index: 2; // Above preview
-
-    .mobileMenu.open & {
-        opacity: 1;
-        transform: scale(1);
-        transition-delay: 0.1s;
-    }
+  }
 }
 
-.mobileLinks {
-    list-style: none;
-    text-align: center;
-    width: 100%;
-    max-width: 400px;
+.dialogNav {
+  padding-block: 4px;
 }
 
-.mobileLink {
-    display: block;
-    padding: $spacing-sm 0;
-    font-size: 2rem;
-    letter-spacing: -0.02em;
-    color: $color-text-primary;
-    transition: all $transition-fast;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: $font-serif;
-    font-weight: 500;
-
-    @include small-mobile {
-        font-size: 1.5rem;
-        padding: 0.75rem 0;
-    }
-
-    &:hover {
-        color: $color-accent;
-        transform: scale(1.05);
-    }
+.dialogList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-// ==========================================
-// NEW DARK FLOATING MENU
-// ==========================================
-
-.closeIcon {
-    font-size: 2rem;  // Match desktop hamburger (32px)
-    font-weight: 300;
-    color: currentColor;
-    line-height: 1;
-    
-    @include mobile {
-        font-size: 1.75rem; // Match mobile hamburger (28px)
-    }
-
-    .nav[data-nav-theme='dark'] & {
-        color: #ffffff;
-    }
-
-    .nav[data-nav-theme='light'] & {
-        color: #1d1d1f;
-    }
-
-    .navOpen & {
-        color: #ffffff;
-    }
+.dialogRow {
+  @include kertas-row;
+  min-block-size: 60px;
+  padding: 13px 22px;
 }
 
-.menuBackdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 999;
-    background: rgba(0, 0, 0, 0.2); // Subtle dim, not too dark
-    pointer-events: auto; // Ensure clicks register to close menu
+.dialogItem:not(:last-child) .dialogRow {
+  border-block-end: 1px solid var(--kertas-3);
 }
 
-.menuOverlay {
-    position: absolute; // Relative to .container
-    // Align top-right with the container edge (where the button is)
-    top: -16px; // Shift up for "padding" around button
-    right: -16px; // Shift right for "padding" around button
-    
-    max-height: calc(100vh - 24px);
-    width: min(420px, calc(100vw - 24px)); // Constrain width
-    z-index: 1100; // Below nav button (1102)
-    pointer-events: auto; // Ensure clickable inside the transparent nav container
-    
-    // iOS 26 Frosted Glass Effect
-    background: rgba(20, 20, 22, 0.75); // Translucent dark
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    
-    border-radius: 20px;
-    overflow-y: auto;
-    box-shadow: 
-        0 25px 80px rgba(0, 0, 0, 0.5),
-        inset 0 0 0 0.5px rgba(255, 255, 255, 0.05); // Inner glow
-    padding-top: 64px; // Reduced space for smaller button (48px + 16px gap)
-
-    @include mobile {
-        position: fixed; // On mobile, behave like a full/floating modal relative to screen
-        top: 12px;   // Increased margin/padding from edge
-        right: 12px;
-        left: 12px;
-        width: auto;
-        max-height: calc(100vh - 24px);
-        border-radius: 20px;
-        padding-top: 64px;
-        z-index: 1100;
-    }
+.rowLead {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  min-inline-size: 0;
 }
 
-
-
-.menuContent {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 24px;
-    min-height: 400px;
-
-    @include mobile {
-        padding: 40px 24px; // Increased padding to visually align with Title
-        min-height: 350px;
-    }
+.rowIndex {
+  font-family: var(--font-kertas-mono);
+  font-size: 0.75rem;
+  line-height: 1;
+  color: var(--dakwat-3);
+  flex-shrink: 0;
+  transition: color var(--dur-fast) var(--ease-settle);
 }
 
-.menuNav {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+.rowText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
-.menuLink {
-    font-family: var(--font-serif);
-    font-size: clamp(1.5rem, 5vw, 2rem);
-    font-weight: 400;
-    color: #ffffff;
-    text-decoration: none;
-    line-height: 1.4;
-    padding: 4px 0;
-    transition: all 0.3s ease;
-    display: inline-block;
-    user-select: none;
-    -webkit-user-select: none;
-
-    &:hover {
-        color: rgba(255, 255, 255, 0.6);
-    }
-
-    &.active {
-        text-decoration: underline;
-        text-underline-offset: 6px;
-        text-decoration-thickness: 1px;
-    }
+.rowLabel {
+  font-family: var(--font-kertas-serif);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--dakwat);
 }
 
-.menuFooter {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 32px;
+.rowMeta {
+  font-family: var(--font-kertas-sans);
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  color: var(--dakwat-3);
 }
 
-.socialCard {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
-    background: #1a1a1c;
-    border-radius: 12px;
-
-    @include mobile {
-        padding-bottom: 8px;
-        padding-top: 12px;
-        padding: 12px 20px 8px 20px;
-    }
+.rowIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dakwat-3);
+  flex-shrink: 0;
+  transition:
+    color var(--dur-fast) var(--ease-settle),
+    transform var(--dur-fast) var(--ease-settle);
 }
 
-.socialLabel {
-    font-family: var(--font-sans);
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.6);
+.dialogRow:hover .rowIcon {
+  color: var(--dakwat);
+  transform: translateX(3px);
 }
 
-.socialIcons {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+.activeRow {
+  .rowIndex {
+    color: var(--dakwat);
+  }
+
+  .rowLabel {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+
+  .rowIcon {
+    color: var(--dakwat);
+  }
 }
 
-.socialIcon {
-    font-family: var(--font-sans);
-    font-size: 1rem;
-    font-weight: 600;
-    color: #ffffff;
-    text-decoration: none;
-    transition: opacity 0.3s ease;
-
-    &:hover {
-        opacity: 0.6;
-    }
+.dialogFooter {
+  padding: 16px 22px 20px;
+  background: var(--kertas-2);
+  border-block-start: 1px solid var(--kertas-3);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.infoCard {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
-    background: #1a1a1c;
-    border-radius: 12px;
+.dialogCaption {
+  @include kertas-kicker;
+  font-size: 0.6875rem;
 }
 
-.infoLabel {
-    font-family: var(--font-sans);
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.6);
+.socialLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
 }
 
-.infoValue {
-    font-family: var(--font-sans);
-    font-size: 1rem;
-    font-weight: 600;
-    color: #ffffff;
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-block-size: 36px;
+  font-family: var(--font-kertas-sans);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--dakwat-2);
+  transition: color var(--dur-fast) var(--ease-settle);
+
+  &:hover {
+    color: var(--dakwat);
+  }
+}
+
+@media print {
+  .header,
+  .menuDialog {
+    display: none !important;
+  }
 }

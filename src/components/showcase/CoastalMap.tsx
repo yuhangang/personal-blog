@@ -2,8 +2,9 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { Camera, Maximize2 } from "lucide-react";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs";
 import { Cormorant_Garamond } from "next/font/google";
 import Image from "next/image";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -24,9 +25,11 @@ export interface CoastalMapProps {
   overlayTitle?: string;
 }
 
-const EAST_COAST_BOUNDS: [[number, number], [number, number]] = [
-  [101.22, 3.92],
-  [104.48, 6.72],
+const EAST_COAST_BOUNDS: [number, number, number, number] = [
+  101.22,
+  3.92,
+  104.48,
+  6.72,
 ];
 
 const cormorant = Cormorant_Garamond({
@@ -372,6 +375,7 @@ export default function CoastalMap({ onImageClick, overlayLabel, overlayTitle }:
       <Map
         ref={mapRef}
         mapLib={maplibregl}
+        workerUrl={maplibreWorkerUrl}
         initialViewState={{
           longitude: 102.86,
           latitude: 5.42,

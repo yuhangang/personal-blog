@@ -2,66 +2,91 @@
 @use '../../styles/mixins' as *;
 
 .page {
-    min-height: 100vh;
-    background: #050505;
-    color: #f4f0e8;
-    overflow-x: hidden;
-    position: relative;
+  min-height: 100dvh;
+  background: #05070c;
+  color: #f4f0e8;
+  overflow-x: clip;
+  position: relative;
 }
 
-.backgroundLayer {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-
-    &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background-image: url('https://cdn.yuhangang.com/pantai-timor/DSC08235.jpg');
-        background-size: cover;
-        background-position: center;
-        filter: blur(80px) saturate(1.5);
-        opacity: 0.15;
-    }
-
-    &::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at 50% 0%, rgba(255, 77, 0, 0.05), transparent 70%);
-        opacity: 0.8;
-    }
+.mapSection {
+  scroll-margin-top: calc(84px + env(safe-area-inset-top));
+  padding: 0 clamp(16px, 4vw, 32px) clamp(4.5rem, 8vw, 7rem);
+  background: #05070c;
 }
 
-.galleryGrid {
-    padding: 0 0 clamp(8rem, 15vw, 15rem);
-    position: relative;
-    z-index: 1;
+.mapFrame {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
 }
 
-.gridContainer {
-    width: 90%;
-    max-width: 1400px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: clamp(2rem, 5vw, 6rem);
-
-    @include tablet {
-        gap: 3rem;
-    }
-
-    @include mobile {
-        grid-template-columns: 1fr;
-        gap: 4rem;
-    }
+.collectionsSection {
+  position: relative;
+  z-index: 2;
+  scroll-margin-top: 92px;
+  padding: clamp(4.5rem, 8vw, 7rem) clamp(16px, 4vw, 32px)
+    clamp(5.5rem, 9vw, 8.5rem);
+  border-top: 1px solid rgba(244, 240, 232, 0.08);
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(26, 51, 77, 0.14),
+      transparent 60%
+    ),
+    #05070c;
 }
 
-@include mobile {
-    .gridContainer {
-        width: 100%;
-        padding: 0 1.5rem;
-    }
+.sectionHeader {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto clamp(2rem, 3.5vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.sectionKicker {
+  margin: 0;
+  font-family: var(--font-kertas-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(244, 240, 232, 0.52);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-kertas-serif);
+  font-size: clamp(2.125rem, 4.5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: #f4f0e8;
+
+  em {
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    color: rgba(244, 240, 232, 0.84);
+  }
+}
+
+.sectionCopy {
+  margin: 0.35rem 0 0;
+  max-width: 42rem;
+  font-family: var(--font-kertas-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(244, 240, 232, 0.62);
+  text-wrap: pretty;
+}
+
+.bandsStack {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
 }

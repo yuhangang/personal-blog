@@ -101,24 +101,6 @@ export const AnimatedTitle = ({
          <span className={styles["title-dot"]}></span>
          <span className={`${amiri.className} ${styles["jawi-title"]}`} dir="rtl">{PANTAI_TIMOR_COPY.animatedTitle.jawi}</span>
       </motion.div>
-
-      <motion.p 
-        initial={{ opacity: 0 }}
-        style={{ 
-          x: titleX,
-          y: useTransform(finalTitleY, (y: string) => `calc(${y} + clamp(4.5rem, 14vw, 11.5rem))`),
-          left: titleLeft,
-          top: titleTop,
-          scale: titleScale,
-          opacity: secondaryHeroOpacity,
-          filter: finalTitleBlur,
-          position: "absolute",
-          transformOrigin: "center center"
-        }}
-        className={styles["subtitle-text"]}
-      >
-        {PANTAI_TIMOR_COPY.animatedTitle.subtitle}
-      </motion.p>
     </div>
   );
 };

@@ -61,17 +61,14 @@ When editing this subproject:
 
 ## Local Section Rules
 
-- Keep the local archive/local section as two clear zones:
-  - editorial header and supporting copy
-  - framed interactive carousel/control area
+- Keep the local archive/local section photo-first, with the framed horizontal carousel (`#pantai-timor-scroller`) and no overlaid copy or archive CTA.
 - Preserve the established scroll container behavior around `#pantai-timor-scroller`.
-- Do not collapse the section back into a crowded single block unless the route is being intentionally redesigned.
+- Keep editorial copy, photo captions, and footer omitted so the route remains an image-led gallery with title and top navigation chrome only.
 
 ## Map and Geography Rules
 
-- Map polish must stay inside the route’s editorial language.
-- Interaction constraints such as zoom bounds are part of the route experience and should be verified live.
-- Avoid turning the geography section into a generic app map embed.
+- The map (`CoastalGeography`), text-led sections (`HistoryCulture`, `QuoteSection`), and `Footer` have been removed from the active `/pantai-timor` route.
+- Navigation section links must target active sections (`#almanac`, `#memory`, `#village`, `#archive`).
 
 ## Validation
 
