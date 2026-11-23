@@ -21,12 +21,13 @@ export default function Home() {
         ariaLabel="Home cover"
         scrollTargetId="practice"
         focal="penang"
+        stickyParallax
         headline={
           <>
             Explore, <em>Evolve</em>
           </>
         }
-        subtitle="Software engineer in Kuala Lumpur — mobile apps, web, mountain trails, and coastal backroads."
+        subtitle="Fueled by curiosity — creating with heart, wandering far, and always chasing what comes next."
       />
       <PracticeSection />
       {/* <PhotographyDeck /> */}

@@ -17,13 +17,13 @@ export default function Footer() {
 
   if (HIDDEN_ROUTES.has(pathname)) return null;
 
-  const isGallery = pathname.startsWith("/gallery");
+  const isDarkRoute = pathname.startsWith("/gallery") || pathname === "/about";
 
   return (
     <footer
       id="site-footer"
       className={styles.footer}
-      data-footer-theme={isGallery ? "dark" : "light"}
+      data-footer-theme={isDarkRoute ? "dark" : "light"}
     >
       <div className={styles.inner}>
         <div className={styles.grid}>

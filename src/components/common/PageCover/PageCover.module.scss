@@ -2,6 +2,8 @@
 @use '../../../styles/mixins' as *;
 
 .coverSection {
+  --cover-progress: 0;
+  --cover-dim-max: 0.36;
   position: relative;
   width: 100%;
   height: 100svh;
@@ -16,6 +18,222 @@
   }
 }
 
+@mixin sticky-cover-motion {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  .coverDim {
+    opacity: calc(var(--cover-progress) * var(--cover-dim-max));
+    will-change: opacity;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .coverMedia {
+      transform: translate3d(0, calc(var(--cover-progress) * 4%), 0)
+        scale(calc(1 + var(--cover-progress) * 0.05));
+      will-change: transform;
+    }
+
+    .coverOverlay {
+      transform: translate3d(0, calc(var(--cover-progress) * -48px), 0);
+      opacity: calc(1 - var(--cover-progress) * 1.15);
+      will-change: transform, opacity;
+    }
+  }
+
+  @supports ((animation-timeline: scroll()) and (animation-range: 0% 100%)) {
+    .coverDim {
+      animation: coverDimScroll linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0px 100svh;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .coverMedia {
+        transform: none;
+        animation: coverMediaScroll linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 0px 100svh;
+      }
+
+      .coverOverlay {
+        transform: none;
+        opacity: 1;
+        animation: coverOverlayScroll linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 0px 65svh;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .coverMedia,
+    .coverOverlay {
+      transform: none;
+      opacity: 1;
+      will-change: auto;
+    }
+  }
+}
+
+.coverSectionSticky {
+  @media (min-width: $breakpoint-tablet) {
+    @include sticky-cover-motion;
+  }
+}
+
+.coverSectionImmersive {
+  --cover-dim-max: 0.74;
+  height: 100svh;
+  min-height: 100svh;
+  aspect-ratio: auto;
+
+  @include mobile {
+    height: 100svh;
+    min-height: 100svh;
+    aspect-ratio: auto;
+
+    .coverOverlay {
+      padding-top: calc(clamp(88px, 12svh, 128px) + env(safe-area-inset-top));
+    }
+
+    .coverHeader {
+      flex: 0;
+      justify-content: flex-start;
+    }
+  }
+
+  @include sticky-cover-motion;
+}
+
+.coverHeaderAlignTopLeft {
+  @media (min-width: $breakpoint-tablet) {
+    .scrimRadial {
+      background: radial-gradient(
+        ellipse 62% 48% at 22% 20%,
+        rgba(14, 15, 16, 0.42) 0%,
+        rgba(14, 15, 16, 0.14) 58%,
+        rgba(14, 15, 16, 0) 100%
+      );
+    }
+
+    .coverOverlay {
+      padding-top: calc(clamp(92px, 11svh, 132px) + env(safe-area-inset-top));
+    }
+
+    .coverHeader {
+      width: 100%;
+      max-width: var(--footer-width);
+      margin-inline: auto;
+      align-items: flex-start;
+    }
+
+    .coverHeadline,
+    .coverSubtitle {
+      text-align: left;
+    }
+  }
+}
+
+.coverNoClick {
+  .coverFrame {
+    cursor: default;
+  }
+}
+
+.coverStickyHeader {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+
+  @supports ((animation-timeline: scroll()) and (animation-range: 0% 100%)) {
+    .coverDim {
+      animation: coverDimScroll linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0% 100%;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .coverMedia {
+        animation: coverMediaScroll linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 0% 100%;
+      }
+    }
+  }
+
+  @include mobile {
+    .scrimBottom {
+      height: 52%;
+      background: linear-gradient(
+        to top,
+        rgba(14, 15, 16, 0.86) 0%,
+        rgba(14, 15, 16, 0.52) 55%,
+        rgba(14, 15, 16, 0) 100%
+      );
+    }
+
+    .coverCredit {
+      display: none;
+    }
+
+    @supports ((animation-timeline: scroll()) and (animation-range: 0% 100%)) {
+      @media (prefers-reduced-motion: no-preference) {
+        .coverOverlay {
+          animation: coverOverlayScroll linear both;
+          animation-timeline: scroll(root block);
+          animation-range: 0px 35svh;
+        }
+      }
+    }
+  }
+
+  @media (min-width: $breakpoint-tablet) {
+    .coverFrame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(
+        to left,
+        rgba(14, 15, 16, 0.64) 0%,
+        rgba(14, 15, 16, 0.34) 48%,
+        rgba(14, 15, 16, 0) 76%
+      );
+    }
+
+    .coverOverlay {
+      z-index: 4;
+      pointer-events: none;
+      transform: none;
+      opacity: 1;
+      animation: none;
+      will-change: auto;
+    }
+
+    @supports ((animation-timeline: scroll()) and (animation-range: 0% 100%)) {
+      @media (prefers-reduced-motion: no-preference) {
+        .coverOverlay {
+          animation: none;
+          transform: none;
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+.coverDim {
+  position: absolute;
+  inset: 0;
+  background-color: #0e0f10;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
 .coverFrame {
   position: relative;
   width: 100%;
@@ -24,6 +242,11 @@
   background-color: #16181a;
   color: #f8f6f2;
   cursor: pointer;
+}
+
+.coverMedia {
+  position: absolute;
+  inset: 0;
 }
 
 .coverImage {
@@ -65,12 +288,21 @@
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    ellipse 76% 48% at 50% 24%,
+    ellipse 72% 46% at 50% 26%,
     rgba(14, 15, 16, 0.34) 0%,
     rgba(14, 15, 16, 0.1) 60%,
     rgba(14, 15, 16, 0) 100%
   );
   pointer-events: none;
+
+  @include mobile {
+    background: radial-gradient(
+      ellipse 84% 52% at 50% 48%,
+      rgba(14, 15, 16, 0.38) 0%,
+      rgba(14, 15, 16, 0.12) 60%,
+      rgba(14, 15, 16, 0) 100%
+    );
+  }
 }
 
 .scrimBottom {
@@ -91,9 +323,9 @@
   z-index: 2;
   width: 100%;
   height: 100%;
-  padding: calc(clamp(88px, 11vh, 132px) + env(safe-area-inset-top))
-    clamp(20px, 5vw, 48px)
-    calc(clamp(22px, 3.8vh, 36px) + env(safe-area-inset-bottom));
+  padding: calc(clamp(88px, 12svh, 180px) + env(safe-area-inset-top))
+    clamp(20px, 5vw, 40px)
+    calc(clamp(22px, 4svh, 48px) + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -109,17 +341,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  max-width: 560px;
+  gap: clamp(10px, 1.2vh, 16px);
+  max-width: 680px;
 
   @include mobile {
+    flex: 1;
+    justify-content: center;
     gap: 8px;
   }
 }
 
 .coverHeadline {
   font-family: var(--font-kertas-serif);
-  font-size: clamp(2.125rem, 1.35rem + 3.2vw, 4rem);
+  font-size: clamp(2.125rem, 1.35rem + 3.2vw, 5rem);
   font-weight: 700;
   line-height: 1.04;
   letter-spacing: -0.025em;
@@ -137,7 +371,7 @@
 
 .coverSubtitle {
   font-family: var(--font-kertas-sans);
-  font-size: clamp(0.9375rem, 0.88rem + 0.35vw, 1.125rem);
+  font-size: clamp(0.9375rem, 0.85rem + 0.35vw, 1.25rem);
   font-weight: 400;
   line-height: 1.5;
   letter-spacing: -0.005em;
@@ -156,6 +390,8 @@
 
 .coverBottomRow {
   width: 100%;
+  max-width: var(--footer-width);
+  margin-inline: auto;
   margin-top: auto;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -172,7 +408,7 @@
 .coverCredit {
   justify-self: start;
   font-family: var(--font-kertas-mono);
-  font-size: 0.75rem;
+  font-size: clamp(0.75rem, 0.7rem + 0.12vw, 0.875rem);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgba(248, 246, 242, 0.84);
@@ -201,6 +437,12 @@
     border-color var(--dur-fast) var(--ease-settle),
     transform var(--dur-fast) var(--ease-settle);
 
+  @media (min-width: 1600px) {
+    min-height: 48px;
+    padding: 0 20px;
+    gap: 8px;
+  }
+
   &:hover {
     background: rgba(14, 15, 16, 0.44);
     border-color: rgba(248, 246, 242, 0.44);
@@ -218,7 +460,7 @@
 
 .scrollCueLabel {
   font-family: var(--font-kertas-mono);
-  font-size: 0.7rem;
+  font-size: clamp(0.7rem, 0.66rem + 0.08vw, 0.8125rem);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   line-height: 1;
@@ -227,6 +469,35 @@
 .scrollCueIcon {
   flex-shrink: 0;
   animation: scrollBob 2.2s ease-in-out infinite;
+}
+
+@keyframes coverDimScroll {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: var(--cover-dim-max, 0.36);
+  }
+}
+
+@keyframes coverMediaScroll {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(0, 4%, 0) scale(1.06);
+  }
+}
+
+@keyframes coverOverlayScroll {
+  from {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  to {
+    transform: translate3d(0, -48px, 0);
+    opacity: 0;
+  }
 }
 
 @keyframes coverSettle {

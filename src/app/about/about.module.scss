@@ -4,29 +4,55 @@
 .page {
   min-height: 100dvh;
   width: 100%;
-  background: var(--kertas-ground);
-  color: var(--dakwat);
+  background: #0e0f10;
+  color: #f8f6f2;
   overflow-x: clip;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  align-items: flex-start;
+  background: transparent;
+
+  @media (min-width: $breakpoint-tablet) {
+    align-items: center;
+    padding: clamp(96px, 11svh, 132px) clamp(20px, 5vw, 40px)
+      clamp(72px, 9svh, 112px);
+  }
 }
 
 .spine {
   @include kertas-spine;
   display: flex;
   flex-direction: column;
-  min-height: 100dvh;
-  padding: clamp(72px, 10vw, 112px) clamp(20px, 5vw, 32px)
-    clamp(88px, 12vw, 136px);
+  padding: 66svh clamp(20px, 5vw, 32px) clamp(72px, 12vw, 112px);
+
+  @media (min-width: $breakpoint-tablet) {
+    width: min(100%, var(--footer-width));
+    padding: 0;
+    align-items: flex-end;
+  }
 }
 
 .bio {
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  @media (min-width: $breakpoint-tablet) {
+    width: min(100%, 560px);
+  }
 }
 
 .title {
   @include kertas-heading;
   font-size: clamp(2.125rem, 1.35rem + 2.6vw, 3.125rem);
+  color: #ffffff;
+  text-shadow: 0 2px 24px rgba(10, 12, 14, 0.45);
   margin: 0;
 }
 
@@ -38,13 +64,15 @@
 
 .prose {
   @include kertas-body;
+  color: rgba(248, 246, 242, 0.88);
+  text-shadow: 0 1px 14px rgba(10, 12, 14, 0.4);
   margin: 0;
 }
 
 .linksRow {
   margin-top: 12px;
   padding-top: 16px;
-  border-top: 1px solid var(--kertas-3);
+  border-top: 1px solid rgba(248, 246, 242, 0.2);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -60,9 +88,10 @@
   font-family: var(--font-kertas-sans);
   font-size: 0.9375rem;
   font-weight: 500;
-  color: var(--dakwat);
+  color: #ffffff;
+  text-shadow: 0 1px 10px rgba(10, 12, 14, 0.55);
   text-decoration: underline;
-  text-decoration-color: rgba(29, 26, 22, 0.28);
+  text-decoration-color: rgba(248, 246, 242, 0.4);
   text-underline-offset: 5px;
   text-decoration-thickness: 1px;
   transition:
@@ -74,7 +103,7 @@
   }
 
   &:hover {
-    text-decoration-color: var(--dakwat);
+    text-decoration-color: #ffffff;
 
     svg {
       transform: translateX(3px);
@@ -96,10 +125,11 @@
   min-height: var(--tap);
   font-family: var(--font-kertas-sans);
   font-size: 0.875rem;
-  color: var(--dakwat-3);
+  color: rgba(248, 246, 242, 0.82);
+  text-shadow: 0 1px 10px rgba(10, 12, 14, 0.6);
   transition: color var(--dur-fast) var(--ease-settle);
 
   &:hover {
-    color: var(--dakwat);
+    color: #ffffff;
   }
 }

@@ -17,7 +17,7 @@ export default function AboutPage() {
   const age = calculateAge("1998-01-06");
 
   return (
-    <main className={styles.page} data-theme="light">
+    <main className={styles.page} data-theme="dark">
       <PageCover
         src="/images/about-cover.webp"
         alt="Yu Hang Ang standing with trekking poles and a backpack on a stone trail beside a waterfall at the Manaslu Circuit, Nepal"
@@ -25,6 +25,10 @@ export default function AboutPage() {
         ariaLabel="Profile cover"
         scrollTargetId="about-bio"
         focal="manaslu"
+        immersive
+        headerAlign="top-left"
+        showScrollCue={false}
+        stickyHeader
         headline={
           <>
             About <em>Me</em>
@@ -33,8 +37,9 @@ export default function AboutPage() {
         subtitle={`${age}, software engineer in Kuala Lumpur — leading mobile at BookDoc.`}
       />
 
-      <div id="about-bio" className={styles.spine}>
-        <article className={styles.bio}>
+      <section id="about-bio" className={styles.content}>
+        <div className={styles.spine}>
+          <article className={styles.bio}>
           <h1 className={styles.title}>Yu Hang Ang</h1>
 
           <div className={styles.proseGroup}>
@@ -85,7 +90,8 @@ export default function AboutPage() {
             </div>
           </nav>
         </article>
-      </div>
+        </div>
+      </section>
     </main>
   );
 }

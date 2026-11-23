@@ -177,7 +177,7 @@
   align-items: center;
   min-block-size: var(--tap);
   font-family: var(--font-kertas-serif);
-  font-size: 1.0625rem;
+  font-size: clamp(1.0625rem, 0.98rem + 0.14vw, 1.25rem);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.015em;
@@ -253,7 +253,7 @@
   min-block-size: var(--tap);
   padding-inline: 2px;
   font-family: var(--font-kertas-sans);
-  font-size: 0.875rem;
+  font-size: clamp(0.875rem, 0.82rem + 0.1vw, 0.96875rem);
   font-weight: 400;
   line-height: 1;
   letter-spacing: 0.025em;

@@ -59,10 +59,10 @@ export default function Navigation() {
   const [homeSectionLabel, setHomeSectionLabel] = useState<string | null>(null);
 
   const isHidden = HIDDEN_ROUTES.has(pathname);
-  const isGallery = pathname.startsWith("/gallery");
+  const isDarkRoute = pathname.startsWith("/gallery") || pathname === "/about";
   const isHome = pathname === "/";
 
-  const navTheme: "light" | "dark" = isGallery
+  const navTheme: "light" | "dark" = isDarkRoute
     ? "dark"
     : overHeroCover || (isHome && overDarkSurface)
       ? "dark"
@@ -76,7 +76,13 @@ export default function Navigation() {
     const handleScroll = () => {
       const coverEl = document.querySelector<HTMLElement>("[data-nav-cover]");
       if (coverEl) {
-        const threshold = Math.max(coverEl.offsetHeight * 0.65, 240);
+        const coverMode = coverEl.getAttribute("data-nav-cover");
+        const threshold =
+          coverMode === "fixed"
+            ? 24
+            : coverMode === "sticky"
+              ? Math.max(coverEl.offsetHeight - 72, 240)
+              : Math.max(coverEl.offsetHeight * 0.65, 240);
         const pastCover = window.scrollY >= threshold;
         setOverHeroCover(!pastCover);
         setScrolledPastHero(pastCover);
@@ -333,7 +339,7 @@ export default function Navigation() {
         {...({ closedby: "any" } as Record<string, string>)}
         aria-labelledby="site-menu-title"
         className={styles.menuDialog}
-        data-dialog-theme={isGallery ? "dark" : "light"}
+        data-dialog-theme={isDarkRoute ? "dark" : "light"}
         onClose={handleDialogClose}
       >
         <div className={styles.dialogHeader}>
