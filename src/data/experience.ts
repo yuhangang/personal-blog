@@ -43,8 +43,8 @@ export const RESUME_CONTACT = {
 } as const;
 
 export const RESUME_SUMMARY: readonly string[] = [
-  "Senior software engineer and mobile team lead with 5+ years of experience building and scaling production mobile and web systems across healthcare, national logistics, consumer media, and enterprise software. Currently leading mobile engineering across iOS, Android, and Flutter at BookDoc, guiding architecture decisions, incremental cross-platform migration, CI/CD release consolidation, and mobile security governance.",
-  "Experienced owning the full product lifecycle from requirements, schema design, and testing through store release and observability, including leading the Flutter migration for nationwide agent tooling at POS Malaysia and delivering sub-second article rendering, native iOS/Android widgets, and production monitoring that cut issue detection time by 50% for Lumi News Malaysia's 700K+ download platform.",
+  "Senior software engineer and mobile team lead with 5+ years of experience shipping production mobile and web products across healthcare, national logistics, consumer media, and enterprise software. Currently leading BookDoc's iOS, Android, and Flutter team, setting the technical direction and standards that help the team ship patient-facing features faster and more safely, while owning data analytics and database administration for the business.",
+  "Track record of tying engineering work to business outcomes: led the Flutter migration of POS Malaysia's nationwide agent app and shipped payments and analytics in its flagship app; at Lumi News Malaysia (700K+ downloads), delivered sub-second article rendering, home-screen widgets that drive daily engagement, and monitoring that cut issue detection time by 50%.",
 ] as const;
 
 export const EXPERIENCES: readonly ExperienceItem[] = [
@@ -57,12 +57,14 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
     timeframe: "2026 - Present",
     domain: "Digital Healthcare",
     summary:
-      "Leading the mobile team across BookDoc's iOS, Android, and Flutter apps, guiding cross-platform migration, release automation, code governance, and security standards.",
+      "Leading BookDoc's mobile team and owning data analytics and database administration, helping the business ship patient-facing features faster and more safely.",
     description: [
-      "Lead the mobile engineering team across iOS, Android, and Flutter as repository code owner, guiding architecture decisions, code reviews, engineering standards, and release coordination.",
-      "Drive the incremental migration of native iOS and Android features (including teleconsultation, health management, and mental wellness) into a shared Flutter module with staged, tester-gated rollouts.",
-      "Consolidated iOS and Android QA and production release workflows into a unified automated pipeline with Slack reporting, resolving Xcode Cloud build-number conflicts.",
-      "Authored the mobile security policy and prioritized remediation roadmap for patient health data, establishing release safeguards and logging standards across engineering.",
+      "Lead the mobile team behind BookDoc's patient apps, owning technical direction, code quality, and release coordination so the team ships consistently across iOS and Android.",
+      "Moving core patient features (teleconsultation, health management, mental wellness) onto one shared codebase, so each feature is built once for both platforms and reaches patients through low-risk staged rollouts.",
+      "Unified iOS and Android releases into one automated CI/CD pipeline, cutting manual release work and giving QA and product real-time visibility into every build.",
+      "Introduced AI-assisted engineering workflows (MCP tooling and an agent harness) that let engineers hand routine work to AI agents without lowering review standards.",
+      "Expanded scope beyond mobile to own data analytics, admin systems, and database administration, giving the business reliable reporting for decisions and keeping production data healthy and access-controlled.",
+      "Authored the mobile security policy and remediation roadmap for patient health data, aligning engineering and leadership on risk priorities and raising the security bar for every release.",
     ],
   },
   {
@@ -74,12 +76,12 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
     timeframe: "2025 - 2026",
     domain: "National Logistics",
     summary:
-      "Led the Flutter migration of POS Mini agent tooling alongside payment and analytics pipelines for POS Mobile.",
+      "Modernized POS Malaysia's nationwide agent app with a Flutter migration and brought payments and analytics into the flagship POS Mobile app.",
     description: [
-      "Built logistics operation apps and backend services tailored to client workflows, gathering requirements, writing user stories, and presenting demos to stakeholders.",
-      "Maintained and improved the legacy Ionic-based POS Mini application used by agents nationwide, monitoring server telemetry and leading the migration to Flutter.",
-      "Integrated payment gateways, data analytics, and messaging pipelines into the flagship POS Mobile app.",
-      "Coordinated production mobile releases and monitoring alongside business, data, and infrastructure teams.",
+      "Led the migration of POS Mini, the app agents use nationwide, from legacy Ionic to Flutter, keeping the live app stable through server telemetry monitoring while modernizing a business-critical tool.",
+      "Integrated payment gateways, data analytics, and messaging pipelines into the flagship POS Mobile app, enabling in-app payments and giving business teams the usage data behind product decisions.",
+      "Turned client operational workflows into logistics apps and backend services, owning requirements, user stories, and stakeholder demos to keep delivery aligned with business needs.",
+      "Coordinated production mobile releases and monitoring with business, data, and infrastructure teams.",
     ],
   },
   {
@@ -91,12 +93,12 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
     timeframe: "2023 - 2025",
     domain: "Consumer Media · 700K+ Downloads",
     summary:
-      "Built low-latency article rendering, production monitoring that halved issue detection time, and native iOS and Android widgets.",
+      "Kept a 700K+ download news app fast and reliable with sub-second article rendering and monitoring that halved issue detection time, and grew daily engagement with native widgets.",
     description: [
-      "Owned full product lifecycle features for a media platform with 700K+ downloads, from system design to launch and post-release tuning.",
-      "Built a content rendering engine supporting HTML injections, social media embeds, and in-article search with sub-second latency.",
-      "Set up production logging and observability tooling that cut issue detection time by 50%.",
-      "Built native home-screen widgets using Swift (WidgetKit) and Kotlin (Jetpack Glance) to drive daily active engagement.",
+      "Owned features end to end for a 700K+ download media platform, from system design through launch and tuning.",
+      "Built a sub-second rendering engine for rich articles, covering HTML injections, social embeds, and in-article search.",
+      "Built production observability that cut issue detection time by 50%, catching problems before they reached more readers.",
+      "Built native home-screen widgets in Swift (WidgetKit) and Kotlin (Jetpack Glance) that bring readers back daily.",
     ],
   },
   {
@@ -108,11 +110,10 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
     timeframe: "2022 - 2023",
     domain: "Enterprise Mobile · MyAstro",
     summary:
-      "Built reward systems, deep-linking, and unit tests for the MyAstro app.",
+      "Delivered customer engagement features for the MyAstro app and made its legacy codebase safer to change.",
     description: [
-      "Developed and groomed features for the MyAstro app, including reward systems, inbox flows, and deep-linking.",
-      "Refactored legacy modules, added unit test coverage, and wrote system documentation.",
-      "Worked in an agile engineering squad to deliver features across MyAstro mobile systems.",
+      "Delivered reward systems, inbox flows, and deep-linking for the MyAstro app to support customer engagement.",
+      "Refactored legacy modules and added unit tests and docs, making the codebase safer to change and faster to onboard onto.",
     ],
   },
   {
@@ -124,10 +125,10 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
     timeframe: "2021 - 2022",
     domain: "Healthcare & Inventory",
     summary:
-      "Built offline-first SQLite synchronization and field inventory software for low-connectivity clinics.",
+      "Kept healthcare field teams working without reliable connectivity through offline-first sync and inventory software.",
     description: [
-      "Designed a relational SQLite schema supporting offline-first data synchronization for healthcare field operations.",
-      "Built a full-cycle inventory monitoring system for reliable performance in low-connectivity environments.",
+      "Designed an offline-first SQLite schema and sync so healthcare field teams keep working without reliable connectivity.",
+      "Built a full-cycle inventory monitoring system that stays reliable in low-connectivity clinics.",
     ],
   },
   {
@@ -139,10 +140,10 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
     timeframe: "2020 - 2021",
     domain: "Live Commerce",
     summary:
-      "Fixed live production bugs and built React Native shopping flows for high-traffic events.",
+      "Kept a live-commerce platform stable and built shopping flows for high-traffic sales events.",
     description: [
-      "Diagnosed and fixed production bugs across a React Native live-streaming platform.",
-      "Built interactive shopping features for high-traffic promotional events.",
+      "Fixed production bugs on a React Native live-commerce platform, keeping live sales sessions stable.",
+      "Built interactive shopping features for high-traffic promotional sales events.",
     ],
   },
 ];
@@ -166,7 +167,7 @@ export const SKILL_GROUPS: readonly SkillGroup[] = [
   {
     category: "AI, SECURITY & QUALITY",
     skills:
-      "OWASP MASVS & Penetration Testing, Unit/Integration Testing, Agentic Coding (Claude Code, Codex, Antigravity, Gemini CLI)",
+      "OWASP MASVS & Penetration Testing, Unit/Integration Testing, Agentic Coding (Claude Code, Codex, Antigravity, Gemini CLI), MCP Servers & Agent Harnesses",
   },
 ];
 
