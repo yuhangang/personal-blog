@@ -44,7 +44,11 @@ export const Lightbox = ({
   const portalRoot = typeof document === "undefined" ? null : document.body;
   const prevIndexRef = useRef<number | null>(null);
   const scrollLockYRef = useRef(0);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const gridToggleRef = useRef<HTMLButtonElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [transitionDirection, setTransitionDirection] = useState(0);
+  const isOpen = activeImageIndex !== null;
 
   useEffect(() => {
     if (activeImageIndex !== null && prevIndexRef.current === null) {
@@ -110,7 +114,42 @@ export const Lightbox = ({
       window.scrollTo(0, scrollLockYRef.current);
     };
   }, [activeImageIndex]);
-  
+
+  // Modal focus: everything outside the viewer goes inert so Tab stays inside,
+  // focus starts on Close, and returns to the photo that opened it. Declared
+  // after the scroll lock so the page is back in place before focus returns.
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const dialog = dialogRef.current;
+    const opener =
+      document.activeElement instanceof HTMLElement && document.activeElement !== document.body
+        ? document.activeElement
+        : null;
+    const inertedNodes = Array.from(document.body.children).filter(
+      (node): node is HTMLElement => node instanceof HTMLElement && node !== dialog && !node.inert
+    );
+
+    inertedNodes.forEach((node) => {
+      node.inert = true;
+    });
+    closeButtonRef.current?.focus({ preventScroll: true });
+
+    return () => {
+      inertedNodes.forEach((node) => {
+        node.inert = false;
+      });
+      opener?.focus({ preventScroll: true });
+    };
+  }, [isOpen]);
+
+  const handleGridSelect = (index: number) => {
+    setActiveImageIndex(index);
+    setIsGridView(false);
+    // The focused cell is about to unmount; keep focus on the grid toggle.
+    gridToggleRef.current?.focus({ preventScroll: true });
+  };
+
   if (!portalRoot) return null;
 
   const activeImage = activeImageIndex === null ? null : FEATURED_IMAGES[activeImageIndex];
@@ -118,8 +157,12 @@ export const Lightbox = ({
   return createPortal(
     <AnimatePresence>
       {activeImageIndex !== null && activeImage && (
-        <motion.div 
-          initial={false} 
+        <motion.div
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label={PANTAI_TIMOR_COPY.lightbox.aria.dialog}
+          initial={false}
           animate={{ opacity: 1 }} 
           exit={{ opacity: 0 }} 
           transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
@@ -130,7 +173,8 @@ export const Lightbox = ({
           <div className={styles["lightbox-glow"]} />
           
           <div className={styles["lightbox-controls"]}>
-            <button 
+            <button
+              ref={gridToggleRef}
               type="button"
                aria-label={isGridView ? PANTAI_TIMOR_COPY.lightbox.aria.closeGrid : PANTAI_TIMOR_COPY.lightbox.aria.openGrid}
               onClick={(e) => {
@@ -147,7 +191,8 @@ export const Lightbox = ({
                 )}
               </div>
             </button>
-            <button 
+            <button
+              ref={closeButtonRef}
               type="button"
                aria-label={PANTAI_TIMOR_COPY.lightbox.aria.closeLightbox}
               onClick={() => setActiveImageIndex(null)}
@@ -196,8 +241,7 @@ export const Lightbox = ({
                 onClick={(e) => e.stopPropagation()}
               >
                 <InfiniteGrid
-                  setActiveImageIndex={setActiveImageIndex}
-                  setIsGridView={setIsGridView}
+                  onSelectImage={handleGridSelect}
                   activeImageIndex={activeImageIndex}
                 />
               </motion.div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useLenis } from "@/components/common/SmoothScroll/SmoothScroll";
 import { ptTrack } from "@/utils/ga-events";
 import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
@@ -13,13 +14,16 @@ interface CarouselItemProps {
   index: number;
   isActive: boolean;
   onClick: () => void;
+  onKeyboardFocus: (item: HTMLElement) => void;
 }
 
-const CarouselItem = React.forwardRef<HTMLDivElement, CarouselItemProps>(
-  ({ item, index, isActive, onClick }, ref) => {
+const CarouselItem = React.forwardRef<HTMLButtonElement, CarouselItemProps>(
+  ({ item, index, isActive, onClick, onKeyboardFocus }, ref) => {
     return (
-      <motion.div
+      <motion.button
         ref={ref}
+        type="button"
+        aria-haspopup="dialog"
         data-index={index}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -28,6 +32,10 @@ const CarouselItem = React.forwardRef<HTMLDivElement, CarouselItemProps>(
         onClick={() => {
           ptTrack.carouselClickImage(index, item.src);
           onClick();
+        }}
+        onFocus={(event) => {
+          // Mouse clicks focus the button too; only keyboard focus moves the page.
+          if (event.currentTarget.matches(":focus-visible")) onKeyboardFocus(event.currentTarget);
         }}
         className={`${styles["carousel-item"]} ${item.isPortrait ? styles.portrait : styles.landscape} ${isActive ? styles.active : styles.inactive}`}
       >
@@ -49,7 +57,7 @@ const CarouselItem = React.forwardRef<HTMLDivElement, CarouselItemProps>(
         
         {/* Archival Overlay */}
         <div className={styles["carousel-border"]} />
-      </motion.div>
+      </motion.button>
     );
   }
 );
@@ -66,8 +74,31 @@ export const TheLocalSection = ({
 }: TheLocalSectionProps) => {
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = React.useState(0);
-  
+  const { lenis } = useLenis();
+
   const total = FEATURED_IMAGES.length;
+
+  // The strip is moved by vertical scroll, so bringing a photo into view means
+  // scrolling the page to the point where that photo sits in the centre.
+  const scrollToItem = (item: HTMLElement) => {
+    const section = localSectionRef.current;
+    if (!section || translateX <= 0) return;
+
+    const travel = section.offsetHeight - window.innerHeight;
+    if (travel <= 0) return;
+
+    // offsetLeft ignores the strip's transform: it is the photo's resting place.
+    const centreOffset = item.offsetLeft + item.offsetWidth / 2 - window.innerWidth / 2;
+    const progress = Math.min(1, Math.max(0, centreOffset / translateX));
+    const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+    const top = sectionTop + progress * travel;
+
+    if (lenis) {
+      lenis.scrollTo(top);
+    } else {
+      window.scrollTo({ top });
+    }
+  };
   const [translateX, setTranslateX] = React.useState(0);
 
   const { scrollYProgress } = useScroll({
@@ -153,6 +184,7 @@ export const TheLocalSection = ({
                 index={idx}
                 isActive={idx === activeIdx}
                 onClick={() => setActiveImageIndex(idx)}
+                onKeyboardFocus={scrollToItem}
               />
             ))}
           </motion.div>

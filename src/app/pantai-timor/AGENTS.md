@@ -58,11 +58,19 @@ When editing this subproject:
 - Prevent visible layout shift when the overlay opens.
 - Gesture handling should belong to the overlay experience, including pinch/zoom ownership when that behavior is present.
 - Browser proof is required for overlay, swipe, zoom, and scroll-lock fixes.
+- The lightbox is a modal `role="dialog"`: while open it sets `inert` on every other `<body>` child, focuses Close, and returns focus to the opener on close. Keep that focus effect declared after the scroll-lock effect so the page is restored before focus returns.
+- The grid view is one tab stop with arrow-key movement (roving `tabIndex`); arrow keys pan the grid to the focused cell and are stopped from reaching the page's previous/next handler.
+
+## Focus
+
+- The route draws its own `#e3e1da` focus ring, scoped to `html.pantai-timor-scroll` so it reaches the portalled lightbox. Don't replace it per component with `outline: none` or ad hoc rings.
+- Clipping containers that hold focusable photos (`.local-sticky-container`, `.infinite-grid-container`) use `overflow: clip`, not `hidden`: a `hidden` box can still be scrolled by focus, which knocks transform-driven layouts out of step.
 
 ## Local Section Rules
 
 - Keep the local archive/local section photo-first, with the framed horizontal carousel (`#pantai-timor-scroller`) and no overlaid copy or archive CTA.
 - Preserve the established scroll container behavior around `#pantai-timor-scroller`.
+- Carousel photos are buttons. Keyboard focus scrolls the page (through Lenis when active) to the point where the strip centres that photo; mouse focus does not move the page.
 - Keep editorial copy, photo captions, and footer omitted so the route remains an image-led gallery with title and top navigation chrome only.
 
 ## Map and Geography Rules

@@ -2,16 +2,36 @@
 
 import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
-import type { PointerEvent as ReactPointerEvent } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent } from "react";
 import Image from "next/image";
 import { FEATURED_IMAGES, getThumbnailUrl } from "../config";
 import styles from "../pantai-timor.module.scss";
 
 interface InfiniteGridProps {
-  setActiveImageIndex: (index: number) => void;
-  setIsGridView: (isGrid: boolean) => void;
+  onSelectImage: (index: number) => void;
   activeImageIndex: number | null;
 }
+
+interface Cell {
+  col: number;
+  row: number;
+}
+
+const ARROW_STEPS: Record<string, Cell> = {
+  ArrowLeft: { col: -1, row: 0 },
+  ArrowRight: { col: 1, row: 0 },
+  ArrowUp: { col: 0, row: -1 },
+  ArrowDown: { col: 0, row: 1 },
+};
+
+// Cells are indexed from -1 to count - 2 and the grid wraps, so moving past
+// either end lands on the cell drawn next to it.
+const wrapCellIndex = (value: number, count: number) => (((value + 1) % count) + count) % count - 1;
+
+// The offset that puts a cell at `target`, picked from all wrapped equivalents
+// as the one nearest the current offset so the pan stays short.
+const nearestOffset = (current: number, target: number, span: number) =>
+  span > 0 ? target + Math.round((current - target) / span) * span : target;
 
 interface Dimensions {
   width: number;
@@ -31,9 +51,10 @@ interface GridCellProps {
   springY: MotionValue<number>;
   imageIndex: number;
   dragDistanceRef: React.MutableRefObject<number>;
-  setActiveImageIndex: (index: number) => void;
-  setIsGridView: (isGrid: boolean) => void;
+  onSelectImage: (index: number) => void;
   activeImageIndex: number | null;
+  isTabStop: boolean;
+  onCellFocus: (cell: Cell, fromKeyboard: boolean) => void;
 }
 
 const wrapPosition = (position: number, span: number, min: number, max: number) => {
@@ -56,12 +77,12 @@ const getImageIndex = (col: number, row: number) => {
 };
 
 export const InfiniteGrid = ({
-  setActiveImageIndex,
-  setIsGridView,
+  onSelectImage,
   activeImageIndex
 }: InfiniteGridProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState<Dimensions>({ width: 0, height: 0 });
+  const [focusedCell, setFocusedCell] = useState<Cell | null>(null);
   const pointerIdRef = useRef<number | null>(null);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
   const dragDistanceRef = useRef(0);
@@ -99,6 +120,42 @@ export const InfiniteGrid = ({
   const rows = Math.max(1, Math.ceil(dimensions.height / step) + 4);
   const totalWidth = cols * step;
   const totalHeight = rows * step;
+
+  // One tab stop for the whole grid (arrow keys move within it): the last
+  // focused cell, or the one under the centre before the grid is panned.
+  const tabStop = focusedCell ?? {
+    col: Math.floor(dimensions.width / 2 / step),
+    row: Math.floor(dimensions.height / 2 / step),
+  };
+
+  const panToCell = ({ col, row }: Cell) => {
+    offsetX.set(nearestOffset(offsetX.get(), (dimensions.width - cellSize) / 2 - col * step, totalWidth));
+    offsetY.set(nearestOffset(offsetY.get(), (dimensions.height - cellSize) / 2 - row * step, totalHeight));
+  };
+
+  const handleCellFocus = (cell: Cell, fromKeyboard: boolean) => {
+    setFocusedCell(cell);
+    if (fromKeyboard) panToCell(cell);
+  };
+
+  const handleKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    const move = ARROW_STEPS[event.key];
+    if (!move) return;
+
+    // Keep the page's arrow keys (previous/next photo) out of grid navigation.
+    event.preventDefault();
+    event.stopPropagation();
+
+    const next = {
+      col: wrapCellIndex(tabStop.col + move.col, cols),
+      row: wrapCellIndex(tabStop.row + move.row, rows),
+    };
+    setFocusedCell(next);
+    panToCell(next);
+    containerRef.current
+      ?.querySelector<HTMLElement>(`[data-cell="${next.col}:${next.row}"]`)
+      ?.focus({ preventScroll: true });
+  };
 
   useEffect(() => {
     const handlePointerMove = (event: PointerEvent) => {
@@ -144,6 +201,7 @@ export const InfiniteGrid = ({
       ref={containerRef}
       className={styles["infinite-grid-container"]}
       onPointerDown={handlePointerDown}
+      onKeyDown={handleKeyDown}
     >
       <div className={styles["infinite-grid-viewport"]}>
         {Array.from({ length: rows * cols }).map((_, index) => {
@@ -166,9 +224,10 @@ export const InfiniteGrid = ({
               springY={springY}
               imageIndex={imageIndex}
               dragDistanceRef={dragDistanceRef}
-              setActiveImageIndex={setActiveImageIndex}
-              setIsGridView={setIsGridView}
+              onSelectImage={onSelectImage}
               activeImageIndex={activeImageIndex}
+              isTabStop={col === tabStop.col && row === tabStop.row}
+              onCellFocus={handleCellFocus}
             />
           );
         })}
@@ -190,9 +249,10 @@ const GridCell = ({
   springY,
   imageIndex,
   dragDistanceRef,
-  setActiveImageIndex,
-  setIsGridView,
-  activeImageIndex
+  onSelectImage,
+  activeImageIndex,
+  isTabStop,
+  onCellFocus
 }: GridCellProps) => {
   const image = FEATURED_IMAGES[imageIndex];
 
@@ -207,15 +267,19 @@ const GridCell = ({
   if (!image) return null;
 
   return (
-    <motion.div
+    <motion.button
+      type="button"
+      tabIndex={isTabStop ? 0 : -1}
+      data-cell={`${col}:${row}`}
       style={{ x, y, width: cellSize, height: cellSize }}
       className={`${styles["infinite-grid-cell"]} ${activeImageIndex === imageIndex ? styles.active : ""}`}
       whileHover={{ scale: 1.02, zIndex: 20 }}
       whileTap={{ scale: 0.98 }}
-      onClick={() => {
-        if (dragDistanceRef.current > 12) return;
-        setActiveImageIndex(imageIndex);
-        setIsGridView(false);
+      onFocus={(event) => onCellFocus({ col, row }, event.currentTarget.matches(":focus-visible"))}
+      onClick={(event) => {
+        // detail is 0 for Enter and Space, which never follow a drag.
+        if (event.detail !== 0 && dragDistanceRef.current > 12) return;
+        onSelectImage(imageIndex);
       }}
     >
       <Image
@@ -226,6 +290,6 @@ const GridCell = ({
         className={styles["grid-image"]}
         draggable={false}
       />
-    </motion.div>
+    </motion.button>
   );
 };

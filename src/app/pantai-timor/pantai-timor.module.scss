@@ -29,6 +29,14 @@
   position: relative;
 }
 
+// Route focus ring. The global ring is `--dakwat` ink, which vanishes on
+// #10110F. Scoped to the html class (not `.pantai-main`) so it also reaches
+// the lightbox, which portals to <body>.
+:global(html.pantai-timor-scroll) :where(a, button, summary, [tabindex]):focus-visible {
+  outline: 2px solid #e3e1da;
+  outline-offset: 3px;
+}
+
 .pantai-main {
   position: relative;
   min-height: 100vh;
@@ -410,7 +418,9 @@
   width: 100%;
   display: grid;
   grid-template-columns: 1fr;
-  overflow: hidden;
+  // clip, not hidden: a hidden box is still scrollable, so keyboard focus on an
+  // off-screen photo would scroll it sideways and knock the strip out of sync.
+  overflow: clip;
 
   @include pantai-md-up {
     top: calc(80px + env(safe-area-inset-top, 0px));
@@ -473,6 +483,8 @@
   aspect-ratio: 1/1;
   display: flex;
   flex-shrink: 0;
+  padding: 0;
+  border: 0;
   background-color: #161715;
   overflow: hidden;
   cursor: pointer;
@@ -490,7 +502,14 @@
     filter: grayscale(0.2);
   }
 
-  &:hover {
+  // A focused photo reads as active even between scroll bands.
+  &:focus-visible {
+    opacity: 1;
+    filter: grayscale(0);
+  }
+
+  &:hover,
+  &:focus-visible {
     .carousel-image {
       transform: scale(1.05);
     }
@@ -1100,11 +1119,6 @@
   border: none;
   cursor: pointer;
 
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(227, 225, 218, 0.5);
-  }
-
   &:hover {
     .lightbox-btn-icon {
       opacity: 0.5;
@@ -1143,7 +1157,6 @@
   color: #e3e1da;
   background: none;
   border: none;
-  outline: none;
   transition: all 0.3s ease;
   cursor: pointer;
 
@@ -1175,8 +1188,14 @@
   &:not(.disabled) {
     opacity: 0.4;
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       opacity: 1;
+    }
+
+    // Flush with the viewport edge, so keep the route ring inside the button.
+    &:focus-visible {
+      outline-offset: -4px;
     }
   }
 
@@ -1210,7 +1229,9 @@
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  // clip, not hidden, so focusing a cell can never scroll the grid out of
+  // step with its pan offset.
+  overflow: clip;
   cursor: grab;
 
   &:active {
@@ -1235,6 +1256,7 @@
 .infinite-grid-cell {
   position: absolute;
   pointer-events: auto;
+  padding: 0;
   border: 1px solid rgba(227, 225, 218, 0.1);
   background-color: #161715;
   transition: border-color 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
@@ -1253,7 +1275,8 @@
     z-index: 25;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     opacity: 1;
     border-color: rgba(227, 225, 218, 0.4);
 
@@ -1264,6 +1287,11 @@
     .grid-item-overlay {
       opacity: 1;
     }
+  }
+
+  // Above the active (25) and hovered (20) cells so the ring is never covered.
+  &:focus-visible {
+    z-index: 30;
   }
 }
 

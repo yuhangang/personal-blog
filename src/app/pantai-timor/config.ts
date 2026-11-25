@@ -111,6 +111,7 @@ export const PANTAI_TIMOR_COPY = {
     viewPhoto: "View Photo",
     defaultDescription: "A frame from the eastern coast archive.",
     aria: {
+      dialog: "Photo viewer",
       closeGrid: "Close grid view",
       openGrid: "Open grid view",
       closeLightbox: "Close photo viewer",
