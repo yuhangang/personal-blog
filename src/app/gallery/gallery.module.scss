@@ -25,7 +25,8 @@
   position: relative;
   z-index: 2;
   scroll-margin-top: 92px;
-  padding: clamp(4.5rem, 8vw, 7rem) clamp(16px, 4vw, 32px)
+  // Side gutter matches Navigation and CinematicCover.
+  padding: clamp(4.5rem, 8vw, 7rem) clamp(20px, 5vw, 40px)
     clamp(5.5rem, 9vw, 8.5rem);
   border-top: 1px solid rgba(244, 240, 232, 0.08);
   background:
@@ -37,9 +38,11 @@
     #05070c;
 }
 
+// Collections share the nav/footer frame, so their left edge lines up with
+// the wordmark above and the footer below.
 .sectionHeader {
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--footer-width);
   margin: 0 auto clamp(2rem, 3.5vw, 3rem);
   display: flex;
   flex-direction: column;
@@ -84,7 +87,7 @@
 
 .bandsStack {
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--footer-width);
   margin: 0 auto;
   display: flex;
   flex-direction: column;

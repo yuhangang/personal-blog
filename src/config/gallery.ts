@@ -11,6 +11,11 @@ export interface GalleryProject {
   description: string;
   image: string;
   video?: string;
+  /**
+   * Black bars baked into each side of `video`, as a share of its width
+   * (e.g. 100 / 1280). The card crops them off so only the picture shows.
+   */
+  videoPillarbox?: number;
   href: string;
   cta: string;
   location: string;
@@ -25,6 +30,9 @@ export const GALLERY_PROJECTS: GalleryProject[] = [
     description: "Photographs from Malaysia's east coast.",
     image: "https://cdn.yuhangang.com/pantai-timor/DSC00552.JPG",
     video: "https://cdn.yuhangang.com/pantai-timor/cover.mp4",
+    // cover.mp4 is 1280×720 with a 1080×720 (3:2) picture: 100px of black
+    // each side for the whole clip.
+    videoPillarbox: 100 / 1280,
     href: "/pantai-timor",
     cta: "Open Gallery",
     location: "East Coast, Malaysia",

@@ -18,6 +18,24 @@
   align-items: flex-start;
   background: transparent;
 
+  // The nav stays transparent over the fixed cover, so fade the bio out in a
+  // band pinned under the nav instead of letting it slide behind the links.
+  // A root scroll timeline shifts the mask 1:1 with scroll so the band stays
+  // fixed to the viewport (content starts at document top).
+  @supports ((animation-timeline: scroll()) and (animation-range: 0% 100%)) {
+    --nav-fade-start: calc(72px + env(safe-area-inset-top));
+    mask-image: linear-gradient(
+      to bottom,
+      transparent var(--nav-fade-start),
+      #000 calc(var(--nav-fade-start) + 48px)
+    );
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    animation: navFadeTrack linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0px 4000px;
+  }
+
   @media (min-width: $breakpoint-tablet) {
     align-items: center;
     padding: clamp(96px, 11svh, 132px) clamp(20px, 5vw, 40px)
@@ -131,5 +149,15 @@
 
   &:hover {
     color: #ffffff;
+  }
+}
+
+@keyframes navFadeTrack {
+  from {
+    mask-position: 0 0;
+  }
+
+  to {
+    mask-position: 0 4000px;
   }
 }

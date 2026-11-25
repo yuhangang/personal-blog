@@ -1,0 +1,510 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+// Same dark cover palette as PageCover so both ends of the page read as one
+// photographic system.
+$cover-ink: #0e0f10;
+$cover-frame: #16181a;
+$cover-paper: #f8f6f2;
+
+.section {
+  position: relative;
+  // Mid-page, this must paint over any sticky cover pinned behind it.
+  z-index: 2;
+  width: 100%;
+  height: 100svh;
+  min-height: 520px;
+  margin: 0;
+  overflow: hidden;
+  background-color: $cover-frame;
+}
+
+.frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: $cover-paper;
+}
+
+.media {
+  --letterbox: clamp(28px, 11svh, 120px);
+  position: absolute;
+  inset: 0;
+}
+
+.poster,
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  // When the frame is wider than the footage, crop sky rather than road.
+  object-position: center bottom;
+}
+
+.video {
+  opacity: 0;
+  transition: opacity 0.9s var(--ease-settle);
+}
+
+.videoVisible {
+  opacity: 1;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 90% 80% at 50% 45%,
+    rgba($cover-ink, 0) 55%,
+    rgba($cover-ink, 0.5) 100%
+  );
+}
+
+.scrimTop {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 30%;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba($cover-ink, 0.42) 0%,
+    rgba($cover-ink, 0) 100%
+  );
+}
+
+.scrimBottom {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 64%;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba($cover-ink, 0.84) 0%,
+    rgba($cover-ink, 0.5) 42%,
+    rgba($cover-ink, 0) 100%
+  );
+}
+
+// Anamorphic bars that open as the section scrolls into view. Only rendered
+// where scroll-driven animations exist, so they never get stuck closed.
+.letterboxTop,
+.letterboxBottom {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  height: var(--letterbox);
+  background-color: $cover-ink;
+  pointer-events: none;
+}
+
+.letterboxTop {
+  top: 0;
+  transform-origin: top;
+}
+
+.letterboxBottom {
+  bottom: 0;
+  transform-origin: bottom;
+}
+
+.overlay {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  max-width: var(--footer-width);
+  margin-inline: auto;
+  padding: calc(clamp(88px, 12svh, 180px) + env(safe-area-inset-top))
+    clamp(20px, 5vw, 40px)
+    calc(clamp(22px, 4svh, 48px) + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: clamp(28px, 6svh, 64px);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(10px, 1.2vh, 16px);
+  max-width: 680px;
+
+  @include mobile {
+    gap: 8px;
+  }
+}
+
+// Portrait phones: text on a black band, above a 3:4 frame of the footage,
+// instead of laid over a tall, narrow crop of it.
+@media (max-width: $breakpoint-mobile) and (orientation: portrait) {
+  .section {
+    height: auto;
+    min-height: 100svh;
+    background-color: $cover-ink;
+  }
+
+  .frame {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 1fr auto;
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .media {
+    --letterbox: 12%;
+    position: relative;
+    inset: auto;
+    grid-row: 2;
+    grid-column: 1;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+  }
+
+  // Lift the sky out of the black band instead of meeting it at a hard edge.
+  .scrimTop {
+    height: 24%;
+    background: linear-gradient(
+      to bottom,
+      $cover-ink 0%,
+      rgba($cover-ink, 0) 100%
+    );
+  }
+
+  // Only the credit row sits on the picture now.
+  .scrimBottom {
+    height: 40%;
+  }
+
+  .overlay {
+    display: contents;
+  }
+
+  .header {
+    grid-row: 1;
+    grid-column: 1;
+    align-self: end;
+    padding: calc(84px + env(safe-area-inset-top)) clamp(20px, 5vw, 40px)
+      20px;
+  }
+
+  .bottomRow {
+    grid-row: 2;
+    grid-column: 1;
+    align-self: end;
+    position: relative;
+    z-index: 3;
+    margin: 0 clamp(20px, 5vw, 40px)
+      calc(20px + env(safe-area-inset-bottom));
+  }
+}
+
+// Centred title. A soft radial scrim sits behind it, and the bottom gradient
+// shrinks to just cover the Pause row.
+.alignCenter {
+  .header {
+    align-items: center;
+    margin: auto;
+    text-align: center;
+  }
+
+  .scrimBottom {
+    height: 32%;
+  }
+
+  .vignette {
+    background:
+      radial-gradient(
+        ellipse 56% 36% at 50% 50%,
+        rgba($cover-ink, 0.46) 0%,
+        rgba($cover-ink, 0) 100%
+      ),
+      radial-gradient(
+        ellipse 90% 80% at 50% 45%,
+        rgba($cover-ink, 0) 55%,
+        rgba($cover-ink, 0.5) 100%
+      );
+  }
+
+  .bottomRow {
+    border-top: 0;
+  }
+
+  // Phones: centred within the black band above the 3:4 frame.
+  @media (max-width: $breakpoint-mobile) and (orientation: portrait) {
+    .header {
+      align-self: center;
+      justify-self: center;
+    }
+  }
+}
+
+.kicker {
+  font-family: var(--font-kertas-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba($cover-paper, 0.78);
+  margin: 0;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
+}
+
+.headline {
+  font-family: var(--font-kertas-serif);
+  font-size: clamp(2.125rem, 1.35rem + 3.2vw, 5rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  color: var(--cinematic-headline, #ffffff);
+  margin: 0;
+  text-wrap: balance;
+  text-shadow: 0 2px 24px rgba(10, 12, 14, 0.45);
+
+  em {
+    font-style: italic;
+    font-weight: 400;
+  }
+}
+
+.headlineDisplay {
+  font-size: clamp(3.25rem, 1.6rem + 6vw, 8.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+
+.subtitle {
+  font-family: var(--font-kertas-sans);
+  font-size: clamp(0.9375rem, 0.85rem + 0.35vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+  color: rgba($cover-paper, 0.9);
+  margin: 0;
+  max-width: 44ch;
+  text-wrap: pretty;
+  text-shadow: 0 1px 16px rgba(10, 12, 14, 0.58);
+
+  @include mobile {
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+}
+
+// Primary action: a solid ivory pill, so it outranks the glass Pause control.
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--tap);
+  margin-top: 8px;
+  padding: 0 20px;
+  border-radius: var(--radius-pill);
+  background: rgba($cover-paper, 0.94);
+  color: $cover-ink;
+  text-decoration: none;
+  transition:
+    background-color var(--dur-fast) var(--ease-settle),
+    transform var(--dur-fast) var(--ease-settle);
+
+  svg {
+    transition: transform var(--dur-fast) var(--ease-settle);
+  }
+
+  &:hover {
+    background: #ffffff;
+
+    svg {
+      transform: translateX(2px);
+    }
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+  }
+}
+
+.actionLabel {
+  font-family: var(--font-kertas-mono);
+  font-size: clamp(0.7rem, 0.66rem + 0.08vw, 0.8125rem);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.bottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid rgba($cover-paper, 0.16);
+}
+
+.credit {
+  font-family: var(--font-kertas-mono);
+  font-size: clamp(0.75rem, 0.7rem + 0.12vw, 0.875rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba($cover-paper, 0.84);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
+}
+
+.playback {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: var(--tap);
+  min-width: var(--tap);
+  padding: 0 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba($cover-paper, 0.24);
+  background: rgba($cover-ink, 0.28);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba($cover-paper, 0.92);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-settle),
+    border-color var(--dur-fast) var(--ease-settle),
+    transform var(--dur-fast) var(--ease-settle);
+
+  &:hover {
+    background: rgba($cover-ink, 0.44);
+    border-color: rgba($cover-paper, 0.44);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+  }
+}
+
+.playbackLabel {
+  font-family: var(--font-kertas-mono);
+  font-size: clamp(0.7rem, 0.66rem + 0.08vw, 0.8125rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+// Section variant: bars part as it scrolls in. Every piece reads one timeline
+// from the section's box; a bare view() would track each bar's own position,
+// so the bottom bar would open far too late.
+@supports ((animation-timeline: view()) and (animation-range: entry 0% entry 100%)) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scrollReveal {
+      view-timeline: --cinematic-cover block;
+
+      .letterboxTop,
+      .letterboxBottom {
+        display: block;
+        animation: letterboxOpen linear both;
+        animation-timeline: --cinematic-cover;
+        animation-range: entry 35% entry 100%;
+      }
+
+      .header {
+        animation: headerRise linear both;
+        animation-timeline: --cinematic-cover;
+        animation-range: entry 55% entry 100%;
+      }
+    }
+  }
+}
+
+// Cover variant: the page opens half open, the footage showing through the
+// middle 50% between solid black bars, which then slide off (top up, bottom
+// down) once on load. A long, even in-out curve keeps the slide visible and
+// smooth for its whole run; the keyframes animate transform only, so the
+// slide stays on the compositor while the page is still loading.
+@media (prefers-reduced-motion: no-preference) {
+  .cover {
+    .letterboxTop,
+    .letterboxBottom {
+      display: block;
+      height: 25%;
+      background-color: #000;
+      animation-duration: 1.9s;
+      animation-timing-function: var(--ease-breathe);
+      animation-delay: 0.3s;
+      animation-fill-mode: both;
+    }
+
+    .letterboxTop {
+      animation-name: curtainUp;
+    }
+
+    .letterboxBottom {
+      animation-name: curtainDown;
+    }
+
+    .header {
+      animation: headerRise 1s var(--ease-settle) 0.15s both;
+    }
+  }
+}
+
+@keyframes curtainUp {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, -100%, 0);
+  }
+}
+
+@keyframes curtainDown {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+@keyframes letterboxOpen {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes headerRise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video {
+    transition: none;
+  }
+}

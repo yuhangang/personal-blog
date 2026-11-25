@@ -50,7 +50,7 @@ export const CoastalAlmanac = forwardRef<HTMLElement, object>((_, ref) => {
 
   return (
     <PantaiSection 
-      id="almanac" 
+      id="prologue" 
       ref={sectionRef} 
       className={`${styles["almanac-section"]} ${pantaiLayout.gutters}`}
     >

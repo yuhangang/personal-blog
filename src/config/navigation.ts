@@ -9,22 +9,15 @@ export const NAV_LINKS: readonly NavLinkItem[] = [
   { label: "Home", href: "/", meta: "Overview" },
   { label: "About", href: "/about", meta: "Background" },
   { label: "Resume", href: "/resume", meta: "Experience, skills, and PDF" },
-  // WIP: temporarily hidden
-  // { label: "Gallery", href: "/gallery", meta: "Earth photo atlas & essays" },
-  // {
-  //   label: "Pantai Timor",
-  //   href: "/pantai-timor",
-  //   meta: "East coast photo essay",
-  // },
+  { label: "Gallery", href: "/gallery", meta: "Photo essays and films" },
 ] as const;
 
 export const FOOTER_EXPLORE_LINKS: readonly NavLinkItem[] = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Resume", href: "/resume" },
-  // WIP: temporarily hidden
-  // { label: "Gallery", href: "/gallery" },
-  // { label: "Pantai Timor", href: "/pantai-timor" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "Pantai Timor", href: "/pantai-timor" },
 ] as const;
 
 export const FOOTER_LINKS: readonly NavLinkItem[] = [

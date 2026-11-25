@@ -77,12 +77,17 @@ export default function Navigation() {
       const coverEl = document.querySelector<HTMLElement>("[data-nav-cover]");
       if (coverEl) {
         const coverMode = coverEl.getAttribute("data-nav-cover");
+        // A fixed cover sits behind the nav for the whole page, so the nav
+        // stays transparent instead of switching to the frosted bar.
+        if (coverMode === "fixed") {
+          setOverHeroCover(true);
+          setScrolledPastHero(false);
+          return;
+        }
         const threshold =
-          coverMode === "fixed"
-            ? 24
-            : coverMode === "sticky"
-              ? Math.max(coverEl.offsetHeight - 72, 240)
-              : Math.max(coverEl.offsetHeight * 0.65, 240);
+          coverMode === "sticky"
+            ? Math.max(coverEl.offsetHeight - 72, 240)
+            : Math.max(coverEl.offsetHeight * 0.65, 240);
         const pastCover = window.scrollY >= threshold;
         setOverHeroCover(!pastCover);
         setScrolledPastHero(pastCover);

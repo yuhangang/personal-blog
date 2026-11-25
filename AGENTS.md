@@ -14,9 +14,10 @@ When making UI changes:
 ## Repo Shape
 
 - `src/app/` contains App Router entrypoints and route wrappers
-- `src/components/` contains shared (`Navigation`, `Footer`, `KertasActionList`) and route-level React components
+- `src/components/` contains shared (`Navigation`, `Footer`, `KertasActionList`, `PageCover`, `CinematicCover`) and route-level React components
+- `CinematicCover` is the looping-video cover of `/gallery` (`variant="cover"`; an unused `variant="section"` reveals mid-page on scroll and takes an optional `action` link), fed by `src/config/galleryReel.ts`; `align="center"`, `headlineSize="display"` and `headlineColor` (a token such as `var(--retro-yellow)`) set the title. The cover opens half open — solid black bars over the top and bottom quarters slide off on load (transform-only keyframes, so the slide stays on the compositor; none under reduced motion). Wide frames crop sky, not road (bottom-aligned); portrait phones stack the text on a black band above a 3:4 frame. The reel lives in `public/videos/` (muted, `preload="none"`, AV1 then HEVC `<source>`s with `codecs` strings, 1440p landscape + 1080×1440 3:4 crop) with a matching first-frame poster in `public/images/`
 - `src/data/experience.ts` is the shared source of truth for career history, skills, and selected projects across `/`, `/about`, and `/resume`
-- `src/styles/_kertas.scss` defines the **Kertas & Dakwat** warm paper (`#faf8f5`, `#ffffff`, `#eeece7`) and bistre ink (`#1d1a16`, `#45423d`, `#6b6760`) design tokens, frosted pill mixins, and `840px` editorial spine helpers
+- `src/styles/_kertas.scss` defines the **Kertas & Dakwat** warm paper (`#faf8f5`, `#ffffff`, `#eeece7`) and bistre ink (`#1d1a16`, `#45423d`, `#6b6760`) design tokens, a `--retro-yellow` (`#f5c242`) accent for type over dark footage, frosted pill mixins, and `840px` editorial spine helpers
 - `src/styles/_variables.scss` holds core breakpoints/spacing tokens imported by preserved routes (`/gallery`, `/pantai-timor`) and `@forward`s `_kertas.scss`
 - `src/styles/_mixins.scss` contains the shared container and breakpoint mixins
 - `src/app/globals.scss` emits `:root` Kertas tokens, base typography (`:where()` low-specificity rules), focus rings, native modal `dialog` containment, `.skip-link`, Lenis rules, and reduced-motion fallbacks

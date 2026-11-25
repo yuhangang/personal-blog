@@ -105,6 +105,7 @@ export const PANTAI_TIMOR_COPY = {
     openMenu: "Open menu",
     closeMenu: "Close menu",
     backToGallery: "Back to Gallery",
+    gallery: "Gallery",
     home: "Home"
   },
   lightbox: {

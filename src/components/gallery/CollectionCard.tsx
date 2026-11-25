@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, type CSSProperties } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import styles from './CollectionCard.module.scss';
 import FilmNoiseOverlay from '@/components/create/ServiceIntro/FilmNoiseOverlay';
 
@@ -14,6 +14,7 @@ interface CollectionCardProps {
     description: string;
     image: string;
     video?: string;
+    videoPillarbox?: number;
     href: string;
     location: string;
     year: string;
@@ -29,6 +30,7 @@ export default function CollectionCard({
     description,
     image,
     video,
+    videoPillarbox,
     href,
     location,
     year,
@@ -40,6 +42,10 @@ export default function CollectionCard({
     const [isHovered, setIsHovered] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
     const prefersReducedMotion = useReducedMotion();
+    // Lets the stylesheet crop black side bars baked into the video file.
+    const videoStyle = videoPillarbox
+        ? ({ '--video-pillarbox': videoPillarbox } as CSSProperties)
+        : undefined;
 
     const handleMouseEnter = () => {
         setIsHovered(true);
@@ -67,6 +73,9 @@ export default function CollectionCard({
                 viewport={{ once: true, margin: "-8%" }}
                 transition={{ duration: prefersReducedMotion ? 0 : 0.7, delay: index * 0.08 }}
             >
+                {/* An editorial plate: the photo stays clean apart from a cover-style
+                    credit, and the words sit in a caption beneath it, as on the
+                    site's page covers and the About bio. */}
                 <Link
                     href={href}
                     className={styles.bandLink}
@@ -74,48 +83,53 @@ export default function CollectionCard({
                     onMouseLeave={handleMouseLeave}
                 >
                     <article className={styles.bandCard}>
-                        <div className={styles.bandMedia} aria-hidden="true">
-                            <Image
-                                src={image}
-                                alt=""
-                                fill
-                                className={styles.image}
-                                sizes="(max-width: 768px) 100vw, 1200px"
-                            />
-
-                            {video && (
-                                <video
-                                    ref={videoRef}
-                                    src={video}
-                                    className={`${styles.video} ${isHovered && !prefersReducedMotion ? styles.visible : ''}`}
-                                    muted
-                                    loop
-                                    playsInline
-                                    preload="none"
+                        <div className={styles.bandFrame}>
+                            <div className={styles.bandMedia} aria-hidden="true">
+                                <Image
+                                    src={image}
+                                    alt=""
+                                    fill
+                                    className={styles.image}
+                                    sizes="(min-width: 1600px) 1320px, (min-width: 1200px) 1120px, calc(100vw - 40px)"
                                 />
-                            )}
 
-                            <div className={styles.bandScrim} />
-                        </div>
+                                {video && (
+                                    <video
+                                        ref={videoRef}
+                                        src={video}
+                                        style={videoStyle}
+                                        className={`${styles.video} ${isHovered && !prefersReducedMotion ? styles.visible : ''}`}
+                                        muted
+                                        loop
+                                        playsInline
+                                        preload="none"
+                                    />
+                                )}
 
-                        <div className={styles.bandContent}>
-                            <div className={styles.bandTop}>
-                                <div className={styles.bandTitleGroup}>
-                                    <h3 className={styles.bandTitle}>{title}</h3>
-                                    <p className={styles.bandSubline}>
-                                        {location} · {year}
-                                    </p>
-                                </div>
-                                <span className={styles.bandBadge}>
-                                    {seriesCode} · {category}
-                                </span>
+                                <div className={styles.bandScrim} />
                             </div>
 
-                            <div className={styles.bandBottom}>
+                            <p className={styles.bandCredit}>
+                                {location} · {year}
+                            </p>
+                        </div>
+
+                        <div className={styles.bandCaption}>
+                            <div className={styles.bandHeading}>
+                                <p className={styles.bandKicker}>
+                                    <span className={styles.bandIndex}>{seriesCode}</span>
+                                    {category}
+                                </p>
+                                <h3 className={styles.bandTitle}>{title}</h3>
+                            </div>
+
+                            <div className={styles.bandBody}>
                                 <p className={styles.bandDescription}>{description}</p>
                                 <span className={styles.bandCta}>
                                     <span>{cta}</span>
-                                    <ArrowUpRight size={15} strokeWidth={1.75} aria-hidden="true" />
+                                    {/* Internal link: a plain arrow, as on CinematicCover; the
+                                        footer keeps the up-right arrow for external links. */}
+                                    <ArrowRight size={15} strokeWidth={1.75} aria-hidden="true" />
                                 </span>
                             </div>
                         </div>
@@ -152,6 +166,7 @@ export default function CollectionCard({
                         <video
                             ref={videoRef}
                             src={video}
+                            style={videoStyle}
                             className={`${styles.video} ${isHovered ? styles.visible : ''}`}
                             muted
                             loop

@@ -3,7 +3,7 @@
 import { AnimatePresence, useMotionTemplate, useScroll, useSpring, useTransform } from "framer-motion";
 import { Inter } from "next/font/google";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { FEATURED_IMAGES } from "./config";
+import { STORY_CHAPTERS, STORY_PLATES } from "./story";
 
 // Import extracted components
 import { Navbar } from "./components/Navbar";
@@ -13,10 +13,11 @@ import { LoadingScreen } from "./components/LoadingScreen";
 
 import { VillageRhythms } from "./components/VillageRhythms";
 import { Lightbox } from "./components/Lightbox";
-import { TheLocalSection } from "./components/TheLocalSection";
 import { CoastalAlmanac } from "./components/CoastalAlmanac";
 import { Memory } from "./components/Memory";
 import { ParallaxZoom } from "./components/ParallaxZoom";
+import { StoryChapter } from "./components/StoryChapter";
+import { Epilogue } from "./components/Epilogue";
 import styles from "./pantai-timor.module.scss";
 
 type ResettableMotionValue = {
@@ -33,10 +34,8 @@ export default function PantaiTimorRedesign() {
   const [vh, setVh] = useState(0);
   const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
   const [isGridView, setIsGridView] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const localSectionRef = useRef<HTMLElement>(null);
 
   const heroRef = useRef<HTMLElement>(null);
   const almanacRef = useRef<HTMLElement>(null);
@@ -96,13 +95,18 @@ export default function PantaiTimorRedesign() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (activeImageIndex === null) return;
-      if (e.key === "Escape") setActiveImageIndex(null);
+      if (e.key === "Escape") {
+        setIsGridView(false);
+        setActiveImageIndex(null);
+      }
+      // On the contact sheet, arrows belong to the page of thumbnails.
+      if (isGridView) return;
       if (e.key === "ArrowLeft") setActiveImageIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : prev));
-      if (e.key === "ArrowRight") setActiveImageIndex((prev) => (prev !== null && prev < FEATURED_IMAGES.length - 1 ? prev + 1 : prev));
+      if (e.key === "ArrowRight") setActiveImageIndex((prev) => (prev !== null && prev < STORY_PLATES.length - 1 ? prev + 1 : prev));
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeImageIndex]);
+  }, [activeImageIndex, isGridView]);
 
   useEffect(() => {
     document.body.style.backgroundColor = "#10110F";
@@ -168,8 +172,6 @@ export default function PantaiTimorRedesign() {
 
   const navRevealY = Math.max(1, vh);
   const navBgOpacity = useTransform(scrollY, [navRevealY, navRevealY + 1], [0, 1]);
-  const navBlur = useTransform(scrollY, [navRevealY, navRevealY + 1], [0, 24]);
-  const navBorderOpacity = useTransform(scrollY, [navRevealY, navRevealY + 1], [0, 0.1]);
 
   const titleScale = useTransform(scrollY, [0, stickyScroll], [1, isMobile ? 0.58 : 0.18]);
   const titleLetterSpacing = useTransform(scrollY, [0, stickyScroll], ["-0.02em", "0.35em"]);
@@ -218,8 +220,6 @@ export default function PantaiTimorRedesign() {
         navBgOpacity={navBgOpacity}
         navTitleOpacity={navTitleOpacity}
         navRef={navRef}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
       />
 
       <Hero 
@@ -235,14 +235,33 @@ export default function PantaiTimorRedesign() {
         onVideoReady={() => setIsLoaded(true)}
       />
 
+      {/* A drive down the coast, north to south. The prologue spans the
+          whole coast; each chapter is one stretch of it, with the immersive
+          pieces placed where their photographs were taken (all in Bachok). */}
       <CoastalAlmanac ref={almanacRef} />
-      <Memory />
-      <ParallaxZoom />
-      <VillageRhythms />
-      <TheLocalSection 
-        localSectionRef={localSectionRef}
-        setActiveImageIndex={setActiveImageIndex}
-      />
+
+      {STORY_CHAPTERS.map((chapter, i) => {
+        const isFirst = i === 0;
+        return (
+          <StoryChapter
+            key={chapter.id}
+            chapter={chapter}
+            onOpenPlate={setActiveImageIndex}
+            lead={isFirst ? <ParallaxZoom /> : undefined}
+            coda={
+              isFirst ? (
+                <>
+                  <VillageRhythms />
+                  {/* Leaving Bachok: the view from the dashboard. */}
+                  <Memory />
+                </>
+              ) : undefined
+            }
+          />
+        );
+      })}
+
+      <Epilogue />
 
       <Lightbox 
         activeImageIndex={activeImageIndex}

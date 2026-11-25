@@ -402,314 +402,181 @@
 
 
 
-// Local Archive Section
-.local-section {
+// Story: plain chapter openers, then the photographs. Kept raw on purpose:
+// no kickers, stats, outlined numerals or pill buttons; the photos carry it.
+.story-chapter {
   position: relative;
-  width: 100%;
-  height: 400vh;
-  background-color: #10110F;
+  // Paint over the sticky hero that stays pinned (faded out) behind the page.
   z-index: 10;
+  width: 100%;
 }
 
-.local-sticky-container {
-  position: sticky;
-  top: calc(72px + env(safe-area-inset-top, 0px));
-  height: calc(100dvh - 72px - env(safe-area-inset-top, 0px));
+// Left-aligned on the plate frame, like a handwritten place name above
+// a contact sheet.
+.chapter-opener {
   width: 100%;
-  display: grid;
-  grid-template-columns: 1fr;
-  // clip, not hidden: a hidden box is still scrollable, so keyboard focus on an
-  // off-screen photo would scroll it sideways and knock the strip out of sync.
-  overflow: clip;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 8rem 1rem 2.5rem;
 
   @include pantai-md-up {
-    top: calc(80px + env(safe-area-inset-top, 0px));
-    height: calc(100dvh - 80px - env(safe-area-inset-top, 0px));
+    padding: 12rem 2rem 3.5rem;
   }
 }
 
-.carousel-viewport {
-  grid-area: 1 / 1;
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  display: flex;
-  align-items: center;
+.chapter-title {
+  margin: 0;
+  font-size: clamp(2.25rem, 6vw, 4.5rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: #f2f0ea;
 }
 
-.local-overlay-container {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
+.chapter-note {
+  margin: 0.75rem 0 0;
+  font-family: $font-sans;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: rgba(227, 225, 218, 0.5);
+}
+
+.chapter-plates {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 1rem 1rem 6rem;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding-bottom: 2rem !important;
-  pointer-events: none;
+  gap: 4.5rem;
 
   @include pantai-md-up {
-    padding-bottom: 3rem !important;
+    padding: 2rem 2rem 9rem;
+    gap: 7rem;
   }
 }
 
-.local-gradient-overlay {
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 11rem;
-  background: linear-gradient(to top, rgba(16, 17, 15, 0.85) 0%, rgba(16, 17, 15, 0.35) 55%, transparent 100%);
-  pointer-events: none;
-  z-index: 5;
-}
-
-.carousel-track {
+// One plate is a wide frame; two share a row at a common height (each grows
+// by its aspect ratio). Phones stack them.
+.plate-row {
   display: flex;
-  gap: 1.5rem;
-  align-items: center;
-  overscroll-behavior: none;
-  touch-action: pan-x;
-  -webkit-overflow-scrolling: touch;
-  z-index: 1;
+  flex-direction: column;
+  gap: 3rem;
 
   @include pantai-md-up {
-    gap: 4rem;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 2rem;
   }
-}
-
-.carousel-item {
-  position: relative;
-  height: auto;
-  width: 95vw;
-  aspect-ratio: 1/1;
-  display: flex;
-  flex-shrink: 0;
-  padding: 0;
-  border: 0;
-  background-color: #161715;
-  overflow: hidden;
-  cursor: pointer;
-  transition: opacity 0.7s ease, filter 0.7s ease, transform 0.7s ease;
-
-  &.active {
-    opacity: 1;
-    transform: scale(1);
-    filter: grayscale(0);
-  }
-
-  &.inactive {
-    opacity: 0.4;
-    transform: scale(1);
-    filter: grayscale(0.2);
-  }
-
-  // A focused photo reads as active even between scroll bands.
-  &:focus-visible {
-    opacity: 1;
-    filter: grayscale(0);
-  }
-
-  &:hover,
-  &:focus-visible {
-    .carousel-image {
-      transform: scale(1.05);
-    }
-
-    .carousel-border {
-      border-color: rgba(227, 225, 218, 0.3);
-    }
-  }
-
-  @include pantai-md-up {
-    width: auto;
-    height: min(78dvh, 780px);
-    aspect-ratio: auto;
-
-    &.portrait {
-      aspect-ratio: 2/3;
-    }
-
-    &.landscape {
-      aspect-ratio: 3/2;
-    }
-  }
-}
-
-.carousel-image-container {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
-
-.carousel-image-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.carousel-image {
-  object-fit: cover;
-  transition: transform 1s ease-out;
-}
-
-.carousel-border {
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgba(227, 225, 218, 0.1);
-  transition: border-color 0.5s ease;
-}
-
-.carousel-caption {
-  position: absolute;
-  bottom: 1.5rem;
-  left: 1.5rem;
-  z-index: 20;
-  overflow: hidden;
-}
-
-.carousel-caption-text {
-  font-family: $font-sans;
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: rgba(227, 225, 218, 0.7);
-}
-
-.local-content-wrapper {
-  position: relative;
-  z-index: 10;
-  margin: 0 auto;
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  padding: 0 1rem 0 !important;
-  pointer-events: none;
-
-  @include pantai-md-up {
-    padding: 0 1.5rem 0 !important;
-  }
-}
-
-.local-content-grid {
-  display: grid;
-  width: 100%;
-  max-width: 80rem;
-  grid-template-columns: 1fr;
-  gap: 2.5rem;
 
   @include pantai-lg-up {
     gap: 3rem;
   }
+}
 
-  @include pantai-xl-up {
-    grid-template-columns: minmax(0, 48rem) minmax(16rem, 20rem);
-    justify-content: center;
-    align-items: flex-start;
-    gap: 4rem;
+.plate {
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+
+  @include pantai-md-up {
+    flex: var(--plate-ratio) 1 0;
   }
 }
 
-.local-text-column {
-  min-width: 0;
+// A lone plate stays inside the viewport height instead of the full width.
+.plate-row-single .plate {
+  @include pantai-md-up {
+    flex: none;
+    width: min(100%, calc(82svh * var(--plate-ratio)));
+    margin-inline: auto;
+  }
 }
 
-.local-title {
-  margin: 0 !important;
+.plate-button {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--plate-ratio);
+  padding: 0;
+  border: 0;
+  background-color: #161715;
+  overflow: hidden;
+  cursor: zoom-in;
 
-  span {
-    display: block;
-    max-width: 15ch;
-    font-size: clamp(2.8rem, 8vw, 4.8rem);
-    line-height: 0.88;
-    letter-spacing: -0.02em;
-    color: #e3e1da;
-    font-style: italic;
-    font-weight: 300;
-    opacity: 0.7;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(227, 225, 218, 0.1);
+    pointer-events: none;
+    transition: border-color 0.5s ease;
+  }
 
-    @include pantai-md-up {
-      font-size: clamp(4.8rem, 6.6vw, 6.8rem);
+  &:hover,
+  &:focus-visible {
+    .plate-image {
+      transform: scale(1.03);
+    }
+
+    &::after {
+      border-color: rgba(227, 225, 218, 0.3);
     }
   }
 }
 
-.local-description {
-  margin: 1.25rem 0 0 !important;
-  max-width: 48rem;
-  text-align: left;
-  font-size: 0.92rem;
-  line-height: 1.9;
-  color: rgba(227, 225, 218, 0.42);
+.plate-image {
+  object-fit: cover;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.plate-caption {
+  font-family: $font-sans;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: rgba(227, 225, 218, 0.45);
+}
+
+// The end of the page: two plain text links on the plate frame.
+.epilogue {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  padding: 3rem 1rem calc(4rem + env(safe-area-inset-bottom, 0px));
 
   @include pantai-md-up {
-    margin-top: 1.75rem !important;
-    font-size: 1rem;
+    padding: 4rem 2rem calc(6rem + env(safe-area-inset-bottom, 0px));
   }
 }
 
-.local-cta-column {
-  display: flex;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.archive-btn {
-  pointer-events: auto;
+.epilogue-link {
   display: inline-flex;
-  min-height: 3rem;
   align-items: center;
-  gap: 1rem;
-  white-space: nowrap;
-  border-bottom: 1px solid rgba(227, 225, 218, 0.18);
-  padding-bottom: 0.75rem !important;
-  font-family: $font-sans;
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.34em;
-  color: rgba(227, 225, 218, 0.78);
-  transition: all 0.5s ease;
+  min-height: var(--tap);
+  padding: 0;
+  border: 0;
   background: none;
-  border-top: none;
-  border-left: none;
-  border-right: none;
+  font-family: $font-sans;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: rgba(227, 225, 218, 0.6);
+  text-decoration: none;
   cursor: pointer;
+  transition: color 0.2s ease;
 
   &:hover {
-    border-color: rgba(227, 225, 218, 0.45);
-    color: #e3e1da;
-
-    .btn-icon-circle {
-      border-color: rgba(227, 225, 218, 0.36);
-      background-color: rgba(227, 225, 218, 0.08);
-      color: #e3e1da;
-    }
-
-    .btn-arrow {
-      transform: translateX(2px);
-    }
+    color: #f2f0ea;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
   }
-
-  @include pantai-md-up {
-    min-height: 3.25rem;
-  }
-}
-
-.btn-icon-circle {
-  display: inline-flex;
-  width: 2.25rem;
-  height: 2.25rem;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  border: 1px solid rgba(227, 225, 218, 0.16);
-  background-color: rgba(227, 225, 218, 0.045);
-  color: rgba(227, 225, 218, 0.82);
-  transition: all 0.5s ease;
-}
-
-.btn-arrow {
-  font-size: 0.95rem;
-  line-height: 1;
-  transition: transform 0.5s ease;
 }
 
 // Coastal Geography
@@ -1054,405 +921,205 @@
   color: rgba(227, 225, 218, 0.2);
 }
 
-// Lightbox
-.lightbox-container {
+// Photo viewer: a solid dark ground, the photograph uncropped, and plain text
+// controls. "Index" swaps the photo for a contact sheet of every frame.
+.viewer {
   position: fixed;
   inset: 0;
   z-index: 100;
   display: flex;
-  height: 100dvh;
-  width: 100%;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  height: 100dvh;
+  background-color: #0c0d0b;
+  color: #e3e1da;
   overscroll-behavior: none;
+  touch-action: none;
 
-  &.grid-mode {
+  &.viewer-sheet-mode {
     touch-action: auto;
   }
-
-  &.image-mode {
-    touch-action: none;
-  }
 }
 
-.lightbox-backdrop {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-color: rgba(21, 22, 18, 0.38);
-  backdrop-filter: blur(56px) saturate(180%);
-}
-
-.lightbox-glow {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(circle at 50% 30%, rgba(227, 225, 218, 0.12), transparent 60%);
-}
-
-.lightbox-controls {
-  position: absolute;
-  top: 1.5rem;
-  right: 1rem;
-  z-index: 120;
+.viewer-bar,
+.viewer-foot {
+  flex-shrink: 0;
   display: flex;
-  gap: 0.75rem;
-
-  @include pantai-md-up {
-    top: 2rem;
-    right: 2rem;
-  }
-}
-
-.lightbox-btn {
-  position: relative;
-  display: flex;
-  height: 3rem;
-  width: 3rem;
   align-items: center;
-  justify-content: center;
-  color: #e3e1da;
-  transition: all 0.3s ease;
-  background: none;
-  border: none;
-  cursor: pointer;
-
-  &:hover {
-    .lightbox-btn-icon {
-      opacity: 0.5;
-    }
-  }
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 1rem;
 
   @include pantai-md-up {
-    height: 3.5rem;
-    width: 3.5rem;
+    padding: 0 2rem;
   }
 }
 
-.lightbox-btn-icon {
-  position: relative;
-  z-index: 10;
+.viewer-bar {
+  min-height: calc(3.5rem + env(safe-area-inset-top, 0px));
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.viewer-foot {
+  min-height: calc(3.5rem + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.viewer-status {
+  margin: 0;
+  min-width: 0;
   display: flex;
-  width: 1.25rem;
-  height: 1.25rem;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.3s ease;
-}
-
-.lightbox-control-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-.lightbox-nav-btn {
-  position: fixed;
-  inset-y: 0;
-  z-index: 110;
-  display: flex;
-  width: 20%;
-  align-items: center;
-  color: #e3e1da;
-  background: none;
-  border: none;
-  transition: all 0.3s ease;
-  cursor: pointer;
-
-  &.prev {
-    left: 0;
-    justify-content: flex-start;
-    padding-left: 0.5rem !important;
-
-    @include pantai-md-up {
-      padding-left: 1.5rem !important;
-    }
-  }
-
-  &.next {
-    right: 0;
-    justify-content: flex-end;
-    padding-right: 0.5rem !important;
-
-    @include pantai-md-up {
-      padding-right: 1.5rem !important;
-    }
-  }
-
-  &.disabled {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  &:not(.disabled) {
-    opacity: 0.4;
-
-    &:hover,
-    &:focus-visible {
-      opacity: 1;
-    }
-
-    // Flush with the viewport edge, so keep the route ring inside the button.
-    &:focus-visible {
-      outline-offset: -4px;
-    }
-  }
-
-  @include pantai-md-up {
-    width: 15%;
-  }
-}
-
-.lightbox-nav-icon {
-  width: 2rem;
-  height: 2rem;
-
-  @include pantai-md-up {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-}
-
-.lightbox-grid-view {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  display: flex;
-  height: 100%;
-  width: 100%;
+  gap: 1rem;
   overflow: hidden;
-  padding: 0 !important;
+  font-family: $font-sans;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: rgba(227, 225, 218, 0.6);
 }
 
-.infinite-grid-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  // clip, not hidden, so focusing a cell can never scroll the grid out of
-  // step with its pan offset.
-  overflow: clip;
-  cursor: grab;
-
-  &:active {
-    cursor: grabbing;
-  }
+.viewer-count {
+  font-variant-numeric: tabular-nums;
+  color: #e3e1da;
 }
 
-.infinite-grid-drag-surface {
-  position: absolute;
-  inset: -100%; // Make it large enough to drag far
-  z-index: 50;
-  touch-action: none;
+.viewer-actions {
+  flex-shrink: 0;
+  display: flex;
+  gap: 1.25rem;
 }
 
-.infinite-grid-viewport {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  pointer-events: none;
-}
-
-.infinite-grid-cell {
-  position: absolute;
-  pointer-events: auto;
+.viewer-text-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
   padding: 0;
-  border: 1px solid rgba(227, 225, 218, 0.1);
-  background-color: #161715;
-  transition: border-color 0.4s ease, opacity 0.4s ease, transform 0.4s ease;
-  overflow: hidden;
-  opacity: 0.6;
-  border-radius: 4px;
+  border: 0;
+  background: none;
+  font-family: $font-sans;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: rgba(227, 225, 218, 0.6);
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover:not(:disabled),
+  &[aria-pressed="true"] {
+    color: #f2f0ea;
+  }
+
+  &:hover:not(:disabled) {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  &:disabled {
+    color: rgba(227, 225, 218, 0.2);
+    cursor: default;
+  }
+}
+
+.viewer-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  padding: 0 1rem;
 
   @include pantai-md-up {
-    border-radius: 8px;
+    padding: 0 2rem;
   }
 
-  &.active {
-    opacity: 1;
-    border-color: #e3e1da;
-    border-width: 2px;
-    z-index: 25;
+  &[data-side="prev"] {
+    cursor: w-resize;
   }
+
+  &[data-side="next"] {
+    cursor: e-resize;
+  }
+}
+
+.viewer-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.viewer-image {
+  object-fit: contain;
+  user-select: none;
+}
+
+.viewer-sheet {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1rem 1rem calc(3rem + env(safe-area-inset-bottom, 0px));
+
+  @include pantai-md-up {
+    padding: 1.5rem 2rem 4rem;
+  }
+}
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.sheet-title {
+  margin: 0 0 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: #f2f0ea;
+}
+
+// Frames keep their shape at one row height, like strips on a contact sheet.
+.sheet-row {
+  // Phones: two 3:2 frames per row (1rem gutters and a 0.5rem gap, 2px slack).
+  --sheet-h: calc((100vw - 2.5rem - 2px) / 3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  @include pantai-md-up {
+    --sheet-h: 180px;
+    gap: 0.75rem;
+  }
+}
+
+.sheet-cell {
+  position: relative;
+  height: var(--sheet-h);
+  aspect-ratio: var(--plate-ratio);
+  padding: 0;
+  border: 0;
+  background-color: #161715;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
 
   &:hover,
-  &:focus-visible {
+  &:focus-visible,
+  &[aria-current="true"] {
     opacity: 1;
-    border-color: rgba(227, 225, 218, 0.4);
-
-    .grid-image {
-      transform: scale(1.08);
-    }
-
-    .grid-item-overlay {
-      opacity: 1;
-    }
   }
 
-  // Above the active (25) and hovered (20) cells so the ring is never covered.
-  &:focus-visible {
-    z-index: 30;
-  }
-}
-
-.grid-image {
-  object-fit: cover;
-  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.grid-item-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(16, 17, 15, 0.6) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 1rem !important;
-}
-
-.view-label {
-  font-family: $font-sans;
-  font-size: 0.55rem;
-  font-weight: 900;
-  color: #e3e1da;
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  opacity: 0.9;
-}
-
-.image-viewer-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
-
-.image-frame {
-  position: relative;
-  z-index: 10;
-  display: flex;
-  min-height: 0;
-  height: 100%;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  padding: 5rem 1.25rem 2.5rem !important;
-  will-change: transform;
-
-  @include pantai-lg-up {
-    padding: 5.5rem 6rem !important;
-  }
-}
-
-.draggable-image-wrapper {
-  position: relative;
-  display: flex;
-  height: min(76dvh, 46rem);
-  width: 100%;
-  max-width: 88rem;
-  cursor: grab;
-  align-items: center;
-  justify-content: center;
-
-  &:active {
-    cursor: grabbing;
-  }
-
-  @include pantai-lg-up {
-    height: 84dvh;
-  }
-}
-
-.lightbox-image {
-  object-fit: contain;
-}
-
-.lightbox-info {
-  position: relative;
-  width: 100%;
-  min-height: 0;
-  pointer-events: auto;
-  z-index: 20;
-
-  @include pantai-lg-up {
+  // The photo being viewed: a plain rule under it.
+  &[aria-current="true"]::after {
+    content: "";
     position: absolute;
-    inset-x: 0;
-    bottom: 0;
-    pointer-events: none;
-  }
-}
-
-.info-gradient {
-  display: none;
-
-  @include pantai-lg-up {
-    display: block;
-    height: 45vh;
-    background: linear-gradient(to top, #10110F 0%, rgba(16, 17, 15, 0.6) 50%, transparent 100%);
-  }
-}
-
-.info-content {
-  position: relative;
-  max-height: 34dvh;
-  overflow-y: auto;
-  padding: 0 1.25rem calc(1.5rem + env(safe-area-inset-bottom, 0px)) !important;
-  text-align: left;
-  pointer-events: auto;
-
-  @include pantai-lg-up {
-    position: absolute;
-    bottom: 0;
     left: 0;
     right: 0;
-    max-height: none;
-    overflow: visible;
-    padding: 4rem !important;
-    padding-bottom: 5rem !important;
+    bottom: -0.4rem;
+    height: 2px;
+    background-color: #e3e1da;
   }
 }
 
-.info-counter {
-  margin-bottom: 1rem !important;
-  font-family: $font-sans;
-  font-size: 0.58rem !important;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.28em !important;
-  color: rgba(227, 225, 218, 0.42);
-}
-
-.info-title {
-  margin-bottom: 0 !important;
-  max-width: 14ch;
-  font-size: clamp(2rem, 9vw, 3rem) !important;
-  line-height: 1.1 !important;
-  letter-spacing: -0.02em !important;
-  color: #e3e1da;
-
-  @include pantai-lg-up {
-    max-width: none;
-    font-size: 2.8rem !important;
-  }
-}
-
-.info-description {
-  margin-bottom: 0 !important;
-  margin-top: 1rem !important;
-  max-width: 42rem;
-  font-family: $font-sans;
-  font-size: 0.84rem !important;
-  line-height: 1.8 !important;
-  color: rgba(227, 225, 218, 0.6);
-
-  @include pantai-lg-up {
-    font-size: 0.92rem !important;
-  }
+.sheet-image {
+  object-fit: cover;
 }
 
 // Loading Screen
@@ -2125,6 +1792,50 @@
   }
 }
 
+// Back to /gallery. Arrow only on phones, where the centred title needs the
+// room; the label joins it from tablet up. Padding gives a 44px target and the
+// negative margin keeps the arrow on the gutter line.
+.nav-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  min-width: var(--tap);
+  min-height: var(--tap);
+  margin-left: -0.75rem;
+  padding: 0 0.75rem;
+  color: rgba(227, 225, 218, 0.72);
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  svg {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    color: #e3e1da;
+
+    svg {
+      transform: translateX(-2px);
+    }
+  }
+}
+
+.nav-back-label {
+  display: none;
+  font-family: $font-sans;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+
+  @include pantai-md-up {
+    display: inline;
+  }
+}
+
 .nav-center {
   display: flex;
   align-items: center;
@@ -2154,310 +1865,6 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-}
-
-.menu-trigger {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #e3e1da;
-  background: none;
-  border: none;
-  cursor: pointer;
-
-  &:hover {
-    .menu-line-1 {
-      width: 2rem;
-    }
-
-    .menu-line-2 {
-      width: 2rem;
-    }
-  }
-}
-
-.menu-lines {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: flex-end;
-}
-
-.menu-line-1 {
-  width: 1.75rem;
-  height: 1px;
-  background-color: rgba(227, 225, 218, 0.9);
-  transition: all 0.3s ease;
-}
-
-.menu-line-2 {
-  width: 1.25rem;
-  height: 1px;
-  background-color: rgba(227, 225, 218, 0.9);
-  transition: all 0.3s ease;
-}
-
-// Menu Overlay
-.menu-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  background-color: rgba(16, 17, 15, 0.42);
-  backdrop-filter: blur(32px) saturate(180%);
-  overflow: hidden;
-}
-
-.menu-bg-container {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.menu-bg-image-wrapper {
-  position: absolute;
-  inset: 0;
-}
-
-.menu-bg-image {
-  object-fit: cover;
-  filter: blur(10px);
-  transform: scale(1.1);
-}
-
-.menu-large-text {
-  position: absolute;
-  bottom: -2.5rem;
-  right: -5rem;
-  pointer-events: none;
-  opacity: 0.03;
-  user-select: none;
-  z-index: 10;
-
-  h2 {
-    font-size: 25rem;
-    line-height: 1;
-    white-space: nowrap;
-  }
-}
-
-.menu-radial-gradient {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at center, rgba(43, 65, 71, 0.15) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 10;
-}
-
-.menu-header {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  align-items: center;
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  padding: 0 1rem !important;
-  height: 72px;
-  border-bottom: 1px solid rgba(227, 225, 218, 0.1);
-
-  @include pantai-md-up {
-    height: 80px;
-    padding: 0 2.5rem !important;
-  }
-}
-
-.menu-header-center {
-  display: flex;
-  justify-content: center;
-}
-
-.menu-header-right {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.menu-title-button {
-  border: none;
-  background: transparent;
-  color: #f2f0ea;
-  cursor: pointer;
-  font-size: 1.85rem;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 1;
-  transition: opacity 0.2s ease;
-  white-space: nowrap;
-
-  &:hover {
-    opacity: 0.7;
-  }
-
-  @include pantai-md-up {
-    font-size: 2rem;
-  }
-}
-
-.menu-close-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #e3e1da;
-  background: none;
-  border: none;
-  cursor: pointer;
-
-  &:hover {
-    .close-line-1 {
-      transform: rotate(225deg);
-    }
-
-    .close-line-2 {
-      transform: rotate(135deg);
-    }
-  }
-}
-
-.close-icon-wrapper {
-  position: relative;
-  width: 1.75rem;
-  height: 1.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.close-line-1 {
-  position: absolute;
-  width: 1.75rem;
-  height: 1px;
-  background-color: #e3e1da;
-  transform: rotate(45deg);
-  transition: transform 0.5s ease;
-}
-
-.close-line-2 {
-  position: absolute;
-  width: 1.75rem;
-  height: 1px;
-  background-color: #e3e1da;
-  transform: rotate(-45deg);
-  transition: transform 0.5s ease;
-}
-
-.menu-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem !important;
-  overflow-y: auto;
-
-  @include pantai-md-up {
-    padding: 5rem !important;
-  }
-}
-
-.menu-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  padding-left: 1rem !important;
-  position: relative;
-  z-index: 10;
-
-  @include pantai-md-up {
-    padding-left: 0 !important;
-    align-items: center;
-    margin-top: 0 !important;
-  }
-}
-
-.menu-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  cursor: pointer;
-
-  @include pantai-md-up {
-    gap: 2rem;
-  }
-}
-
-.menu-item-number {
-  font-family: $font-sans;
-  font-size: 0.6rem;
-  font-weight: 700;
-  color: rgba(227, 225, 218, 0.3);
-  padding-top: 0.75rem;
-
-  @include pantai-md-up {
-    font-size: 0.7rem;
-    padding-top: 1rem;
-  }
-}
-
-.menu-item-link {
-  font-size: 2.5rem;
-  font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #f2f0ea;
-  line-height: 1.2;
-  text-decoration: none;
-
-  @include pantai-md-up {
-    font-size: 4.5rem;
-  }
-}
-
-.menu-footer {
-  position: absolute;
-  bottom: 3rem;
-  left: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  z-index: 10;
-
-  @include pantai-md-up {
-    gap: 3rem;
-  }
-}
-
-.menu-footer-link {
-  font-family: $font-sans;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  color: rgba(227, 225, 218, 0.4);
-  text-decoration: none;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: #e3e1da;
-  }
-
-  @include pantai-md-up {
-    font-size: 11px;
-  }
-}
-
-.menu-footer-divider {
-  width: 1px;
-  height: 0.75rem;
-  background-color: rgba(227, 225, 218, 0.1);
 }
 
 // Coastal Almanac
