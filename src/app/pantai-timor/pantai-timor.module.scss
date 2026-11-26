@@ -51,39 +51,36 @@
 
 // Village Rhythms
 .village-section {
-  padding-top: 4rem !important;
-  padding-bottom: 4rem !important;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
   background-color: #10110F;
-
-  @include pantai-md-up {
-    padding-top: 6rem !important;
-    padding-bottom: 6rem !important;
-  }
 }
 
 .village-container {
   position: relative;
   width: 100%;
-  aspect-ratio: 4/5;
+  min-height: 85svh;
   overflow: hidden;
-  border: 1px solid rgba(227, 225, 218, 0.1);
 
   &:hover {
     .village-image {
-      transform: scale(1.1);
+      transform: scale(1.04);
     }
   }
 
   @include pantai-md-up {
-    aspect-ratio: 16/8;
+    height: 90svh;
+    min-height: 0;
   }
 }
 
 .village-split-bg {
   display: grid;
   grid-template-columns: 1fr;
+  gap: 3px;
   height: 100%;
   width: 100%;
+  background-color: #10110F;
 
   @include pantai-md-up {
     grid-template-columns: repeat(2, 1fr);
@@ -92,17 +89,17 @@
 
 .village-image-wrapper {
   position: relative;
-  height: 100%;
   width: 100%;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
 
-  &.border-top {
-    border-top: 1px solid rgba(227, 225, 218, 0.1);
+  @include pantai-md-up {
+    aspect-ratio: auto;
+    height: 100%;
+  }
 
-    @include pantai-md-up {
-      border-top: 0;
-      border-left: 1px solid rgba(227, 225, 218, 0.1);
-    }
+  &.border-top {
+    border: 0;
   }
 }
 
@@ -203,24 +200,19 @@
 // Memory
 .memory-section {
   position: relative;
-  height: 250vh;
-  background-color: transparent;
+  height: 200vh;
+  background-color: #10110F;
   padding: 0 !important;
 }
 
 .memory-sticky-container {
   position: sticky;
-  top: calc(72px + env(safe-area-inset-top, 0px));
-  height: calc(100dvh - 72px - env(safe-area-inset-top, 0px));
+  top: 0;
+  height: 100svh;
   width: 100%;
   display: flex;
   align-items: center;
-  overflow: hidden;
-
-  @include pantai-md-up {
-    top: calc(80px + env(safe-area-inset-top, 0px));
-    height: calc(100dvh - 80px - env(safe-area-inset-top, 0px));
-  }
+  overflow: clip;
 }
 
 .memory-grid {
@@ -228,27 +220,19 @@
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: 100%;
 }
 
 .memory-image-container {
   position: relative;
   width: 100%;
-  max-width: min(88vw, 68dvh);
-  aspect-ratio: 4/5;
-  overflow: hidden;
-  border: 1px solid rgba(227, 225, 218, 0.1);
-  border-radius: 2px;
+  height: 100%;
+  overflow: clip;
 
   &:hover {
     .memory-image {
-      transform: scale(1.05);
+      transform: scale(1.04);
     }
-  }
-
-  @include pantai-md-up {
-    max-width: min(72vw, 74dvh);
-    aspect-ratio: 1/1;
-    border-radius: 1rem;
   }
 }
 
@@ -411,22 +395,36 @@
   width: 100%;
 }
 
-// Left-aligned on the plate frame, like a handwritten place name above
-// a contact sheet.
+// Left-aligned full-width chapter header, tight editorial beat before full-bleed plates.
 .chapter-opener {
   width: 100%;
-  max-width: 1500px;
-  margin: 0 auto;
-  padding: 8rem 1rem 2.5rem;
+  padding: 3rem clamp(1.25rem, 3vw, 3rem) 1.5rem;
 
   @include pantai-md-up {
-    padding: 12rem 2rem 3.5rem;
+    padding: 4.5rem clamp(1.25rem, 3vw, 3rem) 1.75rem;
+  }
+}
+
+.chapter-rule {
+  display: block;
+  width: 100%;
+  height: 1px;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(
+    to right,
+    rgba(227, 225, 218, 0.16) 0%,
+    rgba(227, 225, 218, 0.04) 55%,
+    transparent 100%
+  );
+
+  @include pantai-md-up {
+    margin-bottom: 2rem;
   }
 }
 
 .chapter-title {
   margin: 0;
-  font-size: clamp(2.25rem, 6vw, 4.5rem);
+  font-size: clamp(2.25rem, 5.5vw, 4.25rem);
   font-weight: 600;
   line-height: 1;
   letter-spacing: -0.01em;
@@ -434,7 +432,7 @@
 }
 
 .chapter-note {
-  margin: 0.75rem 0 0;
+  margin: 0.6rem 0 0;
   font-family: $font-sans;
   font-size: 0.875rem;
   line-height: 1.5;
@@ -443,55 +441,50 @@
 
 .chapter-plates {
   width: 100%;
-  max-width: 1500px;
-  margin: 0 auto;
-  padding: 1rem 1rem 6rem;
+  padding: 0 0 3px;
   display: flex;
   flex-direction: column;
-  gap: 4.5rem;
-
-  @include pantai-md-up {
-    padding: 2rem 2rem 9rem;
-    gap: 7rem;
-  }
+  gap: 3px;
 }
 
-// One plate is a wide frame; two share a row at a common height (each grows
-// by its aspect ratio). Phones stack them.
+// Edge-to-edge full-screen composition: single plates fill the viewport height;
+// paired plates form a full-width diptych with a razor hairline seam.
 .plate-row {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 3px;
+  width: 100%;
 
   @include pantai-md-up {
     flex-direction: row;
-    align-items: flex-start;
-    gap: 2rem;
+    align-items: stretch;
+    height: min(88svh, 58vw);
   }
+}
 
-  @include pantai-lg-up {
-    gap: 3rem;
+.plate-row-single {
+  @include pantai-md-up {
+    height: 92svh;
   }
 }
 
 .plate {
+  position: relative;
   margin: 0;
   min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
+  width: 100%;
 
   @include pantai-md-up {
     flex: var(--plate-ratio) 1 0;
+    height: 100%;
   }
 }
 
-// A lone plate stays inside the viewport height instead of the full width.
 .plate-row-single .plate {
   @include pantai-md-up {
-    flex: none;
-    width: min(100%, calc(82svh * var(--plate-ratio)));
-    margin-inline: auto;
+    flex: 1 1 100%;
+    width: 100%;
+    height: 100%;
   }
 }
 
@@ -503,16 +496,20 @@
   padding: 0;
   border: 0;
   background-color: #161715;
-  overflow: hidden;
   cursor: zoom-in;
 
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border: 1px solid rgba(227, 225, 218, 0.1);
-    pointer-events: none;
-    transition: border-color 0.5s ease;
+  .plate-row-single & {
+    min-height: 62svh;
+  }
+
+  @include pantai-md-up {
+    aspect-ratio: auto;
+    height: 100%;
+    min-height: 0;
+  }
+
+  &:focus-visible {
+    outline-offset: -3px;
   }
 
   &:hover,
@@ -520,9 +517,41 @@
     .plate-image {
       transform: scale(1.03);
     }
+  }
+}
 
-    &::after {
-      border-color: rgba(227, 225, 218, 0.3);
+// Inner clipping container so scroll-driven parallax never clips the focus ring
+// drawn on `.plate-button` or `.cinema-button`.
+.plate-frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: clip;
+}
+
+.plate-parallax {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes plate-drift {
+  from {
+    transform: translateY(-2.5%) scale(1.06);
+  }
+  to {
+    transform: translateY(2.5%) scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    .plate-parallax {
+      animation: plate-drift auto linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
     }
   }
 }
@@ -532,28 +561,305 @@
   transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.plate-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(16, 17, 15, 0.56) 0%,
+    rgba(16, 17, 15, 0.14) 16%,
+    transparent 34%
+  );
+}
+
 .plate-caption {
+  position: absolute;
+  left: clamp(1rem, 2.5vw, 2.5rem);
+  right: clamp(1rem, 2.5vw, 2.5rem);
+  bottom: 1rem;
+  pointer-events: none;
   font-family: $font-sans;
   font-size: 0.8125rem;
   line-height: 1.4;
-  color: rgba(227, 225, 218, 0.45);
+  color: rgba(242, 240, 234, 0.72);
+  text-shadow: 0 1px 10px rgba(16, 17, 15, 0.65);
+
+  @include pantai-md-up {
+    bottom: 1.35rem;
+  }
 }
 
-// The end of the page: two plain text links on the plate frame.
+// Full-bleed widescreen cinema plate (e.g. Marang Coast sunset)
+.cinema-plate {
+  position: relative;
+  margin: 0 0 3px;
+  width: 100%;
+}
+
+.cinema-button {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: 70svh;
+  aspect-ratio: var(--plate-ratio);
+  padding: 0;
+  border: 0;
+  background-color: #10110F;
+  cursor: zoom-in;
+
+  @include pantai-md-up {
+    aspect-ratio: auto;
+    height: 96svh;
+    min-height: 0;
+  }
+
+  &:focus-visible {
+    outline-offset: -3px;
+  }
+
+  &:hover,
+  &:focus-visible {
+    .plate-image {
+      transform: scale(1.025);
+    }
+  }
+}
+
+.cinema-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(16, 17, 15, 0.32) 0%,
+    transparent 16%,
+    transparent 76%,
+    rgba(16, 17, 15, 0.58) 100%
+  );
+}
+
+.cinema-caption {
+  position: absolute;
+  left: clamp(1.25rem, 3vw, 3rem);
+  right: clamp(1.25rem, 3vw, 3rem);
+  bottom: 1.25rem;
+  pointer-events: none;
+  font-family: $font-sans;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: rgba(242, 240, 234, 0.72);
+  text-shadow: 0 1px 10px rgba(16, 17, 15, 0.65);
+
+  @include pantai-md-up {
+    bottom: 1.75rem;
+  }
+}
+
+// Full-bleed scroll passage (Besut & Setiu: Pantai Penarik)
+.passage-section {
+  position: relative;
+  height: 210vh;
+  width: 100%;
+  margin-bottom: 3px;
+  background-color: #10110F;
+}
+
+.passage-sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  width: 100%;
+  overflow: clip;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.passage-aperture {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: clip;
+  will-change: clip-path;
+}
+
+.passage-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform, opacity;
+}
+
+.passage-image {
+  object-fit: cover;
+  object-position: center;
+}
+
+.passage-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background: linear-gradient(
+    to bottom,
+    rgba(16, 17, 15, 0.36) 0%,
+    transparent 20%,
+    transparent 78%,
+    rgba(16, 17, 15, 0.45) 100%
+  );
+}
+
+.passage-static {
+  width: 100%;
+  margin-bottom: 3px;
+}
+
+.passage-static-frame {
+  position: relative;
+  width: 100%;
+  height: 88svh;
+  overflow: clip;
+}
+
+// Closing widescreen horizon beat (Dungun: Kuala Dungun)
+.finale-section {
+  position: relative;
+  margin: 0;
+  height: 185vh;
+  width: 100%;
+  background-color: #10110F;
+}
+
+.finale-sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: clip;
+}
+
+.finale-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, opacity;
+}
+
+.finale-button {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background-color: #10110F;
+  cursor: zoom-in;
+  overflow: clip;
+
+  &:focus-visible {
+    outline-offset: -3px;
+  }
+
+  &:hover,
+  &:focus-visible {
+    .finale-image {
+      transform: scale(1.025);
+    }
+  }
+}
+
+.finale-media {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+.finale-image {
+  object-fit: cover;
+  object-position: 30% 55%;
+  transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+  @include pantai-md-up {
+    object-position: center 55%;
+  }
+}
+
+.finale-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(16, 17, 15, 0.55) 0%,
+    transparent 18%,
+    transparent 74%,
+    #10110F 100%
+  );
+}
+
+.finale-caption {
+  position: absolute;
+  left: clamp(1.25rem, 3vw, 3rem);
+  right: clamp(1.25rem, 3vw, 3rem);
+  bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  pointer-events: none;
+  font-family: $font-sans;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: rgba(242, 240, 234, 0.72);
+  text-shadow: 0 1px 10px rgba(16, 17, 15, 0.65);
+
+  @include pantai-md-up {
+    bottom: 2rem;
+  }
+}
+
+.finale-static {
+  position: relative;
+  margin: 0;
+  width: 100%;
+
+  .finale-button {
+    height: 92svh;
+  }
+}
+
+.finale-caption-static {
+  position: absolute;
+  left: clamp(1.25rem, 3vw, 3rem);
+  right: clamp(1.25rem, 3vw, 3rem);
+  bottom: 1.5rem;
+  pointer-events: none;
+  font-family: $font-sans;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: rgba(242, 240, 234, 0.72);
+}
+
+// The end of the page: two plain text links aligned with the chapter gutter.
 .epilogue {
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 1500px;
-  margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.5rem 2rem;
-  padding: 3rem 1rem calc(4rem + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid rgba(227, 225, 218, 0.08);
+  padding: 2.25rem clamp(1.25rem, 3vw, 3rem) calc(2.75rem + env(safe-area-inset-bottom, 0px));
 
   @include pantai-md-up {
-    padding: 4rem 2rem calc(6rem + env(safe-area-inset-bottom, 0px));
+    padding: 3rem clamp(1.25rem, 3vw, 3rem) calc(3.5rem + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -2055,4 +2361,866 @@
 .almanac-word {
   position: relative;
   display: inline-block;
+}
+
+// ============================================================================
+// 1960s-Inspired Horizontal Photobook Rail (`EditorialBook`)
+// No artificial fold; every photograph maintains its original aspect ratio
+// (`calc(var(--rail-h) * var(--plate-ratio))`) at full rail height on desktop.
+// ============================================================================
+.book-section {
+  position: relative;
+  z-index: 15;
+  width: 100%;
+  background-color: #0e0f0d;
+}
+
+.book-section-native {
+  height: 100svh;
+}
+
+.book-viewport-shell {
+  --folio-h: calc(48px + env(safe-area-inset-bottom, 0px));
+  --rail-h: calc(100svh - var(--folio-h));
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  width: 100%;
+  overflow: clip;
+  background-color: #0e0f0d;
+}
+
+.book-scroller {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.book-scroller-sticky {
+  overflow: clip;
+}
+
+.book-scroller-native {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.rail-track {
+  display: flex;
+  align-items: flex-start;
+  gap: 3px;
+  width: max-content;
+  height: 100%;
+  background-color: #0b0c0a;
+  will-change: transform;
+}
+
+.rail-panel {
+  position: relative;
+  flex: 0 0 auto;
+  height: var(--rail-h);
+  margin: 0;
+  overflow: clip;
+  scroll-snap-align: start;
+  background-color: #10110F;
+}
+
+// Session 0: Inline Cover (Hero) spans exact viewport width × 100svh on the same rail
+.rail-hero-panel {
+  width: var(--vp-w, 100vw);
+  height: 100svh;
+  background-color: #10110F;
+}
+
+.rail-hero-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: clip;
+}
+
+.rail-hero-stage {
+  position: absolute;
+  inset: 0;
+  opacity: 0.4;
+  mix-blend-mode: screen;
+  user-select: none;
+  pointer-events: none;
+  overflow: clip;
+}
+
+.rail-hero-clip {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: clip;
+  will-change: clip-path, opacity;
+  clip-path: inset(16% 4% 16% 4% round 28px);
+
+  @include pantai-md-up {
+    clip-path: inset(18% 20% 18% 20% round 40px);
+  }
+}
+
+.rail-hero-video-parallax {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+.rail-hero-dim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.rail-scroll-indicator {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 0;
+  right: 0;
+  width: max-content;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  will-change: transform, opacity;
+}
+
+.rail-scroll-line {
+  width: 4.5rem;
+  height: 1px;
+  background-color: rgba(227, 225, 218, 0.16);
+  position: relative;
+  overflow: hidden;
+}
+
+.rail-scroll-line-animated {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 45%;
+  height: 100%;
+  background-color: rgba(227, 225, 218, 0.65);
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: pantaiScrollAcross 2.4s ease-in-out infinite;
+  }
+}
+
+@keyframes pantaiScrollAcross {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(120%);
+  }
+  100% {
+    transform: translateX(260%);
+  }
+}
+
+// Session 1: Original Sticky CoastalAlmanac inline on the horizontal rail
+.rail-almanac-panel {
+  width: var(--vp-w, 100vw);
+  height: var(--rail-h);
+  --almanac-x-travel: calc(100vw - 150vh);
+
+  @include pantai-md-up {
+    --almanac-x-travel: -46.666%;
+  }
+}
+
+.rail-almanac-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.rail-almanac-stage {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 3.5rem;
+}
+
+.rail-almanac-window {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  @include pantai-md-up {
+    width: min(80vw, 66svh);
+    height: auto;
+    aspect-ratio: 4 / 5;
+  }
+}
+
+.rail-almanac-pan-layer {
+  position: absolute;
+  inset: 0;
+  width: 150%;
+  height: 100%;
+  will-change: transform, opacity;
+
+  @media (max-width: #{$breakpoint-mobile - 1px}) {
+    width: calc(100svh * 1.5);
+  }
+
+  @include pantai-md-up {
+    width: 187.5%; // 1.5 / 0.8 = 1.875 — exact original 3:2 travel inside 4:5 window
+  }
+}
+
+// True-aspect-ratio photograph panel:
+// - Desktop: fills 100% rail height; width = railHeight * original ratio (zero crop)
+// - Mobile: full-width (100vw) centered vertically at exact original aspect ratio
+.rail-plate-panel {
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0e0f0d;
+
+  @include pantai-md-up {
+    display: block;
+    width: calc(var(--rail-h) * var(--plate-ratio));
+  }
+}
+
+// Session 2: Original Sticky ParallaxZoom stage (full viewport width)
+.rail-pz-panel {
+  width: var(--vp-w, 100vw);
+}
+
+// Original Sticky Memory Focus-Pull stage (full viewport width, photo at exact 3:2 ratio)
+.rail-memory-panel {
+  width: var(--vp-w, 100vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #10110F;
+}
+
+.rail-memory-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--plate-ratio);
+  max-height: 100%;
+  overflow: clip;
+
+  @include pantai-md-up {
+    width: min(100%, calc(var(--rail-h) * var(--plate-ratio)));
+    height: var(--rail-h);
+    aspect-ratio: auto;
+  }
+}
+
+// Stacked 3:2 VillageRhythms column:
+// Each half-height item is `0.5 * rail-h` tall and `0.75 * rail-h` wide -> exact 3:2!
+.rail-stack-panel {
+  width: 100vw;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 3px;
+  background-color: #0b0c0a;
+
+  @include pantai-md-up {
+    width: calc(var(--rail-h) * 0.75);
+  }
+}
+
+.rail-stack-item {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: clip;
+  background-color: #141513;
+}
+
+// Prologue Contents Column
+.rail-toc-panel {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+  background-color: #111210;
+  padding: calc(74px + env(safe-area-inset-top, 0px)) 1.5rem 1.5rem;
+
+  @include pantai-md-up {
+    width: clamp(320px, 34vw, 460px);
+    padding: calc(88px + env(safe-area-inset-top, 0px)) clamp(1.75rem, 3vw, 3rem) 2.25rem;
+  }
+}
+
+// Chapter Opener Column (inspired by 60s magazine chapter dividers)
+.rail-chapter-panel {
+  width: 86vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #111210;
+
+  @include pantai-md-up {
+    width: clamp(290px, 30vw, 430px);
+  }
+}
+
+// Inset photo inside chapter column keeps its exact 3:2 original ratio
+.rail-chapter-inset {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  flex-shrink: 0;
+  overflow: clip;
+  border-top: 3px solid #0b0c0a;
+  background-color: #141513;
+}
+
+// End-of-rail Colophon Column
+.rail-epilogue-panel {
+  width: 86vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #111210;
+  padding: calc(74px + env(safe-area-inset-top, 0px)) 1.5rem 2rem;
+
+  @include pantai-md-up {
+    width: clamp(260px, 26vw, 360px);
+    padding: calc(88px + env(safe-area-inset-top, 0px)) clamp(1.75rem, 3vw, 3rem) 2.5rem;
+  }
+}
+
+.rail-epilogue-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(227, 225, 218, 0.14);
+}
+
+.rail-epilogue-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: $font-sans;
+  font-size: 0.875rem;
+  color: rgba(242, 240, 234, 0.72);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #ffffff;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+}
+
+// Horizontal CoastalAlmanac layers & concentric water ripples
+.book-almanac-layer {
+  position: absolute;
+  inset: 0 -6%;
+  will-change: transform, opacity;
+}
+
+.book-ripple-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  mix-blend-mode: overlay;
+  opacity: 0.34;
+  z-index: 2;
+}
+
+.book-ripple-circle {
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  left: -10%;
+  top: -10%;
+  border: 0.5px solid rgba(227, 225, 218, 0.45);
+  border-radius: 50%;
+  filter: blur(18px);
+}
+
+// Full-height horizontal ParallaxZoom stage (Chapter I Bachok)
+.book-pz-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: clip;
+  background-color: #10110F;
+}
+
+.book-pz-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform, opacity;
+  z-index: 1;
+}
+
+.book-pz-fg {
+  z-index: 2;
+}
+
+.book-pz-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(14, 15, 13, 0.72) 0%,
+    rgba(14, 15, 13, 0.18) 28%,
+    transparent 52%,
+    rgba(14, 15, 13, 0.32) 100%
+  );
+}
+
+.book-pz-title-card {
+  position: absolute;
+  left: clamp(1.25rem, 3.5vw, 3.5rem);
+  bottom: clamp(1.5rem, 4vh, 3.25rem);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.book-pz-heading {
+  margin: 0;
+  font-size: clamp(2.75rem, 7vw, 6.25rem);
+  font-weight: 600;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  color: #f2f0ea;
+  text-shadow: 0 2px 24px rgba(10, 11, 9, 0.55);
+}
+
+.book-pz-note {
+  margin: 0.5rem 0 0;
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(242, 240, 234, 0.24);
+  font-family: $font-sans;
+  font-size: 0.875rem;
+  color: rgba(242, 240, 234, 0.72);
+  width: max-content;
+}
+
+// Inner horizontal-parallax wrapper inside clipped media frames
+.book-parallax-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+.book-page-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(227, 225, 218, 0.14);
+  font-family: $font-sans;
+  font-size: 0.75rem;
+  color: rgba(227, 225, 218, 0.5);
+}
+
+.book-folio-num {
+  font-variant-numeric: tabular-nums;
+  color: rgba(242, 240, 234, 0.78);
+}
+
+.book-running-place {
+  text-align: right;
+}
+
+.book-toc-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  @include pantai-md-up {
+    gap: 1.75rem;
+  }
+}
+
+.book-toc-heading {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 600;
+  font-style: italic;
+  line-height: 0.96;
+  letter-spacing: -0.015em;
+  color: #f2f0ea;
+}
+
+.book-toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(227, 225, 218, 0.14);
+}
+
+.book-toc-item {
+  border-bottom: 1px solid rgba(227, 225, 218, 0.1);
+}
+
+.book-toc-btn {
+  width: 100%;
+  min-height: 44px;
+  display: grid;
+  grid-template-columns: 2.2rem 1fr auto;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.65rem 0;
+  border: 0;
+  background: none;
+  color: #e3e1da;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.2s ease, opacity 0.2s ease;
+
+  &:hover {
+    color: #ffffff;
+
+    .book-toc-meta {
+      color: rgba(242, 240, 234, 0.8);
+    }
+  }
+}
+
+.book-toc-numeral {
+  font-size: 1.15rem;
+  font-style: italic;
+  color: rgba(227, 225, 218, 0.55);
+}
+
+.book-toc-name {
+  font-family: $font-sans;
+  font-size: 0.9rem;
+  color: #f2f0ea;
+}
+
+.book-toc-meta {
+  font-family: $font-sans;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: rgba(227, 225, 218, 0.45);
+  transition: color 0.2s ease;
+}
+
+.book-page-footnote {
+  margin: 0;
+  font-family: $font-sans;
+  font-size: 0.75rem;
+  color: rgba(227, 225, 218, 0.45);
+}
+
+.book-chapter-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: calc(74px + env(safe-area-inset-top, 0px)) 1.5rem 1.5rem;
+  will-change: transform;
+
+  @include pantai-md-up {
+    gap: 0.55rem;
+    padding: calc(88px + env(safe-area-inset-top, 0px)) clamp(1.75rem, 3vw, 3rem) 1.75rem;
+  }
+}
+
+.book-chapter-numeral {
+  font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1;
+  color: rgba(227, 225, 218, 0.42);
+}
+
+.book-chapter-title {
+  margin: 0;
+  font-size: clamp(2rem, 3.8vw, 3.25rem);
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  color: #f2f0ea;
+}
+
+.book-chapter-note {
+  margin: 0.35rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(227, 225, 218, 0.14);
+  font-family: $font-sans;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: rgba(227, 225, 218, 0.52);
+}
+
+.book-plate-btn {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--plate-ratio);
+  max-height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+
+  @include pantai-md-up {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+
+  &:focus-visible {
+    outline-offset: -3px;
+  }
+
+  &:hover,
+  &:focus-visible {
+    .book-plate-img {
+      transform: scale(1.024);
+    }
+  }
+}
+
+.book-plate-media,
+.book-static-media {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: clip;
+
+  .rail-plate-panel > & {
+    aspect-ratio: var(--plate-ratio);
+    height: auto;
+    max-height: 100%;
+
+    @include pantai-md-up {
+      aspect-ratio: auto;
+      height: 100%;
+    }
+  }
+}
+
+.book-plate-img {
+  object-fit: cover;
+  object-position: center;
+  transition: transform 1.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.book-plate-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(14, 15, 13, 0.46) 0%,
+    transparent 16%,
+    transparent 64%,
+    rgba(14, 15, 13, 0.14) 82%,
+    rgba(14, 15, 13, 0.62) 100%
+  );
+}
+
+.book-caption {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 0.85rem;
+  z-index: 3;
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  pointer-events: none;
+  font-family: $font-sans;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: rgba(242, 240, 234, 0.76);
+  text-shadow: 0 1px 10px rgba(10, 11, 9, 0.75);
+
+  @include pantai-md-up {
+    left: 1.5rem;
+    right: 1.5rem;
+    bottom: 1.15rem;
+    font-size: 0.8125rem;
+  }
+}
+
+.book-caption-code {
+  font-variant-numeric: tabular-nums;
+  color: rgba(242, 240, 234, 0.48);
+}
+
+// 1960s Running Folio Navigation Strip (docked at bottom once past Cover)
+.book-folio-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: var(--folio-h);
+  padding: 0 1rem env(safe-area-inset-bottom, 0px);
+  background-color: #0e0f0d;
+  border-top: 1px solid rgba(227, 225, 218, 0.12);
+  will-change: transform, opacity;
+
+  @include pantai-md-up {
+    padding: 0 1.5rem env(safe-area-inset-bottom, 0px);
+  }
+}
+
+.book-folio-chapters {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+
+  @include pantai-md-up {
+    gap: 1.25rem;
+  }
+}
+
+.book-folio-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0 0.4rem;
+  border: 0;
+  background: none;
+  font-family: $font-sans;
+  font-size: 0.75rem;
+  color: rgba(227, 225, 218, 0.4);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+
+  @include pantai-md-up {
+    padding: 0;
+    font-size: 0.8125rem;
+  }
+
+  &:hover {
+    color: rgba(242, 240, 234, 0.85);
+  }
+}
+
+.book-folio-tab-active {
+  color: #f2f0ea;
+}
+
+.book-folio-tab-label {
+  display: none;
+
+  @include pantai-md-up {
+    display: inline;
+  }
+}
+
+.book-folio-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.book-folio-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.book-folio-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: rgba(242, 240, 234, 0.72);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover:not(:disabled) {
+    color: #ffffff;
+  }
+
+  &:disabled {
+    opacity: 0.25;
+    cursor: default;
+  }
+}
+
+.book-folio-pages {
+  font-family: $font-sans;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: rgba(227, 225, 218, 0.62);
+  min-width: 4.5rem;
+  text-align: center;
+}
+
+.book-progress-track {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+}
+
+.book-progress-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(242, 240, 234, 0.58);
+  transform-origin: left center;
 }

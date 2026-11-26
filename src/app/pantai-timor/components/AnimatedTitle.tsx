@@ -36,6 +36,7 @@ interface AnimatedTitleProps {
   finalTitleBlur: MotionValue<string>;
   titleLetterSpacing: MotionValue<string>;
   secondaryHeroOpacity: MotionValue<number>;
+  secondaryTitleX?: MotionValue<string>;
 }
 
 export const AnimatedTitle = ({
@@ -48,6 +49,7 @@ export const AnimatedTitle = ({
   finalTitleBlur,
   titleLetterSpacing,
   secondaryHeroOpacity,
+  secondaryTitleX,
 }: AnimatedTitleProps) => {
   const { lenis } = useLenis();
 
@@ -85,7 +87,7 @@ export const AnimatedTitle = ({
       <motion.div 
         initial={{ opacity: 0 }}
         style={{ 
-          x: titleX,
+          x: secondaryTitleX ?? titleX,
           y: useTransform(finalTitleY, (y: string) => `calc(${y} - clamp(3.8rem, 12vw, 10rem))`),
           left: titleLeft,
           top: titleTop,

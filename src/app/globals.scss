@@ -17,6 +17,12 @@
   initial-value: 0px;
 }
 
+@property --drawer-backdrop {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
 html {
   background-color: var(--kertas-ground);
   color: var(--dakwat);

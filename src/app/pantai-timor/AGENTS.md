@@ -66,18 +66,20 @@ When editing this subproject:
 
 ## Story Structure
 
-The route reads as a drive down the east coast, north to south. Order in `page.tsx`:
+The route is a single unified horizontal editorial rail (`EditorialBook`, `#editorial-book`) inspired by a 1960s photobook/magazine (no artificial book fold), starting with the Cover (`Hero`) inline on the exact same horizontal line as all chapters:
 
-1. `Hero` and the travelling `AnimatedTitle`
-2. Prologue: `CoastalAlmanac` (`#prologue`), spanning the whole coast
-3. Four `StoryChapter`s (`#bachok`, `#besut-setiu`, `#kuala-terengganu`, `#dungun`), each opened by the place name (Cormorant, left-aligned on the plate frame) and one plain line under it: the state, plus how far south of the previous chapter (straight-line km, `kmFromPrevious`)
-4. `Epilogue` (`#epilogue`): two plain text links, "← Back to gallery" and "Back to top ↑"
+1. **Cover (`#cover`)**: Inline first panel (`100svh`) on the rail. During its sticky dwell, `cover.mp4` expands from rounded card (`--hero-width × --hero-height`) to full viewport while `AnimatedTitle` glides into `Navbar`'s running head; the bottom running folio bar stays hidden on the cover and slides in as the rail advances horizontally into `CoastalAlmanac`.
+2. **CoastalAlmanac (`#almanac`)**: Sticky dwell panel preserving the original blurred coastal backdrop, centered `4:5` window panning horizontally (`--almanac-x-travel`) with `DSC07763_1.jpg` → `DSC00590.JPG` cross-fade, and concentric water ripples.
+3. **Prologue TOC (`#prologue`)**: Compact north-to-south contents column jumping directly to each chapter along the piecewise timeline.
+4. **Chapter I (`#bachok`)**: Sticky dwell `ParallaxZoom` (`DSC00465.JPG` zooming `1 → 3×` and dissolving into `DSC00590.JPG`), four true-ratio `3:2` plates, stacked `VillageRhythms` counter-parallax diptych (`width: calc(var(--rail-h) * 0.75)` so both halves remain exact `3:2`), and sticky dwell `Memory` (`DSC00679.JPG` darkroom blur/brightness/saturation focus pull via `useMotionTemplate`).
+5. **Chapter II (`#besut-setiu`)**: Chapter divider column with `3:2` `DSC01061.jpg` inset, road-pan `DSC01024.jpg` (`3:2`), `DSC00032.jpg` (`3:2`), and `DSC08014.jpg` (`3:4` portrait).
+6. **Chapter III (`#kuala-terengganu`)**: Chapter divider column with `3:2` `DSC01218.jpg` inset, `DSC00052.jpg`, `DSC01109.jpg`, `DSC07705.jpg`, and Marang Coast golden sunset `DSC08133_1.jpg` (all true `3:2`).
+7. **Chapter IV (`#dungun`) & `#epilogue`**: Chapter divider column, Rantau Abang plates (`DSC07670_1.jpg`, `DSC08235.jpg`), Kuala Dungun `1500/843` (~`16:9`) dusk horizon (`DSC07665_1.jpg`), and a compact colophon column ("← Back to gallery", "Back to cover ↑").
 
-- Keep it raw. No kickers or letter-spaced uppercase labels, stat lines, outlined numerals, pill buttons, centred display typography or decorative scroll gimmicks; the user rejected those as looking machine-made. Text is sentence case in the sans at small sizes, and the photographs carry the page.
-- The immersive pieces sit in Chapter I because their photographs are all from Bachok: `ParallaxZoom` is its `lead` (arrival on the beach), `VillageRhythms` and `Memory` its `coda` (the dashboard view as the drive leaves Bachok). Place any new immersive piece in the chapter where its photo was taken.
-- Plates are buttons that open the viewer at their `STORY_PLATES` index. Each sits at its true aspect ratio (`--plate-ratio`); a lone plate is capped to `82svh` tall, a pair shares one height, and phones stack them. Plates fade in (opacity only). The caption is just the place name ("Pantai Irama, Bachok").
-- Copy is limited to place names and distances derived from the archive. Don't invent narrative prose about places; ask for it.
-- The old horizontal archive carousel (`TheLocalSection`, `#archive`) has been replaced by the chapters. The map (`CoastalGeography`), text-led sections (`HistoryCulture`, `QuoteSection`), and `Footer` remain off the route.
+- On desktop (`>= 768px`, no reduced motion), `EditorialBook` builds a piecewise scroll timeline (`buildHorizontalTimeline`) whose `trackX` pauses on flat sticky-dwell plateaus at `#cover`, `#almanac`, `#bachok` (`ParallaxZoom`), and `#memory` while sliding smoothly across all true-ratio plates (`width: calc(var(--rail-h) * var(--plate-ratio))`) in between. Vertical scroll (Lenis / mouse wheel), horizontal trackpad wheel (`deltaX`), keyboard `ArrowLeft`/`ArrowRight`, and the bottom running folio bar all drive the same rail. On mobile (`< 768px`) and under `prefers-reduced-motion: reduce`, `.book-scroller` switches to native horizontal touch scrolling (`overflow-x: auto; scroll-snap-type: x proximity`) with `heroProgressMV` synced from `scrollLeft`.
+- All 13 `STORY_PLATES` remain clickable buttons inside the rail that open `Lightbox` at their exact `STORY_PLATES` index (with inset `outline-offset: -3px` focus rings and `onFocus` scrolling the panel into view), separated by crisp `3px` seams with zero document horizontal overflow.
+- Keep it raw and print-inspired: Cormorant Roman numerals and chapter titles, tabular plate counter (`01 / 13`), archive frame codes (`PT · 19`), and place names/distances from the archive. Don't invent narrative prose about places; ask for it.
+- Unused legacy vertical components (`Hero`, `CoastalAlmanac`, `ParallaxZoom`, `VillageRhythms`, `Memory`, `CoastalPassage`, `CoastalFinale`, `StoryChapter`, `Epilogue`, `CoastalGeography`, `HistoryCulture`, `QuoteSection`, `Footer`) remain off the active route.
 
 ## Navbar Rules
 

@@ -364,331 +364,245 @@
   inline-size: 12px;
 }
 
-// Native top-layer modal sheet (<dialog showModal()>)
+// Native top-layer edge navigation drawer (<dialog showModal()>)
 .menuDialog {
-  margin: auto;
-  inline-size: min(calc(100dvw - 24px), 440px);
-  max-block-size: min(86dvh, 660px);
+  --drawer-width: min(20rem, 82dvw, calc(100dvw - 48px));
+  --drawer-backdrop: 0;
+
+  inset: 0;
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  margin: 0;
   padding: 0;
-  border: none;
-  border-radius: var(--radius-card);
-  background: var(--kertas);
+  background: transparent;
+  border: 0;
+  overflow: visible;
   color: var(--dakwat);
-  box-shadow: var(--pad-lifted), var(--pad-hairline);
-  overflow-y: auto;
-
-  // Base (closed/exit) state for top-layer discrete transition
-  opacity: 0;
-  transition-property: opacity, transform, display, overlay;
-  transition-duration: 0.28s;
-  transition-timing-function: var(--ease-settle);
-  transition-behavior: allow-discrete;
-
-  @media (prefers-reduced-motion: no-preference) {
-    transform: translateY(10px) scale(0.985);
-  }
 
   &::backdrop {
-    background-color: rgba(29, 26, 22, 0);
-    backdrop-filter: blur(0px);
-    -webkit-backdrop-filter: blur(0px);
-    transition-property: background-color, backdrop-filter, display, overlay;
-    transition-duration: 0.28s;
-    transition-timing-function: var(--ease-settle);
-    transition-behavior: allow-discrete;
-  }
-
-  &[open] {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &[open]:where(:not([data-closing])) {
-    opacity: 1;
-
-    @starting-style {
-      opacity: 0;
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-      transform: translateY(0) scale(1);
-
-      @starting-style {
-        transform: translateY(10px) scale(0.985);
-      }
-    }
-
-    &::backdrop {
-      background-color: rgba(29, 26, 22, 0.38);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-
-      @starting-style {
-        background-color: rgba(29, 26, 22, 0);
-        backdrop-filter: blur(0px);
-        -webkit-backdrop-filter: blur(0px);
-      }
-    }
+    background: #1d1a16;
+    opacity: calc(var(--drawer-backdrop) * 0.36);
   }
 
   &[data-dialog-theme='dark'] {
-    background: #141311;
     color: #f4f0e8;
-    box-shadow:
-      0 24px 64px -16px rgba(0, 0, 0, 0.75),
-      0 0 0 1px rgba(255, 255, 255, 0.12);
 
-    &[open]:where(:not([data-closing]))::backdrop {
-      background-color: rgba(5, 5, 5, 0.72);
-
-      @starting-style {
-        background-color: rgba(5, 5, 5, 0);
-      }
+    &::backdrop {
+      background: #000000;
+      opacity: calc(var(--drawer-backdrop) * 0.68);
     }
 
-    .dialogHeader {
-      border-block-end-color: rgba(255, 255, 255, 0.08);
+    .drawerSheet {
+      background: #0e0d0c;
+      color: #f4f0e8;
+      border-inline-start-color: rgba(255, 255, 255, 0.09);
     }
 
-    .dialogKicker,
-    .rowIndex,
-    .rowMeta,
-    .dialogCaption {
-      color: rgba(244, 240, 232, 0.52);
-    }
-
-    .dialogTitle,
-    .rowLabel,
     .closeBtn {
       color: #f4f0e8;
     }
 
-    .closeBtn {
-      background: rgba(255, 255, 255, 0.06);
+    .drawerLink {
+      color: rgba(244, 240, 232, 0.72);
 
-      &:hover {
-        background: rgba(255, 255, 255, 0.13);
-      }
-    }
-
-    .dialogItem:not(:last-child) .dialogRow {
-      border-block-end-color: rgba(255, 255, 255, 0.08);
-    }
-
-    .dialogRow:hover {
-      background-color: rgba(255, 255, 255, 0.045);
-    }
-
-    .rowIcon {
-      color: rgba(244, 240, 232, 0.52);
-    }
-
-    .dialogRow:hover .rowIcon,
-    .activeRow .rowIcon {
-      color: #f4f0e8;
-    }
-
-    .activeRow .rowIndex {
-      color: #f4f0e8;
-    }
-
-    .dialogFooter {
-      background: rgba(255, 255, 255, 0.025);
-      border-block-start-color: rgba(255, 255, 255, 0.08);
-    }
-
-    .socialLink {
-      color: rgba(244, 240, 232, 0.78);
-
-      &:hover {
+      &:hover,
+      &:focus-visible {
         color: #ffffff;
       }
     }
-  }
 
-  @media (prefers-reduced-motion: reduce) {
-    transition-duration: 0.1s;
+    .activeLink {
+      color: #ffffff;
+    }
 
-    &::backdrop {
-      transition-duration: 0.1s;
+    .drawerFooter {
+      border-block-start-color: rgba(255, 255, 255, 0.09);
+    }
+
+    .socialLink {
+      color: rgba(244, 240, 232, 0.56);
+
+      &:hover,
+      &:focus-visible {
+        color: #f4f0e8;
+      }
+    }
+
+    :where(a, button):focus-visible {
+      outline-color: #f4f0e8;
     }
   }
 }
 
-.dialogHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 22px 16px;
-  border-block-end: 1px solid var(--kertas-3);
+.drawerScroller {
+  position: relative;
+  display: grid;
+  grid-template-columns: 100% var(--drawer-width);
+  overflow-x: scroll;
+  overscroll-behavior: none;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  // Full-viewport spacer on the left creates the "closed" snap stop;
+  // swiping right pushes the drawer smoothly off the right edge.
+  &::before {
+    content: '';
+    scroll-snap-align: start;
+    scroll-initial-target: nearest;
+  }
 }
 
-.dialogHeadingGroup {
+@media (prefers-reduced-motion: no-preference) {
+  .drawerScroller {
+    scroll-behavior: smooth;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  .menuDialog {
+    timeline-scope: --drawer-fade;
+    animation: fadeDrawerBackdrop linear both;
+    animation-timeline: --drawer-fade;
+  }
+
+  .drawerScroller {
+    scroll-timeline: --drawer-fade x;
+  }
+
+  @keyframes fadeDrawerBackdrop {
+    0% {
+      --drawer-backdrop: 0;
+    }
+
+    100% {
+      --drawer-backdrop: 1;
+    }
+  }
+}
+
+.drawerSheet {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-}
-
-.dialogKicker {
-  font-family: var(--font-kertas-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--dakwat-3);
-}
-
-.dialogTitle {
-  font-family: var(--font-kertas-serif);
-  font-size: 1.375rem;
-  font-weight: 700;
-  line-height: 1.1;
+  height: 100svh;
+  padding-block-start: calc(14px + env(safe-area-inset-top));
+  padding-block-end: calc(24px + env(safe-area-inset-bottom));
+  padding-inline: 28px clamp(20px, 5vw, 40px);
+  background: var(--kertas-ground);
   color: var(--dakwat);
-  margin: 0;
+  border-inline-start: 1px solid rgba(29, 26, 22, 0.08);
+  overflow-y: auto;
+  scroll-snap-align: end;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.drawerTop {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-block-size: var(--tap);
 }
 
 .closeBtn {
-  inline-size: var(--tap);
-  block-size: var(--tap);
-  border-radius: var(--radius-pill);
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  background: var(--kertas-2);
+  justify-content: flex-end;
+  gap: 8px;
+  min-block-size: var(--tap);
+  min-inline-size: var(--tap);
+  padding-inline: 4px 0;
+  border-radius: 4px;
+  font-family: var(--font-kertas-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--dakwat);
-  transition:
-    background-color var(--dur-fast) var(--ease-settle),
-    transform var(--dur-fast) var(--ease-settle);
+  transition: opacity var(--dur-fast) var(--ease-settle);
 
   &:hover {
-    background: var(--kertas-3);
+    opacity: 0.68;
   }
 
   &:active {
-    transform: scale(0.95);
+    opacity: 0.5;
   }
 }
 
-.dialogNav {
-  padding-block: 4px;
-}
-
-.dialogList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.dialogRow {
-  @include kertas-row;
-  min-block-size: 60px;
-  padding: 13px 22px;
-}
-
-.dialogItem:not(:last-child) .dialogRow {
-  border-block-end: 1px solid var(--kertas-3);
-}
-
-.rowLead {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  min-inline-size: 0;
-}
-
-.rowIndex {
-  font-family: var(--font-kertas-mono);
-  font-size: 0.75rem;
+.closeBtnLabel {
   line-height: 1;
-  color: var(--dakwat-3);
-  flex-shrink: 0;
-  transition: color var(--dur-fast) var(--ease-settle);
 }
 
-.rowText {
+.drawerList {
+  list-style: none;
+  margin: clamp(32px, 8svh, 64px) 0 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
-.rowLabel {
-  font-family: var(--font-kertas-serif);
-  font-size: 1.0625rem;
-  font-weight: 700;
-  line-height: 1.25;
-  color: var(--dakwat);
+.drawerItem {
+  display: flex;
 }
 
-.rowMeta {
-  font-family: var(--font-kertas-sans);
-  font-size: 0.8125rem;
-  line-height: 1.3;
-  color: var(--dakwat-3);
-}
-
-.rowIcon {
+.drawerLink {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  color: var(--dakwat-3);
-  flex-shrink: 0;
-  transition:
-    color var(--dur-fast) var(--ease-settle),
-    transform var(--dur-fast) var(--ease-settle);
+  min-block-size: 48px;
+  font-family: var(--font-kertas-serif);
+  font-size: 1.75rem;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--dakwat-2);
+  transition: color var(--dur-fast) var(--ease-settle);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--dakwat);
+  }
 }
 
-.dialogRow:hover .rowIcon {
+.activeLink {
+  font-style: italic;
   color: var(--dakwat);
-  transform: translateX(3px);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 1px;
 }
 
-.activeRow {
-  .rowIndex {
-    color: var(--dakwat);
-  }
-
-  .rowLabel {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-    text-decoration-thickness: 1px;
-  }
-
-  .rowIcon {
-    color: var(--dakwat);
-  }
-}
-
-.dialogFooter {
-  padding: 16px 22px 20px;
-  background: var(--kertas-2);
-  border-block-start: 1px solid var(--kertas-3);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.dialogCaption {
-  @include kertas-kicker;
-  font-size: 0.6875rem;
-}
-
-.socialLinks {
+.drawerFooter {
+  margin-block-start: auto;
+  padding-block-start: 20px;
+  border-block-start: 1px solid rgba(29, 26, 22, 0.08);
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 16px;
+  gap: 2px 18px;
 }
 
 .socialLink {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  min-block-size: 36px;
+  min-block-size: var(--tap);
   font-family: var(--font-kertas-sans);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 400;
-  color: var(--dakwat-2);
+  color: var(--dakwat-3);
   transition: color var(--dur-fast) var(--ease-settle);
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     color: var(--dakwat);
   }
 }

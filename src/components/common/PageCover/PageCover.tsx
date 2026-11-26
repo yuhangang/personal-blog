@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useRef, type MouseEvent, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import Image from "next/image";
-import { ArrowDown } from "lucide-react";
-import { useLenis } from "@/components/common/SmoothScroll/SmoothScroll";
 import styles from "./PageCover.module.scss";
 
 interface PageCoverProps {
@@ -11,14 +9,12 @@ interface PageCoverProps {
   alt: string;
   credit: string;
   ariaLabel: string;
-  scrollTargetId: string;
   headline?: ReactNode;
   subtitle?: ReactNode;
   focal?: "penang" | "manaslu";
   stickyParallax?: boolean;
   immersive?: boolean;
   headerAlign?: "center" | "top-left";
-  showScrollCue?: boolean;
   stickyHeader?: boolean;
 }
 
@@ -27,17 +23,14 @@ export default function PageCover({
   alt,
   credit,
   ariaLabel,
-  scrollTargetId,
   headline,
   subtitle,
   focal = "penang",
   stickyParallax = false,
   immersive = false,
   headerAlign = "center",
-  showScrollCue = true,
   stickyHeader = false,
 }: PageCoverProps) {
-  const { lenis } = useLenis();
   const sectionRef = useRef<HTMLElement>(null);
   const isSticky = stickyParallax || immersive;
   const sectionClassName = [
@@ -46,7 +39,6 @@ export default function PageCover({
     immersive ? styles.coverSectionImmersive : "",
     headerAlign === "top-left" ? styles.coverHeaderAlignTopLeft : "",
     stickyHeader ? styles.coverStickyHeader : "",
-    !showScrollCue ? styles.coverNoClick : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -102,42 +94,12 @@ export default function PageCover({
     };
   }, [isSticky, stickyHeader]);
 
-  const scrollToContent = () => {
-    const targetEl = document.getElementById(scrollTargetId);
-    const targetTop = targetEl
-      ? Math.ceil(targetEl.getBoundingClientRect().top + window.scrollY)
-      : null;
-    const coverBottom = sectionRef.current
-      ? Math.ceil(sectionRef.current.offsetHeight)
-      : null;
-    const targetY = targetTop ?? coverBottom ?? window.innerHeight;
-
-    if (lenis) {
-      lenis.resize();
-      lenis.scrollTo(targetY);
-    } else {
-      window.scrollTo({ top: targetY, behavior: "smooth" });
-    }
-  };
-
-  const handleCoverClick = () => {
-    if (!showScrollCue) return;
-    if (window.getSelection()?.toString()) return;
-    scrollToContent();
-  };
-
-  const handleButtonClick = (e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    scrollToContent();
-  };
-
   return (
     <section
       ref={sectionRef}
       className={sectionClassName}
       aria-label={ariaLabel}
       data-nav-cover={stickyHeader ? "fixed" : isSticky ? "sticky" : ""}
-      onClick={handleCoverClick}
     >
       <div className={styles.coverFrame}>
         <div className={styles.coverMedia}>
@@ -164,22 +126,6 @@ export default function PageCover({
           )}
           <div className={styles.coverBottomRow}>
             <span className={styles.coverCredit}>{credit}</span>
-            {showScrollCue && (
-              <button
-                type="button"
-                className={styles.scrollCue}
-                onClick={handleButtonClick}
-                aria-label="Scroll to content"
-              >
-                <span className={styles.scrollCueLabel}>Scroll</span>
-                <ArrowDown
-                  size={14}
-                  strokeWidth={1.75}
-                  className={styles.scrollCueIcon}
-                  aria-hidden="true"
-                />
-              </button>
-            )}
           </div>
         </div>
       </div>

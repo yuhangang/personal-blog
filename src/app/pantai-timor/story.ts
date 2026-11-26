@@ -9,6 +9,8 @@ import { GALLERY_MAP_PHOTOS, type GalleryMapPhoto } from "@/config/gallery";
 
 export type StoryChapterId = "bachok" | "besut-setiu" | "kuala-terengganu" | "dungun";
 
+export type PlatePresentation = "plate" | "cinema" | "finale";
+
 export interface StoryPlate {
   /** Position in the lightbox sequence (story order). */
   index: number;
@@ -24,6 +26,8 @@ export interface StoryPlate {
   placeName: string;
   lat: number;
   lng: number;
+  /** Visual pacing in the chapter: standard plate, full-bleed cinema, or closing finale. */
+  presentation: PlatePresentation;
 }
 
 export interface StoryChapter {
@@ -67,7 +71,7 @@ const CHAPTER_LAYOUT: {
     numeral: "III",
     title: "Kuala Terengganu",
     region: "Terengganu",
-    rows: [["DSC00052.jpg"], ["DSC01109.jpg", "DSC08133_1.jpg"]],
+    rows: [["DSC00052.jpg"], ["DSC01109.jpg", "DSC07705.jpg"], ["DSC08133_1.jpg"]],
   },
   {
     id: "dungun",
@@ -82,6 +86,13 @@ const CHAPTER_LAYOUT: {
 const PLATE_RATIOS: Record<string, number> = {
   "DSC08014.jpg": 3 / 4,
   "DSC07665_1.jpg": 1500 / 843,
+};
+
+// Full-bleed cinematic moments in the second half: golden sunset at Marang
+// Coast and the 16:9 dusk horizon closing Kuala Dungun.
+const PLATE_PRESENTATION: Record<string, PlatePresentation> = {
+  "DSC08133_1.jpg": "cinema",
+  "DSC07665_1.jpg": "finale",
 };
 
 const photoBySrc = new Map<string, GalleryMapPhoto>(
@@ -127,6 +138,7 @@ const chaptersWithoutDistance = CHAPTER_LAYOUT.map((chapter) => ({
         placeName: photo.placeName,
         lat: photo.lat,
         lng: photo.lng,
+        presentation: PLATE_PRESENTATION[file] ?? "plate",
       };
     })
   ),

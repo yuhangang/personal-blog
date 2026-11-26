@@ -33,10 +33,10 @@ export default function GalleryPage() {
         <div className={styles.sectionHeader}>
           <p className={styles.sectionKicker}>Collections</p>
           <h2 id="collections-heading" className={styles.sectionTitle}>
-            Selected <em>Series.</em>
+            Series
           </h2>
           <p className={styles.sectionCopy}>
-            Long-form photographic essays and visual stories from the archive.
+            Photo sets from trips around Malaysia and beyond.
           </p>
         </div>
 

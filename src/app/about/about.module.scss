@@ -66,9 +66,21 @@
   }
 }
 
+.kicker {
+  font-family: var(--font-kertas-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(248, 246, 242, 0.64);
+  text-shadow: 0 1px 10px rgba(10, 12, 14, 0.5);
+  margin: 0;
+}
+
 .title {
   @include kertas-heading;
-  font-size: clamp(2.125rem, 1.35rem + 2.6vw, 3.125rem);
+  font-size: clamp(2rem, 1.3rem + 2.2vw, 2.75rem);
   color: #ffffff;
   text-shadow: 0 2px 24px rgba(10, 12, 14, 0.45);
   margin: 0;
@@ -87,69 +99,47 @@
   margin: 0;
 }
 
-.linksRow {
-  margin-top: 12px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(248, 246, 242, 0.2);
+.focusBar {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px 24px;
+  align-items: baseline;
+  gap: 10px 24px;
+  padding: 16px 0;
+  border-top: 1px solid rgba(248, 246, 242, 0.2);
+  border-bottom: 1px solid rgba(248, 246, 242, 0.2);
 }
 
-.primaryLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: var(--tap);
+.focusLabel {
+  font-family: var(--font-kertas-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(248, 246, 242, 0.6);
+  text-shadow: 0 1px 10px rgba(10, 12, 14, 0.5);
+  flex-shrink: 0;
+}
+
+.focusList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+}
+
+.focusItem {
   font-family: var(--font-kertas-sans);
   font-size: 0.9375rem;
-  font-weight: 500;
-  color: #ffffff;
-  text-shadow: 0 1px 10px rgba(10, 12, 14, 0.55);
-  text-decoration: underline;
-  text-decoration-color: rgba(248, 246, 242, 0.4);
-  text-underline-offset: 5px;
-  text-decoration-thickness: 1px;
-  transition:
-    color var(--dur-fast) var(--ease-settle),
-    text-decoration-color var(--dur-fast) var(--ease-settle);
-
-  svg {
-    transition: transform var(--dur-fast) var(--ease-settle);
-  }
-
-  &:hover {
-    text-decoration-color: #ffffff;
-
-    svg {
-      transform: translateX(3px);
-    }
-  }
+  font-weight: 400;
+  line-height: 1.45;
+  color: rgba(248, 246, 242, 0.88);
+  text-shadow: 0 1px 10px rgba(10, 12, 14, 0.45);
 }
 
-.secondaryLinks {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 18px;
-}
-
-.textLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  min-height: var(--tap);
-  font-family: var(--font-kertas-sans);
-  font-size: 0.875rem;
-  color: rgba(248, 246, 242, 0.82);
-  text-shadow: 0 1px 10px rgba(10, 12, 14, 0.6);
-  transition: color var(--dur-fast) var(--ease-settle);
-
-  &:hover {
-    color: #ffffff;
-  }
+.actionList {
+  margin-top: -10px;
 }
 
 @keyframes navFadeTrack {

@@ -17,7 +17,8 @@ export default function Footer() {
 
   if (HIDDEN_ROUTES.has(pathname)) return null;
 
-  const isDarkRoute = pathname.startsWith("/gallery") || pathname === "/about";
+  const isDarkRoute =
+    pathname === "/" || pathname.startsWith("/gallery") || pathname === "/about";
 
   return (
     <footer

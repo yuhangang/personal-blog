@@ -4,6 +4,59 @@
   @include kertas-glass-card;
 }
 
+.dark {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+
+  .actionRow {
+    padding: 0.95rem 0;
+    color: #f8f6f2;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    &:active {
+      background-color: transparent;
+    }
+
+    &:focus-visible {
+      outline-color: #f8f6f2;
+      outline-offset: 2px;
+    }
+
+    &:not(:last-child)::after {
+      inset-inline: 0;
+      background: rgba(248, 246, 242, 0.16);
+    }
+  }
+
+  .rowTitle {
+    color: #ffffff;
+    text-shadow: 0 1px 12px rgba(10, 12, 14, 0.5);
+  }
+
+  .rowSub {
+    color: rgba(248, 246, 242, 0.72);
+    text-shadow: 0 1px 10px rgba(10, 12, 14, 0.45);
+  }
+
+  .arrowCircle {
+    background: rgba(248, 246, 242, 0.1);
+    box-shadow: inset 0 0 0 1px rgba(248, 246, 242, 0.2);
+    color: #f8f6f2;
+  }
+
+  .actionRow:hover .arrowCircle {
+    background: #f8f6f2;
+    color: #0e0f10;
+    box-shadow: none;
+  }
+}
+
 .attachedGroup {
   border-top: 1px solid rgba(29, 26, 22, 0.06);
 }

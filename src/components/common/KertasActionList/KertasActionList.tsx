@@ -17,17 +17,21 @@ export interface KertasActionItem {
 interface KertasActionListProps {
   items: readonly KertasActionItem[];
   attached?: boolean;
+  theme?: "light" | "dark";
   className?: string;
 }
 
 export default function KertasActionList({
   items,
   attached = false,
+  theme = "light",
   className = "",
 }: KertasActionListProps) {
   return (
     <div
-      className={`${attached ? styles.attachedGroup : styles.cardGroup} ${className}`.trim()}
+      className={`${attached ? styles.attachedGroup : styles.cardGroup} ${
+        theme === "dark" ? styles.dark : ""
+      } ${className}`.trim()}
     >
       {items.map((item) => {
         const isOutbound =

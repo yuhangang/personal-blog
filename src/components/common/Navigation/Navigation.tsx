@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowRight, ArrowUpRight, X } from "lucide-react";
+import { X } from "lucide-react";
 import styles from "./Navigation.module.scss";
 import { useLenis } from "@/components/common/SmoothScroll/SmoothScroll";
 import { NAV_LINKS } from "@/config/navigation";
@@ -17,40 +17,13 @@ const HIDDEN_ROUTES = new Set(["/pantai-timor", "/terengganu"]);
 
 const INLINE_NAV_LINKS = NAV_LINKS.filter((item) => item.href !== "/");
 
-let supportsDisplayTransition: boolean | undefined;
-
-function canTransitionDisplay(): boolean {
-  if (supportsDisplayTransition !== undefined) return supportsDisplayTransition;
-  if (
-    typeof window === "undefined" ||
-    !window.CSS?.supports?.("transition-behavior", "allow-discrete") ||
-    !document.body
-  ) {
-    return false;
-  }
-  const probe = document.createElement("div");
-  probe.style.cssText =
-    "transition: display 1s allow-discrete !important; display: block;";
-  document.body.appendChild(probe);
-  void getComputedStyle(probe).display;
-  probe.style.display = "none";
-  supportsDisplayTransition = getComputedStyle(probe).display === "block";
-  probe.remove();
-  return supportsDisplayTransition;
-}
-
-function supportsTopLayerExit(): boolean {
-  return (
-    typeof window !== "undefined" &&
-    Boolean(window.CSS?.supports?.("overlay", "auto")) &&
-    canTransitionDisplay()
-  );
-}
-
 export default function Navigation() {
   const pathname = usePathname();
   const { lenis } = useLenis();
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const sheetRef = useRef<HTMLElement>(null);
+  const isOpeningRef = useRef(false);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [overDarkSurface, setOverDarkSurface] = useState(false);
@@ -59,7 +32,8 @@ export default function Navigation() {
   const [homeSectionLabel, setHomeSectionLabel] = useState<string | null>(null);
 
   const isHidden = HIDDEN_ROUTES.has(pathname);
-  const isDarkRoute = pathname.startsWith("/gallery") || pathname === "/about";
+  const isDarkRoute =
+    pathname === "/" || pathname.startsWith("/gallery") || pathname === "/about";
   const isHome = pathname === "/";
 
   const navTheme: "light" | "dark" = isDarkRoute
@@ -147,102 +121,127 @@ export default function Navigation() {
     };
   }, [pathname, isHidden, isHome]);
 
-  const closeMenu = useCallback(async () => {
+  const closeMenu = useCallback(() => {
     const dialog = dialogRef.current;
+    const scroller = scrollerRef.current;
     if (!dialog?.open) return;
 
-    if (!supportsTopLayerExit()) {
-      if (dialog.hasAttribute("data-closing")) return;
-      dialog.setAttribute("data-closing", "");
-      const animations = dialog.getAnimations({ subtree: true });
-      if (animations.length > 0) {
-        await Promise.race([
-          Promise.allSettled(animations.map((a) => a.finished)),
-          new Promise((resolve) => setTimeout(resolve, 600)),
-        ]);
-      }
-      if (!dialog.hasAttribute("data-closing")) return;
-      dialog.removeAttribute("data-closing");
-    }
-
-    if (dialog.open) {
+    isOpeningRef.current = false;
+    if (scroller) {
+      scroller.scrollTo({ left: 0, behavior: "auto" });
+    } else {
       dialog.close();
     }
   }, []);
 
-  // Route native cancel (Escape / light dismiss) through closeMenu for exit animation,
-  // and provide a progressive light-dismiss fallback for browsers missing closedby="any".
+  // Wire up scroll-snap drawer state observation, Escape handling,
+  // and progressive backdrop-fade fallback for browsers without animation-timeline.
   useEffect(() => {
+    if (isHidden) return;
     const dialog = dialogRef.current;
-    if (!dialog) return;
+    const scroller = scrollerRef.current;
+    const sheet = sheetRef.current;
+    if (!dialog || !scroller || !sheet) return;
+
+    const visibleThreshold = 1 / Math.max(window.innerWidth, 1);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries.at(-1);
+        if (!entry) return;
+
+        if (entry.intersectionRatio >= visibleThreshold) {
+          isOpeningRef.current = false;
+        }
+
+        if (entry.intersectionRatio === 1) {
+          setMenuOpen(true);
+        } else if (
+          entry.intersectionRatio < visibleThreshold &&
+          dialog.open &&
+          !isOpeningRef.current
+        ) {
+          dialog.close();
+        }
+      },
+      { root: dialog, threshold: [visibleThreshold, 1] }
+    );
+    observer.observe(sheet);
 
     const onCancel = (event: Event) => {
-      if (!supportsTopLayerExit()) {
+      if (event.cancelable) {
         event.preventDefault();
-        void closeMenu();
+        closeMenu();
       }
     };
     dialog.addEventListener("cancel", onCancel);
 
-    if ("closedBy" in HTMLDialogElement.prototype) {
-      return () => {
-        dialog.removeEventListener("cancel", onCancel);
-      };
+    const supportsScrollTimeline = Boolean(
+      window.CSS?.supports?.("animation-timeline", "scroll()")
+    );
+    const onScroll = () => {
+      const width = sheet.offsetWidth;
+      const ratio =
+        width > 0 ? Math.min(1, Math.max(0, scroller.scrollLeft / width)) : 0;
+      dialog.style.setProperty("--drawer-backdrop", String(ratio));
+    };
+
+    if (!supportsScrollTimeline) {
+      scroller.addEventListener("scroll", onScroll, { passive: true });
     }
 
-    let pressedOutside = false;
-    const isOutside = (e: PointerEvent) => {
-      const r = dialog.getBoundingClientRect();
-      return (
-        e.clientX < r.left ||
-        e.clientX > r.right ||
-        e.clientY < r.top ||
-        e.clientY > r.bottom
-      );
-    };
-
-    const onPointerDown = (e: PointerEvent) => {
-      pressedOutside = isOutside(e);
-    };
-
-    const onPointerUp = (e: PointerEvent) => {
-      if (pressedOutside && isOutside(e)) {
-        void closeMenu();
-      }
-      pressedOutside = false;
-    };
-
-    dialog.addEventListener("pointerdown", onPointerDown);
-    dialog.addEventListener("pointerup", onPointerUp);
-
     return () => {
+      observer.disconnect();
       dialog.removeEventListener("cancel", onCancel);
-      dialog.removeEventListener("pointerdown", onPointerDown);
-      dialog.removeEventListener("pointerup", onPointerUp);
+      if (!supportsScrollTimeline) {
+        scroller.removeEventListener("scroll", onScroll);
+      }
     };
   }, [isHidden, closeMenu]);
 
-  const openMenu = useCallback(() => {
+  const openMenu = useCallback(async () => {
     const dialog = dialogRef.current;
-    if (!dialog || dialog.open) return;
-    dialog.removeAttribute("data-closing");
+    const scroller = scrollerRef.current;
+    const sheet = sheetRef.current;
+    if (!dialog || !scroller || !sheet || dialog.open) return;
+
+    isOpeningRef.current = true;
     dialog.showModal();
     setMenuOpen(true);
     lenis?.stop();
+
+    if (!window.CSS?.supports?.("scroll-initial-target", "nearest")) {
+      scroller.scrollTo({ left: 0, behavior: "instant" });
+      await new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+      );
+    }
+
+    if (!dialog.open) return;
+    scroller.scrollTo({ left: sheet.offsetWidth, behavior: "auto" });
   }, [lenis]);
 
   const handleDialogClose = useCallback(() => {
+    isOpeningRef.current = false;
     if (dialogRef.current) {
       dialogRef.current.returnValue = "";
-      dialogRef.current.removeAttribute("data-closing");
     }
     setMenuOpen(false);
     lenis?.start();
   }, [lenis]);
 
+  const handleDialogClick = useCallback(
+    (event: React.MouseEvent<HTMLDialogElement>) => {
+      if (sheetRef.current && !sheetRef.current.contains(event.target as Node)) {
+        closeMenu();
+      }
+    },
+    [closeMenu]
+  );
+
   const handleLinkClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-      void closeMenu();
+      closeMenu();
 
       if (href === "/" && isHome) {
         e.preventDefault();
@@ -341,124 +340,97 @@ export default function Navigation() {
       <dialog
         id="site-menu-dialog"
         ref={dialogRef}
-        {...({ closedby: "any" } as Record<string, string>)}
-        aria-labelledby="site-menu-title"
+        aria-label="Site navigation"
         className={styles.menuDialog}
         data-dialog-theme={isDarkRoute ? "dark" : "light"}
         onClose={handleDialogClose}
+        onClick={handleDialogClick}
       >
-        <div className={styles.dialogHeader}>
-          <div className={styles.dialogHeadingGroup}>
-            <span className={styles.dialogKicker}>Index</span>
-            <h2 id="site-menu-title" className={styles.dialogTitle}>
-              Navigation
-            </h2>
-          </div>
-          <button
-            type="button"
-            className={styles.closeBtn}
-            onClick={() => void closeMenu()}
-            aria-label="Close navigation menu"
-            autoFocus
+        <div ref={scrollerRef} className={styles.drawerScroller}>
+          <nav
+            ref={sheetRef}
+            className={styles.drawerSheet}
+            aria-label="Site navigation"
           >
-            <X size={17} strokeWidth={1.6} aria-hidden="true" />
-          </button>
-        </div>
-
-        <nav className={styles.dialogNav} aria-label="Site index">
-          <ul className={styles.dialogList}>
-            {NAV_LINKS.map((item, idx) => {
-              const isExternal =
-                item.href.startsWith("http") || item.href.startsWith("mailto:");
-              const isActive =
-                item.href === pathname ||
-                (item.href !== "/" && pathname.startsWith(`${item.href}/`));
-              const indexNumber = String(idx + 1).padStart(2, "0");
-
-              const rowContent = (
-                <>
-                  <span className={styles.rowLead}>
-                    <span className={styles.rowIndex} aria-hidden="true">
-                      {indexNumber}
-                    </span>
-                    <span className={styles.rowText}>
-                      <span className={styles.rowLabel}>{item.label}</span>
-                      {item.meta && (
-                        <span className={styles.rowMeta}>{item.meta}</span>
-                      )}
-                    </span>
-                  </span>
-                  <span className={styles.rowIcon} aria-hidden="true">
-                    {isExternal ? (
-                      <ArrowUpRight size={15} strokeWidth={1.6} />
-                    ) : (
-                      <ArrowRight size={15} strokeWidth={1.6} />
-                    )}
-                  </span>
-                </>
-              );
-
-              return (
-                <li key={item.href} className={styles.dialogItem}>
-                  {isExternal ? (
-                    <a
-                      href={item.href}
-                      target={
-                        item.href.startsWith("http") ? "_blank" : undefined
-                      }
-                      rel={
-                        item.href.startsWith("http")
-                          ? "noopener noreferrer"
-                          : undefined
-                      }
-                      className={styles.dialogRow}
-                      onClick={() => void closeMenu()}
-                    >
-                      {rowContent}
-                    </a>
-                  ) : (
-                    <Link
-                      href={item.href}
-                      className={`${styles.dialogRow} ${
-                        isActive ? styles.activeRow : ""
-                      }`.trim()}
-                      onClick={(e) => handleLinkClick(e, item.href)}
-                      aria-current={isActive ? "page" : undefined}
-                    >
-                      {rowContent}
-                    </Link>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-
-        <div className={styles.dialogFooter}>
-          <span className={styles.dialogCaption}>Connect</span>
-          <div className={styles.socialLinks}>
-            <a
-              href="mailto:contact@yuhangang.com"
-              className={styles.socialLink}
-              onClick={() => void closeMenu()}
-            >
-              <span>Email</span>
-              <ArrowUpRight size={13} strokeWidth={1.6} aria-hidden="true" />
-            </a>
-            {SOCIAL_LINKS.map((social) => (
-              <a
-                key={social.platform}
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.socialLink}
-                onClick={() => void closeMenu()}
+            <div className={styles.drawerTop}>
+              <button
+                type="button"
+                className={styles.closeBtn}
+                onClick={closeMenu}
+                aria-label="Close navigation menu"
+                autoFocus
               >
-                <span>{social.platform}</span>
-                <ArrowUpRight size={13} strokeWidth={1.6} aria-hidden="true" />
+                <span className={styles.closeBtnLabel}>Close</span>
+                <X size={16} strokeWidth={1.5} aria-hidden="true" />
+              </button>
+            </div>
+
+            <ul className={styles.drawerList}>
+              {NAV_LINKS.map((item) => {
+                const isExternal =
+                  item.href.startsWith("http") ||
+                  item.href.startsWith("mailto:");
+                const isActive =
+                  item.href === pathname ||
+                  (item.href !== "/" && pathname.startsWith(`${item.href}/`));
+
+                return (
+                  <li key={item.href} className={styles.drawerItem}>
+                    {isExternal ? (
+                      <a
+                        href={item.href}
+                        target={
+                          item.href.startsWith("http") ? "_blank" : undefined
+                        }
+                        rel={
+                          item.href.startsWith("http")
+                            ? "noopener noreferrer"
+                            : undefined
+                        }
+                        className={styles.drawerLink}
+                        onClick={closeMenu}
+                      >
+                        {item.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className={`${styles.drawerLink} ${
+                          isActive ? styles.activeLink : ""
+                        }`.trim()}
+                        onClick={(e) => handleLinkClick(e, item.href)}
+                        aria-current={isActive ? "page" : undefined}
+                      >
+                        {item.label}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+
+            <div className={styles.drawerFooter}>
+              <a
+                href="mailto:contact@yuhangang.com"
+                className={styles.socialLink}
+                onClick={closeMenu}
+              >
+                Email
               </a>
-            ))}
-          </div>
+              {SOCIAL_LINKS.map((social) => (
+                <a
+                  key={social.platform}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialLink}
+                  onClick={closeMenu}
+                >
+                  {social.platform}
+                </a>
+              ))}
+            </div>
+          </nav>
         </div>
       </dialog>
     </>

@@ -39,31 +39,38 @@ export default function PracticeSection() {
       aria-labelledby="practice-heading"
     >
       <div className={styles.spine}>
-        <p className={styles.kicker}>
-          {RESUME_CONTACT.name.toUpperCase()} ·{" "}
-          {RESUME_CONTACT.location.toUpperCase()}
-        </p>
-        <h1 id="practice-heading" className={styles.heading}>
-          Software engineer, building for mobile and the web.
-        </h1>
-        <p className={styles.prose}>
-          Based in Kuala Lumpur, where I lead mobile engineering across iOS,
-          Android, and Flutter and build web projects on the side. Outside of
-          work, I spend time hiking and photographing trails and coastal towns.
-        </p>
+        <div className={styles.body}>
+          <p className={styles.kicker}>
+            {RESUME_CONTACT.name.toUpperCase()} ·{" "}
+            {RESUME_CONTACT.location.toUpperCase()}
+          </p>
+          <h1 id="practice-heading" className={styles.heading}>
+            Software engineer, building for mobile and the web.
+          </h1>
+          <p className={styles.prose}>
+            Based in Kuala Lumpur, where I lead mobile engineering across iOS,
+            Android, and Flutter and build web projects on the side. Outside of
+            work, I spend time hiking and photographing trails and coastal
+            towns.
+          </p>
 
-        <div className={styles.focusBar}>
-          <span className={styles.focusLabel}>Interests</span>
-          <ul className={styles.focusList}>
-            {INTERESTS.map((item) => (
-              <li key={item} className={styles.focusItem}>
-                {item}
-              </li>
-            ))}
-          </ul>
+          <div className={styles.focusBar}>
+            <span className={styles.focusLabel}>Interests</span>
+            <ul className={styles.focusList}>
+              {INTERESTS.map((item) => (
+                <li key={item} className={styles.focusItem}>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <KertasActionList
+            items={HOME_ACTIONS}
+            theme="dark"
+            className={styles.listTop}
+          />
         </div>
-
-        <KertasActionList items={HOME_ACTIONS} className={styles.listTop} />
       </div>
     </section>
   );

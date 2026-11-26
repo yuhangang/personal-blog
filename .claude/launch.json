@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "personal-blog",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["dev", "--port", "3200"],
+      "port": 3200
+    },
+    {
+      "name": "personal-blog-prod",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start", "--port", "3300"],
+      "port": 3300
+    }
+  ]
+}
